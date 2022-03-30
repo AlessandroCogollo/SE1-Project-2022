@@ -7,7 +7,7 @@ public enum Color {
     Red (3),
     Yellow (4);
 
-    private int index;
+    private final int index;
 
     Color(int index) {
         this.index = index;
@@ -19,5 +19,13 @@ public enum Color {
 
     public static int getNumberOfColors (){
         return Color.values().length;
+    }
+
+    public static Color getColorById (int index){
+        for (Color c: Color.values()){
+            if (c.getIndex() == index)
+                return c;
+        }
+        return null;
     }
 }

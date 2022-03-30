@@ -26,10 +26,10 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
       <version>RELEASE</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->

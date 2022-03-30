@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.util.Arrays;
+
 //The school class implements a container for all the stuffs of the player during the game and can only be modified from the class Student itself
 class School {
 
-    private int[] entrance;
-    private int[] room;
+    private final int[] entrance;
+    private final int[] room;
     private int towers;
 
 
@@ -15,18 +17,21 @@ class School {
     School(int towers, int entranceStudent, Bag bag) {
         this.towers = towers;
         this.room = new int[Color.getNumberOfColors()];
-        for (int i = 0; i < this.room.length; i++)
-            this.room[i] = 0;
-        //todo bag
-        //this.entrance = bag.drawStudents(entranceStudent);
+        Arrays.fill(this.room, 0);
+        //todo modify when bag is completed, need Bag class
+        this.entrance = bag.drawStudents(entranceStudent);
     }
 
-    public int getTowers() {
+    int getTowers() {
         return towers;
     }
 
-    boolean hasStudent (Color color){
+    boolean hasStudentInEntrance (Color color){
         return entrance[color.getIndex()] > 0;
+    }
+
+    int getNumberOfStudentInRoomByColor (Color c){
+        return room[c.getIndex()];
     }
 
     //return true if the player will get a coin
@@ -34,13 +39,11 @@ class School {
         int index = color.getIndex();
         entrance[index]--;
         room[index]++;
-        if (room[index] % 3 == 0)
-            return true;
-        return false;
+        return room[index] % 3 == 0;
     }
 
     void addStudentFromCloud(Cloud c) {
-        //todo cloud
+        //todo actual implementation, need Cloud class
         /*
         Collection<Color> students = c.getStudents();
         for (Color x: students){

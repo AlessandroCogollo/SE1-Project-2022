@@ -4,5 +4,5 @@ public enum ActionPhase {
     NotActionPhase,
     MoveStudent,
     MoveMotherNature,
-    ChooseCloud;
+    ChooseCloud
 }

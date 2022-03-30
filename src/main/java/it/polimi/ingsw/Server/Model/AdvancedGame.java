@@ -11,17 +11,27 @@ public class AdvancedGame extends Game {
 
     public int playCharacter(int playerId, Character x) {
 
+        if (!gameInit.existsPlayer(playerId))
+            return Errors.PLAYER_NOT_EXIST.getCode();
+        if (x == null)
+            return Errors.NULL_POINTER.getCode();
+
         AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
 
         if (p != round.getCurrent())
             return Errors.NOT_CURRENT_PLAYER.getCode();
 
-        // todo check if is a good move (es. play a character during the choose Cloud phase is may an error)
+        //check already played a character
+        if (p.getActiveCharacter().isPresent())
+            return Errors.CHARACTER_YET_PLAYED.getCode();
 
-        if (true/*p.getCoins() < x.getCost()*/)
+        //todo check if is a good move (es. play a character during the choose Cloud phase is may an error) ?
+
+        //todo check can play character, need Character enum
+        if (true) //(p.getCoins() < x.getCost())
             return Errors.NOT_ENOUGH_COINS.getCode();
 
-        p.playCharacter();
+        p.playCharacter(x);
 
         //no next because it doesn't change the round in the game
 
@@ -32,16 +42,21 @@ public class AdvancedGame extends Game {
     @Override
     public int moveMotherNature (int playerId, int position){
 
-        Player p = gameInit.getPlayerById(playerId);
+        //todo check active character that modify methods, need Character enum
+        //no character that change methods
+        if (false)
+            return super.moveMotherNature(playerId, position);
 
-        if (p != round.getCurrent())
-            return Errors.NOT_CURRENT_PLAYER.getCode();
-        if (!round.getPhase().equals(Phase.Action) || !round.getActionPhase().equals(ActionPhase.MoveMotherNature))
-            return Errors.NOT_RIGHT_PHASE.getCode();
+        //with character that change methods
+        if (!gameInit.existsPlayer(playerId))
+            return Errors.PLAYER_NOT_EXIST.getCode();
 
-        //todo check for active character that change the max number of movement
+        AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
+        //todo move mother nature special, need Character enum
 
-        p.moveMotherNature(position); //in this case the player are certainly AdvancePlayer so this call the overrided method in advance player
+
+
+        //p.moveMotherNature(position);
 
         round.next();
 

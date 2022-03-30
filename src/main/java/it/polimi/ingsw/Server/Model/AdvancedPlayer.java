@@ -10,26 +10,31 @@ class AdvancedPlayer extends Player {
     private final Collection<Character> cDeck;
     private Optional<Character> activeCharacter;
 
-    AdvancedPlayer(int id, int towerColor, Optional<Player> mate, GameBoard board, School school) {
+    AdvancedPlayer(int id, int towerColor, Player mate, GameBoard board, School school) {
         super(id, towerColor, mate, board, school);
         this.coins = 1;
 
-        //todo Character
+        //todo right deck, need Character class
         //this.cDeck = Character.getNewDeck();
         this.cDeck = null;
 
-        activeCharacter = null;
+        this.activeCharacter = Optional.empty();
     }
 
     int getCoins() {
         return coins;
     }
 
+    public Optional<Character> getActiveCharacter() {
+        return activeCharacter;
+    }
+
     //override for coins
     @Override
-    void moveStudent(StudentsMovements.Movement move) {
+    void moveStudent(Movement move) {
         if (move.getDestination().isPresent()){
-            //todo movement to cloud
+            Color student = school.moveStudentFromEntrance(move.getColor());
+            //todo movement to cloud, need GameBoard class
         }
         else
             if (school.moveStudentToRoom(move.getColor()))
@@ -39,13 +44,15 @@ class AdvancedPlayer extends Player {
     //override for character that changes the methods
     @Override
     void moveMotherNature(int position) {
-        //todo
+        //todo movement, need GameBoard
         super.moveMotherNature(position);
     }
 
-    void playCharacter() {
+    void playCharacter(Character c) {
         //coins -= x.getCost();
-        //todo Character
+        activeCharacter = Optional.ofNullable(c);
+        //todo actual implementation, need Character class
+
     }
 
 }

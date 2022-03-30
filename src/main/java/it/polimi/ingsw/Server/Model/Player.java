@@ -2,10 +2,11 @@ package it.polimi.ingsw.Server.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 
 //player class that implements the real methods that changes the model
-class Player {
+class Player implements Iterable<Assistant>{
 
     private final int id;
     private final int towerColor; // 1 black, 2 white, 3 gray
@@ -20,17 +21,13 @@ class Player {
 
 
 
-    Player(int id, int towerColor, Optional<Player> mate, GameBoard board, School school) {
+    Player (int id, int towerColor, Player mate, GameBoard board, School school) {
         this.id = id;
         this.towerColor = towerColor;
-        this.mate = mate;
+        this.mate = Optional.ofNullable(mate);
         this.board = board;
         this.school = school;
-
-        //todo Assistant
-        //this.deck = Assistant.getNewDeck();
-        this.deck = null;
-
+        this.deck = Assistant.getNewAssistantDeck();
         this.activeAssistant = null;
     }
 
@@ -38,7 +35,7 @@ class Player {
         return id;
     }
 
-    public int getTowerColor() {
+    int getTowerColor() {
         return towerColor;
     }
 
@@ -51,20 +48,21 @@ class Player {
     }
 
     boolean hasStudent (Color color){
-        return school.hasStudent(color);
+        return school.hasStudentInEntrance(color);
     }
 
     // play assistant will remove the assistant from the student's deck and set it as is active assistant, that will be changed only in the next planning phase
     void playAssistant (Assistant x){
-        deck.remove(x);
+        if (x != null)
+            deck.remove(x);
         activeAssistant = x;
     }
 
     // check if the movement is towards his room or to an island
-    void moveStudent (StudentsMovements.Movement move){
+    void moveStudent (Movement move){
         if (move.getDestination().isPresent()){
             Color student = school.moveStudentFromEntrance(move.getColor());
-            //todo movement to cloud
+            //todo movement to cloud, need GameBoard class
         }
         else
             school.moveStudentToRoom(move.getColor());
@@ -72,7 +70,7 @@ class Player {
 
     // move mother nature calls the appropriate method in board
     void moveMotherNature (int position){
-        //todo board
+        //todo movement, need GameBoard
         //board.moveMotherNature();
     }
 
@@ -95,7 +93,8 @@ class Player {
             return mate.get().moveTowerToIsland(number);
         }
         if (school.removeTowers(number)){
-            return 10; //todo board and case winner, has finished the towers
+            //todo winner case, need GameBoard class
+            return 0;
         }
         return towerColor;
     }
@@ -104,16 +103,21 @@ class Player {
         if (mate.isPresent()){
             mate.get().receiveTowerFromIsland(number);
         }
-        school.addTowers(number);
+        else
+            school.addTowers(number);
+    }
+
+    int getNumberOfStudentInRoomByColor (Color c){
+        return school.getNumberOfStudentInRoomByColor(c);
+    }
+
+    @Override
+    public Iterator<Assistant> iterator() {
+        return deck.iterator();
     }
 
 
-
-    /*
-    factory method for generate all player or advance player if it is an advanced game
-
-    @ensures (* if ids.length == 4 teammates has the same terminal bit in ids (codified in binary) and this final bit is different from the other team *);
-    */
+    //factory method for generate all player or advance player if it is an advanced game, with the exception of 4 players
     static Collection<Player> factoryPlayers (int[] ids, int gameMode, GameBoard board, Bag bag) {
         //generate the collection with the length needed
         Collection<Player> p = new ArrayList<>(ids.length);
@@ -122,35 +126,40 @@ class Player {
         switch (ids.length){
 
             case 2:
-                School school2 = new School (8, 7, bag);
+                School school2_1 = new School (8, 7, bag);
+                School school2_2 = new School (8, 7, bag);
                 if (gameMode == 0){
-                    p.add (new Player(ids[0], 1, null, board, school2));
-                    p.add (new Player(ids[1], 2, null, board, school2));
+                    p.add (new Player(ids[0], 1, null, board, school2_1));
+                    p.add (new Player(ids[1], 2, null, board, school2_2));
                 }
                 else {
-                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school2));
-                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school2));
+                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school2_1));
+                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school2_2));
                 }
                 break;
 
             case 3:
-                School school3 = new School (6, 9, bag);
+                School school3_1 = new School (6, 9, bag);
+                School school3_2 = new School (6, 9, bag);
+                School school3_3 = new School (6, 9, bag);
                 if (gameMode == 0){
-                    p.add (new Player(ids[0], 1, null, board, school3));
-                    p.add (new Player(ids[1], 2, null, board, school3));
-                    p.add (new Player(ids[2], 3, null, board, school3));
+                    p.add (new Player(ids[0], 1, null, board, school3_1));
+                    p.add (new Player(ids[1], 2, null, board, school3_2));
+                    p.add (new Player(ids[2], 3, null, board, school3_3));
                 }
                 else {
-                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school3));
-                    p.add (new AdvancedPlayer(ids[1], 2, null, board, school3));
-                    p.add (new AdvancedPlayer(ids[2], 3, null, board, school3));
+                    p.add (new AdvancedPlayer(ids[0], 1, null, board, school3_1));
+                    p.add (new AdvancedPlayer(ids[1], 2, null, board, school3_2));
+                    p.add (new AdvancedPlayer(ids[2], 3, null, board, school3_3));
                 }
                 break;
 
             // for the case 4 there are 2 types of player, 1 like a normal player in a 2players Game and 1 with no towers, in that case i've added a mate tha can manage the tower
             case 4:
-                School school4 = new School (8, 7, bag);
-                School school4s = new School (0, 7, bag); //special school with no tower
+                School school4_1 = new School (8, 7, bag);
+                School school4_2 = new School (8, 7, bag);
+                School school4s_1 = new School (0, 7, bag); //special school with no tower
+                School school4s_2 = new School (0, 7, bag); //special school with no tower
                 int iA = 0, iB = 0;
                 Player tempA = null, tempB = null;
                 if (gameMode == 0){
@@ -162,24 +171,24 @@ class Player {
 
                             // the first one of the team get the normal school
                             if (iA == 0){
-                                tempA = new Player(x, 1, null, board, school4); // we save the pointer to that player for the next team member
+                                tempA = new Player(x, 1, null, board, school4_1); // we save the pointer to that player for the next team member
                                 p.add(tempA);
                                 iA++;
                             }
                             else {
-                                p.add (new Player(x, 1, Optional.of(tempA), board, school4s)); //here we set the mate with the pointer saved
+                                p.add (new Player(x, 1, tempA, board, school4s_1)); //here we set the mate with the pointer saved
                             }
                         }
                         else {
 
                             // the same for the other team
                             if (iB == 0){
-                                tempB = new Player(x, 2, null, board, school4);
+                                tempB = new Player(x, 2, null, board, school4_2);
                                 p.add(tempB);
                                 iB++;
                             }
                             else {
-                                p.add (new Player(x, 2, Optional.of(tempB), board, school4s));
+                                p.add (new Player(x, 2, tempB, board, school4s_2));
                             }
                         }
                     }
@@ -190,22 +199,22 @@ class Player {
                     for (int x: ids){
                         if (x%2 == 0){
                             if (iA == 0){
-                                tempA = new AdvancedPlayer(x, 1, null, board, school4);
+                                tempA = new AdvancedPlayer(x, 1, null, board, school4_1);
                                 p.add(tempA);
                                 iA++;
                             }
                             else {
-                                p.add (new AdvancedPlayer(x, 1, Optional.of(tempA), board, school4s));
+                                p.add (new AdvancedPlayer(x, 1, tempA, board, school4s_1));
                             }
                         }
                         else {
                             if (iB == 0){
-                                tempB = new AdvancedPlayer(x, 2, null, board, school4);
+                                tempB = new AdvancedPlayer(x, 2, null, board, school4_2);
                                 p.add(tempB);
                                 iB++;
                             }
                             else {
-                                p.add (new AdvancedPlayer(x, 2, Optional.of(tempB), board, school4s));
+                                p.add (new AdvancedPlayer(x, 2, tempB, board, school4s_2));
                             }
                         }
                     }
@@ -213,4 +222,5 @@ class Player {
         }
         return p;
     }
+
 }
