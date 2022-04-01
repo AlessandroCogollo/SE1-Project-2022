@@ -19,7 +19,7 @@ class School {
         this.room = new int[Color.getNumberOfColors()];
         Arrays.fill(this.room, 0);
         //todo modify when bag is completed, need Bag class
-        this.entrance = bag.drawStudents(entranceStudent);
+        this.entrance = Bag.DrawStudents(entranceStudent);
     }
 
     int getTowers() {

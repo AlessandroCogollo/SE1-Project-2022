@@ -13,26 +13,11 @@ class SchoolTest {
 
     private static School getSchool (int towers, int entranceStudent, int mode, int[] stu){
         if (mode == 0) {
-            Bag bag = new Bag() {
-                @Override
-                public int[] drawStudents(int entranceStudent) {
-                    Random rand = new Random(System.currentTimeMillis());
-                    int[] student = new int[Color.getNumberOfColors()];
-                    for (int i = 0; i < entranceStudent; i++) {
-                        student[rand.nextInt(Color.getNumberOfColors())]++;
-                    }
-                    return student;
-                }
-            };
+            Bag bag = new Bag();
             return new School(towers, entranceStudent, bag);
         }
         if (countStudent(stu) == entranceStudent) {
-            Bag bag = new Bag() {
-                @Override
-                public int[] drawStudents(int entranceStudent) {
-                    return stu;
-                }
-            };
+            Bag bag = new Bag();
             return new School(towers, entranceStudent, bag);
         }
         return null;
@@ -168,18 +153,8 @@ class SchoolTest {
 
         //testing only School parameter, other test has been done in player
 
-        GameBoard board = new GameBoard();
-        Bag bag = new Bag() {
-            @Override
-            public int[] drawStudents(int entranceStudent) {
-                Random rand = new Random(System.currentTimeMillis());
-                int[] student = new int[Color.getNumberOfColors()];
-                for (int i = 0; i < entranceStudent; i++) {
-                    student[rand.nextInt(Color.getNumberOfColors())]++;
-                }
-                return student;
-            }
-        };
+        GameBoard board;
+        Bag bag = new Bag();
 
         int[] id2 = new int[2];
         id2[0] = 1;
@@ -196,7 +171,7 @@ class SchoolTest {
         id4[2] = 3;
         id4[3] = 4;
 
-
+        board = new GameBoard(new GameInitializer(id2, 1));
         Collection<Player> players = Player.factoryPlayers(id2, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
@@ -204,6 +179,7 @@ class SchoolTest {
             assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
         }
 
+        board = new GameBoard(new GameInitializer(id3, 1));
         players = Player.factoryPlayers(id3, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
@@ -212,6 +188,7 @@ class SchoolTest {
         }
 
         //the fact that 2 player doesn't have the tower will be hide from the outside
+        board = new GameBoard(new GameInitializer(id4, 1));
         players = Player.factoryPlayers(id4, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");

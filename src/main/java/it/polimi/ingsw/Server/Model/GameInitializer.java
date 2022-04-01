@@ -1,19 +1,20 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 // this class create all the model and keep the register of the players
 class GameInitializer implements Iterable<Player>{
 
-    private final Collection<Player> players;
+    private Collection<Player> players;
     private final int gameMode;
 
 
     GameInitializer(int[] ids, int gameMode) {
         this.gameMode = gameMode;
         //todo use the right constructor, need GameBoard class and Bag class
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(this);
         Bag bag = new Bag();
         //Bag bag = board.getBag();
 
@@ -24,6 +25,8 @@ class GameInitializer implements Iterable<Player>{
         return gameMode;
     }
 
+
+
     Player getPlayerById (int id){
         for (Player x: players){
             if (x.getId() == id)
@@ -32,8 +35,16 @@ class GameInitializer implements Iterable<Player>{
         return null;
     }
 
-    int getNumberOfPlayers (){
+    int getNumberOfPlayers(){
         return players.size();
+    }
+
+
+
+    ArrayList<Player> getPlayers (){
+        ArrayList<Player> temp = new ArrayList<>();
+        for (Player p : players) temp.add(p);
+        return temp;
     }
 
     boolean existsPlayer (int id){
