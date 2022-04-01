@@ -67,24 +67,29 @@ class RoundHandlerTest {
         Player p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
         assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        p.playAssistant(Assistant.getAssistantByValue(4));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
         assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        p.playAssistant(Assistant.getAssistantByValue(3));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
         assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        p.playAssistant(Assistant.getAssistantByValue(2));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
         assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        p.playAssistant(Assistant.getAssistantByValue(1));
         roundHandler.next();
 
         assertEquals(Phase.Action, roundHandler.getPhase(), "Test 4 - Right Phase");
+        assertEquals(p, roundHandler.getCurrent(), "Test 5 - Right sorting");
     }
 
     @Test
