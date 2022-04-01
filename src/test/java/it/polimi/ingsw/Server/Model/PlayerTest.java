@@ -131,12 +131,12 @@ class PlayerTest {
         GameBoard board = null;
         Bag bag = new Bag();
 
+
         Collection<Player> players = Player.factoryPlayers(id2, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 1 - 2 player easy mode");
             assertEquals(true, p instanceof Player, "test 1 - 2 player easy mode");
         }
-
 
         players = Player.factoryPlayers(id2, 1, board, bag);
         for (Player p: players)

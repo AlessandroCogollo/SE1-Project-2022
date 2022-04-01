@@ -171,7 +171,6 @@ class SchoolTest {
         id4[2] = 3;
         id4[3] = 4;
 
-
         Collection<Player> players = Player.factoryPlayers(id2, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
