@@ -129,48 +129,40 @@ class PlayerTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        GameBoard board;
+        GameBoard board = null;
         Bag bag = new Bag();
 
 
-
-        board = new GameBoard(new GameInitializer(id2, 0));
         Collection<Player> players = Player.factoryPlayers(id2, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 1 - 2 player easy mode");
             assertEquals(true, p instanceof Player, "test 1 - 2 player easy mode");
         }
 
-        board = new GameBoard(new GameInitializer(id2, 1));
         players = Player.factoryPlayers(id2, 1, board, bag);
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 2 - 2 player advanced mode");
 
-        board = new GameBoard(new GameInitializer(id3, 0));
         players = Player.factoryPlayers(id3, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 3 - 3 player easy mode");
             assertEquals(true, p instanceof Player, "test 3 - 3 player easy mode");
         }
 
-        board = new GameBoard(new GameInitializer(id3, 1));
         players = Player.factoryPlayers(id3, 1, board, bag);
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 4 - 3 player advanced mode");
 
-        board = new GameBoard(new GameInitializer(id4, 0));
         players = Player.factoryPlayers(id4, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 5 - 4 player easy mode");
             assertEquals(true, p instanceof Player, "test 5 - 4 player easy mode");
         }
 
-        board = new GameBoard(new GameInitializer(id4, 1));
         players = Player.factoryPlayers(id4, 1, board, bag);
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 6 - 4 player advanced mode");
 
-        board = new GameBoard(new GameInitializer(id4, 0));
         players = Player.factoryPlayers(id4, 0, board, bag);
         Player p1 = null, p2 = null, p3 = null, p4 = null;
         for (Player p: players){

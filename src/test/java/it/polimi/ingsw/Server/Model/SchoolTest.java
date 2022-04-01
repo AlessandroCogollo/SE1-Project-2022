@@ -153,7 +153,7 @@ class SchoolTest {
 
         //testing only School parameter, other test has been done in player
 
-        GameBoard board;
+        GameBoard board = null;
         Bag bag = new Bag();
 
         int[] id2 = new int[2];
@@ -171,7 +171,6 @@ class SchoolTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        board = new GameBoard(new GameInitializer(id2, 1));
         Collection<Player> players = Player.factoryPlayers(id2, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
@@ -179,7 +178,6 @@ class SchoolTest {
             assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
         }
 
-        board = new GameBoard(new GameInitializer(id3, 1));
         players = Player.factoryPlayers(id3, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
@@ -188,7 +186,6 @@ class SchoolTest {
         }
 
         //the fact that 2 player doesn't have the tower will be hide from the outside
-        board = new GameBoard(new GameInitializer(id4, 1));
         players = Player.factoryPlayers(id4, 1, board, bag);
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
