@@ -14,7 +14,7 @@ class GameInitializer implements Iterable<Player>{
     GameInitializer(int[] ids, int gameMode) {
         this.gameMode = gameMode;
         //todo use the right constructor, need GameBoard class and Bag class
-        GameBoard board = new GameBoard(this);
+        GameBoard board = new GameBoard(this, ids.length);
         Bag bag = new Bag();
         //Bag bag = board.getBag();
 
@@ -24,8 +24,6 @@ class GameInitializer implements Iterable<Player>{
     int getGameMode() {
         return gameMode;
     }
-
-
 
     Player getPlayerById (int id){
         for (Player x: players){

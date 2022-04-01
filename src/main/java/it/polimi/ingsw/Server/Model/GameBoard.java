@@ -8,23 +8,28 @@ class GameBoard {
 
     private final Collection<Cloud> clouds;
     private final Islands islands;
-    private final Collection<School> schools = null;
+    //private final Collection<School> schools = null;
     private final Professors professors;
     private final GameInitializer gInit;
 
-    public GameBoard(GameInitializer gInit){
+    public GameBoard(GameInitializer gInit, int numOfPlayer){
 
         this.gInit = gInit;
+
         //instantiating clouds
-        this.clouds = new ArrayList<>(gInit.getNumberOfPlayers());
-        for(int i=0; i < gInit.getNumberOfPlayers(); i++){
+        //this.clouds = new ArrayList<>(gInit.getNumberOfPlayers());
+        this.clouds = new ArrayList<>(numOfPlayer);
+
+
+        //for(int i=0; i < gInit.getNumberOfPlayers(); i++){
+        for(int i=0; i < numOfPlayer; i++){
             clouds.add(new Cloud());
         }
 
         //connecting schools
-        for (Player p : gInit.getPlayers()){
+        /*for (Player p : gInit.getPlayers()){
             schools.add(p.getSchool());
-        }
+        }*/
 
         //instantiating islands
         this.islands = new Islands(gInit);
