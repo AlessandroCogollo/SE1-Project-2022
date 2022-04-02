@@ -8,6 +8,7 @@ import java.util.Iterator;
 class GameInitializer implements Iterable<Player>{
 
     private Collection<Player> players;
+    private GameBoard board;
     private final int gameMode;
 
 
@@ -15,10 +16,15 @@ class GameInitializer implements Iterable<Player>{
         this.gameMode = gameMode;
         //todo use the right constructor, need GameBoard class and Bag class
         GameBoard board = new GameBoard(this, ids.length);
+        this.board = board;
         Bag bag = new Bag();
         //Bag bag = board.getBag();
 
         this.players = Player.factoryPlayers(ids, gameMode, board, bag);
+    }
+
+    protected GameBoard getGameBoard(){
+        return this.board;
     }
 
     int getGameMode() {

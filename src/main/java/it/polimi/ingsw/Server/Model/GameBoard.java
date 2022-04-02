@@ -32,16 +32,17 @@ class GameBoard {
         }*/
 
         //instantiating islands
-        this.islands = new Islands(gInit);
+        this.islands = new Islands(this);
 
         //instantiating professors
-        this.professors = new Professors();
+        this.professors = new Professors(this);
 
 
     }
 
     public void AddStudentToIsland(Color color, int id){
         this.islands.AddStudentToIsland(color, id);
+        this.professors.updateProfessors();
     }
 
     public void MoveMotherNature(int count){
@@ -75,9 +76,6 @@ class GameBoard {
         return clouds;
     }
 
-    public Collection<School> getSchools() {
-        return schools;
-    }
 
     public GameInitializer getgInit() {
         return gInit;

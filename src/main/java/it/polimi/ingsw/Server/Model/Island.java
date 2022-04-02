@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class Island {
@@ -11,11 +12,14 @@ public class Island {
     private Optional<Boolean> banCard;
     private int towerCount;
     private GameInitializer gInit;
+    private GameBoard board;
 
-    public Island(GameInitializer gInit, int id){
-        this.gInit = gInit;
+    public Island(GameBoard board, int id){
+        this.gInit = board.getgInit();
+        this.board = board;
+        this.id = id;
         this.students = new int[Color.getNumberOfColors()];
-        for (int i : this.students) {
+        for (int i=0; i<Color.getNumberOfColors(); i++) {
             this.students[i] = 0;
         }
         this.towerColor = -1;
@@ -61,26 +65,33 @@ public class Island {
     }
 
     public void CalcInfluence() {
-        ArrayList<Player> players = gInit.getPlayers();
-        ArrayList<Integer> playersInfluence = new ArrayList<>(5);
+        ArrayList<Player> players = gInit.getPlayers(); // arrray of the players
+        HashMap<Player, Integer> playersInfluence = new HashMap<>(players.size()); // map of the influences
+        //initializating playersInfluence
+        for(Player p: players){
+            playersInfluence.put(p, 0);
+        }
+
         Player p;
-        int p_index;
         //fill the players influence array
+        int temp = 0;
         for (int i=0; i < this.students.length; i++){
-            p = Professors.getPlayerWithProfessor(Color.getColorById(i)); // find who owns the i-color
-            p_index = playersInfluence.indexOf(p); //find the index of that player in playersInfluence
-            playersInfluence.set(p_index, playersInfluence.get(p_index) + students[i]); // sum the influence of the player
+            p = board.getProfessors().getPlayerWithProfessor(Color.getColorById(i)); // find who owns the i-color
+            if (p != null) { //if somebody owns the professor of the i-color
+                temp = playersInfluence.get(p);
+                playersInfluence.replace(p, temp + students[i]); // sum the influence of the player
+                }
             }
         //creating blackinfluence, whiteinfluence and greyinfluence
         int blackInfluence = 0, whiteInfluence = 0, greyInfluence = 0;
-        for (int k=0; k<players.size(); k++) {
-            if (players.get(k).getTowerColor() == 1){ //if the k-player's color is black
+        for (Player k : players) {
+            if (k.getTowerColor() == 1){ //if the k-player's color is black
                 blackInfluence = blackInfluence + playersInfluence.get(k);
             }
-            else if (players.get(k).getTowerColor() == 2){ //if the k-player's color is white
+            else if (k.getTowerColor() == 2){ //if the k-player's color is white
                 whiteInfluence = whiteInfluence + playersInfluence.get(k);
             }
-            else if (players.get(k).getTowerColor() == 3){ //if the k-player's color is grey
+            else if (k.getTowerColor() == 3){ //if the k-player's color is grey
                 greyInfluence = greyInfluence + playersInfluence.get(k);
             }
         }
@@ -116,6 +127,7 @@ public class Island {
 
     public void AddStudent(Color color){
         students[color.getIndex()] = students[color.getIndex()] + 1;
+        board.getProfessors().updateProfessors();
         CalcInfluence();
     }
     //returns the higher TowerColor

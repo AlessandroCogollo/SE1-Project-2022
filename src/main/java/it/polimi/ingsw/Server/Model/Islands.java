@@ -6,10 +6,10 @@ public class Islands {
     private final ArrayList<Island> islands;
     private Island MotherNature;
 
-    public Islands(GameInitializer gInit){
+    public Islands(GameBoard board){
         this.islands = new ArrayList<>();
         for (int i=0; i<12; i++){
-            this.islands.add(new Island(gInit, i));
+            this.islands.add(new Island(board, i));
         }
         this.MotherNature = this.islands.get(0);
     }

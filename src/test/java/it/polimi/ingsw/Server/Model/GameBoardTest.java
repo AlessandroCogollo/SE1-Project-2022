@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server.Model;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameBoardTest {
@@ -10,20 +13,25 @@ public class GameBoardTest {
         ids[0] = 4;
         ids[1] = 24;
         GameInitializer gInit = new GameInitializer(ids, 0);
-        GameBoard board = new GameBoard(gInit);
+        GameBoard board = gInit.getGameBoard();
         return board;
     }
     @Test
-    public void shouldAnswerWithTrue()
+    public void addStudentTest()
     {
+        Color color = Color.Yellow;
         GameBoard board = getGameBoard();
-        board.AddStudentToIsland(Color.Blue, 3);
+        board.getgInit().getPlayers().get(0).moveStudent(new Movement(color, null));
+        board.AddStudentToIsland(color, 3);
         int[] students = new int[Color.getNumberOfColors()];
         for (int i=0; i< students.length; i++){
             students[i] = 0;
         }
-        students[Color.Blue.getIndex()] = 1;
-        assertEquals(board.getIslands().getIslandFromId(3).getStudents(), students);
+        students[color.getIndex()] = 1;
+        for(int i=0; i<Color.getNumberOfColors(); i++){
+            assertEquals(board.getIslands().getIslandFromId(3).getStudents()[i], students[i]);
+        }
+
     }
 
 }
