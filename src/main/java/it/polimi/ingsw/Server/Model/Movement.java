@@ -14,6 +14,7 @@ public class Movement {
     public Color getColor() {
             return x;
     }
+
     public Optional<Island> getDestination() {
         return destination;
     }

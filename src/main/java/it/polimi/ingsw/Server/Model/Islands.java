@@ -43,7 +43,8 @@ public class Islands {
         return null;
     }
 
-    public void AddStudentToIsland(Color color, Island island){
+    public void AddStudentToIsland(Color color, int id){
+        Island island = getIslandFromId(id);
         island.AddStudent(color);
     }
 

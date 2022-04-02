@@ -35,8 +35,8 @@ class GameBoard {
 
     }
 
-    public void AddStudentToIsland(Color color, Island island){
-        this.islands.AddStudentToIsland(color, island);
+    public void AddStudentToIsland(Color color, int id){
+        this.islands.AddStudentToIsland(color, id);
     }
 
     public void MoveMotherNature(int count){
@@ -64,5 +64,25 @@ class GameBoard {
 
     public void ChooseCloud(Player player, Cloud cloud){
 
+    }
+
+    public Collection<Cloud> getClouds() {
+        return clouds;
+    }
+
+    public Collection<School> getSchools() {
+        return schools;
+    }
+
+    public GameInitializer getgInit() {
+        return gInit;
+    }
+
+    public Islands getIslands() {
+        return islands;
+    }
+
+    public Professors getProfessors() {
+        return professors;
     }
 }
