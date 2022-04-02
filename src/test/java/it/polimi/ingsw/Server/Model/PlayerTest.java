@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
-    //todo change when board is implemented, need GameBoard class
     protected static Player getPlayer(int gameMode, School school, Player mate, int towerColor){
         if (gameMode == 0)
             return new Player(1, towerColor, mate, null, school);
@@ -143,15 +142,18 @@ class PlayerTest {
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 2 - 2 player advanced mode");
 
+
         players = Player.factoryPlayers(id3, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 3 - 3 player easy mode");
             assertEquals(true, p instanceof Player, "test 3 - 3 player easy mode");
         }
 
+
         players = Player.factoryPlayers(id3, 1, board, bag);
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 4 - 3 player advanced mode");
+
 
         players = Player.factoryPlayers(id4, 0, board, bag);
         for (Player p: players){
@@ -159,9 +161,11 @@ class PlayerTest {
             assertEquals(true, p instanceof Player, "test 5 - 4 player easy mode");
         }
 
+
         players = Player.factoryPlayers(id4, 1, board, bag);
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 6 - 4 player advanced mode");
+
 
         players = Player.factoryPlayers(id4, 0, board, bag);
         Player p1 = null, p2 = null, p3 = null, p4 = null;
