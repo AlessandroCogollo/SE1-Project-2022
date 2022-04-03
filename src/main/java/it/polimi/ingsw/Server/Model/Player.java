@@ -19,8 +19,6 @@ class Player implements Iterable<Assistant>{
 
     private Assistant activeAssistant;
 
-
-
     Player (int id, int towerColor, Player mate, GameBoard board, School school) {
         this.id = id;
         this.towerColor = towerColor;

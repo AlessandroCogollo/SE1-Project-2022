@@ -14,7 +14,6 @@ class AdvancedPlayer extends Player {
         super(id, towerColor, mate, board, school);
         this.coins = 1;
 
-        //todo right deck, need Character class
         //this.cDeck = Character.getNewDeck();
         this.cDeck = null;
 
@@ -49,7 +48,7 @@ class AdvancedPlayer extends Player {
     }
 
     void playCharacter(Character c) {
-        //coins -= x.getCost();
+        coins -= c.getCost();
         activeCharacter = Optional.ofNullable(c);
         //todo actual implementation, need Character class
 
