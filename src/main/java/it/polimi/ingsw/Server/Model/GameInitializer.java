@@ -7,15 +7,16 @@ import java.util.Iterator;
 // this class create all the model and keep the register of the players
 class GameInitializer implements Iterable<Player>{
 
-    private Collection<Player> players;
-    private GameBoard board;
+    private final Collection<Player> players;
+    private final GameBoard board;
     private final int gameMode;
 
 
     GameInitializer(int[] ids, int gameMode) {
         this.gameMode = gameMode;
-        //todo use the right constructor, need GameBoard class and Bag class
+
         GameBoard board = new GameBoard(this, ids.length);
+
         this.board = board;
         Bag bag = new Bag();
         //Bag bag = board.getBag();

@@ -7,16 +7,11 @@ import java.util.Optional;
 class AdvancedPlayer extends Player {
 
     private int coins;
-    private final Collection<Character> cDeck;
     private Optional<Character> activeCharacter;
 
     AdvancedPlayer(int id, int towerColor, Player mate, GameBoard board, School school) {
         super(id, towerColor, mate, board, school);
         this.coins = 1;
-
-        //this.cDeck = Character.getNewDeck();
-        this.cDeck = null;
-
         this.activeCharacter = Optional.empty();
     }
 
@@ -49,7 +44,7 @@ class AdvancedPlayer extends Player {
     }
 
     void playCharacter(Character c) {
-        coins -= c.getCost();
+        //coins -= x.getCost();
         activeCharacter = Optional.ofNullable(c);
         //todo actual implementation, need Character class
 
