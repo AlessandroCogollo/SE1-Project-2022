@@ -9,4 +9,8 @@ class Cloud {
     public void AddStudents(){
         this.students = Bag.DrawStudents(3);
     }
+
+    public int[] getStudents() {
+        return students;
+    }
 }

@@ -44,12 +44,12 @@ class School {
 
     void addStudentFromCloud(Cloud c) {
         //todo actual implementation, need Cloud class
-        /*
-        Collection<Color> students = c.getStudents();
-        for (Color x: students){
-            entrance[x.getIndex()]++;
+
+        int[] students = c.getStudents();
+        for (int i=0; i<Color.getNumberOfColors(); i++){
+            entrance[i] = entrance[i] + students[i];
         }
-        */
+
     }
 
     void addTowers(int number) {
@@ -64,6 +64,11 @@ class School {
         }
         return false;
     }
+
+    /*Color moveStudentFromEntrance(Color color) {
+        entrance[color.getIndex()]--;
+        return color;
+    }*/
 
     Color moveStudentFromEntrance(Color color) {
         entrance[color.getIndex()]--;

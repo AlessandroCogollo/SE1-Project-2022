@@ -6,7 +6,7 @@ import java.util.List;
 
 class GameBoard {
 
-    private final Collection<Cloud> clouds;
+    private final ArrayList<Cloud> clouds;
     private final Islands islands;
     //private final Collection<School> schools = null;
     private final Professors professors;
@@ -72,7 +72,7 @@ class GameBoard {
 
     }
 
-    public Collection<Cloud> getClouds() {
+    public ArrayList<Cloud> getClouds() {
         return clouds;
     }
 
