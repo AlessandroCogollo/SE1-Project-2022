@@ -35,23 +35,7 @@ public class GameBoardTest {
         GameBoard board = gInit.getGameBoard();
         return board;
     }
-    //@Test
-    public void addStudentTest(int count, int gameMode)
-    {
-        Color color = Color.Yellow;
-        GameBoard board = getGameBoard(count, gameMode);
-        board.getgInit().getPlayers().get(0).moveStudent(new Movement(color, null));
-        board.AddStudentToIsland(color, 3);
-        int[] students = new int[Color.getNumberOfColors()];
-        for (int i=0; i< students.length; i++){
-            students[i] = 0;
-        }
-        students[color.getIndex()] = 1;
-        for(int i=0; i<Color.getNumberOfColors(); i++){
-            assertEquals(board.getIslands().getIslandFromId(3).getStudents()[i], students[i]);
-        }
 
-    }
     //@Test
     public void NewRoundTest(int count, int gameMode){
         GameBoard board = getGameBoard(count, gameMode);
@@ -82,8 +66,6 @@ public class GameBoardTest {
     @Test
     public void Tests(){
         for(int count=2; count <= 4; count ++){
-            addStudentTest(count, 0);
-            addStudentTest(count, 1);
             NewRoundTest(count, 0);
             NewRoundTest(count, 1);
             AddStudentToIslandTest(count, 0);
