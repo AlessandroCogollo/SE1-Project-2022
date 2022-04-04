@@ -18,6 +18,8 @@ public class AdvancedGame extends Game {
 
         AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
 
+        //todo check if is a playable character
+
         if (p != round.getCurrent())
             return Errors.NOT_CURRENT_PLAYER.getCode();
 

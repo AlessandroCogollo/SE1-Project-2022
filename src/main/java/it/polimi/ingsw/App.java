@@ -31,6 +31,7 @@ public class App {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
 
         if (cmd.hasOption(help)) {

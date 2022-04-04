@@ -15,7 +15,7 @@ class Player implements Iterable<Assistant>{
     protected final School school;
     private final Collection<Assistant> deck;
 
-    private final GameBoard board;
+    protected final GameBoard board;
 
     private Assistant activeAssistant;
 
