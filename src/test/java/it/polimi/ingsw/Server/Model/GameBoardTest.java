@@ -43,7 +43,8 @@ public class GameBoardTest {
         ArrayList<Cloud> clouds = board.getClouds();
         for (Cloud c : clouds){
             System.out.println(Arrays.toString(c.getStudents()));
-            assertEquals(Arrays.stream(c.getStudents()).sum(), 3);
+            if (count == 3) assertEquals(Arrays.stream(c.getStudents()).sum(), 4);
+            else assertEquals(Arrays.stream(c.getStudents()).sum(), 3);
         }
     }
 
@@ -62,6 +63,7 @@ public class GameBoardTest {
         assertTrue(board.getIslands().getIslandFromId(3).getStudents()[color.getIndex()] >= 1);
 
     }
+
 
     @Test
     public void Tests(){

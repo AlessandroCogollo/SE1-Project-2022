@@ -11,8 +11,9 @@ class GameBoard {
     //private final Collection<School> schools = null;
     private final Professors professors;
     private final GameInitializer gInit;
+    private final Bag bag;
 
-    public GameBoard(GameInitializer gInit, int numOfPlayer){
+    GameBoard(GameInitializer gInit, int numOfPlayer){
 
         this.gInit = gInit;
 
@@ -20,10 +21,11 @@ class GameBoard {
         //this.clouds = new ArrayList<>(gInit.getNumberOfPlayers());
         this.clouds = new ArrayList<>(numOfPlayer);
 
+        this.bag = new Bag();
 
         //for(int i=0; i < gInit.getNumberOfPlayers(); i++){
         for(int i=0; i < numOfPlayer; i++){
-            clouds.add(new Cloud());
+            clouds.add(new Cloud(bag, numOfPlayer));
         }
 
         //connecting schools
@@ -35,31 +37,31 @@ class GameBoard {
         this.islands = new Islands(this);
 
         //instantiating professors
-        this.professors = new Professors(this);
+        this.professors = new Professors(gInit);
 
 
     }
 
-    public void AddStudentToIsland(Color color, int id){
+    void AddStudentToIsland(Color color, int id){
         this.islands.AddStudentToIsland(color, id);
         this.professors.updateProfessors();
     }
 
-    public void MoveMotherNature(int count){
+    void MoveMotherNature(int count){
         this.islands.MoveMotherNature(count);
     }
 
-    public void NewRound(){
+    void NewRound(){
         PopulateClouds();
     }
 
-    private void PopulateClouds(){
+    void PopulateClouds(){
         for(Cloud cloud : clouds){
             cloud.AddStudents();
         }
     }
 
-    public Collection<Player> getPlayerFromTower(int TowerColor){
+    Collection<Player> getPlayerFromTower(int TowerColor){
         Collection<Player> temp = new ArrayList<>(4);
         Collection<Player> players = gInit.getPlayers();
         for (Player p : players){
@@ -68,24 +70,24 @@ class GameBoard {
         return temp;
     }
 
-    public void ChooseCloud(Player player, Cloud cloud){
+    void getCloud(int cloudId){
 
     }
 
-    public ArrayList<Cloud> getClouds() {
+    ArrayList<Cloud> getClouds() {
         return clouds;
     }
 
 
-    public GameInitializer getgInit() {
+    GameInitializer getgInit() {
         return gInit;
     }
 
-    public Islands getIslands() {
+    Islands getIslands() {
         return islands;
     }
 
-    public Professors getProfessors() {
+    Professors getProfessors() {
         return professors;
     }
 }

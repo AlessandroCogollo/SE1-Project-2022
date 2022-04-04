@@ -33,7 +33,7 @@ class AdvancedPlayer extends Player {
     void moveStudent(Movement move) {
         if (move.getDestination().isPresent()){
             Color student = school.moveStudentFromEntrance(move.getColor());
-            getBoard().AddStudentToIsland(student, move.getDestination().get().getId());
+            board.AddStudentToIsland(student, move.getDestination().get().getId());
             //todo movement to cloud, need GameBoard class
         }
         else

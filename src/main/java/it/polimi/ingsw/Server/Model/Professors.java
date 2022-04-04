@@ -7,31 +7,29 @@ import java.util.Optional;
 
 public class Professors {
     private int[] professors;
-    private GameBoard board;
-    private ArrayList<Player> players;
+    private GameInitializer gInit;
     private ArrayList<School> schools;
 
-    public Professors(GameBoard board){
+    Professors(GameInitializer gInit){
         this.professors = new int[Color.getNumberOfColors()];
         for(int i=0; i<Color.getNumberOfColors(); i++){
             professors[i] = -1;
         }
-        this.board = board;
+        this.gInit = gInit;
     }
 
-    public void updateProfessors(){
-        this.players = board.getgInit().getPlayers();
+    void updateProfessors(){
         schools = new ArrayList<>();
-        for (Player p : players){
+        for (Player p : gInit){
             schools.add(p.getSchool());
         }
         int maxp = -1;
         for (int i=0; i<Color.getNumberOfColors(); i++){
             int max = 0;
-            for (int j=0; j<players.size(); j++){
-                if (schools.get(j).getNumberOfStudentInRoomByColor(Color.getColorById(i)) > max) {
-                    max = schools.get(j).getNumberOfStudentInRoomByColor(Color.getColorById(i));
-                    maxp = players.get(j).getId();
+            for (Player p : gInit){
+                if (p.getNumberOfStudentInRoomByColor(Color.getColorById(i)) > max) {
+                    max = p.getNumberOfStudentInRoomByColor(Color.getColorById(i));
+                    maxp = p.getId();
                 }
             }
             if(maxp != -1){
@@ -41,15 +39,15 @@ public class Professors {
 
     }
 
-    public int[] getProfessors() {
+    int[] getProfessors() {
         return professors;
     }
 
-    public void setProfessors(Color color, Player player){
+    void setProfessors(Color color, Player player){
         this.professors[color.getIndex()] = player.getId();
     }
 
-    public Collection<Color> getControlledProfessors(Player player){
+    Collection<Color> getControlledProfessors(Player player){
         List<Color> temp = new ArrayList<Color>();
         for(int i=0; i<Color.getNumberOfColors(); i++){
             if (professors[i] == player.getId())
@@ -58,10 +56,10 @@ public class Professors {
         return temp;
     }
 
-    public Player getPlayerWithProfessor(Color color){
+    Player getPlayerWithProfessor(Color color){
         int pId = professors[color.getIndex()];
         if(pId != -1) {
-            return board.getgInit().getPlayerById(pId);
+            return gInit.getPlayerById(pId);
         }
         else return null;
     }

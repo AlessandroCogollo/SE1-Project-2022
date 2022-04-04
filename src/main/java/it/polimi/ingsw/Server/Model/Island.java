@@ -25,46 +25,46 @@ public class Island {
         this.towerColor = -1;
         this.banCard = Optional.empty();
         this.towerCount = 0;
-
+        //prendi 20 pedine
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public void setBanCard(Optional<Boolean> banCard) {
+    void setBanCard(Optional<Boolean> banCard) {
         this.banCard = banCard;
     }
 
-    protected void setTowerColor(int towerColor) {
+    void setTowerColor(int towerColor) {
         this.towerColor = towerColor;
     }
 
-    protected void setTowerCount(int towerCount) {
+    void setTowerCount(int towerCount) {
         this.towerCount = towerCount;
     }
 
-    public int getTowerCount() {
+    int getTowerCount() {
         return towerCount;
     }
 
-    public int[] getStudents() {
+    int[] getStudents() {
         return students;
     }
 
-    public Optional<Integer> getTowerColor() {
+    Optional<Integer> getTowerColor() {
         return Optional.of(towerColor);
     }
 
-    public Optional<Boolean> getBanCard() {
+    Optional<Boolean> getBanCard() {
         return banCard;
     }
 
-    protected void setId(int id) {
+    void setId(int id) {
         this.id = id;
     }
 
-    public void CalcInfluence() {
+    void CalcInfluence() {
         ArrayList<Player> players = gInit.getPlayers(); // arrray of the players
         HashMap<Player, Integer> playersInfluence = new HashMap<>(players.size()); // map of the influences
         //initializating playersInfluence
@@ -124,11 +124,15 @@ public class Island {
             }
         }
     }
-
-    public void AddStudent(Color color){
+    //adds the student and update professors and influence
+    void AddStudent(Color color){
         students[color.getIndex()] = students[color.getIndex()] + 1;
         board.getProfessors().updateProfessors();
         CalcInfluence();
+    }
+    //just adds the student
+    void AddStudent2(Color color){
+        students[color.getIndex()] = students[color.getIndex()] + 1;
     }
     //returns the higher TowerColor
      ArrayList<Integer> findMax(int black, int white, int grey){

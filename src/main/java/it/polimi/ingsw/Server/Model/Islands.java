@@ -1,20 +1,50 @@
 package it.polimi.ingsw.Server.Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Islands {
     private final ArrayList<Island> islands;
     private Island MotherNature;
+    private int numOfIslands = 12;
 
-    public Islands(GameBoard board){
+    Islands(GameBoard board){
         this.islands = new ArrayList<>();
-        for (int i=0; i<12; i++){
-            this.islands.add(new Island(board, i));
+
+        int[] firstStudents = new int[Color.getNumberOfColors()];
+        for(int i=0; i<Color.getNumberOfColors(); i++){
+            firstStudents[i] = 4;
         }
+
+        Random rand = new Random(System.currentTimeMillis());
+        int index;
+
+        for (int i=0; i<numOfIslands; i++){
+
+            Island island = new Island(board, i);
+            this.islands.add(island);
+
+            if(i!=0 && i!=numOfIslands/2){
+
+                for(int j=0; j<2; j++){
+
+                    index = rand.nextInt(Color.getNumberOfColors());
+                    while(firstStudents[index] == 0){
+                        index = rand.nextInt(Color.getNumberOfColors());
+                    }
+
+                    island.AddStudent2(Color.getColorById(index));
+                    firstStudents[index]--;
+                }
+            }
+
+        }
+
         this.MotherNature = this.islands.get(0);
     }
 
-    private void AggregateIsland(Island currIsland, Island nearIsland){
+    void AggregateIsland(Island currIsland, Island nearIsland){
         //add the towers
         currIsland.setTowerCount(currIsland.getTowerCount() + nearIsland.getTowerCount());
         //add the students
@@ -25,7 +55,7 @@ public class Islands {
         }
     }
 
-    public void MoveMotherNature(int count){
+    void MoveMotherNature(int count){
         for (int i=0; i<this.islands.size(); i++){
             if (MotherNature.equals(this.islands.get(i))){
                 if(i+count > islands.size()){
@@ -36,17 +66,15 @@ public class Islands {
         }
     }
 
-    public Island getIslandFromId(int id){
+    Island getIslandFromId(int id){
         for (Island i : this.islands){
             if (i.getId() == id) return i;
         }
         return null;
     }
 
-    public void AddStudentToIsland(Color color, int id){
+    void AddStudentToIsland(Color color, int id){
         Island island = getIslandFromId(id);
         island.AddStudent(color);
     }
-
-    private void NextMotherNature(){}
 }

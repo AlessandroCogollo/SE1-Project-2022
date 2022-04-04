@@ -15,7 +15,7 @@ class Player implements Iterable<Assistant>{
     protected final School school;
     private final Collection<Assistant> deck;
 
-    private final GameBoard board;
+    protected final GameBoard board;
 
     private Assistant activeAssistant;
 
@@ -29,9 +29,7 @@ class Player implements Iterable<Assistant>{
         this.activeAssistant = null;
     }
 
-    protected GameBoard getBoard() {
-        return board;
-    }
+
 
     int getId() {
         return id;
@@ -68,7 +66,7 @@ class Player implements Iterable<Assistant>{
     void moveStudent (Movement move){
         if (move.getDestination().isPresent()){
             Color student = school.moveStudentFromEntrance(move.getColor());
-            getBoard().AddStudentToIsland(student, move.getDestination().get().getId());
+            board.AddStudentToIsland(student, move.getDestination().get().getId());
             //todo movement to cloud, need GameBoard class
         }
         else
