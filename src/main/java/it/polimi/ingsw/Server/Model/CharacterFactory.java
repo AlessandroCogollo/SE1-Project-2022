@@ -3,9 +3,8 @@ package it.polimi.ingsw.Server.Model;
 import java.util.*;
 
 public class CharacterFactory {
-
     //method to create a character
-    public static Character getCharacterById(int CharacterId){
+    public static Character produceCharacterById(int CharacterId){
         switch(CharacterId) {
             case 0:
                 return new Apothecary();
@@ -38,7 +37,7 @@ public class CharacterFactory {
 
     // return a collection of 3 characters associated to the game
     public static Collection<Character> getNewGameDeck() {
-        Random rand = new Random(); //instance of random class
+        Random rand = new Random(System.currentTimeMillis()); //instance of random class
         Collection<Character> c = new ArrayList<>(12);
         List<Integer> pickedNumbers = new ArrayList<>(1);
 
@@ -50,7 +49,7 @@ public class CharacterFactory {
                 pickedCard = rand.nextInt(upperbound);
             } while (pickedNumbers.contains(pickedCard));
             pickedNumbers.add(pickedCard);
-            Collections.addAll(c, getCharacterById(pickedCard));
+            Collections.addAll(c, produceCharacterById(pickedCard));
         }
         return c;
     }

@@ -1,16 +1,19 @@
 package it.polimi.ingsw.Server.Model;
-import java.util.Optional;
 
 public class Drunkard extends Character  {
-    private boolean isChangingMethods;
+
+    Drunkard() {
+        super.isChangingMethods = true;
+    }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
+    public void activateEffect(Object object) {
         System.out.println("Drunkard");
     }
+
     /*
     public Optional<Player> calcInfluence() {
-        return ;
+        return null;
     }
-     */
+    */
 }

@@ -1,12 +1,19 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.Optional;
-
 public class Herald extends Character {
-    private boolean isChangingMethods;
+
+    Herald() {
+        super.id = 5;
+        super.isChangingMethods = false;
+        super.cost = 3;
+    }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
-        System.out.println("Herald");
+    public void activateEffect(Object island) {
+        ((Island) island).CalcInfluence();
+        System.out.println("Herald set influence on this island: "
+                + ((Island)island).getTowerCount()
+                + ((Island) island).getTowerColor()
+        );
     }
 }

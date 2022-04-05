@@ -3,13 +3,11 @@ import java.util.Optional;
 
 public class Knight extends Character {
 
-    private int id;
-    private boolean isChangingMethod;
     //private Game game;
 
     Knight() {
         this.id = 7;
-        this.isChangingMethod = true;
+        super.isChangingMethods = true;
     }
 
     /*
@@ -19,7 +17,7 @@ public class Knight extends Character {
     */
 
     @Override
-    public void activateEffect(Optional<Object> object) {
+    public void activateEffect(Object object) {
         System.out.println("Knight");
     }
 }

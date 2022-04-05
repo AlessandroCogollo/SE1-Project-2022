@@ -1,11 +1,13 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.Optional;
-
 public abstract class Character {
 
-    private int cost;
-    private boolean isChangingMethods;
+    protected int id;
+    protected boolean isChangingMethods;
+    protected int cost;
+    protected Game game;
+
+    public int getId() { return this.id; }
 
     public boolean getIsChangingMethods() { return this.isChangingMethods; }
 
@@ -13,5 +15,5 @@ public abstract class Character {
 
     public void setCost() { this.cost += 1; }
 
-    public abstract void activateEffect(Optional<Object> object);
+    public abstract void activateEffect(Object object);
 }

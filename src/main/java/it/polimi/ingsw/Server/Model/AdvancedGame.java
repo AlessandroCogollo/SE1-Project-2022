@@ -44,16 +44,20 @@ public class AdvancedGame extends Game {
     @Override
     public int moveMotherNature (int playerId, int position){
 
+        AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
+        Character c = p.getActiveCharacter().get();
+
         //todo check active character that modify methods, need Character enum
         //no character that change methods
-        if (false)
+        if (c.getId() == 9)
+            // modify movement of mother nature, +2
             return super.moveMotherNature(playerId, position);
 
         //with character that change methods
         if (!gameInit.existsPlayer(playerId))
             return Errors.PLAYER_NOT_EXIST.getCode();
 
-        AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
+        // AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
         //todo move mother nature special, need Character enum
 
 

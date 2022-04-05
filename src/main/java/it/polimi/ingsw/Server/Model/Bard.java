@@ -4,15 +4,22 @@ import java.util.Optional;
 
 public class Bard extends Character {
 
-    private int id = 1;
-    private boolean isChangingMethods = false;
-
     public Bard() {
+        super.id = 1;
+        super.isChangingMethods = false;
+        super.cost = 1;
+        // todo temporary, add Game
 
+        System.out.println("Built Bard");
     }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
-        System.out.println("Bard");
+    public void activateEffect(Object object) {
+        // if Player has students in entrance
+        // game.round.getCurrent();
+        // remove max 2 students from entrance
+        // put them in room
+        // remove max 2 students from room
+        // put them in entrance
     }
 }

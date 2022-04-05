@@ -1,15 +1,20 @@
 package it.polimi.ingsw.Server.Model;
-import java.util.Optional;
 
 public class Postman extends Character {
-    private boolean isChangingMethod;
+
+    Postman() {
+        super.id = 9;
+        super.isChangingMethods = true;
+        super.cost = 1;
+    }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
+    public void activateEffect(Object object) {
         System.out.println("Postman");
     }
 
-    /*
-    public Optional<Player> calcInfluence() {}
-    */
+    public int getMaxMovement() {
+        return 0;
+    }
+
 }
