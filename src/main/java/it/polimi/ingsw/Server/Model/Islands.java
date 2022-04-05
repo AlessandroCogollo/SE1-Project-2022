@@ -28,9 +28,10 @@ public class Islands {
             island = new Island(board, i, gInit);
             this.islands.add(island);
 
+            //todo change because the last one can call a lot of time next int to find the remaining
             if(i != (this.islands.size() / 2)){
                 int j = 0;
-                while (j < 2){
+                while (j < 1){
                     index = rand.nextInt(Color.getNumberOfColors());
                     if (firstStudents[index] > 0){
                         island.AddStudent(Color.getColorById(index));
