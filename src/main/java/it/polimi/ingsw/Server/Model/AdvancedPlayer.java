@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.Collection;
 import java.util.Optional;
 
 // sub class of player that add the play character methods and the management of characters
@@ -28,7 +27,7 @@ class AdvancedPlayer extends Player {
     void moveStudent(Movement move) {
         if (move.getDestination().isPresent()){
             Color student = school.moveStudentFromEntrance(move.getColor());
-            board.AddStudentToIsland(student, move.getDestination().get().getId());
+            board.addStudentToIsland(student, move.getDestination().get().getId());
             //todo movement to cloud, need GameBoard class
         }
         else

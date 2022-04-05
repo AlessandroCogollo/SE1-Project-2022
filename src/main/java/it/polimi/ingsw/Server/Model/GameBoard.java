@@ -2,92 +2,75 @@ package it.polimi.ingsw.Server.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 class GameBoard {
 
     private final ArrayList<Cloud> clouds;
     private final Islands islands;
-    //private final Collection<School> schools = null;
     private final Professors professors;
     private final GameInitializer gInit;
     private final Bag bag;
 
-    GameBoard(GameInitializer gInit, int numOfPlayer){
+    GameBoard (GameInitializer gInit, int numOfPlayer){
 
         this.gInit = gInit;
-
-        //instantiating clouds
-        //this.clouds = new ArrayList<>(gInit.getNumberOfPlayers());
-        this.clouds = new ArrayList<>(numOfPlayer);
-
         this.bag = new Bag();
 
-        //for(int i=0; i < gInit.getNumberOfPlayers(); i++){
-        for(int i=0; i < numOfPlayer; i++){
-            clouds.add(new Cloud(bag, numOfPlayer));
+        this.clouds = new ArrayList<>(numOfPlayer);
+        for(int i = 0; i < numOfPlayer; i++){
+            clouds.add(new Cloud( i, numOfPlayer, bag));
         }
 
-        //connecting schools
-        /*for (Player p : gInit.getPlayers()){
-            schools.add(p.getSchool());
-        }*/
-
         //instantiating islands
-        this.islands = new Islands(this);
+        this.islands = new Islands(this, gInit);
 
         //instantiating professors
         this.professors = new Professors(gInit);
-
-
     }
 
-    void AddStudentToIsland(Color color, int id){
+    void getCloud(int cloudId){
+        //todo
+    }
+
+    Bag getBag() {
+        return bag;
+    }
+
+    Professors getProfessors() {
+        return professors;
+    }
+
+    void addStudentToIsland(Color color, int id){
         this.islands.AddStudentToIsland(color, id);
-        this.professors.updateProfessors();
     }
 
-    void MoveMotherNature(int count){
+    void moveMotherNature(int count){
         this.islands.MoveMotherNature(count);
     }
 
-    void NewRound(){
-        PopulateClouds();
-    }
-
-    void PopulateClouds(){
+    void populateClouds(){
         for(Cloud cloud : clouds){
-            cloud.AddStudents();
+            cloud.setStudents();
         }
     }
 
-    Collection<Player> getPlayerFromTower(int TowerColor){
+    Collection<Player> getPlayerFromTowerColor (int TowerColor){
         Collection<Player> temp = new ArrayList<>(4);
-        Collection<Player> players = gInit.getPlayers();
-        for (Player p : players){
+        for (Player p : gInit){
             if (p.getTowerColor() == TowerColor) temp.add(p);
         }
         return temp;
     }
 
-    void getCloud(int cloudId){
 
-    }
-
-    ArrayList<Cloud> getClouds() {
-        return clouds;
-    }
-
-
+    //only for tests
     GameInitializer getgInit() {
         return gInit;
     }
-
+    ArrayList<Cloud> getClouds() {
+        return clouds;
+    }
     Islands getIslands() {
         return islands;
-    }
-
-    Professors getProfessors() {
-        return professors;
     }
 }

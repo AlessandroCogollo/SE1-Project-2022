@@ -66,7 +66,7 @@ class Player implements Iterable<Assistant>{
     void moveStudent (Movement move){
         if (move.getDestination().isPresent()){
             Color student = school.moveStudentFromEntrance(move.getColor());
-            board.AddStudentToIsland(student, move.getDestination().get().getId());
+            board.addStudentToIsland(student, move.getDestination().get().getId());
             //todo movement to cloud, need GameBoard class
         }
         else

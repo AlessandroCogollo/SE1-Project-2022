@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -15,13 +14,9 @@ class GameInitializer implements Iterable<Player>{
     GameInitializer(int[] ids, int gameMode) {
         this.gameMode = gameMode;
 
-        GameBoard board = new GameBoard(this, ids.length);
+        this.board = new GameBoard(this, ids.length);
 
-        this.board = board;
-        Bag bag = new Bag();
-        //Bag bag = board.getBag();
-
-        this.players = Player.factoryPlayers(ids, gameMode, board, bag);
+        this.players = Player.factoryPlayers(ids, gameMode, this.board, this.board.getBag());
     }
 
     protected GameBoard getGameBoard(){
@@ -42,14 +37,6 @@ class GameInitializer implements Iterable<Player>{
 
     int getNumberOfPlayers(){
         return players.size();
-    }
-
-
-
-    ArrayList<Player> getPlayers (){
-        ArrayList<Player> temp = new ArrayList<>();
-        for (Player p : players) temp.add(p);
-        return temp;
     }
 
     boolean existsPlayer (int id){

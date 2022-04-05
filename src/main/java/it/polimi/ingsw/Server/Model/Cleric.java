@@ -9,11 +9,12 @@ public class Cleric extends Character{
     private int[] students;
     //private Game game;
 
+    //todo character creation in gameboard
     public Cleric() {
         super.id = 4;
         super.isChangingMethods = false;
         // this.game = game;
-        students = Bag.DrawStudents(4);
+        //students = Bag.DrawStudents(4);
         // used for testing
         System.out.println("Built Cleric");
         System.out.println("Initialized Cleric with 4 students on him");

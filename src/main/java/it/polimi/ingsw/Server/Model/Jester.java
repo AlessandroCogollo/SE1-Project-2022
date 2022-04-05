@@ -3,8 +3,9 @@ package it.polimi.ingsw.Server.Model;
 public class Jester extends Character {
     private int[] students;
 
+    //todo character creation in gameboard
     Jester() {
-        students = Bag.DrawStudents(6);
+        //students = Bag.DrawStudents(6);
         super.isChangingMethods = false;
         System.out.println("Jester has " + students.length + " students");
     }

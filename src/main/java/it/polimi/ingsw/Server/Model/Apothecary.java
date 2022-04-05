@@ -28,7 +28,7 @@ class Apothecary extends Character {
     public void activateEffect(Object island) {
 
         // add banCard to island
-        ((Island)island).setBanCard(Optional.of(true));
+        ((Island)island).setBanCard();
 
         // remove banCard from this
         this.removeBanCard();

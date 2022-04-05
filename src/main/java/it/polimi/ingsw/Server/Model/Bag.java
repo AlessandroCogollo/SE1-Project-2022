@@ -5,31 +5,27 @@ import java.util.Random;
 
 class Bag {
 
-    private int[] students; //5
-    private Random rand;
-
-    //all'inizio metti 2 stud per ogni isola in cui non ce madre o nella opposta --OK
-    //gli altri nella bag e controllo se ci sono ancora, altrimenti checkwin --OK
+    private final int[] students;
+    private final Random rand;
 
     public Bag(){
-        students = new int[Color.getNumberOfColors()];
+        this.students = new int[Color.getNumberOfColors()];
         for (int i=0; i<Color.getNumberOfColors(); i++){
-            students[i] = (100/Color.getNumberOfColors());
+            students[i] = (24); //from the rules
         }
+        this.rand = new Random(System.currentTimeMillis());
     }
     public int[] DrawStudents(int count){
-        Random rand = new Random(System.currentTimeMillis());
         int[] drawnStudents = new int[Color.getNumberOfColors()];
         int index;
-        for (int i = 0; i < count; i++) {
+        int i = 0;
+        while (i < count) {
             if (Arrays.stream(students).sum() > 0){
                 index = rand.nextInt(Color.getNumberOfColors());
                 if(students[index] > 0){
                     drawnStudents[index]++;
                     students[index]--;
-                }
-                else {
-                    i--;
+                    i++;
                 }
             }
             else{
@@ -37,7 +33,6 @@ class Bag {
                 // CheckWin() ------------------
                 return null;
             }
-
         }
         return drawnStudents;
     }

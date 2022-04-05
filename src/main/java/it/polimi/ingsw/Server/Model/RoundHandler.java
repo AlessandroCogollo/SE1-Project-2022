@@ -183,6 +183,7 @@ class RoundHandler {
                         actionPhase = ActionPhase.NotActionPhase;
                         resetActiveAssistant();
                         current = planningOrder.poll();
+                        //todo cloud reset
                     }
                     //or to the next player and the next action phase
                     else {

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +38,7 @@ public class GameBoardTest {
     //@Test
     public void NewRoundTest(int count, int gameMode){
         GameBoard board = getGameBoard(count, gameMode);
-        board.NewRound();
+        board.populateClouds();
         ArrayList<Cloud> clouds = board.getClouds();
         for (Cloud c : clouds){
             System.out.println(Arrays.toString(c.getStudents()));
@@ -49,19 +48,23 @@ public class GameBoardTest {
     }
 
     public void AddStudentToIslandTest(int count, int gameMode){
-        GameBoard board = getGameBoard(count, gameMode);
-        board.NewRound();
-        Player player = board.getgInit().getPlayers().get(0);
+        //this method only invoke a method in one other class so the tests will be done in that class (islands)
+
+
+        /*GameBoard board = getGameBoard(count, gameMode);
+        board.populateClouds();
+        Player player = board.getgInit().iterator().next();
         Color color = null;
         for (int i=0; i<Color.getNumberOfColors(); i++){
             if (player.hasStudent(Color.getColorById(i))){
                 color = Color.getColorById(i);
                 player.moveStudent(new Movement(color, board.getIslands().getIslandFromId(3)));
+
                 break;
             }
         }
         assertTrue(board.getIslands().getIslandFromId(3).getStudents()[color.getIndex()] >= 1);
-
+        */
     }
 
 

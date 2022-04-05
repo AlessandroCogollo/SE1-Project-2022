@@ -1,26 +1,27 @@
 package it.polimi.ingsw.Server.Model;
 
 class Cloud {
-    private int id;
+    private final int id;
+    private final Bag bag;
+    private final int numOfPlayer;
     private int[] drawnStudents;
-    private int numOfPlayer;
-    private Bag bag;
 
 
-    public Cloud(Bag bag, int numOfPlayer){
+    Cloud(int id, int numOfPlayer, Bag bag){
+        this.id = id;
         this.bag = bag;
         this.numOfPlayer = numOfPlayer;
-
-    }
-    public void AddStudents(){
-        this.drawnStudents = new int[Color.getNumberOfColors()];
-        if(numOfPlayer == 3){
-            drawnStudents = bag.DrawStudents(4);
-        }
-        else this.drawnStudents = bag.DrawStudents(3);
+        setStudents();
     }
 
-    public int[] getStudents() {
+    void setStudents(){
+        if (numOfPlayer == 3)
+            this.drawnStudents = bag.DrawStudents(4);
+        else
+            this.drawnStudents = bag.DrawStudents(3);
+    }
+
+    int[] getStudents() {
         return drawnStudents;
     }
 }

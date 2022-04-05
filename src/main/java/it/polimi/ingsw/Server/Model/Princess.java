@@ -6,11 +6,12 @@ public class Princess extends Character {
     private boolean isChangingMethods;
     private int[] students;
 
+    //todo character creation in gameboard
     Princess() {
         super.id = 10;
         super.isChangingMethods = false;
         super.cost = 2;
-        students = Bag.DrawStudents(4);
+        //students = Bag.DrawStudents(4);
     }
 
     public void activateEffect(Object object) {
