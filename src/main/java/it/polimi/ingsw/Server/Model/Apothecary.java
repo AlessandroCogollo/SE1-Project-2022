@@ -1,40 +1,59 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Optional;
 
-class Apothecary extends Character {
+final class Apothecary extends Character {
 
     private int banCard;
-    //private Game game;
 
-    Apothecary() {
+    Apothecary(GameInitializer gameInitializer) {
+        super (0, 2, gameInitializer);
         this.banCard = 4;
-        super.id = 1;
-        super.isChangingMethods = false;
-        //this.game = game;
+
         System.out.println("Built Apothecary");
     }
 
-    // return number of banCard "token" on this card
-    public int getBanCard() { return this.banCard; }
+
 
     // used to add a BanCard "token" to this card, after being removed from an island
-    public void addBanCard() { this.banCard += 1; }
+    void addBanCard() { this.banCard += 1; }
 
     // used to remove a BanCard "token" from this card, and to add it to an island
-    public void removeBanCard() { this.banCard -= 1; }
+    void removeBanCard() { this.banCard -= 1; }
 
     @Override
-    public void activateEffect(Object island) {
+    void activateEffect(Object obj) {
 
+        int islandId = (Integer)obj;
+
+        Island i = gameInitializer.getIslands().getIslandFromId(islandId);
         // add banCard to island
-        ((Island)island).setBanCard();
+        i.setBanCard();
 
         // remove banCard from this
-        this.removeBanCard();
+        removeBanCard();
 
         // used for debug
         System.out.println("BanCard on this: " + this.getBanCard());
-        System.out.println("BanCard on Island N°" + ((Island)island).getId() + ": " + ((Island)island).getBanCard());
+        System.out.println("BanCard on Island N°" + i.getId() + ": " + i.getBanCard());
     }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        if (!(obj instanceof Integer))
+            return Errors.NOT_RIGHT_PARAMETER;
+
+        int islandId = (Integer)obj;
+
+        if (!gameInitializer.getIslands().existsIsland(islandId))
+            return Errors.NOT_VALID_DESTINATION;
+        if (this.banCard <= 0)
+            return Errors.NO_MORE_BANCARD;
+        return Errors.NO_ERROR;
+    }
+
+    // return number of banCard "token" on this card
+    int getBanCard() { return this.banCard; }
 }

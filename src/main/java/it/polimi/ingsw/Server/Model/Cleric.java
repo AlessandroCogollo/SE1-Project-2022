@@ -1,43 +1,54 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import it.polimi.ingsw.Server.Errors;
 
-public class Cleric extends Character{
+import java.util.Collection;
+
+final class Cleric extends Character{
 
     private int[] students;
-    //private Game game;
 
-    //todo character creation in gameboard
-    public Cleric() {
-        super.id = 4;
-        super.isChangingMethods = false;
-        // this.game = game;
-        //students = Bag.DrawStudents(4);
+    Cleric(GameInitializer gameInitializer) {
+        super (2, 1, gameInitializer);
+        this.students = super.gameInitializer.getBag().drawStudents(4);
+
         // used for testing
         System.out.println("Built Cleric");
         System.out.println("Initialized Cleric with 4 students on him");
     }
 
     @Override
-    public void activateEffect(Object island) {
+    void activateEffect(Object obj) {
 
-        // choose a color & check if present
         // todo implement actual color choosing
-        int color = 2;
-        if (this.students[color] > 0) {
-            // remove a student from this card
-            this.students[color]--;
-            System.out.println("N° of students before: " + Arrays.toString(((Island) island).getStudents()));
-            ((Island) island).AddStudent(Objects.requireNonNull(Color.getColorById(color)));
-            // used for testing
-            System.out.println("N° of students after: " + Arrays.toString(((Island) island).getStudents()));
-            // draw a new student and put it on this card
-            Random rand = new Random(System.currentTimeMillis());
-            students[rand.nextInt(Color.getNumberOfColors())]++;
-        } else {
-            // throw exception
-        }
+
+        int colorId = 0;
+        int islandId = 0;
+
+        Color c = Color.getColorById(colorId);
+        Island i = gameInitializer.getIslands().getIslandFromId(islandId);
+
+        this.students[c.getIndex()]--;
+        i.AddStudent(c);
+        int[] newStudent= super.gameInitializer.getBag().drawStudents(1);
+        for (Color color: Color.values())
+            this.students[color.getIndex()] += newStudent[color.getIndex()];
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+
+        // todo implement actual color choosing
+        int colorId = 0;
+        int islandId = 0;
+
+        if (colorId < 0 || colorId > 4)
+            return Errors.NOT_VALID_COLOR;
+        if (!gameInitializer.getIslands().existsIsland(islandId))
+            return Errors.NOT_VALID_DESTINATION;
+        if (this.students[colorId] <= 0)
+            return Errors.NO_STUDENT;
+
+        return Errors.NO_ERROR;
     }
 }

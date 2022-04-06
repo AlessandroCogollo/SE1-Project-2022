@@ -3,47 +3,75 @@ package it.polimi.ingsw.Server.Model;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Islands {
+class Islands {
     private final ArrayList<Island> islands;
-    private Island MotherNature;
+    private Island motherNature;
 
-    Islands (GameBoard board, GameInitializer gInit){
+    Islands (){
         this.islands = new ArrayList<>(12);
 
-        //set initial student in island
-        int[] firstStudents = new int[Color.getNumberOfColors()];
-        for(int i = 0; i < Color.getNumberOfColors(); i++){
-            firstStudents[i] = 2;
-        }
-
-        Random rand = new Random(System.currentTimeMillis());
-
-        int index;
-        Island island = new Island(board, 0, gInit);
+        Island island = new Island(0);
         this.islands.add(island);
-        this.MotherNature = island;
+        this.motherNature = island;
 
-        for (int i = 1; i < this.islands.size(); i++){
-
-            island = new Island(board, i, gInit);
-            this.islands.add(island);
-
-            //todo change because the last one can call a lot of time next int to find the remaining
-            if(i != (this.islands.size() / 2)){
-                int j = 0;
-                while (j < 1){
-                    index = rand.nextInt(Color.getNumberOfColors());
-                    if (firstStudents[index] > 0){
-                        island.AddStudent(Color.getColorById(index));
-                        firstStudents[index]--;
-                        j++;
-                    }
-                }
-            }
+        for (int i = 1; i < 12; i++){
+            this.islands.add(new Island(i));
         }
+
+        //set all students in island
+        Color[] firstStudents = new Color[Color.getNumberOfColors() * 2];
+        int i = 0;
+        for (Color c : Color.values()){
+            firstStudents[i++] = c;
+        }
+        for (Color c : Color.values()){
+            firstStudents[i++] = c;
+        }
+
+        rand(firstStudents);
+
+        i = 0;
+        for (Island is : this.islands)
+            if (is.getId() != this.islands.size() / 2 && is.getId() != 0)
+                is.AddStudent(firstStudents[i++]);
     }
 
-    void AggregateIsland(Island currIsland, Island nearIsland){
+    int getIslandsNumber (){
+        return this.islands.size();
+    }
+
+    Island getMotherNature() {
+        return motherNature;
+    }
+
+    boolean existsIsland(int destinationId) {
+        boolean found = false;
+        for (Island i : islands)
+            if (i.getId() == destinationId){
+                found = true;
+                break;
+            }
+        return found;
+    }
+
+    Island getIslandFromId(int id){
+        for (Island i : this.islands)
+            if (i.getId() == id)
+                return i;
+        return null;
+    }
+
+    void addStudentToIsland(Color color, int id){
+        Island island = getIslandFromId(id);
+        island.AddStudent(color);
+    }
+
+    void nextMotherNature() {
+        //todo cycle throw island
+    }
+
+    //todo check if the near island have the same tower color and then aggregate them
+    void aggregateIsland(Island currIsland, Island nearIsland){
         //add the towers
         currIsland.setTowerCount(currIsland.getTowerCount() + nearIsland.getTowerCount());
         //add the students
@@ -54,32 +82,20 @@ public class Islands {
         }
     }
 
-    void MoveMotherNature(int count){
+    static private <T> void rand( T[] array) {
+        // Creating object for Random class
+        Random rd = new Random(System.currentTimeMillis());
 
-        for (int i = 0; i < this.islands.size(); i++){
-            if (MotherNature.equals(this.islands.get(i))){
-                if(i + count > this.islands.size()){
-                    this.MotherNature = this.islands.get(count + i - this.islands.size());
-                }
-                else
-                    this.MotherNature = this.islands.get(i + count);
-            }
+        // Starting from the last element and swapping one by one.
+        for (int i = array.length - 1; i > 0; i--) {
+
+            // Pick a random index from 0 to i
+            int j = rd.nextInt(i + 1);
+
+            // Swap array[i] with the element at random index
+            T temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
-        //if there isn't the ban card
-        if (!this.MotherNature.getBanCard())
-            this.MotherNature.CalcInfluence();
-        //todo check aggregate island
-    }
-
-    Island getIslandFromId(int id){
-        for (Island i : this.islands){
-            if (i.getId() == id) return i;
-        }
-        return null;
-    }
-
-    void AddStudentToIsland (Color color, int id){
-        Island island = getIslandFromId(id);
-        island.AddStudent(color);
     }
 }

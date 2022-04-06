@@ -13,11 +13,11 @@ class SchoolTest {
 
     private static School getSchool (int towers, int entranceStudent, int mode, int[] stu){
         if (mode == 0) {
-            Bag bag = new Bag();
+            Bag bag = new Bag(null);
             return new School(towers, entranceStudent, bag);
         }
         if (countStudent(stu) == entranceStudent) {
-            Bag bag = new Bag();
+            Bag bag = new Bag(null);
             return new School(towers, entranceStudent, bag);
         }
         return null;
@@ -65,7 +65,7 @@ class SchoolTest {
         Arrays.fill(studentsInEntrance, 0);
         for (Color c: Color.values()){
             while (p.hasStudent(c)){
-                p.moveStudent(new Movement(c, null));
+                p.moveStudent(c, -1);
                 studentsInEntrance[c.getIndex()]++;
             }
         }
@@ -154,7 +154,7 @@ class SchoolTest {
         //testing only School parameter, other test has been done in player
 
         GameBoard board = null;
-        Bag bag = new Bag();
+        Bag bag = new Bag(null);
 
         int[] id2 = new int[2];
         id2[0] = 1;
@@ -171,14 +171,24 @@ class SchoolTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        Collection<Player> players = Player.factoryPlayers(id2, 1, board, bag);
+        GameInitializer g = new GameInitializer(0, 2);
+        g.createAllGame(id2, null);
+        Collection<Player> players = new ArrayList<>();
+        for (int i = 0; i < id2.length; i++)
+            players.add(g.getPlayerById(id2[i]));
+
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
             assertEquals(8, p.getTowers(), "Test 2 - towers number");
             assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
         }
 
-        players = Player.factoryPlayers(id3, 1, board, bag);
+        g = new GameInitializer(0, 3);
+        g.createAllGame(id3, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id3.length; i++)
+            players.add(g.getPlayerById(id3[i]));
+
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
             assertEquals(6, p.getTowers(), "Test 2 - towers number");
@@ -186,7 +196,12 @@ class SchoolTest {
         }
 
         //the fact that 2 player doesn't have the tower will be hide from the outside
-        players = Player.factoryPlayers(id4, 1, board, bag);
+        g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id4.length; i++)
+            players.add(g.getPlayerById(id4[i]));
+
         for (Player p: players){
             assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
             assertEquals(8, p.getTowers(), "Test 2 - towers number");

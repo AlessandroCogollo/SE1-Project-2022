@@ -2,8 +2,6 @@ package it.polimi.ingsw.Server.Model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class AdvancedGameTest extends GameTest {
 
     @Test
@@ -11,7 +9,7 @@ class AdvancedGameTest extends GameTest {
     }
 
     @Test
-    void testMoveMotherBlackBox() {
+    void testMoveMotherNatureBlackBox() {
     }
 
     @Test

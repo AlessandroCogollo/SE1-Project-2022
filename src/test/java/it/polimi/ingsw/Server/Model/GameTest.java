@@ -68,46 +68,45 @@ class GameTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        GameInitializer g = new GameInitializer(id4, 0);
+        GameInitializer g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
 
         RoundHandler r = new RoundHandler(g);
         r.start();
 
         Game game = new Game(id4.length, g, r);
 
-        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.playAssistant(1543, Assistant.getAssistantByValue(1)), "Test 0 - not exist");
+        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.playAssistant(1543, 1), "Test 0 - not exist");
 
 
         Player p = r.getCurrent();
 
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 1), "Test 1 - no error");
 
-        assertEquals(Errors.NULL_POINTER.getCode(), game.playAssistant(p.getId(), null), "Test 0 - null");
-
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(1)), "Test 1 - no error");
-
-        assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(2)), "Test 2 - no current");
+        assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.playAssistant(p.getId(), 2), "Test 2 - no current");
 
         p = r.getCurrent();
 
-        assertEquals(Errors.ASSISTANT_ALREADY_PLAYED.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(1)), "Test 2 - assistant played");
+        assertEquals(Errors.ASSISTANT_ALREADY_PLAYED.getCode(), game.playAssistant(p.getId(), 1), "Test 2 - assistant played");
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(2)), "Test 1 - no error");
-
-        p = r.getCurrent();
-
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(3)), "Test 1 - no error");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 2), "Test 1 - no error");
 
         p = r.getCurrent();
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(4)), "Test 1 - no error");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 3), "Test 1 - no error");
 
         p = r.getCurrent();
 
-        assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(5)), "Test 3 - not right phase");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 4), "Test 1 - no error");
+
+        p = r.getCurrent();
+
+        assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.playAssistant(p.getId(), 5), "Test 3 - not right phase");
 
         //reset
 
-        g = new GameInitializer(id4, 0);
+        g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
 
         r = new RoundHandler(g);
         r.start();
@@ -116,15 +115,15 @@ class GameTest {
 
         p = r.getCurrent();
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(1)), "Test 1 - no error");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 1), "Test 1 - no error");
 
         p = r.getCurrent();
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(2)), "Test 1 - no error");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 2), "Test 1 - no error");
 
         p = r.getCurrent();
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(3)), "Test 1 - no error");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 3), "Test 1 - no error");
 
         p = r.getCurrent();
 
@@ -139,13 +138,13 @@ class GameTest {
 
         //now the last player has only 1 2 3 10 assistant
 
-        assertEquals(Errors.ASSISTANT_ALREADY_PLAYED.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(1)), "Test 4 - error not all equal assistant");
+        assertEquals(Errors.ASSISTANT_ALREADY_PLAYED.getCode(), game.playAssistant(p.getId(), 1), "Test 4 - error not all equal assistant");
 
         p.playAssistant(Assistant.getAssistantByValue(10));
 
         //now the last player has only 1 2 3 assistant
 
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), Assistant.getAssistantByValue(1)), "Test 5 - has all equal assistant");
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 1), "Test 5 - has all equal assistant");
     }
 
     @Test //test for error
@@ -157,19 +156,17 @@ class GameTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        GameInitializer g = new GameInitializer(id4, 0);
+        GameInitializer g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
 
         RoundHandler r = new RoundHandler(g);
         r.start();
 
         Game game = new Game(id4.length, g, r);
 
-        Movement m = new Movement(Color.Red, null);
-
         Player p = r.getCurrent();
 
-        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.moveStudents(1543, m), "Test 0 - not exist");
-        assertEquals(Errors.NULL_POINTER.getCode(), game.moveStudents(p.getId(), null), "Test 0 - null");
+        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.moveStudents(1543, Color.Red.getIndex(), -1), "Test 0 - not exist");
 
         //todo other check, need Bag class
 

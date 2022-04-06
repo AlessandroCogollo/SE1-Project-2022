@@ -7,16 +7,20 @@ class Bag {
 
     private final int[] students;
     private final Random rand;
+    private final GameInitializer gameInitializer;
 
-    public Bag(){
+    Bag(GameInitializer gameInitializer){
         this.students = new int[Color.getNumberOfColors()];
         for (int i=0; i<Color.getNumberOfColors(); i++){
             students[i] = (24); //from the rules
         }
         this.rand = new Random(System.currentTimeMillis());
+        this.gameInitializer = gameInitializer;
     }
-    public int[] DrawStudents(int count){
+
+    int[] drawStudents(int count){
         int[] drawnStudents = new int[Color.getNumberOfColors()];
+        Arrays.fill(drawnStudents, 0);
         int index;
         int i = 0;
         while (i < count) {
@@ -30,8 +34,8 @@ class Bag {
             }
             else{
                 System.out.println("Bag is empty!");
-                // CheckWin() ------------------
-                return null;
+                gameInitializer.getRoundHandler().setFinalRound();
+                break;
             }
         }
         return drawnStudents;

@@ -1,15 +1,37 @@
 package it.polimi.ingsw.Server.Model;
 
-public class Thief extends Character {
+import it.polimi.ingsw.Server.Errors;
 
-    Thief() {
-        super.id = 11;
-        super.cost = 3;
-        super.isChangingMethods = false;
+final class Thief extends Character {
+
+    Thief(GameInitializer gameInitializer) {
+        super (11, 3, gameInitializer);
+
         System.out.println("Thief");
     }
 
-    public void activateEffect(Object color) {
+    @Override
+    void activateEffect(Object obj) {
+
+        int colorId = (Integer) obj;
+
+        Color c = Color.getColorById(colorId);
+
+        //todo method implementation
+
         // every player has to move 3 students from his room
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        if (!(obj instanceof Integer))
+            return Errors.NOT_RIGHT_PARAMETER;
+
+        int colorId = (Integer) obj;
+
+        if (colorId < 0 || colorId > 4)
+            return Errors.NOT_VALID_COLOR;
+
+        return Errors.NO_ERROR;
     }
 }

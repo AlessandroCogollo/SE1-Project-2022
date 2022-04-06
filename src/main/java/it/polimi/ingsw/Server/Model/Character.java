@@ -1,19 +1,35 @@
 package it.polimi.ingsw.Server.Model;
 
-public abstract class Character {
+import it.polimi.ingsw.Server.Errors;
 
-    protected int id;
-    protected boolean isChangingMethods;
+abstract class Character {
+
+    protected final int id;
+    protected final GameInitializer gameInitializer;
     protected int cost;
-    protected Game game;
+    protected boolean used;
 
-    public int getId() { return this.id; }
+    protected Character(int id, int cost, GameInitializer gameInitializer) {
+        this.id = id;
+        this.cost = cost;
+        this.gameInitializer = gameInitializer;
+        this.used = false;
+    }
 
-    public boolean getIsChangingMethods() { return this.isChangingMethods; }
+    int getId() { return this.id; }
 
-    public int getCost() { return this.cost; }
+    int getCost() {
+        if (this.used)
+            return this.cost + 1;
+        return this.cost;
+    }
 
-    public void setCost() { this.cost += 1; }
+    void use (Object obj){
+        activateEffect(obj);
+        this.used = true;
+    }
 
-    public abstract void activateEffect(Object object);
+    abstract void activateEffect(Object obj);
+
+    abstract Errors canActivateEffect (Object obj);
 }

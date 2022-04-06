@@ -1,17 +1,24 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Optional;
 
-public class Minotaur extends Character {
+final class Minotaur extends Character {
 
-    Minotaur() {
-        super.id = 8;
-        super.isChangingMethods = true;
-        super.cost = 3;
+    Minotaur(GameInitializer gameInitializer) {
+        super (8, 3, gameInitializer);
     }
 
     @Override
-    public void activateEffect(Object object) {
+    void activateEffect(Object object) {
+        //todo
         System.out.println("Minotaur");
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        //todo
+        return Errors.NO_ERROR;
     }
 
     /*

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,8 +44,8 @@ class PlayerTest {
 
     @Test //testing only the mate possibility
     void getTowers() {
-        School s1 = new School(8, 0, new Bag());
-        School s2 = new School(0, 0, new Bag());
+        School s1 = new School(8, 0, new Bag(null));
+        School s2 = new School(0, 0, new Bag(null));
         Player p1 = getPlayer(0, s1, null, 1);
         Player p2 = getPlayer(0, s2, p1, 1);
 
@@ -53,8 +54,8 @@ class PlayerTest {
 
     @Test //testing only the mate possibility
     void moveTowerToIsland() {
-        School s1 = new School(8, 0, new Bag());
-        School s2 = new School(0, 0, new Bag());
+        School s1 = new School(8, 0, new Bag(null));
+        School s2 = new School(0, 0, new Bag(null));
         Player p1 = getPlayer(0, s1, null, 1);
         Player p2 = getPlayer(0, s2, p1, 1);
 
@@ -79,8 +80,8 @@ class PlayerTest {
 
     @Test //testing only the mate possibility
     void receiveTowerFromIsland() {
-        School s1 = new School(8, 0, new Bag());
-        School s2 = new School(0, 0, new Bag());
+        School s1 = new School(8, 0, new Bag(null));
+        School s2 = new School(0, 0, new Bag(null));
         Player p1 = getPlayer(0, s1, null, 1);
         Player p2 = getPlayer(0, s2, p1, 1);
 
@@ -128,46 +129,77 @@ class PlayerTest {
         id4[2] = 3;
         id4[3] = 4;
 
-        GameBoard board = null;
-        Bag bag = new Bag();
+        GameInitializer g = new GameInitializer(0, 2);
+        g.createAllGame(id2, null);
+        Collection<Player> players = new ArrayList<>();
+        for (int i = 0; i < id2.length; i++)
+            players.add(g.getPlayerById(id2[i]));
 
-
-        Collection<Player> players = Player.factoryPlayers(id2, 0, board, bag);
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 1 - 2 player easy mode");
             assertEquals(true, p instanceof Player, "test 1 - 2 player easy mode");
         }
 
-        players = Player.factoryPlayers(id2, 1, board, bag);
+        g = new GameInitializer(1, 2);
+        g.createAllGame(id2, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id2.length; i++)
+            players.add (g.getPlayerById(id2[i]));
+
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 2 - 2 player advanced mode");
 
 
-        players = Player.factoryPlayers(id3, 0, board, bag);
+        g = new GameInitializer(0, 3);
+        g.createAllGame(id3, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id3.length; i++)
+            players.add(g.getPlayerById(id3[i]));
+
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 3 - 3 player easy mode");
             assertEquals(true, p instanceof Player, "test 3 - 3 player easy mode");
         }
 
 
-        players = Player.factoryPlayers(id3, 1, board, bag);
+        g = new GameInitializer(1, 3);
+        g.createAllGame(id3, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id3.length; i++)
+            players.add(g.getPlayerById(id3[i]));
+
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 4 - 3 player advanced mode");
 
 
-        players = Player.factoryPlayers(id4, 0, board, bag);
+        g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id4.length; i++)
+            players.add(g.getPlayerById(id4[i]));
+
         for (Player p: players){
             assertEquals(false, p instanceof AdvancedPlayer, "test 5 - 4 player easy mode");
             assertEquals(true, p instanceof Player, "test 5 - 4 player easy mode");
         }
 
 
-        players = Player.factoryPlayers(id4, 1, board, bag);
+        g = new GameInitializer(1, 4);
+        g.createAllGame(id4, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id4.length; i++)
+            players.add(g.getPlayerById(id4[i]));
+
         for (Player p: players)
             assertEquals(true, p instanceof AdvancedPlayer, "test 6 - 4 player advanced mode");
 
 
-        players = Player.factoryPlayers(id4, 0, board, bag);
+        g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
+        players = new ArrayList<>();
+        for (int i = 0; i < id4.length; i++)
+            players.add(g.getPlayerById(id4[i]));
+
         Player p1 = null, p2 = null, p3 = null, p4 = null;
         for (Player p: players){
             switch (p.getId()){

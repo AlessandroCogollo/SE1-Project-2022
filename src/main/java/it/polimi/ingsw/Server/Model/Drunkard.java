@@ -1,19 +1,22 @@
 package it.polimi.ingsw.Server.Model;
 
-public class Drunkard extends Character  {
+import it.polimi.ingsw.Server.Errors;
 
-    Drunkard() {
-        super.isChangingMethods = true;
+final class Drunkard extends Character  {
+
+    Drunkard(GameInitializer gameInitializer) {
+        super (4, 2, gameInitializer);
     }
 
     @Override
-    public void activateEffect(Object object) {
+    void activateEffect(Object object) {
+
+        //todo method changing
         System.out.println("Drunkard");
     }
 
-    /*
-    public Optional<Player> calcInfluence() {
-        return null;
+    @Override
+    Errors canActivateEffect(Object obj) {
+        return Errors.NO_ERROR;
     }
-    */
 }

@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server;
 
 public enum Errors {
     NO_ERROR (0, "No Error"),
+    NULL_POINTER (100, "Null Pointer"),
+
     NOT_CURRENT_PLAYER(1, "The player who call this method isn't the current one"),
     NOT_RIGHT_PHASE(2, "The call was made in the wrong phase"),
     NO_SUCH_ASSISTANT (3, "The player doesn't have this assistant"),
@@ -11,10 +13,16 @@ public enum Errors {
     MOVEMENTS_TOO_HIGH (7, "Mother nature cannot move this much times"),
     PLAYER_NOT_EXIST (8, "The player id doesn't exist"),
     MOVEMENT_ERROR (9, "The number of movements aren't correct"),
-    NO_STUDENT (10, "No more student of that color in the entrance"),
-    NULL_POINTER (11, "Null Pointer"),
-    MAX_STUDENT_ROOM (12, "Max student of that color in the room"),
-    CHARACTER_YET_PLAYED (13, "The player has used a character yet");
+    NO_STUDENT (10, "No more student of that color in the entrance or in the character card"),
+    MAX_STUDENT_ROOM (11, "Max student of that color in the room"),
+    CHARACTER_YET_PLAYED (12, "The player has used a character yet"),
+    NOT_VALID_ASSISTANT (13, "The Assistant value doesn't exist"),
+    NOT_VALID_COLOR (14, "The color id isn't a correct type of color for students"),
+    NOT_VALID_DESTINATION (15, "The destination is not valid"),
+    NO_SUCH_CLOUD (16, "The Cloud doesn't exists"),
+    NO_SUCH_CHARACTER (17, "The Character doesn't exists"),
+    NO_MORE_BANCARD (18, "The Apothecary character doesn't have more ban card"),
+    NOT_RIGHT_PARAMETER (19, "The parameter for character passed aren't correct");
 
 
     private final int code;
@@ -31,6 +39,13 @@ public enum Errors {
 
     public int getCode() {
         return code;
+    }
+
+    public Errors getErrorsByCode (int code){
+        for (Errors e: Errors.values())
+            if (e.getCode() == code)
+                return e;
+        return null;
     }
 
     @Override

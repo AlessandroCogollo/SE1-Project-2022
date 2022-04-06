@@ -1,19 +1,37 @@
 package it.polimi.ingsw.Server.Model;
 
-public class Herald extends Character {
+import it.polimi.ingsw.Server.Errors;
 
-    Herald() {
-        super.id = 5;
-        super.isChangingMethods = false;
-        super.cost = 3;
+final class Herald extends Character {
+
+    Herald(GameInitializer gameInitializer) {
+        super (5, 3, gameInitializer);
     }
 
     @Override
-    public void activateEffect(Object island) {
-        ((Island) island).CalcInfluence();
+    void activateEffect(Object island) {
+
+        int islandId = (Integer)island;
+        Island i = gameInitializer.getIslands().getIslandFromId(islandId);
+
+        gameInitializer.getBoard().calcInfluence(i);
+
         System.out.println("Herald set influence on this island: "
                 + ((Island)island).getTowerCount()
                 + ((Island) island).getTowerColor()
         );
+    }
+
+    @Override
+    Errors canActivateEffect(Object island) {
+        if (!(island instanceof Integer))
+            return Errors.NOT_RIGHT_PARAMETER;
+
+        int islandId = (Integer)island;
+
+        if (!gameInitializer.getIslands().existsIsland(islandId))
+            return Errors.NOT_VALID_DESTINATION;
+
+        return Errors.NO_ERROR;
     }
 }

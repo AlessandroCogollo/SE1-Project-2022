@@ -6,47 +6,31 @@ import java.util.Optional;
 class AdvancedPlayer extends Player {
 
     private int coins;
-    private Optional<Character> activeCharacter;
 
-    AdvancedPlayer(int id, int towerColor, Player mate, GameBoard board, School school) {
-        super(id, towerColor, mate, board, school);
+    AdvancedPlayer(int id, int towerColor, Player mate, GameInitializer gameInitializer, School school) {
+        super(id, towerColor, mate, gameInitializer, school);
         this.coins = 1;
-        this.activeCharacter = Optional.empty();
     }
 
     int getCoins() {
         return coins;
     }
 
-    public Optional<Character> getActiveCharacter() {
-        return activeCharacter;
+    void playCharacter(Character c, Object obj) {
+        if (c != null)
+            coins -= c.getCost();
+        gameInitializer.getBoard().playCharacter(c, obj);
     }
 
     //override for coins
     @Override
-    void moveStudent(Movement move) {
-        if (move.getDestination().isPresent()){
-            Color student = school.moveStudentFromEntrance(move.getColor());
-            board.addStudentToIsland(student, move.getDestination().get().getId());
-            //todo movement to cloud, need GameBoard class
+    void moveStudent (Color c, int destinationId){
+        if (destinationId != -1){
+            Color student = school.moveStudentFromEntrance(c);
+            gameInitializer.getIslands().addStudentToIsland(student, destinationId);
         }
         else
-            if (school.moveStudentToRoom(move.getColor()))
+            if (school.moveStudentToRoom(c))
                 coins++;
     }
-
-    //override for character that changes the methods
-    @Override
-    void moveMotherNature(int position) {
-        //todo movement, need GameBoard
-        super.moveMotherNature(position);
-    }
-
-    void playCharacter(Character c) {
-        //coins -= x.getCost();
-        activeCharacter = Optional.ofNullable(c);
-        //todo actual implementation, need Character class
-
-    }
-
 }

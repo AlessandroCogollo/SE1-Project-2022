@@ -10,16 +10,11 @@ class School {
     private int towers;
 
 
-    /*
-    @requires (towers == 6 || towers == 8 || towers == 0) && (entranceStudent == 7 || entranceStudent == 9) && bag != null
-    @ensures (*the school is ready for the start of the game*)
-     */
     School(int towers, int entranceStudent, Bag bag) {
         this.towers = towers;
         this.room = new int[Color.getNumberOfColors()];
         Arrays.fill(this.room, 0);
-        //todo modify when bag is completed, need Bag class
-        this.entrance = bag.DrawStudents(entranceStudent);
+        this.entrance = bag.drawStudents(entranceStudent);
     }
 
     int getTowers() {
@@ -43,13 +38,11 @@ class School {
     }
 
     void addStudentFromCloud(Cloud c) {
-        //todo actual implementation, need Cloud class
-
         int[] students = c.getStudents();
-        for (int i=0; i<Color.getNumberOfColors(); i++){
-            entrance[i] = entrance[i] + students[i];
+        for (Color color : Color.values()){
+            int index = color.getIndex();
+            entrance[index] = entrance[index] + students[index];
         }
-
     }
 
     void addTowers(int number) {
@@ -64,11 +57,6 @@ class School {
         }
         return false;
     }
-
-    /*Color moveStudentFromEntrance(Color color) {
-        entrance[color.getIndex()]--;
-        return color;
-    }*/
 
     Color moveStudentFromEntrance(Color color) {
         entrance[color.getIndex()]--;

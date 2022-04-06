@@ -1,20 +1,20 @@
 package it.polimi.ingsw.Server.Model;
 
-public class Postman extends Character {
+import it.polimi.ingsw.Server.Errors;
 
-    Postman() {
-        super.id = 9;
-        super.isChangingMethods = true;
-        super.cost = 1;
+final class Postman extends Character {
+
+    Postman(GameInitializer gameInitializer) {
+        super (9, 1, gameInitializer);
     }
 
     @Override
-    public void activateEffect(Object object) {
+    void activateEffect(Object object) {
         System.out.println("Postman");
     }
 
-    public int getMaxMovement() {
-        return 0;
+    @Override
+    Errors canActivateEffect(Object obj) {
+        return Errors.NO_ERROR;
     }
-
 }

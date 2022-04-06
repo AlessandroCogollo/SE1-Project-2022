@@ -1,25 +1,25 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Optional;
 
-public class Bard extends Character {
+final class Bard extends Character {
 
-    public Bard() {
-        super.id = 1;
-        super.isChangingMethods = false;
-        super.cost = 1;
-        // todo temporary, add Game
+    Bard(GameInitializer gameInitializer) {
+        super (1, 1, gameInitializer);
 
         System.out.println("Built Bard");
     }
 
     @Override
-    public void activateEffect(Object object) {
-        // if Player has students in entrance
-        // game.round.getCurrent();
-        // remove max 2 students from entrance
-        // put them in room
-        // remove max 2 students from room
-        // put them in entrance
+    void activateEffect(Object obj) {
+        //todo
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        //todo
+        return Errors.NO_ERROR;
     }
 }

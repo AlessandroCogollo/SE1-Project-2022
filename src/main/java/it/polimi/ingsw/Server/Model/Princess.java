@@ -1,26 +1,56 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Random;
 
-public class Princess extends Character {
-    private boolean isChangingMethods;
+final class Princess extends Character {
     private int[] students;
 
-    //todo character creation in gameboard
-    Princess() {
-        super.id = 10;
-        super.isChangingMethods = false;
-        super.cost = 2;
-        //students = Bag.DrawStudents(4);
+    Princess(GameInitializer gameInitializer) {
+        super (10, 2, gameInitializer);
+        students = gameInitializer.getBag().drawStudents(4);
     }
 
-    public void activateEffect(Object object) {
-        // todo move a student to the room
+    void activateEffect(Object object) {
 
-        // draw a new student and put it on this card
-        Random rand = new Random(System.currentTimeMillis());
-        students[rand.nextInt(Color.getNumberOfColors())]++;
+        // todo implement actual color and player choosing
 
-        System.out.println("Princess");
+        int colorId = 0;
+        int playerId = 0;
+
+        Color c = Color.getColorById(colorId);
+        Player p = super.gameInitializer.getPlayerById(playerId);
+
+        this.students[c.getIndex()]--;
+
+        //todo implemetation of method in player
+
+        int[] newStudent= super.gameInitializer.getBag().drawStudents(1);
+        for (Color color: Color.values())
+            this.students[color.getIndex()] += newStudent[color.getIndex()];
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        // todo implement actual color and player choosing
+
+        int colorId = 0;
+        int playerId = 0;
+
+        if (colorId < 0 || colorId > 4)
+            return Errors.NOT_VALID_COLOR;
+        if (!super.gameInitializer.existsPlayer(playerId))
+            return Errors.PLAYER_NOT_EXIST;
+        if (this.students[colorId] <= 0)
+            return Errors.NO_STUDENT;
+
+        Color c = Color.getColorById(colorId);
+        Player p = super.gameInitializer.getPlayerById(playerId);
+
+        if (p.getNumberOfStudentInRoomByColor(c) == 10)
+            return Errors.NO_MORE_MOVEMENT;
+
+        return Errors.NO_ERROR;
     }
 }

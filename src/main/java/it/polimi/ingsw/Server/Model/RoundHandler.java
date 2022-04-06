@@ -18,6 +18,7 @@ class RoundHandler {
     private ActionPhase actionPhase;
     private Player current;
     private int studentMovedInThisTurn;
+    private boolean isFinalRound;
 
     // random for the initial player
     private final Random rand;
@@ -25,11 +26,13 @@ class RoundHandler {
     RoundHandler(GameInitializer gameInitializer) {
         this.current = null;
         this.rand = new Random(System.currentTimeMillis());
+
         this.actionOrder = new LinkedList<>();
         this.planningOrder = new LinkedList<>();
         this.specialOrder = new LinkedList<>();
         this.gInit = gameInitializer;
         this.studentMovedInThisTurn = 0;
+        this.isFinalRound = false;
     }
 
     Player getCurrent() {
@@ -46,6 +49,10 @@ class RoundHandler {
 
     int getStudentMovedInThisTurn() {
         return studentMovedInThisTurn;
+    }
+
+    void setFinalRound() {
+        isFinalRound = true;
     }
 
     //return true if the player can play the assistant considering all the exception
@@ -134,6 +141,19 @@ class RoundHandler {
         current = planningOrder.poll();
     }
 
+    //select a random player id
+    private int getRandomPlayerId (){
+        int[] ids = new int[gInit.getPlayerNumber()];
+        int i = 0;
+        Player p;
+        for (Player player : gInit) {
+            p = player;
+            ids[i] = p.getId();
+            i++;
+        }
+        return ids[rand.nextInt(gInit.getPlayerNumber())];
+    }
+
     //cycle between the phase
     void next (){
 
@@ -164,7 +184,7 @@ class RoundHandler {
                     break;
                 case MoveStudent:
                     studentMovedInThisTurn++;
-                    int playerNum = gInit.getNumberOfPlayers();
+                    int playerNum = gInit.getPlayerNumber();
                     if (((playerNum == 2 || playerNum == 4) && studentMovedInThisTurn == 3) || (playerNum == 3 && studentMovedInThisTurn == 4)){
                         actionPhase = ActionPhase.MoveMotherNature;
                         studentMovedInThisTurn = 0;
@@ -174,16 +194,21 @@ class RoundHandler {
                     actionPhase = ActionPhase.ChooseCloud;
                     break;
                 case ChooseCloud:
-                    if (gInit.getGameMode() == 1)
-                        resetActiveCharacterForCurrentPlayer();
+                    gInit.getBoard().playCharacter(null, null);
 
                     //return to planning
                     if (actionOrder.isEmpty()) {
+                        if (isFinalRound){
+                            phase = Phase.Action;
+                            actionPhase = ActionPhase.NotActionPhase;
+                            gInit.checkWin();
+                            break;
+                        }
                         phase = Phase.Planning;
                         actionPhase = ActionPhase.NotActionPhase;
-                        resetActiveAssistant();
+                        resetActiveAssistants();
+                        gInit.getBoard().populateClouds();
                         current = planningOrder.poll();
-                        //todo cloud reset
                     }
                     //or to the next player and the next action phase
                     else {
@@ -195,11 +220,7 @@ class RoundHandler {
         }
     }
 
-    private void resetActiveCharacterForCurrentPlayer() {
-        ((AdvancedPlayer) current).playCharacter(null);
-    }
-
-    private void resetActiveAssistant() {
+    private void resetActiveAssistants() {
         for (Player p: gInit)
             p.playAssistant(null);
     }
@@ -210,7 +231,7 @@ class RoundHandler {
         final int value = 1;
 
         //we create a matrix 2xNumberOfPlayers with in the first row all the ids and in the second row alla the value of their active assistant
-        int[][] arr = new int[2][gInit.getNumberOfPlayers()];
+        int[][] arr = new int[2][gInit.getPlayerNumber()];
         int i = 0;
         Player x;
         for (Player player : gInit) {
@@ -240,7 +261,7 @@ class RoundHandler {
                 }
 
                 //considering that the matrix is ordered from the one with the smallest value to the one with the max value, player with the same value are in a random order, so to make that the first one who has played the assistant is the first, for all the others players in this special queue (the first that has play the assistant isn't in the queue) we shift them to the last position with the same value. So, int this way also for multiple player with the same assistant we keep the correct order
-                while (arr[value][i] == arr[value][i + 1] && i < gInit.getNumberOfPlayers() - 1){
+                while (arr[value][i] == arr[value][i + 1] && i < gInit.getPlayerNumber() - 1){
                     swap (arr, i, i + 1);
                     i++;
                 }
@@ -248,12 +269,13 @@ class RoundHandler {
         }
 
         //now in all cases in the matrix there's the correct order so we insert it in each queue
-        for (i = 0; i < gInit.getNumberOfPlayers(); i++){
+        for (i = 0; i < gInit.getPlayerNumber(); i++){
             actionOrder.add(gInit.getPlayerById(arr[id][i]));
             planningOrder.add(gInit.getPlayerById(arr[id][i]));
         }
     }
 
+    //todo more object oriented
     //sort the matrix column considering only the index passed as parameter in O(n^2)
     private static void sortMatrixColumn (int[][] matrix, int rowToCompare){
         for (int i = 0; i < matrix[0].length; i++) {
@@ -275,18 +297,4 @@ class RoundHandler {
         matrix[0][index2] = tmp0;
         matrix[1][index2] = tmp1;
     }
-
-    //select a random player id
-    private int getRandomPlayerId (){
-        int[] ids = new int[gInit.getNumberOfPlayers()];
-        int i = 0;
-        Player p;
-        for (Player player : gInit) {
-            p = player;
-            ids[i] = p.getId();
-            i++;
-        }
-        return ids[rand.nextInt(gInit.getNumberOfPlayers())];
-    }
-
 }

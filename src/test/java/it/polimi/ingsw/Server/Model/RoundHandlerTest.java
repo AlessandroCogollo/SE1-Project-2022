@@ -16,9 +16,13 @@ class RoundHandlerTest {
         ids[2] = 3;
         ids[3] = 721;
 
-        GameInitializer g = new GameInitializer(ids, 0);
+        GameInitializer g = new GameInitializer(0, ids.length);
+
 
         RoundHandler r = new RoundHandler(g);
+
+
+        g.createAllGame(ids, r);
         r.start();
 
         Player p = r.getCurrent();
@@ -57,11 +61,14 @@ class RoundHandlerTest {
         ids[2] = 3;
         ids[3] = 721;
 
-        GameInitializer gInit = new GameInitializer(ids, 0);
+        GameInitializer gInit = new GameInitializer(0, ids.length);
+
 
         RoundHandler roundHandler = new RoundHandler(gInit);
 
         assertNull(roundHandler.getCurrent(), "Test 1 - current null");
+
+        gInit.createAllGame(ids, roundHandler);
         roundHandler.start();
 
         Player p = roundHandler.getCurrent();
@@ -100,9 +107,11 @@ class RoundHandlerTest {
         ids[0] = 10;
         ids[1] = 6;
 
-        GameInitializer g = new GameInitializer(ids, 0);
+        GameInitializer g = new GameInitializer(0, ids.length);
 
         RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(ids, r);
         r.start();
 
         assertEquals(Phase.Planning, r.getPhase(), "Test 1 - Planning");
