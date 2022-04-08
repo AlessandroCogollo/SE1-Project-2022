@@ -20,7 +20,7 @@ class GameBoard {
 
         this.gInit = gInit;
 
-        int numOfPlayer = gInit.getPlayerNumber();
+        int numOfPlayer = gInit.getPlayersNumber();
         this.clouds = new ArrayList<>(numOfPlayer);
         for(int i = 0; i < numOfPlayer; i++){
             clouds.add(new Cloud( i, gInit));
@@ -114,7 +114,7 @@ class GameBoard {
 
     void calcInfluence(Island c) {
 
-        HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayerNumber()); // map of the influences
+        HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences
 
         //initializating playersInfluence
         for(Player p: gInit){

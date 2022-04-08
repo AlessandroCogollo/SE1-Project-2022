@@ -2,7 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-//todo calc influence little method, finish check win
+//todo calc influence little method, finish check win, check if the players can play the character during the planning phase
 
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{
@@ -52,7 +52,7 @@ public class Game{
 
         if (!gameInit.existsPlayer(playerId))
             return Errors.PLAYER_NOT_EXIST.getCode();
-        if (colorId < 1 || colorId > Color.getNumberOfColors())
+        if (colorId < 0 || colorId > Color.getNumberOfColors())
             return Errors.NOT_VALID_COLOR.getCode();
         if (destinationId != -1 && !gameInit.getIslands().existsIsland(destinationId))
             return Errors.NOT_VALID_DESTINATION.getCode();
@@ -66,12 +66,13 @@ public class Game{
             return Errors.NOT_RIGHT_PHASE.getCode();
 
         //check if the player can still move student
+        //the check is already done in round handler and this one is redundant because if you have already move all the students in this turn the phase is automatically updated
         int movementDone = round.getStudentMovedInThisTurn();
         if (((numOfPlayer == 2 || numOfPlayer == 4) && movementDone >= 3) || (numOfPlayer == 3 && movementDone >= 4))
             return Errors.NO_MORE_MOVEMENT.getCode();
 
         //check if the player has the student that he wants to move
-        if (p.hasStudent(c))
+        if (!p.hasStudent(c))
             return Errors.NO_STUDENT.getCode();
 
         //check if student has already 10 student of that color in the room
@@ -91,6 +92,8 @@ public class Game{
 
         if (!gameInit.existsPlayer(playerId))
             return Errors.PLAYER_NOT_EXIST.getCode();
+        if (position < 1)
+            return Errors.MOVEMENT_NOT_VALID.getCode();
 
         Player p = gameInit.getPlayerById(playerId);
 

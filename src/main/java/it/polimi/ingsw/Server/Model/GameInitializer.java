@@ -38,7 +38,7 @@ class GameInitializer implements Iterable<Player>{
         return gameMode;
     }
 
-    int getPlayerNumber() {
+    int getPlayersNumber() {
         return playerNumber;
     }
 
@@ -81,7 +81,7 @@ class GameInitializer implements Iterable<Player>{
     }
 
     void checkWin(){
-
+        //todo
     }
 
     @Override

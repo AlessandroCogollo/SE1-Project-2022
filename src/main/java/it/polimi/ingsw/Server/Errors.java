@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Server;
 
+//todo upscale error code and description
 public enum Errors {
     NO_ERROR (0, "No Error"),
     NULL_POINTER (100, "Null Pointer"),
-
     NOT_CURRENT_PLAYER(1, "The player who call this method isn't the current one"),
     NOT_RIGHT_PHASE(2, "The call was made in the wrong phase"),
     NO_SUCH_ASSISTANT (3, "The player doesn't have this assistant"),
@@ -22,7 +22,8 @@ public enum Errors {
     NO_SUCH_CLOUD (16, "The Cloud doesn't exists"),
     NO_SUCH_CHARACTER (17, "The Character doesn't exists"),
     NO_MORE_BANCARD (18, "The Apothecary character doesn't have more ban card"),
-    NOT_RIGHT_PARAMETER (19, "The parameter for character passed aren't correct");
+    NOT_RIGHT_PARAMETER (19, "The parameter for character passed aren't correct"),
+    MOVEMENT_NOT_VALID (20, "the number of position moved by mother nature must be over or equal to 1 and less or equal than the value on the assistant card");
 
 
     private final int code;

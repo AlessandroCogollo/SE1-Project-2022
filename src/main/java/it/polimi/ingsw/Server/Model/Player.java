@@ -86,7 +86,7 @@ class Player implements Iterable<Assistant>{
         return school.getTowers();
     }
 
-    //todo check usage for force stop the execution
+    //todo check usage for force stop the execution in win case
     int moveTowerToIsland (int number){
         if (mate.isPresent()){
             return mate.get().moveTowerToIsland(number);

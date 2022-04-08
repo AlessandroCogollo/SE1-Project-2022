@@ -20,13 +20,10 @@ class AdvancedPlayerTest extends PlayerTest{
         assertEquals(2, p.getCoins());
     }
 
-    @Test
-    void moveMotherNature() {
-        //todo, need GameBoard
-    }
 
     @Test
     void playCharacter() {
-        //todo need Character
+        //done in board test
+        assertTrue(true);
     }
 }

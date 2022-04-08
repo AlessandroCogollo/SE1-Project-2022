@@ -46,7 +46,7 @@ class SchoolTest {
         return studentsInRoom;
     }
 
-    //destructive method
+    //destructive method, because it move all the students from the entrance to the room
     private static int[] getStudentInEntrance_destructive (School s){
         int[] studentsInEntrance = new int[Color.getNumberOfColors()];
         Arrays.fill(studentsInEntrance, 0);
@@ -59,7 +59,7 @@ class SchoolTest {
         return studentsInEntrance;
     }
 
-    //destructive method
+    //destructive method, because it move all the students from the entrance to the room
     private static int[] getStudentInEntrance_destructive (Player p){
         int[] studentsInEntrance = new int[Color.getNumberOfColors()];
         Arrays.fill(studentsInEntrance, 0);
@@ -108,7 +108,28 @@ class SchoolTest {
     @Test
     void addStudentFromCloud() {
 
-        //todo, need Cloud class
+        int[] id2 = new int[2];
+        id2[0] = 4;
+        id2[1] = 24;
+
+        GameInitializer g = new GameInitializer(0, 2);
+        RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(id2, r);
+        r.start();
+
+        Game game = new Game(id2.length, g, r);
+
+        Cloud c = g.getBoard().getCloudById(0);
+
+        School s = getSchool(0, 0, 0, null);
+
+        assertEquals(0, countStudent(getStudentInEntrance_destructive(s)));
+
+        s.addStudentFromCloud(c);
+
+        assertEquals(3, countStudent(getStudentInEntrance_destructive(s)));
+
     }
 
     @Test
@@ -125,6 +146,17 @@ class SchoolTest {
         assertEquals(8, s.getTowers());
         s.removeTowers(2);
         assertEquals(6, s.getTowers());
+        s.removeTowers(4);
+        assertEquals(2, s.getTowers());
+        assertFalse(s.removeTowers(1));
+        assertEquals(1, s.getTowers());
+        assertTrue(s.removeTowers(1));
+        assertTrue(s.removeTowers(1));
+        assertTrue(s.removeTowers(10));
+        assertEquals(0, s.getTowers());
+        s = getSchool(8, 0, 0, null);
+        assertTrue(s.removeTowers(10));
+        assertEquals(0, s.getTowers());
     }
 
     @Test

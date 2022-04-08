@@ -41,7 +41,7 @@ class School {
         int[] students = c.getStudents();
         for (Color color : Color.values()){
             int index = color.getIndex();
-            entrance[index] = entrance[index] + students[index];
+            entrance[index] += students[index];
         }
     }
 
@@ -50,12 +50,12 @@ class School {
     }
 
     boolean removeTowers(int number) {
-        for (int i = 0; i < number; i++){
+
+        for (int i = 0; i < number && towers > 0; i++)
             towers--;
-            if (towers == 0) //win
-                return true;
-        }
-        return false;
+
+        //win
+        return towers == 0;
     }
 
     Color moveStudentFromEntrance(Color color) {

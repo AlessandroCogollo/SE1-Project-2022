@@ -24,6 +24,29 @@ class PlayerTest {
     }
 
     @Test
+    void playAssistant() {
+        int[] id2 = new int[2];
+        id2[0] = 4;
+        id2[1] = 24;
+
+        GameInitializer g = new GameInitializer(0, 2);
+        RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(id2, r);
+        r.start();
+
+        Game game = new Game(id2.length, g, r);
+
+        Player p = r.getCurrent();
+        for (int i = 1; i < Assistant.getNumberOfAssistants(); i++) {
+            p.playAssistant(Assistant.getAssistantByValue(i));
+            assertFalse(r.getIsFinalRound());
+        }
+        p.playAssistant(Assistant.getAssistantByValue(10));
+        assertTrue(r.getIsFinalRound());
+    }
+
+    @Test
     void moveStudent() {
 
         //done in school and cloud
@@ -32,14 +55,14 @@ class PlayerTest {
 
     @Test
     void moveMotherNature() {
-
-        //todo, need GameBoard class
+        //done in board test
+        assertTrue(true);
     }
 
     @Test
     void chooseCloud() {
-
-        //todo, need GameBoard class
+        //done in school test
+        assertTrue(true);
     }
 
     @Test //testing only the mate possibility
@@ -75,7 +98,7 @@ class PlayerTest {
         assertEquals(6, p2.getTowers(), "Test 1");
         assertEquals(0, s2.getTowers(), "Test 2");
 
-        //todo test win case, need Gameboard
+        //todo test win case
     }
 
     @Test //testing only the mate possibility

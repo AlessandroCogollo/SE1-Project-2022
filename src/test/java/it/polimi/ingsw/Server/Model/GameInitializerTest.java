@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +66,7 @@ class GameInitializerTest {
         GameInitializer gInit;
         for (int i = 2; i <= 4; i++) {
             gInit = setGameInitializer(i, i % 2);
-            assertEquals(i, gInit.getPlayerNumber(), "Test " + (i - 1) + " - number of player" + i);
+            assertEquals(i, gInit.getPlayersNumber(), "Test " + (i - 1) + " - number of player" + i);
         }
         //no other control because the control of number of player is done by game and to gameInitializer came only right value
     }
@@ -84,5 +83,10 @@ class GameInitializerTest {
             else
                 assertEquals(true, gInit.existsPlayer(i), "Test " + (1 + startId) + " - exist player id" + i);
         }
+    }
+
+    @Test
+    void checkWin() {
+        //todo
     }
 }

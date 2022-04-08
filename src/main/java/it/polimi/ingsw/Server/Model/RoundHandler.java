@@ -6,7 +6,7 @@ import java.util.*;
 //this class cycle throw the phase and the player to keep track of all moves done, needs to run start() in order to start the game
 class RoundHandler {
 
-    private final GameInitializer gInit; //for have the pointers to player
+    private final GameInitializer gInit;
 
     //except for the 1' round the planning phase is always equal to the last action phase but considering that the queue uses a destructive getters we need one queue for all the 2 phase
     private final Queue<Player> actionOrder; // the order during the action phase
@@ -49,6 +49,10 @@ class RoundHandler {
 
     int getStudentMovedInThisTurn() {
         return studentMovedInThisTurn;
+    }
+
+    boolean getIsFinalRound() {
+        return isFinalRound;
     }
 
     void setFinalRound() {
@@ -141,19 +145,6 @@ class RoundHandler {
         current = planningOrder.poll();
     }
 
-    //select a random player id
-    private int getRandomPlayerId (){
-        int[] ids = new int[gInit.getPlayerNumber()];
-        int i = 0;
-        Player p;
-        for (Player player : gInit) {
-            p = player;
-            ids[i] = p.getId();
-            i++;
-        }
-        return ids[rand.nextInt(gInit.getPlayerNumber())];
-    }
-
     //cycle between the phase
     void next (){
 
@@ -177,14 +168,14 @@ class RoundHandler {
         //action phase
         else {
 
-            //during the action phase we iter before throw action phase  and then to the next player
+            //during the action phase we iter before throw action phase and then to the next player
             switch (actionPhase){
                 case NotActionPhase:
-                    //error not possible
+                    //win
                     break;
                 case MoveStudent:
                     studentMovedInThisTurn++;
-                    int playerNum = gInit.getPlayerNumber();
+                    int playerNum = gInit.getPlayersNumber();
                     if (((playerNum == 2 || playerNum == 4) && studentMovedInThisTurn == 3) || (playerNum == 3 && studentMovedInThisTurn == 4)){
                         actionPhase = ActionPhase.MoveMotherNature;
                         studentMovedInThisTurn = 0;
@@ -194,7 +185,7 @@ class RoundHandler {
                     actionPhase = ActionPhase.ChooseCloud;
                     break;
                 case ChooseCloud:
-                    gInit.getBoard().playCharacter(null, null);
+                    gInit.getBoard().playCharacter(null, null); //reset active character
 
                     //return to planning
                     if (actionOrder.isEmpty()) {
@@ -220,6 +211,19 @@ class RoundHandler {
         }
     }
 
+    //select a random player id
+    private int getRandomPlayerId (){
+        int[] ids = new int[gInit.getPlayersNumber()];
+        int i = 0;
+        Player p;
+        for (Player player : gInit) {
+            p = player;
+            ids[i] = p.getId();
+            i++;
+        }
+        return ids[rand.nextInt(gInit.getPlayersNumber())];
+    }
+
     private void resetActiveAssistants() {
         for (Player p: gInit)
             p.playAssistant(null);
@@ -231,7 +235,7 @@ class RoundHandler {
         final int value = 1;
 
         //we create a matrix 2xNumberOfPlayers with in the first row all the ids and in the second row alla the value of their active assistant
-        int[][] arr = new int[2][gInit.getPlayerNumber()];
+        int[][] arr = new int[2][gInit.getPlayersNumber()];
         int i = 0;
         Player x;
         for (Player player : gInit) {
@@ -261,7 +265,7 @@ class RoundHandler {
                 }
 
                 //considering that the matrix is ordered from the one with the smallest value to the one with the max value, player with the same value are in a random order, so to make that the first one who has played the assistant is the first, for all the others players in this special queue (the first that has play the assistant isn't in the queue) we shift them to the last position with the same value. So, int this way also for multiple player with the same assistant we keep the correct order
-                while (arr[value][i] == arr[value][i + 1] && i < gInit.getPlayerNumber() - 1){
+                while (arr[value][i] == arr[value][i + 1] && i < gInit.getPlayersNumber() - 1){
                     swap (arr, i, i + 1);
                     i++;
                 }
@@ -269,7 +273,7 @@ class RoundHandler {
         }
 
         //now in all cases in the matrix there's the correct order so we insert it in each queue
-        for (i = 0; i < gInit.getPlayerNumber(); i++){
+        for (i = 0; i < gInit.getPlayersNumber(); i++){
             actionOrder.add(gInit.getPlayerById(arr[id][i]));
             planningOrder.add(gInit.getPlayerById(arr[id][i]));
         }

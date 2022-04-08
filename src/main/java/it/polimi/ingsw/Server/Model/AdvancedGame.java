@@ -21,6 +21,8 @@ public class AdvancedGame extends Game {
 
         if (p != round.getCurrent())
             return Errors.NOT_CURRENT_PLAYER.getCode();
+        if (round.getPhase().equals(Phase.Planning) || round.getActionPhase().equals(ActionPhase.NotActionPhase))
+            return Errors.NOT_RIGHT_PHASE.getCode();
 
         //check already played a character
         if (gameInit.getBoard().isCharacterPlayed())

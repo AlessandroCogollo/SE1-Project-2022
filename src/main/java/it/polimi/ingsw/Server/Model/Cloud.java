@@ -12,7 +12,7 @@ class Cloud {
     Cloud(int id, GameInitializer gameInitializer){
         this.id = id;
         this.bag = gameInitializer.getBag();
-        this.numOfPlayer = gameInitializer.getPlayerNumber();
+        this.numOfPlayer = gameInitializer.getPlayersNumber();
         setStudents();
     }
 
