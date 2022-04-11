@@ -2,7 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-//todo calc influence little method, finish check win, check if the players can play the character during the planning phase
+//todo calc influence little method, finish check win, check if the players can play the character during the planning phase, better main function, common check in character, javadoc
 
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{
@@ -48,7 +48,7 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
-    public int moveStudents (int playerId, int colorId, int destinationId){
+    public int moveStudent(int playerId, int colorId, int destinationId){
 
         if (!gameInit.existsPlayer(playerId))
             return Errors.PLAYER_NOT_EXIST.getCode();

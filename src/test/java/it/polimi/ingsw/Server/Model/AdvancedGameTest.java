@@ -13,7 +13,7 @@ class AdvancedGameTest extends GameTest {
     }
 
     @Test
-    void moveStudentsBlackBox() {
+    void moveStudentBlackBox() {
     }
 
     @Test
@@ -120,7 +120,7 @@ class AdvancedGameTest extends GameTest {
         for (int i = 0; i < 3; i++) {
             for (Color c : Color.values())
                 if (p.hasStudent(c)) {
-                    game.moveStudents(p.getId(), c.getIndex(), -1);
+                    game.moveStudent(p.getId(), c.getIndex(), -1);
                     break;
                 }
         }

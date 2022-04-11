@@ -3,8 +3,6 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.Errors;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -103,7 +101,7 @@ class GameTest {
     }
 
     @Test //test for error
-    void moveStudents() {
+    void moveStudent() {
 
         int[] id4 = new int[4];
         id4[0] = 1;
@@ -130,25 +128,25 @@ class GameTest {
 
         //now move student phase
         p = r.getCurrent();
-        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.moveStudents(1543, Color.Red.getIndex(), -1), "player not exists");
-        assertEquals(Errors.NOT_VALID_COLOR.getCode(), game.moveStudents(p.getId(), -3, -1), "color not exists");
-        assertEquals(Errors.NOT_VALID_DESTINATION.getCode(), game.moveStudents(p.getId(), Color.Red.getIndex(), 20), "destination not exists");
+        assertEquals(Errors.PLAYER_NOT_EXIST.getCode(), game.moveStudent(1543, Color.Red.getIndex(), -1), "player not exists");
+        assertEquals(Errors.NOT_VALID_COLOR.getCode(), game.moveStudent(p.getId(), -3, -1), "color not exists");
+        assertEquals(Errors.NOT_VALID_DESTINATION.getCode(), game.moveStudent(p.getId(), Color.Red.getIndex(), 20), "destination not exists");
 
         for (Color c: Color.values())
             if (p.hasStudent(c)) {
-                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudents(p.getId(), c.getIndex(), -1));
+                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudent(p.getId(), c.getIndex(), -1));
                 break;
             }
 
         for (Color c: Color.values())
             if (p.hasStudent(c)) {
-                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudents(p.getId(), c.getIndex(), -1));
+                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudent(p.getId(), c.getIndex(), -1));
                 break;
             }
 
         for (Color c: Color.values())
             if (p.hasStudent(c)) {
-                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudents(p.getId(), c.getIndex(), -1));
+                assertEquals(Errors.NO_ERROR.getCode(), game.moveStudent(p.getId(), c.getIndex(), -1));
                 break;
             }
 
@@ -156,7 +154,7 @@ class GameTest {
 
         for (Color c: Color.values())
             if (p.hasStudent(c)) {
-                assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.moveStudents(p.getId(), c.getIndex(), -1), "not current player");
+                assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.moveStudent(p.getId(), c.getIndex(), -1), "not current player");
                 break;
             }
 
@@ -189,7 +187,7 @@ class GameTest {
             for (Color c : Color.values())
                 if (p.hasStudent(c)) {
                     assertEquals(i, r.getStudentMovedInThisTurn(), "right students moved");
-                    game.moveStudents(p.getId(), c.getIndex(), -1);
+                    game.moveStudent(p.getId(), c.getIndex(), -1);
                     break;
                 }
         }
@@ -202,7 +200,7 @@ class GameTest {
         //now the students doesn't have any student in entrance
 
         for (Color c: Color.values())
-            assertEquals(Errors.NO_STUDENT.getCode(), game.moveStudents(p.getId(), c.getIndex(), -1), "no more students");
+            assertEquals(Errors.NO_STUDENT.getCode(), game.moveStudent(p.getId(), c.getIndex(), -1), "no more students");
     }
 
     @Test //test for error
@@ -233,7 +231,7 @@ class GameTest {
         for (int i = 0; i < 3; i++) {
             for (Color c : Color.values())
                 if (p.hasStudent(c)) {
-                    game.moveStudents(p.getId(), c.getIndex(), -1);
+                    game.moveStudent(p.getId(), c.getIndex(), -1);
                     break;
                 }
         }
@@ -281,7 +279,7 @@ class GameTest {
         for (int i = 0; i < 3; i++) {
             for (Color c : Color.values())
                 if (p.hasStudent(c)) {
-                    game.moveStudents(p.getId(), c.getIndex(), -1);
+                    game.moveStudent(p.getId(), c.getIndex(), -1);
                     break;
                 }
         }
@@ -365,7 +363,7 @@ class GameTest {
         int[] id8 = new int[2];
         id8[0] = 4;
         id8[1] = 24;
-        Game test8 = Game.getGameModel(id1, 3);
+        Game test8 = Game.getGameModel(id8, 3);
         assertNull(test8, "test 8 - 2 player no mode, null for game mode number");
 
         int[] id9 = new int[2];
