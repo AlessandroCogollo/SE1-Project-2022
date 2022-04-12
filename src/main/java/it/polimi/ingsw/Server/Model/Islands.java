@@ -1,14 +1,16 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 
 class Islands {
-    private final ArrayList<Island> islands;
+    private final LinkedList<Island> islands;
     private Island motherNature;
 
     Islands (){
-        this.islands = new ArrayList<>(12);
+        this.islands = new LinkedList<>();
 
         Island island = new Island(0);
         this.islands.add(island);
@@ -21,19 +23,17 @@ class Islands {
         //set all students in island
         Color[] firstStudents = new Color[Color.getNumberOfColors() * 2];
         int i = 0;
-        for (Color c : Color.values()){
+        for (Color c : Color.values())
             firstStudents[i++] = c;
-        }
-        for (Color c : Color.values()){
+        for (Color c : Color.values())
             firstStudents[i++] = c;
-        }
 
         rand(firstStudents);
 
         i = 0;
         for (Island is : this.islands)
             if (is.getId() != this.islands.size() / 2 && is.getId() != 0)
-                is.AddStudent(firstStudents[i++]);
+                is.addStudent(firstStudents[i++]);
     }
 
     int getIslandsNumber (){
@@ -63,23 +63,88 @@ class Islands {
 
     void addStudentToIsland(Color color, int id){
         Island island = getIslandFromId(id);
-        island.AddStudent(color);
+        island.addStudent(color);
     }
 
-    void nextMotherNature() {
-        //todo cycle throw island
-    }
-
-    //todo check if the near island have the same tower color and then aggregate them
-    void aggregateIsland(Island currIsland, Island nearIsland){
-        //add the towers
-        currIsland.setTowerCount(currIsland.getTowerCount() + nearIsland.getTowerCount());
-        //add the students
-        for (int i=0; i<Color.getNumberOfColors(); i++) {
-            for(int j=0; j<nearIsland.getStudents()[i]; j++){
-                currIsland.AddStudent(Color.getColorById(i));
-            }
+    void nextMotherNature(int position) {
+        int size = islands.size();
+        if (position >= size)
+            position -= size;
+        //get the iterator from motherNature
+        Iterator<Island> iterator;
+        if (motherNature.equals(islands.peekLast()))
+            iterator = islands.listIterator(0);
+        else
+            iterator = islands.listIterator(islands.indexOf(motherNature) + 1);
+        for (int i = 0; i < position; i++) {
+            if (!iterator.hasNext())
+                iterator = islands.listIterator(0);
+            motherNature = iterator.next();
         }
+    }
+
+    void aggregateIsland(Island currIsland){
+        if (!existsIsland(currIsland.getId())){
+            System.out.println("Error the island doesn't exist");
+            return;
+        }
+
+        //check previous
+        Island temp;
+        boolean special = false;
+        ListIterator<Island> iterator = islands.listIterator(islands.indexOf(currIsland));
+        if (currIsland.equals(islands.peekFirst())) {
+            temp = islands.peekLast();
+            special = true;
+        }
+        else
+            temp = iterator.previous();
+
+        if (currIsland.getTowerColor() == temp.getTowerColor()) {
+            mergeIslands(currIsland, temp);
+            if (special) {
+                islands.remove(temp);
+                iterator = islands.listIterator(islands.indexOf(currIsland));
+            }
+            else
+                iterator.remove();
+        }
+
+        iterator.next(); //current island
+
+        special = false;
+        //check next island
+        if (currIsland.equals(islands.peekLast())) {
+            temp = islands.peekFirst();
+            special = true;
+        }
+        else
+            temp = iterator.next();
+
+        if (currIsland.getTowerColor() == temp.getTowerColor()) {
+            mergeIslands(currIsland, temp);
+            if (special)
+                islands.remove(temp);
+            else
+                iterator.remove();
+        }
+    }
+
+    static private void mergeIslands (Island dest, Island src){
+        //retrieve the pointer to the students of the islands
+        int[] studentsSrc = src.getStudents();
+        int[] studentsDest = dest.getStudents();
+
+        //add all students from the src island that would be deleted to the dest island
+        for (Color c: Color.values())
+            studentsDest[c.getIndex()] += studentsSrc[c.getIndex()];
+
+        int bancardCount = src.getBanCard() + dest.getBanCard(); //technically the dest island never have bancard
+
+        for (int i = 0; i < bancardCount; i++)
+            dest.setBanCard();
+
+        dest.setTowerCount(src.getTowerCount() + dest.getTowerCount());
     }
 
     static private <T> void rand( T[] array) {

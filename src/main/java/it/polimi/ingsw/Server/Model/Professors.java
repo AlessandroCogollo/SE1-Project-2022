@@ -14,23 +14,37 @@ class Professors {
     }
 
     void updateProfessors(){
-        int maxp = -1;
-        for (int i = 0; i < Color.getNumberOfColors(); i++){
-            int max = 0;
-            for (Player p : gInit){
-                if (p.getNumberOfStudentInRoomByColor(Color.getColorById(i)) > max) {
-                    max = p.getNumberOfStudentInRoomByColor(Color.getColorById(i));
-                    maxp = p.getId();
+        //check all professor color
+        for (Color c: Color.values()){
+
+            //initialise temp variables
+            Player maxP = null;
+            int max = -1;
+            boolean equal = false;
+
+            //check the number of students for all the player
+            for (Player p: gInit){
+                int studentCount = p.getNumberOfStudentInRoomByColor(c);
+
+                //if is the first
+                if (maxP == null) {
+                    maxP = p;
+                    max = studentCount;
+                }
+                else{
+                    if (max < studentCount){
+                        max = studentCount;
+                        maxP = p;
+                        equal = false;
+                    }
+                    if (max == studentCount)
+                        equal = true;
                 }
             }
-            if(maxp != -1){
-                this.professors[i] = maxp;
-            }
+            //update the professor if only if there aren't equals
+            if (!equal)
+                professors[c.getIndex()] = maxP.getId();
         }
-    }
-
-    void setProfessors(Color color, Player player){
-        this.professors[color.getIndex()] = player.getId();
     }
 
     Player getPlayerWithProfessor (Color color){

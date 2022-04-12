@@ -16,7 +16,7 @@ class Cloud {
         setStudents();
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
@@ -29,10 +29,13 @@ class Cloud {
 
     //return a copy of the students in the cloud and reset them to 0
     int[] getStudents() {
-        int[] students = new int[Color.getNumberOfColors()];
-        for (Color c: Color.values())
-            students[c.getIndex()] = drawnStudents[c.getIndex()];
+        //create a copy of drawstudents
+        int[] students = Arrays.copyOf(drawnStudents, drawnStudents.length);
+
+        //delete all the students from the cloud
         Arrays.fill(drawnStudents, 0);
+
+        //return the copy
         return students;
     }
 }

@@ -82,7 +82,7 @@ class AdvancedGameTest extends GameTest {
     }
 
     @Test //test only for error
-    void testMoveMotherNature() {
+    void moveMotherNature() {
 
         int[] id2 = new int[2];
         id2[0] = 4;

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +24,7 @@ class SchoolTest {
 
     private static int countStudent (int[] x){
         int sum = 0;
-        for (int i = 0; i < x.length; i++)
-            sum += x[i];
+        for (int j : x) sum += j;
         return sum;
     }
 
@@ -70,6 +68,79 @@ class SchoolTest {
             }
         }
         return studentsInEntrance;
+    }
+
+    @Test
+    void getSchool () {
+
+        //testing only School parameter, other test has been done in player
+
+        int[] id2 = new int[2];
+        id2[0] = 1;
+        id2[1] = 2;
+
+        int[] id3 = new int[3];
+        id3[0] = 1;
+        id3[1] = 2;
+        id3[2] = 3;
+
+        int[] id4 = new int[4];
+        id4[0] = 1;
+        id4[1] = 2;
+        id4[2] = 3;
+        id4[3] = 4;
+
+        GameInitializer g = new GameInitializer(0, 2);
+        g.createAllGame(id2, null);
+        Collection<Player> players = new ArrayList<>();
+        for (int j : id2) players.add(g.getPlayerById(j));
+
+        for (Player p: players){
+            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
+            assertEquals(8, p.getTowers(), "Test 2 - towers number");
+            assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
+        }
+
+        g = new GameInitializer(0, 3);
+        g.createAllGame(id3, null);
+        players = new ArrayList<>();
+        for (int j : id3) players.add(g.getPlayerById(j));
+
+        for (Player p: players){
+            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
+            assertEquals(6, p.getTowers(), "Test 2 - towers number");
+            assertEquals(9, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
+        }
+
+        //the fact that 2 player doesn't have the tower will be hide from the outside
+        g = new GameInitializer(0, 4);
+        g.createAllGame(id4, null);
+        players = new ArrayList<>();
+        for (int j : id4) players.add(g.getPlayerById(j));
+
+        for (Player p: players){
+            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
+            assertEquals(8, p.getTowers(), "Test 2 - towers number");
+            assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
+        }
+    }
+
+    @Test
+    void getTowers() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void hasStudentInEntrance() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getNumberOfStudentInRoomByColor() {
+        //trivial
+        assertTrue(true);
     }
 
     @Test
@@ -117,8 +188,6 @@ class SchoolTest {
 
         g.createAllGame(id2, r);
         r.start();
-
-        Game game = new Game(id2.length, g, r);
 
         Cloud c = g.getBoard().getCloudById(0);
 
@@ -178,66 +247,5 @@ class SchoolTest {
             }
         }
         assertTrue(x);
-    }
-
-    @Test
-    void getSchool () {
-
-        //testing only School parameter, other test has been done in player
-
-        GameBoard board = null;
-        Bag bag = new Bag(null);
-
-        int[] id2 = new int[2];
-        id2[0] = 1;
-        id2[1] = 2;
-
-        int[] id3 = new int[3];
-        id3[0] = 1;
-        id3[1] = 2;
-        id3[2] = 3;
-
-        int[] id4 = new int[4];
-        id4[0] = 1;
-        id4[1] = 2;
-        id4[2] = 3;
-        id4[3] = 4;
-
-        GameInitializer g = new GameInitializer(0, 2);
-        g.createAllGame(id2, null);
-        Collection<Player> players = new ArrayList<>();
-        for (int i = 0; i < id2.length; i++)
-            players.add(g.getPlayerById(id2[i]));
-
-        for (Player p: players){
-            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
-            assertEquals(8, p.getTowers(), "Test 2 - towers number");
-            assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
-        }
-
-        g = new GameInitializer(0, 3);
-        g.createAllGame(id3, null);
-        players = new ArrayList<>();
-        for (int i = 0; i < id3.length; i++)
-            players.add(g.getPlayerById(id3[i]));
-
-        for (Player p: players){
-            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
-            assertEquals(6, p.getTowers(), "Test 2 - towers number");
-            assertEquals(9, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
-        }
-
-        //the fact that 2 player doesn't have the tower will be hide from the outside
-        g = new GameInitializer(0, 4);
-        g.createAllGame(id4, null);
-        players = new ArrayList<>();
-        for (int i = 0; i < id4.length; i++)
-            players.add(g.getPlayerById(id4[i]));
-
-        for (Player p: players){
-            assertEquals(0, countStudent(getStudentInRoom(p)), "Test 1 - no student in room initially");
-            assertEquals(8, p.getTowers(), "Test 2 - towers number");
-            assertEquals(7, countStudent(getStudentInEntrance_destructive(p)), "Test 3 - entrance student number");
-        }
     }
 }

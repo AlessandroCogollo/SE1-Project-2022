@@ -311,8 +311,8 @@ class GameTest {
         id1[0] = 4;
         id1[1] = 24;
         Game test1 = Game.getGameModel(id1, 0);
-        assertEquals(false, test1 instanceof AdvancedGame, "test 1 - 2 player easy mode");
-        assertEquals(true, test1 instanceof Game, "test 1 - 2 player easy mode");
+        assertFalse(test1 instanceof AdvancedGame, "test 1 - 2 player easy mode");
+        assertNotNull(test1, "test 1 - 2 player easy mode");
 
 
         int[] id2 = new int[3];
@@ -320,8 +320,8 @@ class GameTest {
         id2[1] = 24;
         id2[2] = 10;
         Game test2 = Game.getGameModel(id2, 0);
-        assertEquals(false, test2 instanceof AdvancedGame, "test 2 - 3 player easy mode");
-        assertEquals(true, test2 instanceof Game, "test 2 - 3 player easy mode");
+        assertFalse(test2 instanceof AdvancedGame, "test 2 - 3 player easy mode");
+        assertNotNull(test2, "test 2 - 3 player easy mode");
 
         int[] id3 = new int[4];
         id3[0] = 1;
@@ -329,7 +329,7 @@ class GameTest {
         id3[2] = 3;
         id3[3] = 4;
         Game test3 = Game.getGameModel(id3, 1);
-        assertEquals(true, test3 instanceof AdvancedGame, "test 3 - 4 player advanced mode");
+        assertTrue(test3 instanceof AdvancedGame, "test 3 - 4 player advanced mode");
 
         int[] id4 = new int[4];
         id4[0] = 10;
@@ -337,7 +337,7 @@ class GameTest {
         id4[2] = 3;
         id4[3] = 721;
         Game test4 = Game.getGameModel(id4, 1);
-        assertEquals(true, test4 instanceof AdvancedGame, "test 4 - 4 player advanced mode, 'casual' id");
+        assertTrue(test4 instanceof AdvancedGame, "test 4 - 4 player advanced mode, 'casual' id");
 
         int[] id5 = new int[4];
         id5[0] = 10;

@@ -6,17 +6,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameInitializerTest {
 
-    protected static GameInitializer setGameInitializer (int numOfPLayers, int gameMode){
+    public static GameInitializer setGameInitializer (int numOfPLayers, int gameMode){
         GameInitializer g;
-        switch (numOfPLayers){
-            case 2:
+        switch (numOfPLayers) {
+            case 2 -> {
                 int[] id2 = new int[2];
                 id2[0] = 4;
                 id2[1] = 24;
                 g = new GameInitializer(gameMode, id2.length);
                 g.createAllGame(id2, null);
                 return g;
-            case 3:
+            }
+            case 3 -> {
                 int[] id3 = new int[3];
                 id3[0] = 4;
                 id3[1] = 24;
@@ -24,7 +25,8 @@ class GameInitializerTest {
                 g = new GameInitializer(gameMode, id3.length);
                 g.createAllGame(id3, null);
                 return g;
-            case 4:
+            }
+            case 4 -> {
                 int[] id4 = new int[4];
                 id4[0] = 1;
                 id4[1] = 2;
@@ -33,8 +35,57 @@ class GameInitializerTest {
                 g = new GameInitializer(gameMode, id4.length);
                 g.createAllGame(id4, null);
                 return g;
+            }
         }
         return null;
+    }
+
+    @Test
+    void createAllGame() {
+        //done in all constructor
+        assertTrue(true);
+    }
+
+    @Test
+    void getGameMode() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getPlayersNumber() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getBag() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getProfessors() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getIslands() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getBoard() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getRoundHandler() {
+        //trivial
+        assertTrue(true);
     }
 
     @Test
@@ -79,9 +130,9 @@ class GameInitializerTest {
         final int endId = 10; //included
         for (int i = startId; i <= endId; i++){
             if (i < 1 || i > 4)
-                assertEquals(false, gInit.existsPlayer(i), "Test " + (1 + startId) + " - exist player id " + i);
+                assertFalse(gInit.existsPlayer(i), "Test " + (1 + startId) + " - exist player id " + i);
             else
-                assertEquals(true, gInit.existsPlayer(i), "Test " + (1 + startId) + " - exist player id" + i);
+                assertTrue(gInit.existsPlayer(i), "Test " + (1 + startId) + " - exist player id" + i);
         }
     }
 

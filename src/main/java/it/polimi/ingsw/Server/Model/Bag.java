@@ -21,23 +21,25 @@ class Bag {
     int[] drawStudents(int count){
         int[] drawnStudents = new int[Color.getNumberOfColors()];
         Arrays.fill(drawnStudents, 0);
+
+        int remainingStudent = Arrays.stream(students).sum();
+        if (count >= remainingStudent) {
+            count = remainingStudent;
+            System.out.println("Bag is empty!");
+            gameInitializer.getRoundHandler().setFinalRound();
+        }
+
         int index;
         int i = 0;
-        while (i < count) {
-            if (Arrays.stream(students).sum() > 0){
-                index = rand.nextInt(Color.getNumberOfColors());
-                if(students[index] > 0){
-                    drawnStudents[index]++;
-                    students[index]--;
-                    i++;
-                }
-            }
-            else{
-                System.out.println("Bag is empty!");
-                gameInitializer.getRoundHandler().setFinalRound();
-                break;
+        while (i < count){
+            index = rand.nextInt(Color.getNumberOfColors());
+            if(students[index] > 0){
+                drawnStudents[index]++;
+                students[index]--;
+                i++;
             }
         }
+
         return drawnStudents;
     }
 }

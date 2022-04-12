@@ -2,8 +2,6 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-import java.util.Collection;
-
 final class Cleric extends Character{
 
     private int[] students;
@@ -29,7 +27,7 @@ final class Cleric extends Character{
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
 
         this.students[c.getIndex()]--;
-        i.AddStudent(c);
+        i.addStudent(c);
         int[] newStudent= super.gameInitializer.getBag().drawStudents(1);
         for (Color color: Color.values())
             this.students[color.getIndex()] += newStudent[color.getIndex()];

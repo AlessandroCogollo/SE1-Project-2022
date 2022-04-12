@@ -2,11 +2,16 @@ package it.polimi.ingsw.Server.Model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AdvancedPlayerTest extends PlayerTest{
+
+    @Test
+    void getCoins() {
+        //trivial
+        assertTrue(true);
+    }
 
     @Test   //only testing the coin
     void moveStudent() {
@@ -19,7 +24,6 @@ class AdvancedPlayerTest extends PlayerTest{
         p.moveStudent(Color.getColorById(0), -1);
         assertEquals(2, p.getCoins());
     }
-
 
     @Test
     void playCharacter() {

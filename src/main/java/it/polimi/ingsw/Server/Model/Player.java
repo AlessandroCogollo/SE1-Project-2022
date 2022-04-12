@@ -64,8 +64,10 @@ class Player implements Iterable<Assistant>{
             Color student = school.moveStudentFromEntrance(c);
             gameInitializer.getIslands().addStudentToIsland(student, destinationId);
         }
-        else
+        else {
             school.moveStudentToRoom(c);
+            gameInitializer.getProfessors().updateProfessors();
+        }
     }
 
     // move mother nature calls the appropriate method in board

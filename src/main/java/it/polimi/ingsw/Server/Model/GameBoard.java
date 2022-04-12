@@ -11,7 +11,6 @@ class GameBoard {
     private final Collection<Character> charactersDeck;
     private final Islands islands;
     private final Professors professors;
-    private final Bag bag;
 
     private Character activeCharacter;
 
@@ -29,9 +28,9 @@ class GameBoard {
 
         this.islands = gInit.getIslands();
         this.professors = gInit.getProfessors();
-        this.bag = gInit.getBag();
         this.activeCharacter = null;
     }
+
 
     Character getActiveCharacter() {
         return activeCharacter;
@@ -85,33 +84,40 @@ class GameBoard {
     }
 
     boolean isCharacterPlayed (){
-        if (this.activeCharacter == null)
-            return false;
-        return true;
+        return this.activeCharacter != null;
     }
 
     void moveMotherNature(int count){
-        int size = islands.getIslandsNumber();
 
-        for (int i = 0; i < count; i++)
-            islands.nextMotherNature();
+        //move mother nature of count position
+        islands.nextMotherNature(count);
+
 
         Island mN = islands.getMotherNature();
 
-        //if there isn't the ban card
-        if (mN.getBanCard() == 0)
+
+        if (mN.getBanCard() == 0){
+            //if there isn't the ban card
+
+            //this modify the island leaving it with the right tower in the end
             calcInfluence(mN);
 
-            //else don't do nothing
+            //now we check if there are some aggregation to do and we will do it
+            islands.aggregateIsland(mN);
+        }
         else {
+            //else only remove the bancard and return it to the apothecary
             mN.removeBanCard();
             for (Character c: charactersDeck)
                 if (c.getId() == 0)
                     ((Apothecary) c).addBanCard();
         }
 
+        if (islands.getIslandsNumber() <= 3)
+            gInit.checkWin();
     }
 
+    //todo divide in smaller function
     void calcInfluence(Island c) {
 
         HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences

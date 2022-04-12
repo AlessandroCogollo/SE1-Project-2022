@@ -1,10 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Optional;
-
 class Island {
 
     private final int id;
@@ -47,7 +42,7 @@ class Island {
     }
 
     //adds the student to the island
-    void AddStudent(Color color){
+    void addStudent(Color color){
         students[color.getIndex()]++;
     }
 

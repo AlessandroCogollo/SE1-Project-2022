@@ -9,16 +9,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
-    protected static Player getPlayer(int gameMode, School school, Player mate, int towerColor){
-        if (gameMode == 0)
-            return new Player(1, towerColor, mate, null, school);
-        else
-            return new AdvancedPlayer(1, towerColor, mate, null, school);
+    protected static Player getPlayer(int gameMode, School school, Player mate, int towerColor) {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 0);
+        if (gameMode == 0) {
+            return new Player(1, towerColor, mate, g, school);
+        }
+        else {
+            return new AdvancedPlayer(1, towerColor, mate, g, school);
+        }
+    }
+
+    @Test
+    void getId() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getTowerColor() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getActiveAssistant() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void hasAssistant() {
+        //trivial
+        assertTrue(true);
     }
 
     @Test
     void hasStudent() {
-
         //done in school test
         assertTrue(true);
     }
@@ -34,8 +60,6 @@ class PlayerTest {
 
         g.createAllGame(id2, r);
         r.start();
-
-        Game game = new Game(id2.length, g, r);
 
         Player p = r.getCurrent();
         for (int i = 1; i < Assistant.getNumberOfAssistants(); i++) {
@@ -133,7 +157,7 @@ class PlayerTest {
     }
 
     @Test
-    void getPlayers (){
+    void factoryPlayers() {
 
         //testing only player parameter, other test will be done in school
 
@@ -155,89 +179,74 @@ class PlayerTest {
         GameInitializer g = new GameInitializer(0, 2);
         g.createAllGame(id2, null);
         Collection<Player> players = new ArrayList<>();
-        for (int i = 0; i < id2.length; i++)
-            players.add(g.getPlayerById(id2[i]));
+        for (int j : id2) players.add(g.getPlayerById(j));
 
-        for (Player p: players){
-            assertEquals(false, p instanceof AdvancedPlayer, "test 1 - 2 player easy mode");
-            assertEquals(true, p instanceof Player, "test 1 - 2 player easy mode");
+        for (Player p : players) {
+            assertFalse(p instanceof AdvancedPlayer, "test 1 - 2 player easy mode");
+            assertNotNull(p, "test 1 - 2 player easy mode");
         }
 
         g = new GameInitializer(1, 2);
         g.createAllGame(id2, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id2.length; i++)
-            players.add (g.getPlayerById(id2[i]));
+        for (int j : id2) players.add(g.getPlayerById(j));
 
-        for (Player p: players)
-            assertEquals(true, p instanceof AdvancedPlayer, "test 2 - 2 player advanced mode");
+        for (Player p : players)
+            assertTrue(p instanceof AdvancedPlayer, "test 2 - 2 player advanced mode");
 
 
         g = new GameInitializer(0, 3);
         g.createAllGame(id3, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id3.length; i++)
-            players.add(g.getPlayerById(id3[i]));
+        for (int j : id3) players.add(g.getPlayerById(j));
 
-        for (Player p: players){
-            assertEquals(false, p instanceof AdvancedPlayer, "test 3 - 3 player easy mode");
-            assertEquals(true, p instanceof Player, "test 3 - 3 player easy mode");
+        for (Player p : players) {
+            assertFalse(p instanceof AdvancedPlayer, "test 3 - 3 player easy mode");
+            assertNotNull(p, "test 3 - 3 player easy mode");
         }
 
 
         g = new GameInitializer(1, 3);
         g.createAllGame(id3, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id3.length; i++)
-            players.add(g.getPlayerById(id3[i]));
+        for (int j : id3) players.add(g.getPlayerById(j));
 
-        for (Player p: players)
-            assertEquals(true, p instanceof AdvancedPlayer, "test 4 - 3 player advanced mode");
+        for (Player p : players)
+            assertTrue(p instanceof AdvancedPlayer, "test 4 - 3 player advanced mode");
 
 
         g = new GameInitializer(0, 4);
         g.createAllGame(id4, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id4.length; i++)
-            players.add(g.getPlayerById(id4[i]));
+        for (int j : id4) players.add(g.getPlayerById(j));
 
-        for (Player p: players){
-            assertEquals(false, p instanceof AdvancedPlayer, "test 5 - 4 player easy mode");
-            assertEquals(true, p instanceof Player, "test 5 - 4 player easy mode");
+        for (Player p : players) {
+            assertFalse(p instanceof AdvancedPlayer, "test 5 - 4 player easy mode");
+            assertNotNull(p, "test 5 - 4 player easy mode");
         }
 
 
         g = new GameInitializer(1, 4);
         g.createAllGame(id4, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id4.length; i++)
-            players.add(g.getPlayerById(id4[i]));
+        for (int j : id4) players.add(g.getPlayerById(j));
 
-        for (Player p: players)
-            assertEquals(true, p instanceof AdvancedPlayer, "test 6 - 4 player advanced mode");
+        for (Player p : players)
+            assertTrue(p instanceof AdvancedPlayer, "test 6 - 4 player advanced mode");
 
 
         g = new GameInitializer(0, 4);
         g.createAllGame(id4, null);
         players = new ArrayList<>();
-        for (int i = 0; i < id4.length; i++)
-            players.add(g.getPlayerById(id4[i]));
+        for (int j : id4) players.add(g.getPlayerById(j));
 
         Player p1 = null, p2 = null, p3 = null, p4 = null;
-        for (Player p: players){
-            switch (p.getId()){
-                case 1:
-                    p1 = p;
-                    break;
-                case 2:
-                    p2 = p;
-                    break;
-                case 3:
-                    p3 = p;
-                    break;
-                case 4:
-                    p4 = p;
-                    break;
+        for (Player p : players) {
+            switch (p.getId()) {
+                case 1 -> p1 = p;
+                case 2 -> p2 = p;
+                case 3 -> p3 = p;
+                case 4 -> p4 = p;
             }
         }
         p1.receiveTowerFromIsland(2);

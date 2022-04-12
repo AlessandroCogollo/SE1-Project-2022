@@ -45,7 +45,7 @@ public class App {
         }
         else {
 
-            //todo parameter sanitize
+            //todo parameter sanitize and reduce the line number in main function
 
             if (cmd.hasOption(server) && cmd.hasOption(client)) {
                 //both -c and -s options

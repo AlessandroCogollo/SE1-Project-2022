@@ -61,5 +61,4 @@ public class AdvancedGame extends Game {
 
         return Errors.NO_ERROR.getCode();
     }
-
 }

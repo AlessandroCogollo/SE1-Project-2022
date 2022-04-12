@@ -22,15 +22,16 @@ class AdvancedPlayer extends Player {
         gameInitializer.getBoard().playCharacter(c, obj);
     }
 
-    //override for coins
-    @Override
+    @Override //override for coins
     void moveStudent (Color c, int destinationId){
         if (destinationId != -1){
             Color student = school.moveStudentFromEntrance(c);
             gameInitializer.getIslands().addStudentToIsland(student, destinationId);
         }
-        else
+        else {
             if (school.moveStudentToRoom(c))
                 coins++;
+            gameInitializer.getProfessors().updateProfessors();
+        }
     }
 }
