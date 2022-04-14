@@ -8,8 +8,6 @@ class Bag {
     private int[] students; //5
     private Random rand;
 
-    //all'inizio metti 2 stud per ogni isola in cui non ce madre o nella opposta --OK
-    //gli altri nella bag e controllo se ci sono ancora, altrimenti checkwin --OK
 
     public Bag(){
         students = new int[Color.getNumberOfColors()];

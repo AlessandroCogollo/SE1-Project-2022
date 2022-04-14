@@ -78,7 +78,6 @@ class GameBoard {
         return clouds;
     }
 
-
     GameInitializer getgInit() {
         return gInit;
     }
