@@ -122,7 +122,7 @@ class GameBoard {
 
         HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences
 
-        //initializating playersInfluence
+        //initializing playersInfluence
         for(Player p: gInit){
             playersInfluence.put(p, 0);
         }

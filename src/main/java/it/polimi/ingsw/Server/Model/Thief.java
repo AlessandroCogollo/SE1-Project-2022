@@ -14,12 +14,16 @@ final class Thief extends Character {
     void activateEffect(Object obj) {
 
         int colorId = (Integer) obj;
-
         Color c = Color.getColorById(colorId);
 
-        //todo method implementation
-
-        // every player has to move 3 students from his room
+        for (Player p : gameInitializer) {
+            int tempCount = 3;
+            while ((p.getSchool().getNumberOfStudentInRoomByColor(c) > 0) && (tempCount > 0)) {
+                p.getSchool().removeStudentFromRoom(c);
+                super.gameInitializer.getBag().addStudents(c);
+                tempCount--;
+            }
+        }
     }
 
     @Override

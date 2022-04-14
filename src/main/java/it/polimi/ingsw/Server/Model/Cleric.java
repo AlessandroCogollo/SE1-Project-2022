@@ -4,13 +4,12 @@ import it.polimi.ingsw.Server.Errors;
 
 final class Cleric extends Character{
 
-    private int[] students;
+    private final int[] students;
 
     Cleric(GameInitializer gameInitializer) {
         super (2, 1, gameInitializer);
         this.students = super.gameInitializer.getBag().drawStudents(4);
 
-        // used for testing
         System.out.println("Built Cleric");
         System.out.println("Initialized Cleric with 4 students on him");
     }
@@ -18,13 +17,11 @@ final class Cleric extends Character{
     @Override
     void activateEffect(Object obj) {
 
-        // todo implement actual color choosing
+        // color number is given by zero position of array, island id is given by first position of array
+        int[] studentToIsland = (int[])obj;
 
-        int colorId = 0;
-        int islandId = 0;
-
-        Color c = Color.getColorById(colorId);
-        Island i = gameInitializer.getIslands().getIslandFromId(islandId);
+        Color c = Color.getColorById(studentToIsland[0]);
+        Island i = gameInitializer.getIslands().getIslandFromId(studentToIsland[1]);
 
         this.students[c.getIndex()]--;
         i.addStudent(c);
@@ -36,9 +33,10 @@ final class Cleric extends Character{
     @Override
     Errors canActivateEffect(Object obj) {
 
-        // todo implement actual color choosing
-        int colorId = 0;
-        int islandId = 0;
+        int[] studentToIsland = (int[])obj;
+
+        int colorId = studentToIsland[0];
+        int islandId = studentToIsland[1];
 
         if (colorId < 0 || colorId > 4)
             return Errors.NOT_VALID_COLOR;

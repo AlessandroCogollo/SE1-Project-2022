@@ -7,12 +7,12 @@ final class Minotaur extends Character {
 
     Minotaur(GameInitializer gameInitializer) {
         super (8, 3, gameInitializer);
+        System.out.println("Built Minotaur");
     }
 
     @Override
     void activateEffect(Object object) {
         //todo
-        System.out.println("Minotaur");
     }
 
     @Override

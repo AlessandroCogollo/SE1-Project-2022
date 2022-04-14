@@ -18,6 +18,10 @@ class Bag {
         this.gameInitializer = gameInitializer;
     }
 
+    void addStudents(Color color) {
+        this.students[color.getIndex()]++;
+    }
+
     int[] drawStudents(int count){
         int[] drawnStudents = new int[Color.getNumberOfColors()];
         Arrays.fill(drawnStudents, 0);
