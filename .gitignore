@@ -10,6 +10,8 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+target/**
+
 # Package Files #
 *.jar
 *.war
@@ -24,3 +26,6 @@ hs_err_pid*
 
 #.idea directory
 .idea/
+
+#am56 file
+/AM56.iml

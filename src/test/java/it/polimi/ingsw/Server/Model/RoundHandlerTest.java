@@ -7,6 +7,48 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoundHandlerTest {
 
     @Test
+    void RoundHandler (){
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getCurrent() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getPhase() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getActionPhase() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getStudentMovedInThisTurn() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getIsFinalRound() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void setFinalRound() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
     void canPLayAssistant() {
 
         //done also in game play assistant test
@@ -16,14 +58,18 @@ class RoundHandlerTest {
         ids[2] = 3;
         ids[3] = 721;
 
-        GameInitializer g = new GameInitializer(ids, 0);
+        GameInitializer g = new GameInitializer(0, ids.length);
+
 
         RoundHandler r = new RoundHandler(g);
+
+
+        g.createAllGame(ids, r);
         r.start();
 
         Player p = r.getCurrent();
         //all null
-        assertEquals(true, r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all null");
+        assertTrue(r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all null");
 
         int i = 1;
         for (Player x: g){
@@ -34,17 +80,17 @@ class RoundHandlerTest {
         }
 
         //set all assistant except for p
-        assertEquals(false, r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all set");
-        assertEquals(true, r.canPLayAssistant(p, Assistant.getAssistantByValue(4)), "Test 1 - all set");
+        assertFalse(r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all set");
+        assertTrue(r.canPLayAssistant(p, Assistant.getAssistantByValue(4)), "Test 1 - all set");
 
         for (i = 4; i <= 10; i++)
             p.playAssistant(Assistant.getAssistantByValue(i));
 
         //now p has only 1 2 3 assistant
 
-        assertEquals(true, r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all set");
-        assertEquals(true, r.canPLayAssistant(p, Assistant.getAssistantByValue(2)), "Test 1 - all set");
-        assertEquals(true, r.canPLayAssistant(p, Assistant.getAssistantByValue(3)), "Test 1 - all set");
+        assertTrue(r.canPLayAssistant(p, Assistant.getAssistantByValue(1)), "Test 1 - all set");
+        assertTrue(r.canPLayAssistant(p, Assistant.getAssistantByValue(2)), "Test 1 - all set");
+        assertTrue(r.canPLayAssistant(p, Assistant.getAssistantByValue(3)), "Test 1 - all set");
 
     }
 
@@ -57,34 +103,37 @@ class RoundHandlerTest {
         ids[2] = 3;
         ids[3] = 721;
 
-        GameInitializer gInit = new GameInitializer(ids, 0);
+        GameInitializer gInit = new GameInitializer(0, ids.length);
+
 
         RoundHandler roundHandler = new RoundHandler(gInit);
 
         assertNull(roundHandler.getCurrent(), "Test 1 - current null");
+
+        gInit.createAllGame(ids, roundHandler);
         roundHandler.start();
 
         Player p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
-        assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        assertTrue(gInit.existsPlayer(p.getId()), "Test 3 - player exists");
         p.playAssistant(Assistant.getAssistantByValue(4));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
-        assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        assertTrue(gInit.existsPlayer(p.getId()), "Test 3 - player exists");
         p.playAssistant(Assistant.getAssistantByValue(3));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
-        assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        assertTrue(gInit.existsPlayer(p.getId()), "Test 3 - player exists");
         p.playAssistant(Assistant.getAssistantByValue(2));
         roundHandler.next();
 
         p = roundHandler.getCurrent();
         assertNotNull(p, "Test 2 - current not null");
-        assertEquals(true, gInit.existsPlayer(p.getId()), "Test 3 - player exists");
+        assertTrue(gInit.existsPlayer(p.getId()), "Test 3 - player exists");
         p.playAssistant(Assistant.getAssistantByValue(1));
         roundHandler.next();
 
@@ -100,9 +149,11 @@ class RoundHandlerTest {
         ids[0] = 10;
         ids[1] = 6;
 
-        GameInitializer g = new GameInitializer(ids, 0);
+        GameInitializer g = new GameInitializer(0, ids.length);
 
         RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(ids, r);
         r.start();
 
         assertEquals(Phase.Planning, r.getPhase(), "Test 1 - Planning");

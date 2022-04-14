@@ -1,18 +1,25 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Optional;
 
-public class Bard extends Character {
+final class Bard extends Character {
 
-    private int id = 1;
-    private boolean isChangingMethods = false;
+    Bard(GameInitializer gameInitializer) {
+        super (1, 1, gameInitializer);
 
-    public Bard() {
-
+        System.out.println("Built Bard");
     }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
-        System.out.println("Bard");
+    void activateEffect(Object obj) {
+        //todo
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        //todo
+        return Errors.NO_ERROR;
     }
 }

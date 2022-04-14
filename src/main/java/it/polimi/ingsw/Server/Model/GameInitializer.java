@@ -1,35 +1,65 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 // this class create all the model and keep the register of the players
 class GameInitializer implements Iterable<Player>{
 
-    private final Collection<Player> players;
-    private final GameBoard board;
     private final int gameMode;
+    private final int playerNumber;
+    private Collection<Player> players = null;
+    private Bag bag = null;
+    private Professors professors = null;
+    private Islands islands = null;
+    private GameBoard board = null;
+    private RoundHandler roundHandler;
+    private int winningPlayerId;
 
 
-    GameInitializer(int[] ids, int gameMode) {
+
+
+    GameInitializer(int gameMode, int playerNumber) {
         this.gameMode = gameMode;
-
-        GameBoard board = new GameBoard(this, ids.length);
-
-        this.board = board;
-        Bag bag = new Bag();
-        //Bag bag = board.getBag();
-
-        this.players = Player.factoryPlayers(ids, gameMode, board, bag);
+        this.playerNumber = playerNumber;
+        this.winningPlayerId = -1;
     }
 
-    protected GameBoard getGameBoard(){
-        return this.board;
+    void createAllGame (int[] ids, RoundHandler roundHandler){
+        this.bag = new Bag(this);
+        this.professors = new Professors(this);
+        this.islands = new Islands();
+        this.board = new GameBoard(this);
+        this.players = Player.factoryPlayers(ids, this);
+        this.roundHandler = roundHandler;
     }
 
     int getGameMode() {
         return gameMode;
+    }
+
+    int getPlayersNumber() {
+        return playerNumber;
+    }
+
+    Bag getBag() {
+        return bag;
+    }
+
+    Professors getProfessors() {
+        return professors;
+    }
+
+    Islands getIslands() {
+        return islands;
+    }
+
+    GameBoard getBoard() {
+        return board;
+    }
+
+    RoundHandler getRoundHandler() {
+        return roundHandler;
     }
 
     Player getPlayerById (int id){
@@ -38,18 +68,6 @@ class GameInitializer implements Iterable<Player>{
                 return x;
         }
         return null;
-    }
-
-    int getNumberOfPlayers(){
-        return players.size();
-    }
-
-
-
-    ArrayList<Player> getPlayers (){
-        ArrayList<Player> temp = new ArrayList<>();
-        for (Player p : players) temp.add(p);
-        return temp;
     }
 
     boolean existsPlayer (int id){
@@ -62,9 +80,12 @@ class GameInitializer implements Iterable<Player>{
         return exists;
     }
 
+    void checkWin(){
+        //todo
+    }
+
     @Override
     public Iterator<Player> iterator() {
         return players.iterator();
     }
-
 }

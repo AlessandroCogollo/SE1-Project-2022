@@ -1,26 +1,41 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.util.Arrays;
+
 class Cloud {
-    private int id;
+    private final int id;
+    private final Bag bag;
+    private final int numOfPlayer;
     private int[] drawnStudents;
-    private int numOfPlayer;
-    private Bag bag;
 
 
-    public Cloud(Bag bag, int numOfPlayer){
-        this.bag = bag;
-        this.numOfPlayer = numOfPlayer;
-
-    }
-    public void AddStudents(){
-        this.drawnStudents = new int[Color.getNumberOfColors()];
-        if(numOfPlayer == 3){
-            drawnStudents = bag.DrawStudents(4);
-        }
-        else this.drawnStudents = bag.DrawStudents(3);
+    Cloud(int id, GameInitializer gameInitializer){
+        this.id = id;
+        this.bag = gameInitializer.getBag();
+        this.numOfPlayer = gameInitializer.getPlayersNumber();
+        setStudents();
     }
 
-    public int[] getStudents() {
-        return drawnStudents;
+    int getId() {
+        return id;
+    }
+
+    void setStudents(){
+        if (numOfPlayer == 3)
+            this.drawnStudents = bag.drawStudents(4);
+        else
+            this.drawnStudents = bag.drawStudents(3);
+    }
+
+    //return a copy of the students in the cloud and reset them to 0
+    int[] getStudents() {
+        //create a copy of drawstudents
+        int[] students = Arrays.copyOf(drawnStudents, drawnStudents.length);
+
+        //delete all the students from the cloud
+        Arrays.fill(drawnStudents, 0);
+
+        //return the copy
+        return students;
     }
 }

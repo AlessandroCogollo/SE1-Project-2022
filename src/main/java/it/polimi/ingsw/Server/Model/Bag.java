@@ -5,38 +5,41 @@ import java.util.Random;
 
 class Bag {
 
-    private int[] students; //5
-    private Random rand;
+    private final int[] students;
+    private final Random rand;
+    private final GameInitializer gameInitializer;
 
-
-    public Bag(){
-        students = new int[Color.getNumberOfColors()];
+    Bag(GameInitializer gameInitializer){
+        this.students = new int[Color.getNumberOfColors()];
         for (int i=0; i<Color.getNumberOfColors(); i++){
-            students[i] = (100/Color.getNumberOfColors());
+            students[i] = (24); //from the rules
         }
+        this.rand = new Random(System.currentTimeMillis());
+        this.gameInitializer = gameInitializer;
     }
-    public int[] DrawStudents(int count){
-        Random rand = new Random(System.currentTimeMillis());
-        int[] drawnStudents = new int[Color.getNumberOfColors()];
-        int index;
-        for (int i = 0; i < count; i++) {
-            if (Arrays.stream(students).sum() > 0){
-                index = rand.nextInt(Color.getNumberOfColors());
-                if(students[index] > 0){
-                    drawnStudents[index]++;
-                    students[index]--;
-                }
-                else {
-                    i--;
-                }
-            }
-            else{
-                System.out.println("Bag is empty!");
-                // CheckWin() ------------------
-                return null;
-            }
 
+    int[] drawStudents(int count){
+        int[] drawnStudents = new int[Color.getNumberOfColors()];
+        Arrays.fill(drawnStudents, 0);
+
+        int remainingStudent = Arrays.stream(students).sum();
+        if (count >= remainingStudent) {
+            count = remainingStudent;
+            System.out.println("Bag is empty!");
+            gameInitializer.getRoundHandler().setFinalRound();
         }
+
+        int index;
+        int i = 0;
+        while (i < count){
+            index = rand.nextInt(Color.getNumberOfColors());
+            if(students[index] > 0){
+                drawnStudents[index]++;
+                students[index]--;
+                i++;
+            }
+        }
+
         return drawnStudents;
     }
 }

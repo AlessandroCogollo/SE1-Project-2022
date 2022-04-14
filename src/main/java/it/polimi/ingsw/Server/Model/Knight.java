@@ -1,15 +1,14 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Server.Errors;
+
 import java.util.Optional;
 
-public class Knight extends Character {
+final class Knight extends Character {
 
-    private int id;
-    private boolean isChangingMethod;
     //private Game game;
 
-    Knight() {
-        this.id = 7;
-        this.isChangingMethod = true;
+    Knight(GameInitializer gameInitializer) {
+        super (7, 2, gameInitializer);
     }
 
     /*
@@ -19,7 +18,14 @@ public class Knight extends Character {
     */
 
     @Override
-    public void activateEffect(Optional<Object> object) {
+    void activateEffect(Object object) {
+        //todo
         System.out.println("Knight");
+    }
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        //todo
+        return Errors.NO_ERROR;
     }
 }

@@ -9,60 +9,56 @@ public class AdvancedGame extends Game {
         super(numOfPlayer, gameInit, round);
     }
 
-    public int playCharacter(int playerId, Character x) {
+    public int playCharacter(int playerId, int characterId, Object obj) {
 
         if (!gameInit.existsPlayer(playerId))
             return Errors.PLAYER_NOT_EXIST.getCode();
-        if (x == null)
-            return Errors.NULL_POINTER.getCode();
+        if (!gameInit.getBoard().existsCharacter(characterId))
+            return Errors.NO_SUCH_CHARACTER.getCode();
 
         AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
-
-        //todo check if is a playable character
+        Character x = gameInit.getBoard().getCharacterById(characterId);
 
         if (p != round.getCurrent())
             return Errors.NOT_CURRENT_PLAYER.getCode();
+        if (round.getPhase().equals(Phase.Planning) || round.getActionPhase().equals(ActionPhase.NotActionPhase))
+            return Errors.NOT_RIGHT_PHASE.getCode();
 
         //check already played a character
-        if (p.getActiveCharacter().isPresent())
+        if (gameInit.getBoard().isCharacterPlayed())
             return Errors.CHARACTER_YET_PLAYED.getCode();
 
         //todo check if is a good move (es. play a character during the choose Cloud phase is may an error) ?
 
-        //todo check can play character, need Character enum
-        if (true) //(p.getCoins() < x.getCost())
+        if (p.getCoins() < x.getCost())
             return Errors.NOT_ENOUGH_COINS.getCode();
 
-        p.playCharacter(x);
+        //check if the object passed is correct and if the action performed by the character it's valid
+        Errors er = x.canActivateEffect(obj);
+        if (!er.equals(Errors.NO_ERROR))
+            return er.getCode();
 
-        //no next because it doesn't change the round in the game
+        p.playCharacter(x, obj);
 
         return Errors.NO_ERROR.getCode();
     }
 
-    // only one override because the character can only modify this method
     @Override
     public int moveMotherNature (int playerId, int position){
 
-        //todo check active character that modify methods, need Character enum
-        //no character that change methods
-        if (false)
-            return super.moveMotherNature(playerId, position);
-
-        //with character that change methods
-        if (!gameInit.existsPlayer(playerId))
-            return Errors.PLAYER_NOT_EXIST.getCode();
+        int errorCode = super.moveMotherNature(playerId, position);
+        if (Errors.MOVEMENTS_TOO_HIGH.getCode() != errorCode)
+            return errorCode;
 
         AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
-        //todo move mother nature special, need Character enum
 
+        if (gameInit.getBoard().isCharacterPlayed() && gameInit.getBoard().getActiveCharacter().getId() == 9 && position > (p.getActiveAssistant().getMaxMovement() + 2))
+            return errorCode;
 
-
-        //p.moveMotherNature(position);
+        p.moveMotherNature(position);
 
         round.next();
 
         return Errors.NO_ERROR.getCode();
     }
-
 }

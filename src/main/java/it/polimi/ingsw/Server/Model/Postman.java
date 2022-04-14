@@ -1,15 +1,20 @@
 package it.polimi.ingsw.Server.Model;
-import java.util.Optional;
 
-public class Postman extends Character {
-    private boolean isChangingMethod;
+import it.polimi.ingsw.Server.Errors;
+
+final class Postman extends Character {
+
+    Postman(GameInitializer gameInitializer) {
+        super (9, 1, gameInitializer);
+    }
 
     @Override
-    public void activateEffect(Optional<Object> object) {
+    void activateEffect(Object object) {
         System.out.println("Postman");
     }
 
-    /*
-    public Optional<Player> calcInfluence() {}
-    */
+    @Override
+    Errors canActivateEffect(Object obj) {
+        return Errors.NO_ERROR;
+    }
 }
