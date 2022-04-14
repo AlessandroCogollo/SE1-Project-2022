@@ -15,6 +15,10 @@ final class Cook extends Character {
         this.color = Optional.empty();
     }
 
+    Color getProfessor(){
+        return Color.Red; //todo getProfessor and chooseProfessor method
+    }
+
     @Override
     void activateEffect(Object color) {
         int colorId = (Integer) color;

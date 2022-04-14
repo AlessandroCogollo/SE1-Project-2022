@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 class GameBoard {
 
@@ -117,27 +118,52 @@ class GameBoard {
         if (islands.getIslandsNumber() <= 3)
             gInit.checkWin();
     }
+    //knight: adds 2 points to the current player (id = 7) --- OK
+    //drunkard: given a color, blocks the influence calc for those students (id = 4) --- OK
+    //minotaur: blocks the influence calc for the towers (id = 8) --- OK
+    //cook: obtains the professor even if in withdraw in number of students in the room (id = 3) --- OK
+
 
     //returns the influence of each player
     HashMap<Player, Integer> getInfluenceMap(Island c){
 
         HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences
 
-        //initializating playersInfluence
+        //initializing playersInfluence
         for(Player p: gInit){
             playersInfluence.put(p, 0);
         }
+
+        /* Knight effect */
+        if(getActiveCharacter().getId()==7){
+            Player p = gInit.getRoundHandler().getCurrent();
+            playersInfluence.put(p, 2);
+        }
+
         int [] students = c.getStudents();
         Player p;
         //fill the players influence array
         int temp = 0;
         for (int i = 0; i < Color.getNumberOfColors(); i++){
-            p = this.professors.getPlayerWithProfessor(Color.getColorById(i)); // find who owns the i-color
+
+            /* Cook effect */
+            if(getActiveCharacter().getId() == 3 && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor())){
+                p = gInit.getRoundHandler().getCurrent(); //if i is the cook-color, p is the current player
+            }
+
+            else{
+                p = this.professors.getPlayerWithProfessor(Color.getColorById(i)); // else p is who owns the i-color
+            }
             if (p != null) { //if somebody owns the professor of the i-color
-                temp = playersInfluence.get(p);
-                playersInfluence.replace(p, temp + students[i]); // sum the influence of the player
+                playersInfluence.replace(p, playersInfluence.get(p) + students[i]); // sum the influence of the player
             }
         }
+
+        /* Drunkard effect */
+        if(getActiveCharacter().getId()==4){
+            p = this.professors.getPlayerWithProfessor(((Drunkard) getActiveCharacter()).getColor()); // p owns the drunkard-color
+            playersInfluence.replace(p, 0);
+        };
         return playersInfluence;
     }
 
@@ -162,14 +188,18 @@ class GameBoard {
             }
         }
 
-        //if there are towers, add them to the influence
-        int towerCount = c.getTowerCount();
-        int towerColor = c.getTowerColor();
-        if (towerCount>0){
-            if (towerColor == 1) blackInfluence = blackInfluence + towerCount;
-            else if (towerColor == 2) whiteInfluence = whiteInfluence + towerCount;
-            else if (towerColor == 3) greyInfluence = greyInfluence + towerCount;
+        /*Minotaur effect*/
+        if(getActiveCharacter().getId()!=8) {
+            //if there are towers, add them to the influence
+            int towerCount = c.getTowerCount();
+            int towerColor = c.getTowerColor();
+            if (towerCount>0){
+                if (towerColor == 1) blackInfluence = blackInfluence + towerCount;
+                else if (towerColor == 2) whiteInfluence = whiteInfluence + towerCount;
+                else if (towerColor == 3) greyInfluence = greyInfluence + towerCount;
+            }
         }
+
         ArrayList<Integer> influences = new ArrayList<>(Color.getNumberOfColors());
         influences.add(blackInfluence);
         influences.add(whiteInfluence);
@@ -199,7 +229,6 @@ class GameBoard {
         if (max.size() == 1){
             //find a player who owns the max-influence tower color
             Player p = getPlayerWithTower(max.get(0)).get(0);
-
             //if there is no tower, add it
             if(c.getTowerCount() == 0){
                 p.moveTowerToIsland(c.getId());
@@ -215,11 +244,11 @@ class GameBoard {
         }
 
     }
-
-    ArrayList<Player> getPlayerWithTower(int color){
+    //returns an ArrayList with the players that owns the given tower color
+    ArrayList<Player> getPlayerWithTower(int towerColor){
         ArrayList<Player> list = new ArrayList<>();
         for (Player p : gInit){
-            if (p.getTowerColor() == color){
+            if (p.getTowerColor() == towerColor){
                 list.add(p);
             }
         }

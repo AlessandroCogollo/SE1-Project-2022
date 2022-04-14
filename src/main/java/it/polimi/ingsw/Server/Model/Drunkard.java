@@ -10,9 +10,12 @@ final class Drunkard extends Character  {
 
     @Override
     void activateEffect(Object object) {
-
         //todo method changing
         System.out.println("Drunkard");
+    }
+    //todo getColor method and choosing method
+    Color getColor(){
+        return Color.Blue;
     }
 
     @Override
