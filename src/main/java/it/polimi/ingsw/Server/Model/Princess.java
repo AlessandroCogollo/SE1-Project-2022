@@ -2,10 +2,8 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-import java.util.Random;
-
 final class Princess extends Character {
-    private int[] students;
+    private final int[] students;
 
     Princess(GameInitializer gameInitializer) {
         super (10, 2, gameInitializer);
@@ -24,7 +22,7 @@ final class Princess extends Character {
 
         this.students[c.getIndex()]--;
 
-        //todo implemetation of method in player
+        p.getSchool().moveStudentToRoom(c);
 
         int[] newStudent= super.gameInitializer.getBag().drawStudents(1);
         for (Color color: Color.values())

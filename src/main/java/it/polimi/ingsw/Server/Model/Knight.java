@@ -5,27 +5,16 @@ import java.util.Optional;
 
 final class Knight extends Character {
 
-    //private Game game;
-
     Knight(GameInitializer gameInitializer) {
         super (7, 2, gameInitializer);
+        System.out.println("Built Knight");
     }
-
-    /*
-    public Optional<Player> calcInfluence() {
-        return Player;
-    }
-    */
 
     @Override
-    void activateEffect(Object object) {
-        //todo
-        System.out.println("Knight");
-    }
+    void activateEffect(Object object) {}
 
     @Override
     Errors canActivateEffect(Object obj) {
-        //todo
         return Errors.NO_ERROR;
     }
 }

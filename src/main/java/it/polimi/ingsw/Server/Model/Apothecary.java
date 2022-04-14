@@ -13,15 +13,17 @@ final class Apothecary extends Character {
         this.banCard = 4;
 
         System.out.println("Built Apothecary");
+        System.out.println("Initialized with: " + this.getBanCard() + " banCard");
     }
 
-
-
-    // used to add a BanCard "token" to this card, after being removed from an island
+    // used to add a BanCard "token" to this card (after being removed from an island)
     void addBanCard() { this.banCard += 1; }
 
-    // used to remove a BanCard "token" from this card, and to add it to an island
+    // used to remove a BanCard "token" from this card (and to add it to an island)
     void removeBanCard() { this.banCard -= 1; }
+
+    // return number of banCard "token" on this card
+    int getBanCard() { return this.banCard; }
 
     @Override
     void activateEffect(Object obj) {
@@ -29,6 +31,7 @@ final class Apothecary extends Character {
         int islandId = (Integer)obj;
 
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
+
         // add banCard to island
         i.setBanCard();
 
@@ -50,10 +53,8 @@ final class Apothecary extends Character {
         if (!gameInitializer.getIslands().existsIsland(islandId))
             return Errors.NOT_VALID_DESTINATION;
         if (this.banCard <= 0)
-            return Errors.NO_MORE_BANCARD;
+            return Errors.NOT_ENOUGH_TOKEN;
         return Errors.NO_ERROR;
     }
 
-    // return number of banCard "token" on this card
-    int getBanCard() { return this.banCard; }
 }

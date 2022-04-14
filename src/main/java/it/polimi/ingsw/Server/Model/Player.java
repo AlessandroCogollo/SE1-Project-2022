@@ -37,6 +37,8 @@ class Player implements Iterable<Assistant>{
         return towerColor;
     }
 
+    School getSchool() {return school;}
+
     Assistant getActiveAssistant() {
         return activeAssistant;
     }

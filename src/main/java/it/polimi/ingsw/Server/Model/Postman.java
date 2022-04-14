@@ -6,11 +6,12 @@ final class Postman extends Character {
 
     Postman(GameInitializer gameInitializer) {
         super (9, 1, gameInitializer);
+        System.out.println("Built Postman");
     }
 
     @Override
     void activateEffect(Object object) {
-        System.out.println("Postman");
+        // method already implemented in AdvancedGame
     }
 
     @Override

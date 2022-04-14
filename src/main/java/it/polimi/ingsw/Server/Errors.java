@@ -21,10 +21,10 @@ public enum Errors {
     NOT_VALID_DESTINATION (15, "The destination is not valid"),
     NO_SUCH_CLOUD (16, "The Cloud doesn't exists"),
     NO_SUCH_CHARACTER (17, "The Character doesn't exists"),
-    NO_MORE_BANCARD (18, "The Apothecary character doesn't have more ban card"),
+    NOT_ENOUGH_TOKEN (18, "There are not enough token to perform this action"),
     NOT_RIGHT_PARAMETER (19, "The parameter for character passed aren't correct"),
-    MOVEMENT_NOT_VALID (20, "the number of position moved by mother nature must be over or equal to 1 and less or equal than the value on the assistant card");
-
+    MOVEMENT_NOT_VALID (20, "the number of position moved by mother nature must be over or equal to 1 and less or equal than the value on the assistant card"),
+    ILLEGAL_INPUT(21, "Expected an array with certain length, received an odd lenght/empty array/array with more than 4 elements");
 
     private final int code;
     private final String description;

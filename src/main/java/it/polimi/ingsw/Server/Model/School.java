@@ -37,6 +37,12 @@ class School {
         return room[index] % 3 == 0;
     }
 
+    // used for characters' effects
+    Color removeStudentFromRoom(Color color) {
+        room[color.getIndex()]--;
+        return color;
+    }
+
     void addStudentFromCloud(Cloud c) {
         int[] students = c.getStudents();
         for (Color color : Color.values()){
@@ -61,5 +67,9 @@ class School {
     Color moveStudentFromEntrance(Color color) {
         entrance[color.getIndex()]--;
         return color;
+    }
+
+    void moveStudentToEntrance(Color color) {
+        entrance[color.getIndex()]++;
     }
 }

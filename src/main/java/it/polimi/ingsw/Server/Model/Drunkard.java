@@ -6,12 +6,12 @@ final class Drunkard extends Character  {
 
     Drunkard(GameInitializer gameInitializer) {
         super (4, 2, gameInitializer);
+        System.out.println("Built Drunkard");
     }
 
     @Override
     void activateEffect(Object object) {
-        //todo method changing
-        System.out.println("Drunkard");
+        // TODO: with calcInfluence()
     }
     //todo getColor method and choosing method
     Color getColor(){
@@ -20,6 +20,7 @@ final class Drunkard extends Character  {
 
     @Override
     Errors canActivateEffect(Object obj) {
+        // TODO: with calcInfluence()
         return Errors.NO_ERROR;
     }
 }
