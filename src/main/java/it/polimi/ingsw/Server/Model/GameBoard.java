@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -117,8 +118,8 @@ class GameBoard {
             gInit.checkWin();
     }
 
-    //todo divide in smaller function
-    void calcInfluence(Island c) {
+    //returns the influence of each player
+    HashMap<Player, Integer> getInfluenceMap(Island c){
 
         HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences
 
@@ -137,8 +138,16 @@ class GameBoard {
                 playersInfluence.replace(p, temp + students[i]); // sum the influence of the player
             }
         }
+        return playersInfluence;
+    }
 
-        //creating blackinfluence, whiteinfluence and greyinfluence
+    // returns an ArrayList of int with the black, white and grey influences
+    ArrayList<Integer> getInfluences(Island c){
+
+        //get the influence of each player
+        HashMap<Player, Integer> playersInfluence = getInfluenceMap(c);
+
+        //merging influences of mates
         int blackInfluence = 0, whiteInfluence = 0, greyInfluence = 0;
 
         for (Player k : gInit) {
@@ -153,41 +162,76 @@ class GameBoard {
             }
         }
 
+        //if there are towers, add them to the influence
         int towerCount = c.getTowerCount();
         int towerColor = c.getTowerColor();
-        //if there are towers, add them to the influence
         if (towerCount>0){
             if (towerColor == 1) blackInfluence = blackInfluence + towerCount;
             else if (towerColor == 2) whiteInfluence = whiteInfluence + towerCount;
             else if (towerColor == 3) greyInfluence = greyInfluence + towerCount;
         }
+        ArrayList<Integer> influences = new ArrayList<>(Color.getNumberOfColors());
+        influences.add(blackInfluence);
+        influences.add(whiteInfluence);
+        influences.add(greyInfluence);
+        return influences;
+    }
 
-        //finding the max
-        ArrayList<Integer> max = findMax(blackInfluence, whiteInfluence, greyInfluence);
+    //replaces the current towers on the Island c with the ones of the player p
+    void replaceTowers(Island c, Player p){
+        int count = c.getTowerCount();
+        for (int i=0; i<count; i++){
+            //the old towers come back to the owner
+            Player owner = getPlayerWithTower(c.getTowerColor()).get(0);
+            owner.receiveTowerFromIsland(c.getId());
+            //put the new towers
+            p.moveTowerToIsland(c.getId());
+        }
+    }
 
-        //in case of withdraw nothing changes
-        //else
-        //todo moving the tower between players
+    //check if there's a tower to add or all towers to be replaced, and in that case does that
+    void calcInfluence(Island c) {
+
+        ArrayList<Integer> influences = getInfluences(c);
+        ArrayList<Integer> max = findMax(influences);
+
+        //in case of withdraw nothing changes, else:
         if (max.size() == 1){
-            if(towerCount == 0){
-                //if there is no tower, add it with the right color
-                towerColor = max.get(0);
-                towerCount = 1;
+            //find a player who owns the max-influence tower color
+            Player p = getPlayerWithTower(max.get(0)).get(0);
+
+            //if there is no tower, add it
+            if(c.getTowerCount() == 0){
+                p.moveTowerToIsland(c.getId());
             }
+            //else if there are towers
             else {
-                //else if there are towers
-                if (max.get(0) != towerColor) {
-                    //if the max influence is different from the previous one, change the tower color, and the tower count remains the same
-                    towerColor = max.get(0);
+                //if the max influence is different from the previous one, replace all the towers, and the tower count remains the same
+                if (max.get(0) != c.getTowerColor()) {
+                    replaceTowers(c,p);
                 }
                 //else if the max influence remains the same nothing changes
             }
         }
+
+    }
+
+    ArrayList<Player> getPlayerWithTower(int color){
+        ArrayList<Player> list = new ArrayList<>();
+        for (Player p : gInit){
+            if (p.getTowerColor() == color){
+                list.add(p);
+            }
+        }
+        return list;
     }
 
     //returns the higher TowerColor
-    private static ArrayList<Integer> findMax (int black, int white, int grey){
+    private static ArrayList<Integer> findMax (ArrayList<Integer> influences){
         int max = 0;
+        int black = influences.get(0);
+        int white = influences.get(1);
+        int grey = influences.get(2);
         ArrayList<Integer> temp = new ArrayList<>();
         if (black>max) {
             max = black;
