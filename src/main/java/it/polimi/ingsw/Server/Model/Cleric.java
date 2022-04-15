@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
+import java.util.Objects;
+
 final class Cleric extends Character{
 
     private final int[] students;
@@ -11,7 +13,7 @@ final class Cleric extends Character{
         this.students = super.gameInitializer.getBag().drawStudents(4);
 
         System.out.println("Built Cleric");
-        System.out.println("Initialized Cleric with 4 students on him");
+        System.out.println("Initialized Cleric with 4 students");
     }
 
     @Override
@@ -23,7 +25,7 @@ final class Cleric extends Character{
         Color c = Color.getColorById(studentToIsland[0]);
         Island i = gameInitializer.getIslands().getIslandFromId(studentToIsland[1]);
 
-        this.students[c.getIndex()]--;
+        this.students[Objects.requireNonNull(c).getIndex()]--;
         i.addStudent(c);
         int[] newStudent= super.gameInitializer.getBag().drawStudents(1);
         for (Color color: Color.values())
@@ -38,6 +40,8 @@ final class Cleric extends Character{
         int colorId = studentToIsland[0];
         int islandId = studentToIsland[1];
 
+        if (studentToIsland.length > 3)
+            return Errors.ILLEGAL_INPUT;
         if (colorId < 0 || colorId > 4)
             return Errors.NOT_VALID_COLOR;
         if (!gameInitializer.getIslands().existsIsland(islandId))

@@ -11,10 +11,13 @@ final class Knight extends Character {
     }
 
     @Override
-    void activateEffect(Object object) {}
+    void activateEffect(Object object) {
+        // calcInfluence() method already implemented in GameBoard
+    }
 
     @Override
     Errors canActivateEffect(Object obj) {
+        // no further checks needed
         return Errors.NO_ERROR;
     }
 }

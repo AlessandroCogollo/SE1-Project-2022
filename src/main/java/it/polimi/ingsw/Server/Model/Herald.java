@@ -9,16 +9,16 @@ final class Herald extends Character {
     }
 
     @Override
-    void activateEffect(Object island) {
+    void activateEffect(Object obj) {
 
-        int islandId = (Integer)island;
+        int islandId = (Integer)obj;
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
 
         gameInitializer.getBoard().calcInfluence(i);
 
         System.out.println("Herald set influence on this island: "
-                + ((Island)island).getTowerCount()
-                + ((Island) island).getTowerColor()
+                + i.getTowerCount()
+                + i.getTowerColor()
         );
     }
 

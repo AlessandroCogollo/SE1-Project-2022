@@ -11,16 +11,16 @@ final class Drunkard extends Character  {
 
     @Override
     void activateEffect(Object object) {
-        // TODO: with calcInfluence()
+        // calcInfluence() method already implemented in GameBoard
     }
-    //todo getColor method and choosing method
+
     Color getColor(){
         return Color.Blue;
     }
 
     @Override
     Errors canActivateEffect(Object obj) {
-        // TODO: with calcInfluence()
+        // no further checks needed
         return Errors.NO_ERROR;
     }
 }

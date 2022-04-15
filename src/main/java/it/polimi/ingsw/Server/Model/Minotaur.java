@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Server.Errors;
 
-import java.util.Optional;
+import it.polimi.ingsw.Server.Errors;
 
 final class Minotaur extends Character {
 
@@ -12,18 +11,13 @@ final class Minotaur extends Character {
 
     @Override
     void activateEffect(Object object) {
-        //todo
+        // calcInfluence() method already implemented in GameBoard
     }
 
     @Override
     Errors canActivateEffect(Object obj) {
-        //todo
+        // no further checks needed
         return Errors.NO_ERROR;
     }
 
-    /*
-    public Optional<Player> calcInfluence() {
-
-    }
-     */
 }

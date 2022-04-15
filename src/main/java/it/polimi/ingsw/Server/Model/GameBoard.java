@@ -101,14 +101,14 @@ class GameBoard {
         if (mN.getBanCard() == 0){
             //if there isn't the ban card
 
-            //this modify the island leaving it with the right tower in the end
+            //this modifies the island leaving it with the right tower in the end
             calcInfluence(mN);
 
-            //now we check if there are some aggregation to do and we will do it
+            //now we check if there are some aggregation to do, and we will do it
             islands.aggregateIsland(mN);
         }
         else {
-            //else only remove the bancard and return it to the apothecary
+            //else only remove the banCard and return it to the apothecary
             mN.removeBanCard();
             for (Character c: charactersDeck)
                 if (c.getId() == 0)

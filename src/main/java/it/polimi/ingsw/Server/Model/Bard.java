@@ -38,7 +38,7 @@ final class Bard extends Character {
         if (!(obj instanceof int[] chosenColors))
             return Errors.NOT_RIGHT_PARAMETER;
 
-        if (chosenColors.length <= 0 || chosenColors.length >= 4 || chosenColors.length%2 == 1) {
+        if (chosenColors.length == 0 || chosenColors.length >= 4 || chosenColors.length%2 == 1) {
             return Errors.ILLEGAL_INPUT;
         }
 

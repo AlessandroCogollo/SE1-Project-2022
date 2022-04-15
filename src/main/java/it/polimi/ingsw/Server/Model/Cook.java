@@ -2,8 +2,6 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 
 final class Cook extends Character {
@@ -15,16 +13,15 @@ final class Cook extends Character {
         this.color = Optional.empty();
     }
 
-    Color getProfessor(){
-        return Color.Red; //todo getProfessor and chooseProfessor method
+    Optional<Color> getProfessor(){
+        return this.color;
     }
 
     @Override
     void activateEffect(Object color) {
         int colorId = (Integer) color;
-        this.color = Optional.of(Color.getColorById(colorId));
-        //todo set of method
-        System.out.println("Color choosen for cook: " + this.color);
+        this.color = Optional.ofNullable(Color.getColorById(colorId));
+        System.out.println("Color chosen for cook: " + this.color);
     }
 
     @Override
@@ -39,8 +36,4 @@ final class Cook extends Character {
 
         return Errors.NO_ERROR;
     }
-
-
-    //todo splitting calc influence
-
 }
