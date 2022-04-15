@@ -237,6 +237,7 @@ class GameBoard {
                 p.moveTowerToIsland(1);
                 //and added to the island
                 c.setTowerCount(1);
+                c.setTowerColor(p.getTowerColor());
             }
             //else if there are towers
             else {
