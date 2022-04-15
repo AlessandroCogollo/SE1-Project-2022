@@ -118,6 +118,8 @@ class GameBoard {
         if (islands.getIslandsNumber() <= 3)
             gInit.checkWin();
     }
+
+
     //knight: adds 2 points to the current player (id = 7) --- OK
     //drunkard: given a color, blocks the influence calc for those students (id = 4) --- OK
     //minotaur: blocks the influence calc for the towers (id = 8) --- OK
@@ -135,7 +137,7 @@ class GameBoard {
         }
 
         /* Knight effect */
-        if(getActiveCharacter().getId()==7){
+        if( activeCharacter != null && activeCharacter.getId()==7){
             Player p = gInit.getRoundHandler().getCurrent();
             playersInfluence.put(p, 2);
         }
@@ -147,7 +149,7 @@ class GameBoard {
         for (int i = 0; i < Color.getNumberOfColors(); i++){
 
             /* Cook effect */
-            if(getActiveCharacter().getId() == 3 && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor())){
+            if(activeCharacter != null && activeCharacter.getId() == 3 && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor())){
                 p = gInit.getRoundHandler().getCurrent(); //if i is the cook-color, p is the current player
             }
 
@@ -160,10 +162,10 @@ class GameBoard {
         }
 
         /* Drunkard effect */
-        if(getActiveCharacter().getId()==4){
+        if(activeCharacter != null && activeCharacter.getId() == 4){
             p = this.professors.getPlayerWithProfessor(((Drunkard) getActiveCharacter()).getColor()); // p owns the drunkard-color
             playersInfluence.replace(p, 0);
-        };
+        }
         return playersInfluence;
     }
 
@@ -189,7 +191,7 @@ class GameBoard {
         }
 
         /*Minotaur effect*/
-        if(getActiveCharacter().getId()!=8) {
+        if(activeCharacter != null && activeCharacter.getId() != 8) {
             //if there are towers, add them to the influence
             int towerCount = c.getTowerCount();
             int towerColor = c.getTowerColor();
@@ -210,13 +212,13 @@ class GameBoard {
     //replaces the current towers on the Island c with the ones of the player p
     void replaceTowers(Island c, Player p){
         int count = c.getTowerCount();
-        for (int i=0; i<count; i++){
-            //the old towers come back to the owner
-            Player owner = getPlayerWithTower(c.getTowerColor()).get(0);
-            owner.receiveTowerFromIsland(c.getId());
-            //put the new towers
-            p.moveTowerToIsland(c.getId());
-        }
+        //the old towers come back to the owner
+        Player owner = getPlayerWithTower(c.getTowerColor()).get(0);
+        owner.receiveTowerFromIsland(count);
+        //put the new towers
+        p.moveTowerToIsland(count);
+        c.setTowerCount(count);
+        c.setTowerColor(p.getTowerColor());
     }
 
     //check if there's a tower to add or all towers to be replaced, and in that case does that
@@ -231,7 +233,10 @@ class GameBoard {
             Player p = getPlayerWithTower(max.get(0)).get(0);
             //if there is no tower, add it
             if(c.getTowerCount() == 0){
-                p.moveTowerToIsland(c.getId());
+                //remove one tower from the player
+                p.moveTowerToIsland(1);
+                //and added to the island
+                c.setTowerCount(1);
             }
             //else if there are towers
             else {
