@@ -7,7 +7,7 @@ final class Thief extends Character {
     Thief(GameInitializer gameInitializer) {
         super (11, 3, gameInitializer);
 
-        System.out.println("Thief");
+        System.out.println("Built Thief");
     }
 
     @Override

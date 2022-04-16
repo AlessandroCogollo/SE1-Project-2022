@@ -5,34 +5,21 @@ import java.util.*;
 class CharacterFactory {
     //method to create a character
     static Character produceCharacterById(int CharacterId, GameInitializer gameInitializer){
-        switch(CharacterId) {
-            case 0:
-                return new Apothecary(gameInitializer);
-            case 1:
-                return new Bard(gameInitializer);
-            case 2:
-                return new Cleric(gameInitializer);
-            case 3:
-                return new Cook(gameInitializer);
-            case 4:
-                return new Drunkard(gameInitializer);
-            case 5:
-                return new Herald(gameInitializer);
-            case 6:
-                return new Jester(gameInitializer);
-            case 7:
-                return new Knight(gameInitializer);
-            case 8:
-                return new Minotaur(gameInitializer);
-            case 9:
-                return new Postman(gameInitializer);
-            case 10:
-                return new Princess(gameInitializer);
-            case 11:
-                return new Thief(gameInitializer);
-            default:
-                return null;
-        }
+        return switch (CharacterId) {
+            case 0 -> new Apothecary(gameInitializer);
+            case 1 -> new Bard(gameInitializer);
+            case 2 -> new Cleric(gameInitializer);
+            case 3 -> new Cook(gameInitializer);
+            case 4 -> new Drunkard(gameInitializer);
+            case 5 -> new Herald(gameInitializer);
+            case 6 -> new Jester(gameInitializer);
+            case 7 -> new Knight(gameInitializer);
+            case 8 -> new Minotaur(gameInitializer);
+            case 9 -> new Postman(gameInitializer);
+            case 10 -> new Princess(gameInitializer);
+            case 11 -> new Thief(gameInitializer);
+            default -> null;
+        };
     }
 
     // return a collection of 3 characters associated to the game

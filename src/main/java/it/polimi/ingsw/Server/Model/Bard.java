@@ -32,8 +32,6 @@ final class Bard extends Character {
 
     @Override
     Errors canActivateEffect(Object obj) {
-        Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
-        School currSchool = currPlayer.getSchool();
 
         if (!(obj instanceof int[] chosenColors))
             return Errors.NOT_RIGHT_PARAMETER;

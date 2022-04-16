@@ -13,7 +13,7 @@ final class Cleric extends Character{
         this.students = super.gameInitializer.getBag().drawStudents(4);
 
         System.out.println("Built Cleric");
-        System.out.println("Initialized Cleric with 4 students");
+        System.out.println("Initialized with: 4 students");
     }
 
     @Override

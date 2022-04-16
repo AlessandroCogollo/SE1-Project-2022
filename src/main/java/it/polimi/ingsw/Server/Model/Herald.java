@@ -16,10 +16,9 @@ final class Herald extends Character {
 
         gameInitializer.getBoard().calcInfluence(i);
 
-        System.out.println("Herald set influence on this island: "
-                + i.getTowerCount()
-                + i.getTowerColor()
-        );
+        System.out.println("Herald set influence on island N° : " + i.getId());
+        System.out.println("Tower Count: " + i.getTowerCount());
+        System.out.println("Tower Color: " + i.getTowerColor());
     }
 
     @Override

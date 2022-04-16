@@ -8,8 +8,8 @@ final class Jester extends Character {
     Jester(GameInitializer gameInitializer) {
         super (6, 1, gameInitializer);
         this.students = super.gameInitializer.getBag().drawStudents(6);
-        System.out.print("Built Jester");
-        System.out.println("Jester has " + students.length + " students");
+        System.out.println("Built Jester");
+        System.out.println("Initialized with: " + students.length + " students");
     }
 
     @Override

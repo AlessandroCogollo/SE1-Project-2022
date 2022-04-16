@@ -11,9 +11,6 @@ final class Apothecary extends Character {
     Apothecary(GameInitializer gameInitializer) {
         super (0, 2, gameInitializer);
         this.banCard = 4;
-
-        System.out.println("Built Apothecary");
-        System.out.println("Initialized with: " + this.getBanCard() + " banCard");
     }
 
     // used to add a BanCard "token" to this card (after being removed from an island)
@@ -32,15 +29,12 @@ final class Apothecary extends Character {
 
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
 
-        // add banCard to island
-        i.setBanCard();
-
         // remove banCard from this
         removeBanCard();
 
-        // used for debug
-        System.out.println("BanCard on this: " + this.getBanCard());
-        System.out.println("BanCard on Island N°" + i.getId() + ": " + i.getBanCard());
+        // add banCard to island
+        i.setBanCard();
+
     }
 
     @Override
