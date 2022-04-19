@@ -12,6 +12,10 @@ final class Princess extends Character {
         students = gameInitializer.getBag().drawStudents(4);
     }
 
+    int[] getStudents() {
+        return this.students;
+    }
+
     void activateEffect(Object obj) {
 
         int colorId = (int) obj;

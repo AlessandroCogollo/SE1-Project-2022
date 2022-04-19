@@ -7,7 +7,6 @@ final class Knight extends Character {
 
     Knight(GameInitializer gameInitializer) {
         super (7, 2, gameInitializer);
-        System.out.println("Built Knight");
     }
 
     @Override

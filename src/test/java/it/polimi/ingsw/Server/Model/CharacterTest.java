@@ -10,11 +10,10 @@ import java.util.Collection;
 
 public class CharacterTest {
 
-    GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
-
     @Test
     @DisplayName("Set Up Test")
     void setUp() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Collection<Character> allCharacters = new ArrayList<>(12);
 
         for (int i = 0; i < 12; i++) {
@@ -26,6 +25,7 @@ public class CharacterTest {
     @Test
     @DisplayName("Draw Deck Test")
     void drawDeck() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Collection<Character> charactersDeck = CharacterFactory.getNewGameDeck(g);
         Assertions.assertEquals(3, charactersDeck.size());
     }
@@ -88,14 +88,13 @@ public class CharacterTest {
 
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
 
-        for (int i = 0; i < testCases.length; i++) {
+        for (int[] testCase : testCases) {
 
-            System.out.println("Test N° " + i);
             Character Bard = CharacterFactory.produceCharacterById(1, g);
 
-            Errors er = Bard.canActivateEffect(testCases[i]);
+            Errors er = Bard.canActivateEffect(testCase);
             if (er == Errors.NO_ERROR) {
-                Bard.activateEffect(testCases[i]);
+                Bard.activateEffect(testCase);
             } else {
                 Assertions.assertEquals(21, er.getCode());
             }
@@ -105,29 +104,104 @@ public class CharacterTest {
     @Test
     @DisplayName("Cleric Test")
     void ClericTest() {
+
+        int[][] testCases = {
+                {},                          // check empty input
+                {1, 2, 3},                   // check input longer than maximum size
+                {1},                         // check single value input
+                {-2, 1},                     // check invalid colorId
+                {1, -4},                     // check invalid island
+                // TODO: check behaviour when the number of students on this is <= 0
+        };
+
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Cleric = CharacterFactory.produceCharacterById(2, g);
 
-        // TODO: implement class
+        // check correct building
+        Assertions.assertTrue(Cleric instanceof Cleric);
 
+        for (int i = 0; i < testCases.length; i++) {
+
+            int[] tempStudents = ((Cleric) Cleric).getStudentsNumber();
+            int countStudents = 0;
+            for (Color color: Color.values()) {
+                if (tempStudents[color.getIndex()] != 0)
+                    countStudents += tempStudents[color.getIndex()];
+            }
+
+            // check correct number of students on this
+            Assertions.assertEquals(4, countStudents);
+
+            try {
+                Errors er = Cleric.canActivateEffect(testCases[i]);
+                if (er==Errors.NO_ERROR) {
+                    // trivial
+                    Assertions.assertTrue(true);
+                } else {
+                    if (i == 3) {
+                        // check error catch: NOT_VALID_COLOR
+                        Assertions.assertEquals(14, er.getCode());
+                    } else {
+                        // check error catch: NOT_VALID_DESTINATION
+                        Assertions.assertEquals(15, er.getCode());
+                    }
+                }
+            // catch OutOfBounds
+            } catch (ArrayIndexOutOfBoundsException exception) {
+                Assertions.assertTrue(true);
+            }
+        }
     }
 
     @Test
     @DisplayName("Cook Test")
     void CookTest() {
 
+        int[] testCases = {
+                0, 1, 2, 3, 4, 5, -1
+        };
+
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Cook = CharacterFactory.produceCharacterById(3, g);
+
+        // check correct building
+        Assertions.assertTrue(Cook instanceof Cook);
+        Assertions.assertTrue(((Cook) Cook).getProfessor().isEmpty());
+
+        for (int i = 0; i < testCases.length; i++) {
+            Errors er = Cook.canActivateEffect(testCases[i]);
+            Cook.canActivateEffect(testCases[i]);
+            if (er == Errors.NO_ERROR) {
+                Cook.activateEffect(testCases[i]);
+            }
+            else {
+                if (i > 4) {
+                    Assertions.assertEquals(14, er.getCode());
+                }
+            }
+        }
+
+        // calcInfluence() for Cook is trivial, already tested in GameBoard
     }
 
     @Test
     @DisplayName("Drunkard Test")
     void DrunkardTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Drunkard = CharacterFactory.produceCharacterById(4, g);
 
+        Assertions.assertTrue(Drunkard instanceof Drunkard);
+
+        // trivial, already tested in GameBoard
     }
 
     @Test
     @DisplayName("Herald Test")
     void HeraldTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Herald = CharacterFactory.produceCharacterById(5, g);
+
+        Assertions.assertTrue(Herald instanceof Herald);
 
         int[] testCases = {
                 1, 2, 3, 4
@@ -142,36 +216,86 @@ public class CharacterTest {
     @Test
     @DisplayName("Jester Test")
     void JesterTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Jester = CharacterFactory.produceCharacterById(6, g);
 
+        // check correct building
+        Assertions.assertTrue(Jester instanceof Jester);
+
+        // check if number of students is correct
+        int studentsCount = 0;
+        int[] studentsTemp = ((Jester) Jester).getStudents();
+        for (Color color: Color.values()) {
+            if (studentsTemp[color.getIndex()] != 0) studentsCount += studentsTemp[color.getIndex()];
+        }
+        Assertions.assertEquals(6, studentsCount);
+
+        // TODO: check activateEffects() && canActivateEffects()
     }
 
     @Test
     @DisplayName("Knight Test")
     void KnightTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Knight = CharacterFactory.produceCharacterById(7, g);
 
+        // check correct building
+        Assertions.assertTrue(Knight instanceof Knight);
+
+        // trivial, already tested in GameBoard
     }
 
     @Test
     @DisplayName("Minotaur Test")
     void MinotaurTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Minotaur = CharacterFactory.produceCharacterById(8, g);
 
+        // check correct building
+        Assertions.assertTrue(Minotaur instanceof Minotaur);
+
+        // trivial, already tested in GameBoard
     }
 
     @Test
     @DisplayName("Postman Test")
     void PostmanTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Postman = CharacterFactory.produceCharacterById(9, g);
 
+        // check correct building
+        Assertions.assertTrue(Postman instanceof Postman);
+
+        // trivial, already tested in GameBoard
     }
 
     @Test
     @DisplayName("Princess Test")
     void PrincessTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Princess = CharacterFactory.produceCharacterById(10, g);
 
+        // check correct building
+        Assertions.assertTrue(Princess instanceof Princess);
+
+        // check if number of students is correct
+        int studentsCount = 0;
+        int[] studentsTemp = ((Princess) Princess).getStudents();
+        for (Color color: Color.values()) {
+            if (studentsTemp[color.getIndex()] != 0) studentsCount += studentsTemp[color.getIndex()];
+        }
+        Assertions.assertEquals(4, studentsCount);
+
+        // TODO: check activateEffects() && canActivateEffects()
     }
 
     @Test
     @DisplayName("Thief Test")
     void ThiefTest() {
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
+        Character Thief = CharacterFactory.produceCharacterById(11, g);
 
+        // check correct building
+        Assertions.assertTrue(Thief instanceof Thief);
     }
 }

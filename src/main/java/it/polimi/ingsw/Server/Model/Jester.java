@@ -8,8 +8,6 @@ final class Jester extends Character {
     Jester(GameInitializer gameInitializer) {
         super (6, 1, gameInitializer);
         this.students = super.gameInitializer.getBag().drawStudents(6);
-        System.out.println("Built Jester");
-        System.out.println("Initialized with: " + students.length + " students");
     }
 
     @Override
@@ -33,6 +31,11 @@ final class Jester extends Character {
         }
     }
 
+    // used for testing
+    int[] getStudents() {
+        return this.students;
+    }
+
     @Override
     Errors canActivateEffect(Object obj) {
 
@@ -43,7 +46,7 @@ final class Jester extends Character {
 
         int length = ((int[]) obj).length;
 
-        if(length > 5 || length == 0 || length%2 == 1) {
+        if(length%2 == 1) {
             return Errors.ILLEGAL_INPUT;
         }
 

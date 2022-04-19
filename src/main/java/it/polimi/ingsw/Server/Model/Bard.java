@@ -8,7 +8,6 @@ final class Bard extends Character {
 
     Bard(GameInitializer gameInitializer) {
         super (1, 1, gameInitializer);
-        System.out.println("Built Bard");
     }
 
     @Override

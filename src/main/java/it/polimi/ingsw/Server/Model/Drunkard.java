@@ -6,7 +6,6 @@ final class Drunkard extends Character  {
 
     Drunkard(GameInitializer gameInitializer) {
         super (4, 2, gameInitializer);
-        System.out.println("Built Drunkard");
     }
 
     @Override

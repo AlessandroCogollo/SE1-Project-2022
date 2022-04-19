@@ -6,7 +6,6 @@ final class Postman extends Character {
 
     Postman(GameInitializer gameInitializer) {
         super (9, 1, gameInitializer);
-        System.out.println("Built Postman");
     }
 
     @Override

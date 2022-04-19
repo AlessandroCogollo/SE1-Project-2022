@@ -21,7 +21,6 @@ final class Cook extends Character {
     void activateEffect(Object color) {
         int colorId = (Integer) color;
         this.color = Optional.ofNullable(Color.getColorById(colorId));
-        System.out.println("Color chosen for cook: " + this.color);
     }
 
     @Override
