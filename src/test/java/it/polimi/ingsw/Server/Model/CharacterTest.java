@@ -111,6 +111,13 @@ public class CharacterTest {
                 {1},                         // check single value input
                 {-2, 1},                     // check invalid colorId
                 {1, -4},                     // check invalid island
+
+                //try all color for have at least one no error
+                {0, 1},
+                {1, 1},
+                {2, 1},
+                {3, 1},
+                {4, 1}
                 // TODO: check behaviour when the number of students on this is <= 0
         };
 
@@ -120,19 +127,42 @@ public class CharacterTest {
         // check correct building
         Assertions.assertTrue(Cleric instanceof Cleric);
 
+        int[] tempStudents = ((Cleric) Cleric).getStudentsNumber();
+        int countStudents = 0;
+        for (Color color: Color.values()) {
+            if (tempStudents[color.getIndex()] != 0)
+                countStudents += tempStudents[color.getIndex()];
+        }
+
+        // check correct number of students on this
+        Assertions.assertEquals(4, countStudents);
+
+        //wrong object
+        int x = 0;
+        Errors er = Cleric.canActivateEffect(x);
+        Assertions.assertEquals(21, er.getCode());
+
+
         for (int i = 0; i < testCases.length; i++) {
+            er = Cleric.canActivateEffect(testCases[i]);
+            if (testCases[i].length != 2)
+                //wrong length
+                Assertions.assertEquals(21, er.getCode());
+            else if (testCases[i][0] < 0 || testCases[i][0] > 4)
+                //invalid colorId
+                Assertions.assertEquals(14, er.getCode());
+            else if (!g.getIslands().existsIsland(testCases[i][1]))
+                //invalid islandId
+                Assertions.assertEquals(15, er.getCode());
+            else if (tempStudents[testCases[i][0]] <= 0)
+                //the card hasn't the students color
+                Assertions.assertEquals(10, er.getCode());
+            else
+                //no error
+                Assertions.assertEquals(0, er.getCode());
 
-            int[] tempStudents = ((Cleric) Cleric).getStudentsNumber();
-            int countStudents = 0;
-            for (Color color: Color.values()) {
-                if (tempStudents[color.getIndex()] != 0)
-                    countStudents += tempStudents[color.getIndex()];
-            }
 
-            // check correct number of students on this
-            Assertions.assertEquals(4, countStudents);
-
-            try {
+            /*try {
                 Errors er = Cleric.canActivateEffect(testCases[i]);
                 if (er==Errors.NO_ERROR) {
                     // trivial
@@ -143,13 +173,14 @@ public class CharacterTest {
                         Assertions.assertEquals(14, er.getCode());
                     } else {
                         // check error catch: NOT_VALID_DESTINATION
+                        if
                         Assertions.assertEquals(15, er.getCode());
                     }
                 }
             // catch OutOfBounds
             } catch (ArrayIndexOutOfBoundsException exception) {
                 Assertions.assertTrue(true);
-            }
+            }*/
         }
     }
 

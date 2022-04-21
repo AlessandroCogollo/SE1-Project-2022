@@ -37,7 +37,11 @@ final class Cleric extends Character{
     @Override
     Errors canActivateEffect(Object obj) {
 
-        int[] studentToIsland = (int[]) obj;
+        if (! (obj instanceof int[] studentToIsland))
+            return Errors.ILLEGAL_INPUT;
+
+        if (studentToIsland.length != 2)
+            return Errors.ILLEGAL_INPUT;
 
         int colorId = studentToIsland[0];
         int islandId = studentToIsland[1];

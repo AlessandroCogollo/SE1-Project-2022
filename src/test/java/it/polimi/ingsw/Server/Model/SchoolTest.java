@@ -10,16 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SchoolTest {
 
-    private static School getSchool (int towers, int entranceStudent, int mode, int[] stu){
-        if (mode == 0) {
-            Bag bag = new Bag(null);
-            return new School(towers, entranceStudent, bag);
-        }
-        if (countStudent(stu) == entranceStudent) {
-            Bag bag = new Bag(null);
-            return new School(towers, entranceStudent, bag);
-        }
-        return null;
+    private static School getSchool (int towers, int entranceStudent){
+        GameInitializer g = GameInitializerTest.setGameInitializer(2, 0);
+        Bag bag = g.getBag();
+        return new School(towers, entranceStudent, bag);
     }
 
     private static int countStudent (int[] x){
@@ -148,9 +142,9 @@ class SchoolTest {
         School s;
 
         for (Color c: Color.values()){
-            s = getSchool(0, 7, 0, null);
+            s = getSchool(0, 7);
             while (!s.hasStudentInEntrance(c))
-                s = getSchool(0, 7, 0, null);
+                s = getSchool(0, 7);
 
             int[] studentsInRoomInit = getStudentInRoom(s);
             s.moveStudentToRoom(c);
@@ -158,7 +152,7 @@ class SchoolTest {
             assertEquals(countStudent(studentsInRoomInit) + 1, countStudent(studentsInRoomFinal), "Test 1 - move a student");
         }
 
-        s = getSchool(0, 7, 0, null);
+        s = getSchool(0, 7);
         int[] studentsInRoomInit = getStudentInRoom(s);
         int[] colorDone = new int[Color.getNumberOfColors()];
         Arrays.fill(colorDone, 0);
@@ -191,7 +185,7 @@ class SchoolTest {
 
         Cloud c = g.getBoard().getCloudById(0);
 
-        School s = getSchool(0, 0, 0, null);
+        School s = getSchool(0, 0);
 
         assertEquals(0, countStudent(getStudentInEntrance_destructive(s)));
 
@@ -203,7 +197,7 @@ class SchoolTest {
 
     @Test
     void addTowers() {
-        School s = getSchool(8, 0, 0, null);
+        School s = getSchool(8, 0);
         assertEquals(8, s.getTowers());
         s.addTowers(2);
         assertEquals(10, s.getTowers());
@@ -211,7 +205,7 @@ class SchoolTest {
 
     @Test
     void removeTowers() {
-        School s = getSchool(8, 0, 0, null);
+        School s = getSchool(8, 0);
         assertEquals(8, s.getTowers());
         s.removeTowers(2);
         assertEquals(6, s.getTowers());
@@ -223,14 +217,14 @@ class SchoolTest {
         assertTrue(s.removeTowers(1));
         assertTrue(s.removeTowers(10));
         assertEquals(0, s.getTowers());
-        s = getSchool(8, 0, 0, null);
+        s = getSchool(8, 0);
         assertTrue(s.removeTowers(10));
         assertEquals(0, s.getTowers());
     }
 
     @Test
     void moveStudentFromEntrance() {
-        School s = getSchool(8, 7, 0, null);
+        School s = getSchool(8, 7);
         int i = 0;
         for (Color c: Color.values()){
             while (s.hasStudentInEntrance(c)) {
