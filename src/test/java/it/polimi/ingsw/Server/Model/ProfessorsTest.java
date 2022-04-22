@@ -70,4 +70,10 @@ class ProfessorsTest {
                 assertEquals(p1, g.getProfessors().getPlayerWithProfessor(c));
         }
     }
+
+    @Test
+    void getProfessorsCopy() {
+        //trivial
+        assertTrue(true);
+    }
 }

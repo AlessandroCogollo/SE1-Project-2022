@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Objects;
 
 final class Cleric extends Character{
@@ -13,6 +15,9 @@ final class Cleric extends Character{
         this.students = super.gameInitializer.getBag().drawStudents(4);
     }
 
+    int[] getStudentsCopy(){
+        return Arrays.copyOf(students, students.length);
+    }
     // used for testing
     int[] getStudentsNumber() {
         return this.students;

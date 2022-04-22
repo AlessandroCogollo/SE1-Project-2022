@@ -1,9 +1,15 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.util.Arrays;
+
 class Professors {
 
     private final int[] professors;
     private final GameInitializer gInit;
+
+    int[] getProfessorsCopy(){
+        return Arrays.copyOf(professors, professors.length);
+    }
 
     Professors(GameInitializer gInit){
         this.professors = new int[Color.getNumberOfColors()];

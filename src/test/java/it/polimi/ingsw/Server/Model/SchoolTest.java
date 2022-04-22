@@ -23,19 +23,11 @@ class SchoolTest {
     }
 
     private static int[] getStudentInRoom (School s){
-        int[] studentsInRoom = new int[Color.getNumberOfColors()];
-        for (Color c: Color.values()){
-            studentsInRoom[c.getIndex()] = s.getNumberOfStudentInRoomByColor(c);
-        }
-        return studentsInRoom;
+        return s.getCopyOfRoom();
     }
 
     private static int[] getStudentInRoom (Player p){
-        int[] studentsInRoom = new int[Color.getNumberOfColors()];
-        for (Color c: Color.values()){
-            studentsInRoom[c.getIndex()] = p.getNumberOfStudentInRoomByColor(c);
-        }
-        return studentsInRoom;
+        return p.getSchool().getCopyOfRoom();
     }
 
     //destructive method, because it move all the students from the entrance to the room
@@ -241,5 +233,17 @@ class SchoolTest {
             }
         }
         assertTrue(x);
+    }
+
+    @Test
+    void getCopyOfEntrance() {
+        //trivial
+        assertTrue(true);
+    }
+
+    @Test
+    void getCopyOfRoom() {
+        //trivial
+        assertTrue(true);
     }
 }

@@ -8,13 +8,16 @@ class GameInitializerTest {
 
     public static GameInitializer setGameInitializer (int numOfPLayers, int gameMode){
         GameInitializer g;
+        RoundHandler roundHandler;
         switch (numOfPLayers) {
             case 2 -> {
                 int[] id2 = new int[2];
                 id2[0] = 4;
                 id2[1] = 24;
                 g = new GameInitializer(gameMode, id2.length);
-                g.createAllGame(id2, null);
+                roundHandler = new RoundHandler(g);
+                g.createAllGame(id2, roundHandler);
+                roundHandler.start();
                 return g;
             }
             case 3 -> {
@@ -23,7 +26,9 @@ class GameInitializerTest {
                 id3[1] = 24;
                 id3[2] = 10;
                 g = new GameInitializer(gameMode, id3.length);
-                g.createAllGame(id3, null);
+                roundHandler = new RoundHandler(g);
+                g.createAllGame(id3, roundHandler);
+                roundHandler.start();
                 return g;
             }
             case 4 -> {
@@ -33,7 +38,9 @@ class GameInitializerTest {
                 id4[2] = 3;
                 id4[3] = 4;
                 g = new GameInitializer(gameMode, id4.length);
-                g.createAllGame(id4, null);
+                roundHandler = new RoundHandler(g);
+                g.createAllGame(id4, roundHandler);
+                roundHandler.start();
                 return g;
             }
         }

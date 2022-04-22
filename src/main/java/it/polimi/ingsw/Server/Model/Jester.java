@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
+import java.util.Arrays;
+
 final class Jester extends Character {
     private final int[] students;
 
@@ -34,6 +36,10 @@ final class Jester extends Character {
     // used for testing
     int[] getStudents() {
         return this.students;
+    }
+
+    int[] getStudentsCopy(){
+        return Arrays.copyOf(students, students.length);
     }
 
     @Override
