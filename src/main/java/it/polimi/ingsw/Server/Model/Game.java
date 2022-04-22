@@ -66,7 +66,7 @@ public class Game{
             return Errors.NOT_RIGHT_PHASE.getCode();
 
         //check if the player can still move student
-        //the check is already done in round handler and this one is redundant because if you have already move all the students in this turn the phase is automatically updated
+        //the check is already done in round handler and this one is redundant because if you have already moved all the students in this turn the phase is automatically updated
         int movementDone = round.getStudentMovedInThisTurn();
         if (((numOfPlayer == 2 || numOfPlayer == 4) && movementDone >= 3) || (numOfPlayer == 3 && movementDone >= 4))
             return Errors.NO_MORE_MOVEMENT.getCode();
@@ -76,7 +76,7 @@ public class Game{
             return Errors.NO_STUDENT.getCode();
 
         //check if student has already 10 student of that color in the room
-        if (p.getNumberOfStudentInRoomByColor(c) == 10)
+        if (destinationId== -1 && p.getNumberOfStudentInRoomByColor(c) == 10)
             return Errors.MAX_STUDENT_ROOM.getCode();
 
 

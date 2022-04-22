@@ -10,6 +10,7 @@ class AdvancedGameTest extends GameTest {
 
     @Test
     void playAssistantBlackBox() {
+
     }
 
     @Test
@@ -18,6 +19,40 @@ class AdvancedGameTest extends GameTest {
 
     @Test
     void moveMotherNatureBlackBox() {
+        int[] id2 = new int[2];
+        id2[0] = 4;
+        id2[1] = 24;
+
+        GameInitializer g = new GameInitializer(0, 2);
+        RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(id2, r);
+        r.start();
+
+        Game game = new Game(id2.length, g, r);
+
+        Player p = r.getCurrent();
+        game.playAssistant(p.getId(), 1);
+
+        p = r.getCurrent();
+        game.playAssistant(p.getId(), 2);
+
+        p = r.getCurrent();
+
+        //move 3 students
+        for (int i = 0; i < 3; i++) {
+            for (Color c : Color.values())
+                if (p.hasStudent(c)) {
+                    game.moveStudent(p.getId(), c.getIndex(), -1);
+                    break;
+                }
+        }
+
+        game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement());
+
+        assertEquals(g.getIslands().getMotherNature().getId(), p.getActiveAssistant().getMaxMovement());
+        assertEquals(g.getIslands().getMotherNature().getTowerCount(), 0);
+
     }
 
     @Test
@@ -26,6 +61,39 @@ class AdvancedGameTest extends GameTest {
 
     @Test
     void playCharacterBlackBox() {
+
+        int[] id2 = new int[2];
+        id2[0] = 4;
+        id2[1] = 24;
+
+        GameInitializer g = new GameInitializer(1, 2);
+        RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(id2, r);
+        r.start();
+
+        AdvancedGame game = new AdvancedGame(id2.length, g, r);
+
+        Player p = r.getCurrent();
+
+        //resetting until there is postman
+        while (!g.getBoard().existsCharacter(9)){
+            g = new GameInitializer(1, 2);
+            r = new RoundHandler(g);
+
+            g.createAllGame(id2, r);
+            r.start();
+
+            game = new AdvancedGame(id2.length, g, r);
+        }
+
+        game.playAssistant(p.getId(), 1);
+        p = r.getCurrent();
+        game.playAssistant(p.getId(), 2);
+        p = r.getCurrent();
+        game.playCharacter(p.getId(), 9, null);
+        assertEquals(g.getBoard().getActiveCharacter().getId(), 9);
+
 
     }
 

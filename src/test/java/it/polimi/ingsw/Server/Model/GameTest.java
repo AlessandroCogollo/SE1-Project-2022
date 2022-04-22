@@ -248,7 +248,7 @@ class GameTest {
             p2 = g.getPlayerById(4);
 
         assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.moveMotherNature(p2.getId(), 1), "not current player");
-        assertEquals(Errors.MOVEMENTS_TOO_HIGH.getCode(), game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement() + 1), "not current player");
+        assertEquals(Errors.MOVEMENTS_TOO_HIGH.getCode(), game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement() + 1), "movement too high");
         assertEquals(Errors.NO_ERROR.getCode(), game.moveMotherNature(p.getId(), 1));
         assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.moveMotherNature(p.getId(), 1), "not right phase");
     }

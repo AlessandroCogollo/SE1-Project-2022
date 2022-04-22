@@ -168,7 +168,7 @@ class RoundHandler {
         //action phase
         else {
 
-            //during the action phase we iter before throw action phase and then to the next player
+            //during the action phase we iterate before throw action phase and then to the next player
             switch (actionPhase){
                 case NotActionPhase:
                     //win
