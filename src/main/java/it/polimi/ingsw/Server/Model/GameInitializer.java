@@ -62,6 +62,10 @@ class GameInitializer implements Iterable<Player>{
         return roundHandler;
     }
 
+    public int getWinningPlayerId() {
+        return winningPlayerId;
+    }
+
     Player getPlayerById (int id){
         for (Player x: players){
             if (x.getId() == id)
@@ -80,8 +84,104 @@ class GameInitializer implements Iterable<Player>{
         return exists;
     }
 
-    void checkWin(){
-        //todo
+    void checkWin(Player winner){
+        this.winningPlayerId = winner.getId();
+    }
+
+    void checkWin (){
+
+        int length;
+        if (playerNumber == 3)
+            length = 3;
+        else
+            length = 2;
+
+        int[][] originalTowerMap = new int[2][length];
+
+        final int id = 0;
+        final int remainingTowers = 1;
+
+        int i = 0;
+        for(Player p : this){
+            int tempTowers = p.getSchool().getTowers();
+            if (tempTowers != 0) {//player with no tower win automatically using the other method and this removed the player with 0 towers (mate in 4 players game)
+                originalTowerMap[id][i] = p.getId();
+                originalTowerMap[remainingTowers][i] = p.getSchool().getTowers();
+                i++;
+            }
+        }
+
+        //ascending order
+        RoundHandler.sortMatrixColumn(originalTowerMap, remainingTowers);
+
+
+        if (originalTowerMap[remainingTowers][0] == originalTowerMap[remainingTowers][1]){
+            checkWin(getPlayerById(equalCase()));
+        }
+        else {
+            checkWin(getPlayerById(originalTowerMap[id][0]));
+        }
+    }
+
+    private int equalCase() {
+        final int id = 0;
+        final int professorNumber = 1;
+
+        int[][] professorMap = new int [2][playerNumber];
+        int i = 0;
+        for (Player p: this){
+            professorMap[id][i] = p.getId();
+            professorMap[professorNumber][i] = getProfessors().getNumberOfProfessorOfPlayer(p);
+            i++;
+        }
+
+        int length;
+        if (playerNumber == 4){
+            //In 4 players game we have to count the sum of professor of the team
+            professorMap = teamProfessors(professorMap); //we remove 2 player adding their professor to the mate
+            length = 2;
+        }
+        else
+            length = playerNumber;
+
+        //ascending order
+        RoundHandler.sortMatrixColumn(professorMap, professorNumber);
+        //descending order
+        RoundHandler.revertMatrix(professorMap, length);
+
+        //other case case are not covered in rules, if the player has the same number of tower used and the same number of professor (an odd number of professor must be not took), or the same with 3 players
+        return professorMap[id][0];
+    }
+
+    int[][] teamProfessors(int[][] professorMap) {
+        //only case 4 players
+
+        int[] teamA = new int[2];
+        int teamAProfessors = 0;
+        int[] teamB = new int[2];
+        int teamBProfessors = 0;
+        int a = 0, b = 0;
+        for (int i = 0; i < 4; i++){
+            if (professorMap[0][i] % 2 == 0){
+                teamA[a] = professorMap[0][i];
+                teamAProfessors += professorMap[1][i];
+                a++;
+            }
+            else{
+                teamB[b] = professorMap[0][i];
+                teamBProfessors += professorMap[1][i];
+                b++;
+            }
+        }
+
+        int[][] newProfessorMap = new int[2][2];
+        newProfessorMap[0][0] = teamA[0];
+        newProfessorMap[1][0] = teamAProfessors;
+
+        newProfessorMap[0][1] = teamB[0];
+        newProfessorMap[1][1] = teamBProfessors;
+
+        return newProfessorMap;
     }
 
     @Override

@@ -43,12 +43,12 @@ class Professors {
                         maxP = p;
                         equal = false;
                     }
-                    if (max == studentCount)
+                    else if (max == studentCount)
                         equal = true;
                 }
             }
             //update the professor if only if there aren't equals
-            if (!equal)
+            if (!equal && maxP != null)
                 professors[c.getIndex()] = maxP.getId();
         }
     }
@@ -58,5 +58,15 @@ class Professors {
         if (pId != -1)
             return gInit.getPlayerById(pId);
         return null;
+    }
+
+    int getNumberOfProfessorOfPlayer (Player p){
+        int i = 0;
+        int id = p.getId();
+        for (Color c: Color.values()){
+            if (professors[c.getIndex()] == id)
+                i++;
+        }
+        return i;
     }
 }

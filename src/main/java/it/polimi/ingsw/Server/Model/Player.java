@@ -84,22 +84,16 @@ class Player implements Iterable<Assistant>{
 
     //methods for the board to manage the tower, if it's a game with 4 players there will be some players with the mate attribute not null
     int getTowers (){
-        if (mate.isPresent()){
-            return mate.get().getTowers();
-        }
-        return school.getTowers();
+        return mate.map(Player::getTowers).orElseGet(school::getTowers);
     }
 
-    //todo check usage for force stop the execution in win case
-    int moveTowerToIsland (int number){
+    void moveTowerToIsland (int number){
         if (mate.isPresent()){
-            return mate.get().moveTowerToIsland(number);
+            mate.get().moveTowerToIsland(number);
         }
-        if (school.removeTowers(number)){
-            gameInitializer.checkWin();
-            return -1;
+        else if (school.removeTowers(number)){
+            gameInitializer.checkWin(this);
         }
-        return towerColor;
     }
 
     void receiveTowerFromIsland (int number){

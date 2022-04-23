@@ -137,11 +137,11 @@ public class ModelMessage {
 
     private final int activeCharacterId;
 
-    private ModelMessage(GameInitializer g, Errors er, int winnerId) {
+    private ModelMessage(GameInitializer g, Errors er) {
         Islands s = g.getIslands();
         GameBoard b = g.getBoard();
         RoundHandler r = g.getRoundHandler();
-        this.winnerId = winnerId;
+        this.winnerId = g.getWinningPlayerId();
         this.errorCode = er.getCode();
         this.time = Instant.now().toString();
         this.gameMode = g.getGameMode();
@@ -192,10 +192,7 @@ public class ModelMessage {
             this.activeCharacterId = -1;
     }
 
-    static ModelMessage modelMessageBuilder (GameInitializer g, Errors er, Player winner){
-        return new ModelMessage(g, er, winner.getId());
-    }
     static ModelMessage modelMessageBuilder (GameInitializer g, Errors er){
-        return new ModelMessage(g, er, -1);
+        return new ModelMessage(g, er);
     }
 }

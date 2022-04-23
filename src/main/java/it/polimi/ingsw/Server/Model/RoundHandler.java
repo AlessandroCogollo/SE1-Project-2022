@@ -151,7 +151,7 @@ class RoundHandler {
         //planning phase
         if (phase.equals(Phase.Planning)){
 
-            //during the planning phase we iter before throw player and then to the next phase
+            //during the planning phase we go before through player and then to the next phase
 
             //change to action phase
             if (planningOrder.isEmpty()) {
@@ -246,7 +246,7 @@ class RoundHandler {
         }
 
         //we sort the column of the matrix  comparing the value of the active assistant
-        sortMatrixColumn(arr, 1);
+        sortMatrixColumn(arr, value);
 
         //special case when a player has the same assistant as the others
         if (!specialOrder.isEmpty()){
@@ -279,9 +279,8 @@ class RoundHandler {
         }
     }
 
-    //todo more object oriented
-    //sort the matrix column considering only the index passed as parameter in O(n^2)
-    private static void sortMatrixColumn (int[][] matrix, int rowToCompare){
+    //sort int ascending order the matrix column considering only the index passed as parameter in O(n^2)
+    static void sortMatrixColumn (int[][] matrix, int rowToCompare){
         for (int i = 0; i < matrix[0].length; i++) {
             for (int j = i + 1; j < matrix[0].length; j++) {
                 if (matrix[rowToCompare][i] > matrix[rowToCompare][j]) {
@@ -292,7 +291,7 @@ class RoundHandler {
     }
 
     //swap two column of a matrix with 2 row
-    private static void swap (int[][] matrix, int index1, int index2){
+    static void swap (int[][] matrix, int index1, int index2){
         int tmp0, tmp1;
         tmp0 = matrix[0][index1];
         tmp1 = matrix[1][index1];
@@ -300,5 +299,12 @@ class RoundHandler {
         matrix[1][index1] = matrix[1][index2];
         matrix[0][index2] = tmp0;
         matrix[1][index2] = tmp1;
+    }
+
+    //revert the column order of a matrix 2xn
+    static void revertMatrix (int[][] matrix, int columnNumber){
+        for (int i = 0; i < (columnNumber / 2); i++){
+            RoundHandler.swap(matrix, i, (columnNumber - 1) - i);
+        }
     }
 }

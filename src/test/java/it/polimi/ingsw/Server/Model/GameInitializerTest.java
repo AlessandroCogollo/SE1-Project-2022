@@ -1,6 +1,14 @@
 package it.polimi.ingsw.Server.Model;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -143,8 +151,114 @@ class GameInitializerTest {
         }
     }
 
-    @Test
+    @RepeatedTest(10)
     void checkWin() {
-        //todo
+        GameInitializer g = setGameInitializer(4, 0);
+
+        Random rand = new Random(System.currentTimeMillis());
+        int[] playerPosition = new int[2];
+        int[] towersRemoved = new int[2];
+
+        int i = 0;
+        for (Player p: g){
+            int removedTowers = rand.nextInt(3) + 1;
+            p.moveTowerToIsland(removedTowers);
+            if (p.getSchool().getTowers() != 0) {
+                playerPosition[i] = p.getId();
+                i++;
+            }
+        }
+        for (Player p : g){
+            if (p.getSchool().getTowers() != 0)
+                towersRemoved[getPlayerPosition(playerPosition, p.getId())] = 8 - p.getSchool().getTowers();
+        }
+
+        g.checkWin();
+
+        int max = -1;
+        int pos = -1;
+        boolean equals = false;
+        for (i = 0; i < 2; i++){
+            if (towersRemoved[i] > max){
+                max = towersRemoved[i];
+                pos = i;
+                equals = false;
+            }
+            else if (max == towersRemoved[i]){
+                equals = true;
+            }
+        }
+
+        if (!equals && pos != -1)
+            assertEquals(playerPosition[pos], g.getWinningPlayerId());
+
+        else {
+            //no students has been moved so no player has professor
+
+            //in this case is one random of them
+            assertNotEquals(-1, g.getWinningPlayerId());
+        }
+
+        //now test the professor part
+        g = setGameInitializer(2, 1);
+
+        //removed 4 towers for player
+        for (Player p: g){
+            int removedTowers = 4;
+            p.moveTowerToIsland(removedTowers);
+        }
+        for (Player p: g){
+            assertEquals(4, p.getTowers());
+        }
+
+
+        //moved some random students
+        int id1 = 4;
+        Player p1 = g.getPlayerById(id1);
+        int rand1 = rand.nextInt(6) + 1;
+        int[] extracted1 = new int[Color.getNumberOfColors()];
+        Arrays.fill(extracted1, 0);
+
+        int id2 = 24;
+        Player p2 = g.getPlayerById(id2);
+        int rand2 = rand.nextInt(6) + 1;
+        int[] extracted2 = new int[Color.getNumberOfColors()];
+        Arrays.fill(extracted2, 0);
+
+        i = 0;
+        while (i < rand1){
+            Color c = Color.getColorById(rand.nextInt(Color.getNumberOfColors()));
+            if (p1.hasStudent(c)){
+                extracted1[c.getIndex()]++;
+                p1.moveStudent(c, -1);
+                i++;
+            }
+        }
+
+        i = 0;
+        while (i < rand2){
+            Color c = Color.getColorById(rand.nextInt(Color.getNumberOfColors()));
+            if (p2.hasStudent(c)){
+                extracted2[c.getIndex()]++;
+                p2.moveStudent(c, -1);
+                i++;
+            }
+        }
+
+        g.checkWin();
+
+        if (g.getProfessors().getNumberOfProfessorOfPlayer(p1) > g.getProfessors().getNumberOfProfessorOfPlayer(p2))
+            assertEquals(p1.getId(), g.getWinningPlayerId());
+        else if (g.getProfessors().getNumberOfProfessorOfPlayer(p1) < g.getProfessors().getNumberOfProfessorOfPlayer(p2))
+            assertEquals(p2.getId(), g.getWinningPlayerId());
+        else
+            assertTrue(g.getWinningPlayerId() == p1.getId() || g.getWinningPlayerId() == p2.getId()); //rule didn't cover the same number of professor case
+    }
+
+    private int getPlayerPosition (int[] array, int id){
+        for (int i = 0; i < array.length; i++)
+            if (array[i] == id)
+                return i;
+        return -1;
     }
 }
