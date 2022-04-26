@@ -3,7 +3,10 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.Errors;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 //todo test black box
 class AdvancedGameTest extends GameTest {
@@ -99,6 +102,98 @@ class AdvancedGameTest extends GameTest {
 
     @Test //black box
     void completeGame(){
+        int[] id2 = new int[2];
+        id2[0] = 4;
+        id2[1] = 24;
+
+        GameInitializer g = new GameInitializer(0, 2);
+        RoundHandler r = new RoundHandler(g);
+
+        g.createAllGame(id2, r);
+        r.start();
+
+        Game game = new Game(id2.length, g, r);
+
+        for(int i=0; i<6; i++){
+            System.out.println("Turn : " + i);
+            completeRound(g, r, game);
+        }
+
+        Player p = r.getCurrent();
+        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 1));
+
+
+    }
+
+
+    void completeRound(GameInitializer g, RoundHandler r, Game game){
+
+        Player p = r.getCurrent();
+        Random rand = new Random(System.currentTimeMillis());
+        int k;
+        do{
+            k = rand.nextInt(1,11);
+        }
+        while(k%2 != 0);
+
+        //play Assistant
+        System.out.println(r.getPhase() + " " + r.getActionPhase());
+        assertEquals(r.getPhase(), Phase.Planning);
+        assertEquals(r.getActionPhase(), ActionPhase.NotActionPhase);
+
+        assertEquals(Errors.NO_ERROR.getCode(),game.playAssistant(p.getId(), k));
+
+        p = r.getCurrent();
+        game.playAssistant(p.getId(), k-1);
+
+        p = r.getCurrent();
+
+        //move 2 students to the island k
+        System.out.println(r.getPhase() + " " + r.getActionPhase());
+        assertEquals(r.getPhase(), Phase.Action);
+        assertEquals(r.getActionPhase(), ActionPhase.MoveStudent);
+
+        for (int i = 0; i < 2; i++) {
+            for (Color c : Color.values())
+                if (p.hasStudent(c)) {
+                    game.moveStudent(p.getId(), c.getIndex(), rand.nextInt(0, 12));
+                    break;
+                }
+        }
+
+        //move one student to the room
+        for (Color c : Color.values())
+            if (p.hasStudent(c)) {
+                //if there's place for another student of that color in the room
+                if (Errors.MAX_STUDENT_ROOM.getCode() != game.moveStudent(p.getId(), c.getIndex(), -1)){
+                    break;
+                }
+
+            }
+
+        //move mother nature
+        System.out.println(r.getPhase() + " " + r.getActionPhase());
+        assertEquals(r.getPhase(), Phase.Action);
+        assertEquals(r.getActionPhase(), ActionPhase.MoveMotherNature);
+
+        game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement());
+
+        //choose cloud and get students
+        System.out.println(r.getPhase() + " " + r.getActionPhase());
+        assertEquals(r.getPhase(), Phase.Action);
+        assertEquals(r.getActionPhase(), ActionPhase.ChooseCloud);
+
+        int i;
+        for(i=0; i<g.getPlayersNumber(); i++){
+            if (Arrays.stream(g.getBoard().getCloudById(i).getStudents()).sum() > 0){
+                break;
+            }
+        }
+        assertTrue(Arrays.stream(g.getBoard().getCloudById(i).getStudents()).sum() > 0);
+        assertEquals(Errors.NO_ERROR.getCode(),game.chooseCloud(p.getId(), i));
+
+        r.next();
+
     }
 
     @Test //test only for error

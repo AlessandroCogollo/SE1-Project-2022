@@ -1,0 +1,43 @@
+https://sequencediagram.org/
+
+title Eriantys
+
+note over Server,Client: the content of message ara in another txt file
+
+Server-->(1)Client: UDP message
+
+Client->(1)Server: I'm an Eryantis Client
+
+Server->(1)Client: Give me login
+
+Client->(1)Server: Login reponse
+
+
+Server->(1)Client: Received Login, wait for the start of the game
+
+
+Client->(1)Server: Ok, i'll wait
+
+space 5
+
+Server->(2)Client: Model Message
+
+Client->(2)Server: Move (only if current player)
+
+space 2
+
+Server->(2)Client: Model Message
+
+Client->(2)Server: Move (only if current player)
+
+space 2
+
+Server->(2)Client: ...
+
+Client->(2)Server: ...
+
+space 2
+
+Server->(2)Client: Model Message with winner
+
+Client->(1)Server: Closing

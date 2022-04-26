@@ -296,6 +296,7 @@ class GameTest {
         else
             p2 = g.getPlayerById(4);
 
+
         assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.chooseCloud(p2.getId(), 1), "not current player");
         assertEquals(Errors.NO_ERROR.getCode(), game.chooseCloud(p.getId(), 1));
         assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.chooseCloud(p.getId(), 1), "not current player");

@@ -24,7 +24,7 @@ class GameBoard {
         int numOfPlayer = gInit.getPlayersNumber();
         this.clouds = new ArrayList<>(numOfPlayer);
         for(int i = 0; i < numOfPlayer; i++){
-            clouds.add(new Cloud( i, gInit));
+            clouds.add(new Cloud(i, gInit));
         }
         this.charactersDeck = CharacterFactory.getNewGameDeck(gInit);
 

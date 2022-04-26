@@ -151,7 +151,7 @@ class RoundHandler {
         //planning phase
         if (phase.equals(Phase.Planning)){
 
-            //during the planning phase we iter before throw player and then to the next phase
+            //during the planning phase we iterate before throw player and then to the next phase
 
             //change to action phase
             if (planningOrder.isEmpty()) {
