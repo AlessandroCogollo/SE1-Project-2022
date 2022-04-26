@@ -1,12 +1,9 @@
 package it.polimi.ingsw.Server.Model;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
-class GameBoard {
+class GameBoard implements Iterable<Cloud>{
 
     private final GameInitializer gInit;
     private final ArrayList<Cloud> clouds;
@@ -288,5 +285,10 @@ class GameBoard {
             temp.add(3);
         }
         return temp;
+    }
+
+    @Override
+    public Iterator<Cloud> iterator() {
+        return clouds.iterator();
     }
 }

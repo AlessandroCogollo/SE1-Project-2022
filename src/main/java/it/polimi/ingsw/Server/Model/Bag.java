@@ -9,6 +9,10 @@ class Bag {
     private final Random rand;
     private final GameInitializer gameInitializer;
 
+    int[] getStudentsCopy(){
+        return Arrays.copyOf(students, students.length);
+    }
+
     Bag(GameInitializer gameInitializer){
         this.students = new int[Color.getNumberOfColors()];
         for (int i=0; i<Color.getNumberOfColors(); i++){

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 final class Princess extends Character {
@@ -14,6 +15,10 @@ final class Princess extends Character {
 
     int[] getStudents() {
         return this.students;
+    }
+
+    int[] getStudentsCopy(){
+        return Arrays.copyOf(students, students.length);
     }
 
     void activateEffect(Object obj) {

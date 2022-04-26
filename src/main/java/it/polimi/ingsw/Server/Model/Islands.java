@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
 
-class Islands {
+class Islands implements Iterable<Island>{
     private final LinkedList<Island> islands;
     private Island motherNature;
 
@@ -162,5 +162,10 @@ class Islands {
             array[i] = array[j];
             array[j] = temp;
         }
+    }
+
+    @Override
+    public Iterator<Island> iterator() {
+        return islands.iterator();
     }
 }

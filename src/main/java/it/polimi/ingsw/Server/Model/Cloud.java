@@ -8,7 +8,10 @@ class Cloud {
     private final int numOfPlayer;
     private int[] drawnStudents;
 
-
+    //return only a copy of drawnStudents, used only in message creations
+    int[] getCopyOfDrawnStudents (){
+        return Arrays.copyOf(drawnStudents, drawnStudents.length);
+    }
     Cloud(int id, GameInitializer gameInitializer){
         this.id = id;
         this.bag = gameInitializer.getBag();

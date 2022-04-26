@@ -13,6 +13,10 @@ final class Cook extends Character {
         this.color = Optional.empty();
     }
 
+    Color getColor (){
+        return color.orElse(null);
+    }
+
     Optional<Color> getProfessor(){
         return this.color;
     }

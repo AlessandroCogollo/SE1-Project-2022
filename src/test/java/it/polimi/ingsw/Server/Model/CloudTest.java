@@ -39,4 +39,10 @@ class CloudTest {
         //trivial
         assertTrue(true);
     }
+
+    @Test
+    void getCopyOfDrawnStudents() {
+        //trivial
+        assertTrue(true);
+    }
 }

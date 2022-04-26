@@ -35,4 +35,10 @@ class BagTest {
         int[] x = bag.drawStudents(24);
         assertEquals(24, Arrays.stream(x).sum());
     }
+
+    @Test
+    void getStudentsCopy() {
+        //trivial
+        assertTrue(true);
+    }
 }

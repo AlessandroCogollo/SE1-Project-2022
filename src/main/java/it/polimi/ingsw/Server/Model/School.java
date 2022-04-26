@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 //The school class implements a container for all the stuffs of the player during the game and can only be modified from the class Student itself
@@ -9,7 +10,12 @@ class School {
     private final int[] room;
     private int towers;
 
-
+    int[] getCopyOfEntrance (){
+        return Arrays.copyOf(entrance, entrance.length);
+    }
+    int[] getCopyOfRoom (){
+        return Arrays.copyOf(room, room.length);
+    }
     School(int towers, int entranceStudent, Bag bag) {
         this.towers = towers;
         this.room = new int[Color.getNumberOfColors()];
