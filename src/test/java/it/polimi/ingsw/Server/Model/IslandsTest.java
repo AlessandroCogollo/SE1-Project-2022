@@ -1,5 +1,10 @@
 package it.polimi.ingsw.Server.Model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import it.polimi.ingsw.Server.Errors;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -109,6 +114,9 @@ class IslandsTest {
         curr.setTowerColor(1);
         isNext.setTowerColor(1);
 
+        isPrec.setTowerCount(2);
+        isNext.setTowerCount(1);
+
         g.getIslands().aggregateIsland(curr);
 
         g.getIslands().nextMotherNature(4);
@@ -136,6 +144,7 @@ class IslandsTest {
         isNext.setTowerColor(1);
 
         isPrec.setTowerCount(2);
+        isNext.setTowerCount(1);
         isNext.addStudent(Color.Red);
         isNext.addStudent(Color.Red);
 
@@ -152,7 +161,7 @@ class IslandsTest {
         assertEquals(0, curr.getBanCard());
 
         //towers
-        assertEquals(2, curr.getTowerCount());
+        assertEquals(3, curr.getTowerCount());
 
         //other island
         assertFalse(g.getIslands().existsIsland(isNext.getId()));

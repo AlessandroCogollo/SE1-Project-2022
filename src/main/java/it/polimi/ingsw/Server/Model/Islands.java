@@ -16,7 +16,7 @@ class Islands implements Iterable<Island>{
         this.islands.add(island);
         this.motherNature = island;
 
-        for (int i = 0; i < 12; i++){
+        for (int i = 1; i < 12; i++){ //the 0 is the mn island
             this.islands.add(new Island(i));
         }
 
@@ -71,16 +71,24 @@ class Islands implements Iterable<Island>{
         if (position >= size)
             position -= size;
         //get the iterator from motherNature
-        Iterator<Island> iterator;
-        if (motherNature.equals(islands.peekLast()))
-            iterator = islands.listIterator(0);
+       for (int i = 0; i < position; i++)
+           this.motherNature = getNext(this.motherNature);
+    }
+
+    private Island getPrevious (Island x){
+        int index = islands.indexOf(x);
+        if (index == 0)
+            return islands.peekLast();
         else
-            iterator = islands.listIterator(islands.indexOf(motherNature) + 1);
-        for (int i = 0; i < position; i++) {
-            if (!iterator.hasNext())
-                iterator = islands.listIterator(0);
-            motherNature = iterator.next();
-        }
+            return islands.get(index - 1);
+    }
+
+    private Island getNext (Island x){
+        int index = islands.indexOf(x);
+        if (index == (islands.size() - 1))
+            return islands.peekFirst();
+        else
+            return islands.get(index + 1);
     }
 
     void aggregateIsland(Island currIsland){
@@ -89,48 +97,22 @@ class Islands implements Iterable<Island>{
             return;
         }
 
-        //check previous
-        Island temp;
-        boolean special = false;
-        ListIterator<Island> iterator = islands.listIterator(islands.indexOf(currIsland));
-        if (currIsland.equals(islands.peekFirst())) {
-            temp = islands.peekLast();
-            special = true;
+        Island prev = getPrevious(currIsland);
+        Island next = getNext(currIsland);
+
+        if (currIsland.getTowerColor() == prev.getTowerColor() && prev.getTowerCount() != 0) {
+            mergeIslands(currIsland, prev);
+            islands.remove(prev);
         }
-        else
-            temp = iterator.previous();
-
-        if (currIsland.getTowerColor() == temp.getTowerColor()) {
-            mergeIslands(currIsland, temp);
-            if (special) {
-                islands.remove(temp);
-                iterator = islands.listIterator(islands.indexOf(currIsland));
-            }
-            else
-                iterator.remove();
-        }
-
-        iterator.next(); //current island
-
-        special = false;
-        //check next island
-        if (currIsland.equals(islands.peekLast())) {
-            temp = islands.peekFirst();
-            special = true;
-        }
-        else
-            temp = iterator.next();
-
-        if (currIsland.getTowerColor() == temp.getTowerColor()) {
-            mergeIslands(currIsland, temp);
-            if (special)
-                islands.remove(temp);
-            else
-                iterator.remove();
+        if (currIsland.getTowerColor() == next.getTowerColor() && next.getTowerCount() != 0) {
+            mergeIslands(currIsland, next);
+            islands.remove(next);
         }
     }
 
     static private void mergeIslands (Island dest, Island src){
+        if (dest.equals(src))
+            System.out.println("MergeIsland: Error same src and destination");
         //retrieve the pointer to the students of the islands
         int[] studentsSrc = src.getStudents();
         int[] studentsDest = dest.getStudents();

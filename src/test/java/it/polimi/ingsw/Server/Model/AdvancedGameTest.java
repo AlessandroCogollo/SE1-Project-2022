@@ -1,6 +1,10 @@
 package it.polimi.ingsw.Server.Model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Server.Errors;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -42,19 +46,41 @@ class AdvancedGameTest extends GameTest {
 
         p = r.getCurrent();
 
+
+
+
+        Color[] colorPicked = new Color[3];
+        Random rand = new Random(System.currentTimeMillis());
         //move 3 students
-        for (int i = 0; i < 3; i++) {
-            for (Color c : Color.values())
-                if (p.hasStudent(c)) {
-                    game.moveStudent(p.getId(), c.getIndex(), -1);
-                    break;
-                }
+        int i = 0;
+        while (i < 3) {
+            Color c = Color.getColorById(rand.nextInt(Color.getNumberOfColors())); // get a random Color
+            if (p.hasStudent(c)) {
+                game.moveStudent(p.getId(), c.getIndex(), -1);
+                colorPicked[i] = c;
+                i++;
+            }
         }
 
         game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement());
 
-        assertEquals(g.getIslands().getMotherNature().getTowerCount(), 0);
+        Island mn = g.getIslands().getMotherNature();
 
+        int[] mnStudents = mn.getStudents();
+
+        int[] professor = g.getProfessors().getProfessorsCopy();
+
+
+        boolean towerBuild = false;
+        for (i = 0; i < Color.getNumberOfColors() && !towerBuild; i++){
+            if (p.getId() == professor[i] && mnStudents[i] > 0) //the player has the professor and in the island there a student of that color
+                towerBuild = true;
+        }
+
+        if (towerBuild)
+            assertEquals(1, mn.getTowerCount());
+        else
+            assertEquals(0, mn.getTowerCount());
     }
 
     @Test
