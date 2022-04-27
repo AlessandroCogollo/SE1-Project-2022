@@ -42,7 +42,7 @@ public enum Errors {
         return code;
     }
 
-    public Errors getErrorsByCode (int code){
+    public static Errors getErrorsByCode(int code){
         for (Errors e: Errors.values())
             if (e.getCode() == code)
                 return e;

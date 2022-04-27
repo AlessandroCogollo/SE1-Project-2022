@@ -3,6 +3,8 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.Errors;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -296,9 +298,11 @@ class GameTest {
         else
             p2 = g.getPlayerById(4);
 
-
         assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.chooseCloud(p2.getId(), 1), "not current player");
+        int old = Arrays.stream(r.getCurrent().getSchool().getCopyOfEntrance()).sum();
         assertEquals(Errors.NO_ERROR.getCode(), game.chooseCloud(p.getId(), 1));
+        int newEntrance = Arrays.stream(r.getCurrent().getSchool().getCopyOfEntrance()).sum();
+        assertEquals(newEntrance, old + 3);
         assertEquals(Errors.NOT_CURRENT_PLAYER.getCode(), game.chooseCloud(p.getId(), 1), "not current player");
         assertEquals(Errors.NOT_RIGHT_PHASE.getCode(), game.chooseCloud(p2.getId(), 1), "not right phase");
     }

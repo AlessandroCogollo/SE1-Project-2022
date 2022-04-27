@@ -3,8 +3,8 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.Errors;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +53,6 @@ class AdvancedGameTest extends GameTest {
 
         game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement());
 
-        assertEquals(g.getIslands().getMotherNature().getId(), p.getActiveAssistant().getMaxMovement());
         assertEquals(g.getIslands().getMotherNature().getTowerCount(), 0);
 
     }
@@ -99,7 +98,9 @@ class AdvancedGameTest extends GameTest {
 
 
     }
-
+    //todo checkwin (uncomment "break")
+    //todo fix always 0 towers
+    //todo fix sometimes loop (i believe because of checkwin)
     @Test //black box
     void completeGame(){
         int[] id2 = new int[2];
@@ -113,14 +114,23 @@ class AdvancedGameTest extends GameTest {
         r.start();
 
         Game game = new Game(id2.length, g, r);
-
+        
         for(int i=0; i<6; i++){
-            System.out.println("Turn : " + i);
-            completeRound(g, r, game);
-        }
+            System.out.println("-------------------------- Turn : " + i + "---------------------------------");
 
-        Player p = r.getCurrent();
-        assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), 1));
+            completeRound(g, r, game);
+            /*
+            if(g.getWinningPlayerId() != -1){
+                System.out.println("---------------------- Winner : player # " + g.getWinningPlayerId() + "-----------------------------");
+                //break;
+            }
+             */
+            //todo remove this when check win fixed
+            if(g.getIslands().getIslandsNumber() == 3){
+                System.out.println("---------------------- Winner : player # " + g.getWinningPlayerId() + "-----------------------------");
+                break;
+            }
+        }
 
 
     }
@@ -128,71 +138,167 @@ class AdvancedGameTest extends GameTest {
 
     void completeRound(GameInitializer g, RoundHandler r, Game game){
 
-        Player p = r.getCurrent();
-        Random rand = new Random(System.currentTimeMillis());
-        int k;
-        do{
-            k = rand.nextInt(1,11);
-        }
-        while(k%2 != 0);
 
-        //play Assistant
+
+        //All the players play an assistant
+
         System.out.println(r.getPhase() + " " + r.getActionPhase());
         assertEquals(r.getPhase(), Phase.Planning);
         assertEquals(r.getActionPhase(), ActionPhase.NotActionPhase);
 
-        assertEquals(Errors.NO_ERROR.getCode(),game.playAssistant(p.getId(), k));
+        Player p = null;
+        Random rand = new Random(System.currentTimeMillis());
+        int k;
+        List<Integer> assistantsIds = new ArrayList<>(g.getPlayersNumber());
+        for (int i=0; i<g.getPlayersNumber(); i++){
 
-        p = r.getCurrent();
-        game.playAssistant(p.getId(), k-1);
-
-        p = r.getCurrent();
-
-        //move 2 students to the island k
-        System.out.println(r.getPhase() + " " + r.getActionPhase());
-        assertEquals(r.getPhase(), Phase.Action);
-        assertEquals(r.getActionPhase(), ActionPhase.MoveStudent);
-
-        for (int i = 0; i < 2; i++) {
-            for (Color c : Color.values())
-                if (p.hasStudent(c)) {
-                    game.moveStudent(p.getId(), c.getIndex(), rand.nextInt(0, 12));
+            for (Assistant a : p = r.getCurrent()){
+                if (r.canPLayAssistant(p, a)){
+                    assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), a.getValue()));
+                    System.out.println("#" + p.getId() + " -> " + "Play Assistant With Max Movements : " + a.getMaxMovement());
                     break;
                 }
-        }
-
-        //move one student to the room
-        for (Color c : Color.values())
-            if (p.hasStudent(c)) {
-                //if there's place for another student of that color in the room
-                if (Errors.MAX_STUDENT_ROOM.getCode() != game.moveStudent(p.getId(), c.getIndex(), -1)){
-                    break;
-                }
-
             }
 
-        //move mother nature
-        System.out.println(r.getPhase() + " " + r.getActionPhase());
-        assertEquals(r.getPhase(), Phase.Action);
-        assertEquals(r.getActionPhase(), ActionPhase.MoveMotherNature);
+        }
 
-        game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement());
+        //action phase for every player
+        for(int t=0; t<g.getPlayersNumber(); t++){
 
-        //choose cloud and get students
-        System.out.println(r.getPhase() + " " + r.getActionPhase());
-        assertEquals(r.getPhase(), Phase.Action);
-        assertEquals(r.getActionPhase(), ActionPhase.ChooseCloud);
+            System.out.println("############################## ISLANDS ##############################");
+            //printing islands
+            String towerColor = null;
+            for(Island is : g.getIslands()){
+                if (is.getTowerColor() == -1) {
+                    towerColor = " ";
+                }
+                else if (is.getTowerColor() == 0){
+                    towerColor = " Black";
+                }
+                else if (is.getTowerColor() == 1){
+                    towerColor = " White";
+                }
+                else if (is.getTowerColor() == 2){
+                    towerColor = " Grey";
+                }
+                System.out.println("{ID: " + is.getId() + " , STUDENTS: " + Arrays.toString(is.getStudents()) + " , TOWERS: " + is.getTowerCount()  + towerColor + " , BAN CARD: " + is.getBanCard() + "}");
 
-        int i;
-        for(i=0; i<g.getPlayersNumber(); i++){
-            if (Arrays.stream(g.getBoard().getCloudById(i).getStudents()).sum() > 0){
+            }
+            System.out.println("#####################################################################");
+            System.out.println("###### PROFESSORS ######");
+            System.out.println(Arrays.toString(g.getProfessors().getProfessorsCopy()));
+            System.out.println("########################");
+
+            System.out.println("###### ENTRANCES ######");
+            for (Player pl : g){
+                System.out.println("#" + pl.getId() + " -> " + Arrays.toString(p.getSchool().getCopyOfEntrance()));
+            }
+            System.out.println("########################");
+
+            p = r.getCurrent();
+            System.out.println("Current player : " + p.getId());
+
+            System.out.println("#" + p.getId() + " -> " + Arrays.toString(p.getSchool().getCopyOfEntrance()) + " -- Initial");
+
+            //move 2 students to the island k
+            System.out.println("#" + p.getId() + " -> " + r.getPhase() + " " + r.getActionPhase());
+            assertEquals(r.getPhase(), Phase.Action);
+            assertEquals(r.getActionPhase(), ActionPhase.MoveStudent);
+            int errorCode;
+            for (int i = 0; i < 2; i++) {
+                for (Color c : Color.values())
+                    if (p.hasStudent(c)) {
+                        do{
+                            k = rand.nextInt(0, 12);
+                            System.out.println("#" + p.getId() + " -> " + "Moving student to " + k);
+                            errorCode = game.moveStudent(p.getId(), c.getIndex(), k);
+                            System.out.println("#" + p.getId() + " -> " + Errors.getErrorsByCode(errorCode).getDescription());
+                        } while (errorCode != 0);
+                        System.out.println("#" + p.getId() + " -> " + "Moved!");
+                        assertEquals(Errors.NO_ERROR.getCode(), errorCode);
+                        break;
+                    }
+            }
+
+            //move one student to the room, or, if not possible, to an island
+            boolean movedToRoom = false;
+            for (Color c : Color.values()) {
+                if (p.hasStudent(c)) {
+                    //if there's place for another student of that color in the room
+                    System.out.println("#" + p.getId() + " -> " + "Moving student to -1");
+                    errorCode = game.moveStudent(p.getId(), c.getIndex(), -1);
+                    System.out.println("#" + p.getId() + " -> " + Errors.getErrorsByCode(errorCode).getDescription());
+                    if (Errors.NO_ERROR.getCode() == errorCode) {
+                        System.out.println("#" + p.getId() + " -> " + "Moved!");
+                        assertEquals(Errors.NO_ERROR.getCode(), errorCode);
+                        movedToRoom = true;
+                        break;
+                    }
+
+                }
+            }
+            if(!movedToRoom){
+                for (Color c : Color.values()){
+                    if (p.hasStudent(c)){
+                        do{
+                            k = rand.nextInt(0, 12);
+                            System.out.println("#" + p.getId() + " -> " + "Moving student to " + k);
+                            errorCode = game.moveStudent(p.getId(), c.getIndex(), k);
+                            System.out.println(Errors.getErrorsByCode(errorCode).getDescription());
+                        } while (errorCode != 0);
+                        System.out.println("#" + p.getId() + " -> " + "Moved!");
+                        assertEquals(Errors.NO_ERROR.getCode(), errorCode);
+                        break;
+                    }
+                }
+            }
+
+            System.out.println("#" + p.getId() + " -> " + Arrays.toString(p.getSchool().getCopyOfEntrance()) + " -- After Moving");
+
+            //move mother nature
+            System.out.println("#" + p.getId() + " -> " + r.getPhase() + " " + r.getActionPhase());
+            assertEquals(r.getPhase(), Phase.Action);
+            assertEquals(r.getActionPhase(), ActionPhase.MoveMotherNature);
+
+            assertEquals(Errors.NO_ERROR.getCode(), game.moveMotherNature(p.getId(), p.getActiveAssistant().getMaxMovement()));
+
+            //todo remove this when check win fixed
+            if(g.getIslands().getIslandsNumber() == 3){
+                System.out.println("---------------------- Winner : player # " + g.getWinningPlayerId() + "-----------------------------");
                 break;
             }
-        }
-        assertTrue(Arrays.stream(g.getBoard().getCloudById(i).getStudents()).sum() > 0);
-        assertEquals(Errors.NO_ERROR.getCode(),game.chooseCloud(p.getId(), i));
 
-        r.next();
+            //choose cloud and get students
+            System.out.println("#" + p.getId() + " -> " + r.getPhase() + " " + r.getActionPhase());
+            assertEquals(r.getPhase(), Phase.Action);
+            assertEquals(r.getActionPhase(), ActionPhase.ChooseCloud);
+
+
+            int i;
+            boolean found = false;
+            int[] students = new int[Color.getNumberOfColors()];
+            for(i=0; i<g.getPlayersNumber(); i++) {
+                students = g.getBoard().getCloudById(i).getCopyOfDrawnStudents().clone();
+                for (int student : students) {
+                    if (student > 0) {
+                        System.out.println("#" + p.getId() + " -> " + Arrays.toString(students) + " -- Chosen Cloud");
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+            if (!found) System.out.println("#" + p.getId() + " -> " + "All the clouds are empty");
+            p = r.getCurrent();
+            assertEquals(Errors.NO_ERROR.getCode(),game.chooseCloud(p.getId(), i));
+
+            System.out.println("#" + p.getId() + " -> " + Arrays.toString(p.getSchool().getCopyOfEntrance()) + " -- After Choosing Cloud");
+
+            g.checkWin();
+
+        }
+
+
 
     }
 

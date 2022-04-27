@@ -98,7 +98,7 @@ class RoundHandler {
             }
         }
 
-        //if we found that the player can actually play the assistant x we add the player in the special order and we return true
+        //if we found that the player can actually play the assistant x we add the player in the special order, and we return true
         if (allEqual) {
             specialOrder.add(p);
             return true;
@@ -272,7 +272,7 @@ class RoundHandler {
             }
         }
 
-        //now in all cases in the matrix there's the correct order so we insert it in each queue
+        //now in all cases in the matrix there's the correct order, so we insert it in each queue
         for (i = 0; i < gInit.getPlayersNumber(); i++){
             actionOrder.add(gInit.getPlayerById(arr[id][i]));
             planningOrder.add(gInit.getPlayerById(arr[id][i]));
