@@ -141,7 +141,7 @@ class AdvancedGameTest extends GameTest {
 
         Game game = new Game(id2.length, g, r);
         
-        for(int i=0; i<6; i++){
+        for(int i=0; i<10; i++){
             System.out.println("-------------------------- Turn : " + i + "---------------------------------");
 
             completeRound(g, r, game);
