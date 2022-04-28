@@ -14,8 +14,9 @@ public class ModelMessage {
         private final int[] assistantDeck;
         private final int activeAssistant;
         private final School school;
+        private final int coins;
 
-        PlayerSerializable(Player p) {
+        PlayerSerializable(Player p, int mode) {
             this.id = p.getId();
             this.towerColor = p.getTowerColor();
             this.school = p.getSchool();
@@ -31,6 +32,10 @@ public class ModelMessage {
             i = 0;
             for (Assistant a: p)
                 this.assistantDeck[i++] = a.getValue();
+            if (mode == 0)
+                this.coins = 0;
+            else
+                this.coins = ((AdvancedPlayer)p).getCoins();
         }
     }
 
@@ -165,31 +170,37 @@ public class ModelMessage {
 
         this.playerList = new ArrayList<>(this.playerNumber);
         for (Player player : g)
-            this.playerList.add(new PlayerSerializable(player));
+            this.playerList.add(new PlayerSerializable(player, this.gameMode));
 
-        this.characterList = new ArrayList<>(3);
-        for (int i = 0; i < 12; i++)
-            if (b.existsCharacter(i)){
-                Character temp = b.getCharacterById(i);
-                int tempId = temp.getId();
-                if (tempId == 0)
-                    this.characterList.add(new ApothecarySerializable((Apothecary) temp));
-                else if (tempId == 3)
-                    this.characterList.add(new CookSerializable((Cook) temp));
-                else if (tempId == 2)
-                    this.characterList.add(new ClericSerializable((Cleric) temp));
-                else if (tempId == 6)
-                    this.characterList.add(new JesterSerializable((Jester) temp));
-                else if (tempId == 10)
-                    this.characterList.add(new PrincessSerializable((Princess) temp));
-                else
-                    this.characterList.add(new normalCharacterSerializable(temp));
-            }
-        Character t = b.getActiveCharacter();
-        if (t != null)
-            this.activeCharacterId = t.getId();
-        else
+        if (this.gameMode == 1) {
+            this.characterList = new ArrayList<>(3);
+            for (int i = 0; i < 12; i++)
+                if (b.existsCharacter(i)) {
+                    Character temp = b.getCharacterById(i);
+                    int tempId = temp.getId();
+                    if (tempId == 0)
+                        this.characterList.add(new ApothecarySerializable((Apothecary) temp));
+                    else if (tempId == 3)
+                        this.characterList.add(new CookSerializable((Cook) temp));
+                    else if (tempId == 2)
+                        this.characterList.add(new ClericSerializable((Cleric) temp));
+                    else if (tempId == 6)
+                        this.characterList.add(new JesterSerializable((Jester) temp));
+                    else if (tempId == 10)
+                        this.characterList.add(new PrincessSerializable((Princess) temp));
+                    else
+                        this.characterList.add(new normalCharacterSerializable(temp));
+                }
+            Character t = b.getActiveCharacter();
+            if (t != null)
+                this.activeCharacterId = t.getId();
+            else
+                this.activeCharacterId = -1;
+        }
+        else{
+            this.characterList = null;
             this.activeCharacterId = -1;
+        }
     }
 
     static ModelMessage modelMessageBuilder (GameInitializer g, Errors er){
