@@ -17,16 +17,15 @@ class ModelMessageTest {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement x = gson.toJsonTree(m);
         System.out.println(gson.toJson(x));
+
+        GameInitializer g2 = GameInitializerTest.setGameInitializer(4, 0);
+        ModelMessage m2 = ModelMessage.modelMessageBuilder(g2, Errors.NO_ERROR);
+
+        System.out.println(gson.toJson(m2));
     }
 
     @Test
     void modelMessageBuilder() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
-    void testModelMessageBuilder() {
         //trivial
         assertTrue(true);
     }
