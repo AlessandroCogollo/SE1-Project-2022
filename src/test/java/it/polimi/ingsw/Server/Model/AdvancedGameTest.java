@@ -207,7 +207,13 @@ class AdvancedGameTest extends GameTest {
                 else if (is.getTowerColor() == 2){
                     towerColor = " Grey";
                 }
-                System.out.println("{ID: " + is.getId() + " , STUDENTS: " + Arrays.toString(is.getStudents()) + " , TOWERS: " + is.getTowerCount()  + towerColor + " , BAN CARD: " + is.getBanCard() + "}");
+                System.out.println(
+                        "{ID: " + is.getId() +
+                        " , STUDENTS: " + Arrays.toString(is.getStudents()) +
+                        " , TOWERS: " + is.getTowerCount()  + towerColor +
+                        " , BAN CARD: " + is.getBanCard() +
+                        "}" +
+                        (g.getIslands().getMotherNature().equals(is) ? "  <-- MOTHER NATURE" : ""));
 
             }
             System.out.println("#####################################################################");
