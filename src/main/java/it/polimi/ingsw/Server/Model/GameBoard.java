@@ -112,8 +112,10 @@ class GameBoard implements Iterable<Cloud>{
                     ((Apothecary) c).addBanCard();
         }
 
-        if (islands.getIslandsNumber() <= 3)
+        if (islands.getIslandsNumber() <= 3 && gInit.getWinningPlayerId() == -1) { //if a player has no more tower is the winner in any case
+            System.out.println("\n\n Island <= 3 \n");
             gInit.checkWin();
+        }
     }
 
 
@@ -146,7 +148,7 @@ class GameBoard implements Iterable<Cloud>{
         for (int i = 0; i < Color.getNumberOfColors(); i++){
 
             /* Cook effect */
-            if(activeCharacter != null && activeCharacter.getId() == 3 && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor())){
+            if(activeCharacter != null && activeCharacter.getId() == 3 && ((Cook) getActiveCharacter()).getProfessor().isPresent() && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor().get())){
                 p = gInit.getRoundHandler().getCurrent(); //if i is the cook-color, p is the current player
             }
 

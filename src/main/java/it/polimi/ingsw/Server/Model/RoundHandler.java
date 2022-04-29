@@ -265,7 +265,7 @@ class RoundHandler {
                 }
 
                 //considering that the matrix is ordered from the one with the smallest value to the one with the max value, player with the same value are in a random order, so to make that the first one who has played the assistant is the first, for all the others players in this special queue (the first that has play the assistant isn't in the queue) we shift them to the last position with the same value. So, int this way also for multiple player with the same assistant we keep the correct order
-                while (arr[value][i] == arr[value][i + 1] && i < gInit.getPlayersNumber() - 1){
+                while (i < (gInit.getPlayersNumber() - 1) && arr[value][i] == arr[value][i + 1]){
                     swap (arr, i, i + 1);
                     i++;
                 }

@@ -115,6 +115,9 @@ class GameInitializer implements Iterable<Player>{
         RoundHandler.sortMatrixColumn(originalTowerMap, remainingTowers);
 
 
+        /*String[] name = {"id", "towers"};
+        printMatrix(originalTowerMap, 2, length, name);*/
+
         if (originalTowerMap[remainingTowers][0] == originalTowerMap[remainingTowers][1]){
             checkWin(getPlayerById(equalCase()));
         }
@@ -182,6 +185,17 @@ class GameInitializer implements Iterable<Player>{
         newProfessorMap[1][1] = teamBProfessors;
 
         return newProfessorMap;
+    }
+
+    void printMatrix (int[][] matrix, int row, int column, String[] rawName){
+        boolean use = rawName.length == row;
+        for (int r = 0; r < row; r++) {
+            System.out.print("[ ");
+            for (int c = 0; c < column; c++) {
+                System.out.print( matrix[r][c] + " , ");
+            }
+            System.out.print( "\b\b] " + (use ? rawName[r] : "" + "\n"));
+        }
     }
 
     @Override

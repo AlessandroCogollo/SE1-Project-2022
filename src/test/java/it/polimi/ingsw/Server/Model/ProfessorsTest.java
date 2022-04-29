@@ -25,7 +25,8 @@ class ProfessorsTest {
         assertTrue(true);
     }
 
-    @RepeatedTest(10)
+    //@RepeatedTest(1000)
+    @Test
     void getPlayerWithProfessor() {
         //set some random students for testing
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 0);
@@ -84,7 +85,8 @@ class ProfessorsTest {
         assertTrue(true);
     }
 
-    @RepeatedTest(10)
+    //@RepeatedTest(1000)
+    @Test
     void getNumberOfProfessorOfPlayer() {
         //set some random students for testing
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 0);

@@ -2,7 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-//todo calc influence little method, finish check win, better main function, common check in character, javadoc
+//todo check if the bag does not have enough students at the end of the game
 
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{
@@ -36,7 +36,7 @@ public class Game{
             return Errors.NOT_RIGHT_PHASE.getCode();
         if (!p.hasAssistant(assistant))
             return Errors.NO_SUCH_ASSISTANT.getCode();
-        if (!round.canPLayAssistant(p, assistant))
+        if (!round.canPLayAssistant(p, assistant)) //it's mandatory to call can play assistant before use the method game.play assistant because it's been used for the special order
             return Errors.ASSISTANT_ALREADY_PLAYED.getCode();
 
         // call the correct method in player to modify the model

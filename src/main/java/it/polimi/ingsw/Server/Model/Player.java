@@ -56,8 +56,10 @@ class Player implements Iterable<Assistant>{
         if (x != null)
             deck.remove(x);
         activeAssistant = x;
-        if (deck.size() == 0)
+        if (deck.size() == 0) {
+            System.out.println("\n\n Assistant finished \n");
             gameInitializer.getRoundHandler().setFinalRound();
+        }
     }
 
     // check if the movement is towards his room or to an island
@@ -92,6 +94,7 @@ class Player implements Iterable<Assistant>{
             mate.get().moveTowerToIsland(number);
         }
         else if (school.removeTowers(number)){
+            System.out.println("\n\n Player : " + id + "has finished the towers \n");
             gameInitializer.checkWin(this);
         }
     }

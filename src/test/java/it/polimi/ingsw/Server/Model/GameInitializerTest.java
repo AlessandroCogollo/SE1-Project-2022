@@ -151,7 +151,8 @@ class GameInitializerTest {
         }
     }
 
-    @RepeatedTest(10)
+    //@RepeatedTest(1000)
+    @Test
     void checkWin() {
         GameInitializer g = setGameInitializer(4, 0);
 
@@ -216,20 +217,15 @@ class GameInitializerTest {
         int id1 = 4;
         Player p1 = g.getPlayerById(id1);
         int rand1 = rand.nextInt(6) + 1;
-        int[] extracted1 = new int[Color.getNumberOfColors()];
-        Arrays.fill(extracted1, 0);
 
         int id2 = 24;
         Player p2 = g.getPlayerById(id2);
         int rand2 = rand.nextInt(6) + 1;
-        int[] extracted2 = new int[Color.getNumberOfColors()];
-        Arrays.fill(extracted2, 0);
 
         i = 0;
         while (i < rand1){
             Color c = Color.getColorById(rand.nextInt(Color.getNumberOfColors()));
             if (p1.hasStudent(c)){
-                extracted1[c.getIndex()]++;
                 p1.moveStudent(c, -1);
                 i++;
             }
@@ -239,7 +235,6 @@ class GameInitializerTest {
         while (i < rand2){
             Color c = Color.getColorById(rand.nextInt(Color.getNumberOfColors()));
             if (p2.hasStudent(c)){
-                extracted2[c.getIndex()]++;
                 p2.moveStudent(c, -1);
                 i++;
             }

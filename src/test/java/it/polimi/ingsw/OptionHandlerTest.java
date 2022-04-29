@@ -28,7 +28,8 @@ class OptionHandlerTest {
         assertTrue(true);
     }
 
-    @RepeatedTest(10)
+    //@RepeatedTest(1000)
+    @Test
     void testEquals() {
         Random r = new Random(System.currentTimeMillis());
         int v = r.nextInt();
@@ -37,7 +38,8 @@ class OptionHandlerTest {
         assertEquals(x, y);
     }
 
-    @RepeatedTest(10)
+    //@RepeatedTest(1000)
+    @Test
     void testHashCode() {
         Random r = new Random(System.currentTimeMillis());
         int v = r.nextInt();
