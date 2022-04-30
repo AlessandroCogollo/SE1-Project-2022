@@ -31,7 +31,7 @@ final class Thief extends Character {
 
         int colorId = (Integer) obj;
 
-        if (colorId < 0 || colorId > 4)
+        if (Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;
 
         return Errors.NO_ERROR;

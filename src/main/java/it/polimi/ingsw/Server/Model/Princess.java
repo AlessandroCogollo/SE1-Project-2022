@@ -44,7 +44,7 @@ final class Princess extends Character {
         int colorId = (int) obj;
         Player p = super.gameInitializer.getRoundHandler().getCurrent();
 
-        if (colorId < 0 || colorId > 4)
+        if (Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;
         if (!super.gameInitializer.existsPlayer(p.getId()))
             return Errors.PLAYER_NOT_EXIST;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.util.Optional;
+
 public enum Color {
     Blue (0),
     Green (1),
@@ -27,5 +29,9 @@ public enum Color {
                 return c;
         }
         return null;
+    }
+
+    public static boolean isColorIdValid (int colorId){
+        return (getColorById(colorId) != null);
     }
 }

@@ -51,7 +51,7 @@ final class Cleric extends Character{
         int colorId = studentToIsland[0];
         int islandId = studentToIsland[1];
 
-        if (colorId < 0 || colorId > 4)
+        if (Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;
         if (!gameInitializer.getIslands().existsIsland(islandId))
             return Errors.NOT_VALID_DESTINATION;
