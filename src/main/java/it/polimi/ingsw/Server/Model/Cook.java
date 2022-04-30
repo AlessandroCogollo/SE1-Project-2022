@@ -34,7 +34,7 @@ final class Cook extends Character {
 
         int colorId = (Integer) color;
 
-        if (Color.isColorIdValid(colorId))
+        if (!Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;
 
         return Errors.NO_ERROR;
