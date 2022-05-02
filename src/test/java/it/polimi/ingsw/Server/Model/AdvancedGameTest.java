@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
+import it.polimi.ingsw.Server.Model.Phases.Phase;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -10,27 +13,129 @@ import static org.junit.jupiter.api.Assertions.*;
 class AdvancedGameTest extends GameTest {
 
     @Test
+    @DisplayName("Testing playAssistant() Black Box")
     void playAssistantBlackBox() {
 
+        Queue<Player> tempOrder = new LinkedList<>();
+
+        int[][] ids = {
+                {1, 2},             // check two players
+                {1, 2, 3},          // check three players
+                {1, 2, 3, 4}        // check four players
+        };
+
+        for (int i = 0; i < ids.length; i++) {
+
+            GameInitializer g = new GameInitializer(1, i+2);
+            RoundHandler r = new RoundHandler(g);
+
+            g.createAllGame(ids[i], r);
+            r.start();
+
+            AdvancedGame game = new AdvancedGame(ids.length, g, r);
+
+            // check if planning order is correct && correct assistant played
+            for (int j = 0; j < ids[i].length; j++) {
+                Player p = r.getCurrent();
+                tempOrder.add(p);
+                assertEquals(Errors.NO_ERROR.getCode(), game.playAssistant(p.getId(), j+1));
+                assertFalse(p.hasAssistant(Assistant.getAssistantByValue(j+1)));
+            }
+            for (Player p: r.getPlanningOrder()) {
+                assertEquals(p, tempOrder.poll());
+            }
+        }
     }
 
     @Test
+    @DisplayName("Testing moveStudent() Black Box")
     void moveStudentBlackBox() {
+        int[][] ids = {
+                {1, 2},             // check two players
+                {1, 2, 3},          // check three players
+                {1, 2, 3, 4}        // check four players
+        };
+
+        for (int i = 0; i < ids.length; i++) {
+
+            System.out.println("TestSet N°"+ i);
+
+            for (int l = 0; l < 2; l++) {
+
+                System.out.println("Test N°" + l);
+
+                GameInitializer g = new GameInitializer(1, i+2);
+                RoundHandler r = new RoundHandler(g);
+
+                g.createAllGame(ids[i], r);
+                r.start();
+
+                AdvancedGame game = new AdvancedGame(ids.length, g, r);
+
+                // init actionPhase order
+                for (int j = 0; j < ids[i].length; j++) {
+                    Player p = r.getCurrent();
+                    game.playAssistant(p.getId(), j+1);
+                }
+
+                // action phase
+                for (int j = 0; j < ids[i].length; j++) {
+
+                    Player p = r.getCurrent();
+                    System.out.println("Entrance Of Player " + p.getId() + " : " + Arrays.toString(p.getSchool().getCopyOfEntrance()));
+
+                    for (int m = 0; m < 3; m++) {
+
+                        int k = 0;
+                        int IslandId = (int)(Math.random()*(g.getIslands().getIslandsNumber())-1);
+                        System.out.println("Island ID: " + IslandId);
+                        int StudentsInEntrance;
+
+                        StudentsInEntrance = 0;
+                        for (int z = 0; z < p.getSchool().getCopyOfEntrance().length; z++) {
+                            StudentsInEntrance += p.getSchool().getCopyOfEntrance()[z];
+                        }
+
+                        if (StudentsInEntrance > 0) {
+                            do {
+                                k = (int)(Math.random()*5);
+                            } while ((p.getSchool().getCopyOfEntrance())[k] <= 0);
+                        }
+
+                        System.out.println("ColorID " + k + "- Number Of Students Of This Color: " + (p.getSchool().getCopyOfEntrance())[k]);
+
+                        if (l == 0) {
+                            int[] OldNumberOfStudentsInIsland = g.getIslands().getIslandFromId(IslandId).getStudents();
+                            p.moveStudent(Color.getColorById(k), IslandId);
+                            assertEquals((OldNumberOfStudentsInIsland[k]), g.getIslands().getIslandFromId(IslandId).getStudents()[k]);
+                        } else {
+                            int OldNumberOfStudentsInRoom = p.getSchool().getNumberOfStudentInRoomByColor(Objects.requireNonNull(Color.getColorById(k)));
+                            p.moveStudent(Color.getColorById(k), -1);
+                            assertEquals((OldNumberOfStudentsInRoom + 1), p.getSchool().getNumberOfStudentInRoomByColor(Objects.requireNonNull(Color.getColorById(k))));
+                        }
+                    }
+                    p.moveMotherNature(p.getActiveAssistant().getMaxMovement());
+                    int cloudId = (int)(Math.random()*ids[i].length);
+                    p.chooseCloud(g.getBoard().getCloudById(cloudId));
+                }
+            }
+        }
     }
 
     @Test
     void moveMotherNatureBlackBox() {
+
         int[] id2 = new int[2];
         id2[0] = 4;
         id2[1] = 24;
 
-        GameInitializer g = new GameInitializer(0, 2);
+        GameInitializer g = new GameInitializer(1, 2);
         RoundHandler r = new RoundHandler(g);
 
         g.createAllGame(id2, r);
         r.start();
 
-        Game game = new Game(id2.length, g, r);
+        AdvancedGame game = new AdvancedGame(id2.length, g, r);
 
         Player p = r.getCurrent();
         game.playAssistant(p.getId(), 1);
@@ -39,9 +144,6 @@ class AdvancedGameTest extends GameTest {
         game.playAssistant(p.getId(), 2);
 
         p = r.getCurrent();
-
-
-
 
         //Color[] colorPicked = new Color[3];
         Random rand = new Random(System.currentTimeMillis());
@@ -75,10 +177,6 @@ class AdvancedGameTest extends GameTest {
             assertEquals(1, mn.getTowerCount());
         else
             assertEquals(0, mn.getTowerCount());
-    }
-
-    @Test
-    void chooseCloudBlackBox() {
     }
 
     @Test

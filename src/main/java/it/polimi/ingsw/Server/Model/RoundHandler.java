@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
+import it.polimi.ingsw.Server.Model.Phases.Phase;
+
 import java.util.*;
 
 
@@ -57,6 +60,12 @@ class RoundHandler {
 
     void setFinalRound() {
         isFinalRound = true;
+    }
+
+    // getter used for testing purposes        // TODO: check correct order of players based on assistant values
+
+    Queue<Player> getPlanningOrder() {
+        return planningOrder;
     }
 
     //return true if the player can play the assistant considering all the exception

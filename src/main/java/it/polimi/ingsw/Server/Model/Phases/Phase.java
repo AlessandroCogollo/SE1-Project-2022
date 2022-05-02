@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Phases;
 
 public enum Phase {
     Planning,
