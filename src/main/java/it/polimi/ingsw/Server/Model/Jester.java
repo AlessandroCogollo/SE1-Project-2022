@@ -4,7 +4,7 @@ import it.polimi.ingsw.Server.Errors;
 
 import java.util.Arrays;
 
-final class Jester extends Character {
+final public class Jester extends Character {
     private final int[] students;
 
     Jester(GameInitializer gameInitializer) {
@@ -13,7 +13,7 @@ final class Jester extends Character {
     }
 
     @Override
-    void activateEffect(Object obj) {
+    protected void activateEffect(Object obj) {
 
         Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
         School currSchool = currPlayer.getSchool();
@@ -34,16 +34,16 @@ final class Jester extends Character {
     }
 
     // used for testing
-    int[] getStudents() {
+    public int[] getStudents() {
         return this.students;
     }
 
-    int[] getStudentsCopy(){
+    public int[] getStudentsCopy(){
         return Arrays.copyOf(students, students.length);
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
 
         if (!(obj instanceof int[]))
             return Errors.NOT_RIGHT_PARAMETER;

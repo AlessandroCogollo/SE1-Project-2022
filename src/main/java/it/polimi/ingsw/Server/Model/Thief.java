@@ -2,14 +2,14 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-final class Thief extends Character {
+final public class Thief extends Character {
 
     Thief(GameInitializer gameInitializer) {
         super (11, 3, gameInitializer);
     }
 
     @Override
-    void activateEffect(Object obj) {
+    protected void activateEffect(Object obj) {
 
         int colorId = (Integer) obj;
         Color c = Color.getColorById(colorId);
@@ -25,7 +25,7 @@ final class Thief extends Character {
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
         if (!(obj instanceof Integer))
             return Errors.NOT_RIGHT_PARAMETER;
 

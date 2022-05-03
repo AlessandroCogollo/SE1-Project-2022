@@ -14,6 +14,7 @@ public class Game{
     protected final GameInitializer gameInit;
     protected final RoundHandler round;
 
+    //not public only created by factory
     Game (int numOfPlayer, GameInitializer gameInit, RoundHandler round) {
         this.numOfPlayer = numOfPlayer;
         this.gameInit = gameInit;

@@ -6,7 +6,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 
-final class Cleric extends Character{
+final public class Cleric extends Character{
 
     private final int[] students;
 
@@ -15,16 +15,16 @@ final class Cleric extends Character{
         this.students = super.gameInitializer.getBag().drawStudents(4);
     }
 
-    int[] getStudentsCopy(){
+    public int[] getStudentsCopy(){
         return Arrays.copyOf(students, students.length);
     }
     // used for testing
-    int[] getStudentsNumber() {
+    public int[] getStudentsNumber() {
         return this.students;
     }
 
     @Override
-    void activateEffect(Object obj) {
+    protected void activateEffect(Object obj) {
 
         // color number is given by zero position of array, island id is given by first position of array
         int[] studentToIsland = (int[]) obj;
@@ -40,7 +40,7 @@ final class Cleric extends Character{
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
 
         if (! (obj instanceof int[] studentToIsland))
             return Errors.ILLEGAL_INPUT;

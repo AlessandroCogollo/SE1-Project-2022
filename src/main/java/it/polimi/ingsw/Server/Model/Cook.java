@@ -4,7 +4,7 @@ import it.polimi.ingsw.Server.Errors;
 
 import java.util.Optional;
 
-final class Cook extends Character {
+final public class Cook extends Character {
 
     private Optional<Color> color;
 
@@ -13,22 +13,22 @@ final class Cook extends Character {
         this.color = Optional.empty();
     }
 
-    Color getColor (){
+    public Color getColor (){
         return color.orElse(null);
     }
 
-    Optional<Color> getProfessor(){
+    public Optional<Color> getProfessor(){
         return this.color;
     }
 
     @Override
-    void activateEffect(Object color) {
+    protected void activateEffect(Object color) {
         int colorId = (Integer) color;
         this.color = Optional.ofNullable(Color.getColorById(colorId));
     }
 
     @Override
-    Errors canActivateEffect(Object color) {
+    public Errors canActivateEffect(Object color) {
         if (!(color instanceof Integer))
             return Errors.NOT_RIGHT_PARAMETER;
 

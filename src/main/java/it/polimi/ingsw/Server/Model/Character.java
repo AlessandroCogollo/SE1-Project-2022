@@ -2,7 +2,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
 
-abstract class Character {
+abstract public class Character {
 
     protected final int id;
     protected final GameInitializer gameInitializer;
@@ -16,20 +16,20 @@ abstract class Character {
         this.used = false;
     }
 
-    int getId() { return this.id; }
+    public int getId() { return this.id; }
 
-    int getCost() {
+    public int getCost() {
         if (this.used)
             return this.cost + 1;
         return this.cost;
     }
 
-    void use (Object obj){
+    public void use (Object obj){
         activateEffect(obj);
         this.used = true;
     }
 
-    abstract void activateEffect(Object obj);
+    abstract protected void activateEffect(Object obj);
 
-    abstract Errors canActivateEffect (Object obj);
+    abstract public Errors canActivateEffect (Object obj);
 }

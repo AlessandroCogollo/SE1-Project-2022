@@ -5,7 +5,7 @@ import it.polimi.ingsw.Server.Errors;
 import java.util.Arrays;
 import java.util.Objects;
 
-final class Princess extends Character {
+final public class Princess extends Character {
     private final int[] students;
 
     Princess(GameInitializer gameInitializer) {
@@ -13,15 +13,16 @@ final class Princess extends Character {
         students = gameInitializer.getBag().drawStudents(4);
     }
 
-    int[] getStudents() {
+    public int[] getStudents() {
         return this.students;
     }
 
-    int[] getStudentsCopy(){
+    public int[] getStudentsCopy(){
         return Arrays.copyOf(students, students.length);
     }
 
-    void activateEffect(Object obj) {
+    @Override
+    protected void activateEffect(Object obj) {
 
         int colorId = (int) obj;
 
@@ -38,7 +39,7 @@ final class Princess extends Character {
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
         // todo implement actual color and player choosing
 
         int colorId = (int) obj;
