@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
-class Island {
+public class Island {
 
     private final int id;
     private final int[] students;
@@ -42,11 +42,11 @@ class Island {
     }
 
     //adds the student to the island
-    void addStudent(Color color){
+    public void addStudent(Color color){
         students[color.getIndex()]++;
     }
 
-    void setBanCard() {
+    public void setBanCard() {
         this.banCard++;
     }
 

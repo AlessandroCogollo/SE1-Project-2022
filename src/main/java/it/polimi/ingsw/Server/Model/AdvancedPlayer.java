@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.util.Optional;
+import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
 // sub class of player that add the play character methods and the management of characters
 public class AdvancedPlayer extends Player {

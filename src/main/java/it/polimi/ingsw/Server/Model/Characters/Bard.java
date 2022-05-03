@@ -1,6 +1,10 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Color;
+import it.polimi.ingsw.Server.Model.GameInitializer;
+import it.polimi.ingsw.Server.Model.Player;
+import it.polimi.ingsw.Server.Model.School;
 
 import java.util.Objects;
 

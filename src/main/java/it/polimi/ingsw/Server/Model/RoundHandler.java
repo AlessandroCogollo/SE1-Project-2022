@@ -7,7 +7,7 @@ import java.util.*;
 
 
 //this class cycle throw the phase and the player to keep track of all moves done, needs to run start() in order to start the game
-class RoundHandler {
+public class RoundHandler {
 
     private final GameInitializer gInit;
 
@@ -38,7 +38,7 @@ class RoundHandler {
         this.isFinalRound = false;
     }
 
-    Player getCurrent() {
+    public Player getCurrent() {
         return current;
     }
 

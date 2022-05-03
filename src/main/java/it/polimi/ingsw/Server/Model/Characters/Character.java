@@ -1,6 +1,8 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.GameInitializer;
+import it.polimi.ingsw.Server.Model.Characters.*;
 
 abstract public class Character {
 
@@ -9,7 +11,7 @@ abstract public class Character {
     protected int cost;
     protected boolean used;
 
-    protected Character(int id, int cost, GameInitializer gameInitializer) {
+    public Character(int id, int cost, GameInitializer gameInitializer) {
         this.id = id;
         this.cost = cost;
         this.gameInitializer = gameInitializer;
@@ -24,6 +26,9 @@ abstract public class Character {
         return this.cost;
     }
 
+    public boolean getUsed() {
+        return this.used;
+    }
     public void use (Object obj){
         activateEffect(obj);
         this.used = true;

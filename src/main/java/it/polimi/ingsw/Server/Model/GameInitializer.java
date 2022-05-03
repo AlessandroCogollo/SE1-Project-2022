@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Model.Characters.*;
+
 import java.util.Collection;
 import java.util.Iterator;
 
 // this class create all the model and keep the register of the players
-class GameInitializer implements Iterable<Player>{
+public class GameInitializer implements Iterable<Player>{
 
     private final int gameMode;
     private final int playerNumber;
@@ -42,7 +44,7 @@ class GameInitializer implements Iterable<Player>{
         return playerNumber;
     }
 
-    Bag getBag() {
+    public Bag getBag() {
         return bag;
     }
 
@@ -50,15 +52,15 @@ class GameInitializer implements Iterable<Player>{
         return professors;
     }
 
-    Islands getIslands() {
+    public Islands getIslands() {
         return islands;
     }
 
-    GameBoard getBoard() {
+    public GameBoard getBoard() {
         return board;
     }
 
-    RoundHandler getRoundHandler() {
+    public RoundHandler getRoundHandler() {
         return roundHandler;
     }
 
@@ -74,7 +76,7 @@ class GameInitializer implements Iterable<Player>{
         return null;
     }
 
-    boolean existsPlayer (int id){
+    public boolean existsPlayer (int id){
         boolean exists = false;
         for (Player p : players)
             if (p.getId() == id) {

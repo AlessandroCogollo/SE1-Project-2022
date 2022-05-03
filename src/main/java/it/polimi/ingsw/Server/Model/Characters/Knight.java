@@ -1,11 +1,11 @@
-package it.polimi.ingsw.Server.Model;
-
+package it.polimi.ingsw.Server.Model.Characters;
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.GameInitializer;
 
-final public class Minotaur extends Character {
+final public class Knight extends Character {
 
-    Minotaur(GameInitializer gameInitializer) {
-        super (8, 3, gameInitializer);
+    Knight(GameInitializer gameInitializer) {
+        super (7, 2, gameInitializer);
     }
 
     @Override
@@ -18,5 +18,4 @@ final public class Minotaur extends Character {
         // no further checks needed
         return Errors.NO_ERROR;
     }
-
 }

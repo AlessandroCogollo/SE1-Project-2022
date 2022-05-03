@@ -1,8 +1,8 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
-
-import java.util.Optional;
+import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
 final public class Apothecary extends Character {
 
@@ -24,7 +24,7 @@ final public class Apothecary extends Character {
     public int getBanCard() { return this.banCard; }
 
     @Override
-    protected void activateEffect(Object obj) {
+    public void activateEffect(Object obj) {
 
         int islandId = (Integer)obj;
 

@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 //The school class implements a container for all the stuffs of the player during the game and can only be modified from the class Student itself
-class School {
+public class School {
 
     private final int[] entrance;
     private final int[] room;
@@ -31,12 +31,12 @@ class School {
         return entrance[color.getIndex()] > 0;
     }
 
-    int getNumberOfStudentInRoomByColor (Color c){
+    public int getNumberOfStudentInRoomByColor (Color c){
         return room[c.getIndex()];
     }
 
     //return true if the player will get a coin
-    boolean moveStudentToRoom (Color color){
+    public boolean moveStudentToRoom (Color color){
         int index = color.getIndex();
         entrance[index]--;
         room[index]++;
@@ -44,7 +44,7 @@ class School {
     }
 
     // used for characters' effects
-    Color removeStudentFromRoom(Color color) {
+    public Color removeStudentFromRoom(Color color) {
         room[color.getIndex()]--;
         return color;
     }
@@ -70,12 +70,12 @@ class School {
         return towers == 0;
     }
 
-    Color moveStudentFromEntrance(Color color) {
+    public Color moveStudentFromEntrance(Color color) {
         entrance[color.getIndex()]--;
         return color;
     }
 
-    void moveStudentToEntrance(Color color) {
+    public void moveStudentToEntrance(Color color) {
         entrance[color.getIndex()]++;
     }
 }
