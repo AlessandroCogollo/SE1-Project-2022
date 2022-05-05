@@ -11,10 +11,12 @@ public class Server
     private ServerSocket server = null;
     private int numOfPlayers = 0;
     private boolean isFirstConnected = false;
+    private ArrayList<Integer> ids;
 
 
     public Server(int port) {
 
+        ids = new ArrayList<>();
         this.port = port;
         Executor e = Executors.newFixedThreadPool(4);
         ClientHandler c = null;
@@ -26,8 +28,7 @@ public class Server
                 c = new ClientHandler(this, client);
                 e.execute(c);
                 //while the server is connected and has not decided the number of players
-                while(numOfPlayers == 0 && client.isConnected()){
-                }
+                while(numOfPlayers == 0 && client.isConnected()){}
                 //if the player disconnected and hadn't decided the number of players yet, redo this cycle
                 if(!client.isConnected()){
                     this.isFirstConnected = false;
@@ -82,8 +83,16 @@ public class Server
         return port;
     }
 
-    protected void setNumOfPlayers(int numOfPlayers) {
+    void setNumOfPlayers(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
+    }
+
+    void addId(int id){
+        ids.add(id);
+    }
+
+    public ArrayList<Integer> getIds() {
+        return new ArrayList<>(this.ids);
     }
 
     public static void main(String[] args) throws IOException {
