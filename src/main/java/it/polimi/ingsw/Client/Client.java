@@ -39,56 +39,54 @@ public class Client
             System.out.println(i);
         }
 
-        Talk();
+
+        Runnable listening = () -> {
+            try {
+                Listen();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+
+        Runnable talking = () -> {
+            Talk();
+        };
+
+        Executor e = Executors.newFixedThreadPool(2);
+        e.execute(listening);
+        e.execute(talking);
+
+
+    }
+
+    void Listen() throws IOException {
+        String line = "";
+        while(true){
+            line = in.readLine();
+            System.out.println(line);
+        }
 
     }
 
     void Talk(){
         String line = "";
-        String resp = "";
         Scanner sc=new Scanner(System.in);
 
         // keep reading until "Over" is input
         while (!line.equals("END"))
         {
-            try
-            {
-                System.out.println(resp);
-                line = sc.nextLine();
-                resp = sendMessage(line);
+            line = sc.nextLine();
+            out.println(line);
 
-            }
-            catch(IOException i)
-            {
-                System.out.println(i);
-                System.out.println("IOException : Closing connection...");
-                try
-                {
-                    in.close();
-                    out.close();
-                    socket.close();
-                }
-                catch(IOException io)
-                {
-                    System.out.println(io);
-                }
-
-            }
         }
         if(line.equals("END")){
             try {
-                sendMessage("Closing connection by client with port : " + port);
+                out.write("Closing connection by client with port : " + port);
                 stopConnection();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public String sendMessage(String msg) throws IOException {
-        out.println(msg);
-        String resp = in.readLine();
-        return resp;
     }
 
     public void stopConnection() throws IOException {
@@ -99,7 +97,7 @@ public class Client
 
     public static void main(String args[])
     {
-        Client client = new Client("127.0.0.1", 5011);
+        Client client = new Client("127.0.0.1", 5088);
     }
 }
 
