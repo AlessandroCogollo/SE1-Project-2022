@@ -4,8 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
+import it.polimi.ingsw.Server.Model.Characters.*;
 
-class Islands implements Iterable<Island>{
+public class Islands implements Iterable<Island>{
     private final LinkedList<Island> islands;
     private Island motherNature;
 
@@ -44,7 +45,7 @@ class Islands implements Iterable<Island>{
         return motherNature;
     }
 
-    boolean existsIsland(int destinationId) {
+    public boolean existsIsland(int destinationId) {
         boolean found = false;
         for (Island i : islands)
             if (i.getId() == destinationId){
@@ -54,7 +55,7 @@ class Islands implements Iterable<Island>{
         return found;
     }
 
-    Island getIslandFromId(int id){
+    public Island getIslandFromId(int id){
         for (Island i : this.islands)
             if (i.getId() == id)
                 return i;

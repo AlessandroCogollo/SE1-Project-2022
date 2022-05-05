@@ -1,6 +1,7 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class CharacterTest {
         Character Apothecary = CharacterFactory.produceCharacterById(0, g);
 
         // check correct building
-        Assertions.assertTrue(Apothecary instanceof Apothecary);
+        Assertions.assertTrue(Apothecary instanceof it.polimi.ingsw.Server.Model.Characters.Apothecary);
 
         for (int i = 0; i < testCases.length; i++) {
 

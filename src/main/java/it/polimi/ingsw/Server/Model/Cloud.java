@@ -2,28 +2,28 @@ package it.polimi.ingsw.Server.Model;
 
 import java.util.Arrays;
 
-class Cloud {
+public class Cloud {
     private final int id;
     private final Bag bag;
     private final int numOfPlayer;
     private int[] drawnStudents;
-
-    //return only a copy of drawnStudents, used only in message creations
-    int[] getCopyOfDrawnStudents (){
-        return Arrays.copyOf(drawnStudents, drawnStudents.length);
-    }
-    Cloud(int id, GameInitializer gameInitializer){
+    public Cloud(int id, GameInitializer gameInitializer){
         this.id = id;
         this.bag = gameInitializer.getBag();
         this.numOfPlayer = gameInitializer.getPlayersNumber();
         setStudents();
     }
 
-    int getId() {
+    //return only a copy of drawnStudents, used only in message creations
+    public int[] getCopyOfDrawnStudents (){
+        return Arrays.copyOf(drawnStudents, drawnStudents.length);
+    }
+
+    public int getId() {
         return id;
     }
 
-    void setStudents(){
+    public void setStudents(){
         if (numOfPlayer == 3)
             this.drawnStudents = bag.drawStudents(4);
         else
@@ -31,7 +31,7 @@ class Cloud {
     }
 
     //return a copy of the students in the cloud and reset them to 0
-    int[] getStudents() {
+    public int[] getStudents() {
         //create a copy of drawstudents
         int[] students = Arrays.copyOf(drawnStudents, drawnStudents.length);
 

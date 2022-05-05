@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameInitializerTest {
+public class GameInitializerTest {
 
     public static GameInitializer setGameInitializer (int numOfPLayers, int gameMode){
         GameInitializer g;

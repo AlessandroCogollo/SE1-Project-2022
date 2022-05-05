@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Characters.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -55,13 +57,11 @@ public class ModelMessage {
         private final int cost;
         private final boolean used;
 
-        normalCharacterSerializable(Character c) {
-            this.id = c.id;
-            this.cost = c.cost;
-            this.used = c.used;
+        public normalCharacterSerializable(Character c) {
+            this.id = c.getId();
+            this.cost = c.getCost();
+            this.used = c.getUsed();
         }
-
-
     }
 
     private final class ApothecarySerializable extends normalCharacterSerializable{
@@ -192,6 +192,7 @@ public class ModelMessage {
                         this.characterList.add(new normalCharacterSerializable(temp));
                 }
             Character t = b.getActiveCharacter();
+
             if (t != null)
                 this.activeCharacterId = t.getId();
             else

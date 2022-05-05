@@ -1,17 +1,22 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Color;
+import it.polimi.ingsw.Server.Model.GameInitializer;
+import it.polimi.ingsw.Server.Model.Player;
+import it.polimi.ingsw.Server.Model.School;
 
 import java.util.Objects;
 
-final class Bard extends Character {
+final public class Bard extends Character {
 
+    //not public created only by factory in character class
     Bard(GameInitializer gameInitializer) {
         super (1, 1, gameInitializer);
     }
 
     @Override
-    void activateEffect(Object obj) {
+    protected void activateEffect(Object obj) {
         Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
         School currSchool = currPlayer.getSchool();
 
@@ -30,7 +35,7 @@ final class Bard extends Character {
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
 
         if (!(obj instanceof int[] chosenColors))
             return Errors.NOT_RIGHT_PARAMETER;

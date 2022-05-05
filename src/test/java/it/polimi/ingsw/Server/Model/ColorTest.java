@@ -25,4 +25,12 @@ class ColorTest {
         assertNull(Color.getColorById(-1));
         assertNull(Color.getColorById(5));
     }
+
+    @Test
+    void isColorIdValid() {
+        for (Color c: Color.values())
+            assertTrue(Color.isColorIdValid(c.getIndex()));
+        assertFalse(Color.isColorIdValid(-1));
+        assertFalse(Color.isColorIdValid(5));
+    }
 }

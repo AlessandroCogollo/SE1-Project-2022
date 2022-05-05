@@ -1,29 +1,30 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
-import java.util.Optional;
-
-final class Apothecary extends Character {
+final public class Apothecary extends Character {
 
     private int banCard;
 
+    //not public only created in factory in Character class
     Apothecary(GameInitializer gameInitializer) {
         super (0, 2, gameInitializer);
         this.banCard = 4;
     }
 
     // used to add a BanCard "token" to this card (after being removed from an island)
-    void addBanCard() { this.banCard += 1; }
+    public void addBanCard() { this.banCard += 1; }
 
     // used to remove a BanCard "token" from this card (and to add it to an island)
-    void removeBanCard() { this.banCard -= 1; }
+    public void removeBanCard() { this.banCard -= 1; }
 
     // return number of banCard "token" on this card
-    int getBanCard() { return this.banCard; }
+    public int getBanCard() { return this.banCard; }
 
     @Override
-    void activateEffect(Object obj) {
+    public void activateEffect(Object obj) {
 
         int islandId = (Integer)obj;
 
@@ -38,7 +39,7 @@ final class Apothecary extends Character {
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
         if (!(obj instanceof Integer))
             return Errors.NOT_RIGHT_PARAMETER;
 

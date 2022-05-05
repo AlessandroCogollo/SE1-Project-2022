@@ -1,10 +1,13 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
+import it.polimi.ingsw.Server.Model.Phases.Phase;
+
 import java.util.*;
 
 
 //this class cycle throw the phase and the player to keep track of all moves done, needs to run start() in order to start the game
-class RoundHandler {
+public class RoundHandler {
 
     private final GameInitializer gInit;
 
@@ -35,7 +38,7 @@ class RoundHandler {
         this.isFinalRound = false;
     }
 
-    Player getCurrent() {
+    public Player getCurrent() {
         return current;
     }
 
@@ -57,6 +60,12 @@ class RoundHandler {
 
     void setFinalRound() {
         isFinalRound = true;
+    }
+
+    // getter used for testing purposes        // TODO: check correct order of players based on assistant values
+
+    Queue<Player> getPlanningOrder() {
+        return planningOrder;
     }
 
     //return true if the player can play the assistant considering all the exception

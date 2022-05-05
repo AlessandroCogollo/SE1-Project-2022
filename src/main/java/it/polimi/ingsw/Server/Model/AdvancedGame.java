@@ -1,10 +1,14 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Server.Model.Phases.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
 // the sub class of Game that extends the possible interactions of players adding the play character method
 public class AdvancedGame extends Game {
 
+    //not public only created by factory in Game class
     AdvancedGame(int numOfPlayer, GameInitializer gameInit, RoundHandler round) {
         super(numOfPlayer, gameInit, round);
     }

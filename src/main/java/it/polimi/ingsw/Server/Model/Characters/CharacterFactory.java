@@ -1,10 +1,12 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
+
+import it.polimi.ingsw.Server.Model.GameInitializer;
 
 import java.util.*;
 
-class CharacterFactory {
+public class CharacterFactory {
     //method to create a character
-    static Character produceCharacterById(int CharacterId, GameInitializer gameInitializer){
+    protected static Character produceCharacterById(int CharacterId, GameInitializer gameInitializer){
         return switch (CharacterId) {
             case 0 -> new Apothecary(gameInitializer);
             case 1 -> new Bard(gameInitializer);
@@ -23,7 +25,7 @@ class CharacterFactory {
     }
 
     // return a collection of 3 characters associated to the game
-    static Collection<Character> getNewGameDeck(GameInitializer gameInitializer) {
+    public static Collection<Character> getNewGameDeck(GameInitializer gameInitializer) {
         Random rand = new Random(System.currentTimeMillis()); //instance of random class
         Collection<Character> c = new ArrayList<>(3);
         List<Integer> pickedNumbers = new ArrayList<>();

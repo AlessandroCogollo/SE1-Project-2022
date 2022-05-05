@@ -1,24 +1,26 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Color;
+import it.polimi.ingsw.Server.Model.GameInitializer;
 
-final class Drunkard extends Character  {
+final public class Drunkard extends Character  {
 
     Drunkard(GameInitializer gameInitializer) {
         super (4, 2, gameInitializer);
     }
 
     @Override
-    void activateEffect(Object object) {
+    protected void activateEffect(Object object) {
         // calcInfluence() method already implemented in GameBoard
     }
 
-    Color getColor(){
+    public Color getColor(){
         return Color.Blue;
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
         // no further checks needed
         return Errors.NO_ERROR;
     }

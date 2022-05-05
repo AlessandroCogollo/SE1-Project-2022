@@ -1,20 +1,21 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.GameInitializer;
 
-final class Postman extends Character {
+final public class Postman extends Character {
 
     Postman(GameInitializer gameInitializer) {
         super (9, 1, gameInitializer);
     }
 
     @Override
-    void activateEffect(Object object) {
+    protected void activateEffect(Object object) {
         // method already implemented in AdvancedGame
     }
 
     @Override
-    Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(Object obj) {
         return Errors.NO_ERROR;
     }
 }

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Optional;
 
 //player class that implements the real methods that changes the model
-class Player implements Iterable<Assistant>{
+public class Player implements Iterable<Assistant>{
 
     private final int id;
     private final int towerColor; // 1 black, 2 white, 3 gray
@@ -19,6 +19,7 @@ class Player implements Iterable<Assistant>{
 
     private Assistant activeAssistant;
 
+    //not public used only by factory
     Player (int id, int towerColor, Player mate, GameInitializer gameInitializer, School school) {
         this.id = id;
         this.towerColor = towerColor;
@@ -29,30 +30,30 @@ class Player implements Iterable<Assistant>{
         this.activeAssistant = null;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    int getTowerColor() {
+    public int getTowerColor() {
         return towerColor;
     }
 
-    School getSchool() {return school;}
+    public School getSchool() {return school;}
 
-    Assistant getActiveAssistant() {
+    public Assistant getActiveAssistant() {
         return activeAssistant;
     }
 
-    boolean hasAssistant (Assistant x){
+    public boolean hasAssistant (Assistant x){
         return deck.contains(x);
     }
 
-    boolean hasStudent (Color color){
+    public boolean hasStudent (Color color){
         return school.hasStudentInEntrance(color);
     }
 
     // play assistant will remove the assistant from the student's deck and set it as is active assistant, that will be changed only in the next planning phase
-    void playAssistant (Assistant x){
+    public void playAssistant (Assistant x){
         if (x != null)
             deck.remove(x);
         activeAssistant = x;
@@ -63,7 +64,7 @@ class Player implements Iterable<Assistant>{
     }
 
     // check if the movement is towards his room or to an island
-    void moveStudent (Color c, int destinationId){
+    public void moveStudent (Color c, int destinationId){
         if (destinationId != -1){
             Color student = school.moveStudentFromEntrance(c);
             gameInitializer.getIslands().addStudentToIsland(student, destinationId);
@@ -75,21 +76,21 @@ class Player implements Iterable<Assistant>{
     }
 
     // move mother nature calls the appropriate method in board
-    void moveMotherNature (int position){
+    public void moveMotherNature (int position){
         gameInitializer.getBoard().moveMotherNature(position);
     }
 
     // choose cloud call the method in school for add all the students
-    void chooseCloud (Cloud c){
+    public void chooseCloud (Cloud c){
         school.addStudentFromCloud(c);
     }
 
     //methods for the board to manage the tower, if it's a game with 4 players there will be some players with the mate attribute not null
-    int getTowers (){
+    public int getTowers (){
         return mate.map(Player::getTowers).orElseGet(school::getTowers);
     }
 
-    void moveTowerToIsland (int number){
+    public void moveTowerToIsland (int number){
         if (mate.isPresent()){
             mate.get().moveTowerToIsland(number);
         }
@@ -99,7 +100,7 @@ class Player implements Iterable<Assistant>{
         }
     }
 
-    void receiveTowerFromIsland (int number){
+    public void receiveTowerFromIsland (int number){
         if (mate.isPresent()){
             mate.get().receiveTowerFromIsland(number);
         }
@@ -107,7 +108,7 @@ class Player implements Iterable<Assistant>{
             school.addTowers(number);
     }
 
-    int getNumberOfStudentInRoomByColor (Color c){
+    public int getNumberOfStudentInRoomByColor (Color c){
         return school.getNumberOfStudentInRoomByColor(c);
     }
 
@@ -118,7 +119,7 @@ class Player implements Iterable<Assistant>{
 
 
     //factory method for generate all player or advance player if it is an advanced game, with the exception of 4 players
-    static Collection<Player> factoryPlayers (int[] ids, GameInitializer gI) {
+    public static Collection<Player> factoryPlayers (int[] ids, GameInitializer gI) {
 
         Bag bag = gI.getBag();
         int gameMode = gI.getGameMode();

@@ -1,15 +1,16 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.*;
 
-final class Herald extends Character {
+final public class Herald extends Character {
 
     Herald(GameInitializer gameInitializer) {
         super (5, 3, gameInitializer);
     }
 
     @Override
-    void activateEffect(Object obj) {
+    protected void activateEffect(Object obj) {
 
         int islandId = (Integer)obj;
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
@@ -18,7 +19,7 @@ final class Herald extends Character {
     }
 
     @Override
-    Errors canActivateEffect(Object island) {
+    public Errors canActivateEffect(Object island) {
         if (!(island instanceof Integer))
             return Errors.NOT_RIGHT_PARAMETER;
 

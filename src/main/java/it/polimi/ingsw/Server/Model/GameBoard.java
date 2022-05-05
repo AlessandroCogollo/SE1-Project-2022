@@ -1,9 +1,11 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.lang.reflect.Array;
+import it.polimi.ingsw.Server.Model.Characters.*;
+import it.polimi.ingsw.Server.Model.Characters.Character;
+
 import java.util.*;
 
-class GameBoard implements Iterable<Cloud>{
+public class GameBoard implements Iterable<Cloud>{
 
     private final GameInitializer gInit;
     private final ArrayList<Cloud> clouds;
@@ -14,7 +16,7 @@ class GameBoard implements Iterable<Cloud>{
     private Character activeCharacter;
 
 
-    GameBoard (GameInitializer gInit){
+    public GameBoard (GameInitializer gInit){
 
         this.gInit = gInit;
 
@@ -221,7 +223,7 @@ class GameBoard implements Iterable<Cloud>{
     }
 
     //check if there's a tower to add or all towers to be replaced, and in that case does that
-    void calcInfluence(Island c) {
+    public void calcInfluence(Island c) {
 
         ArrayList<Integer> influences = getInfluences(c);
         ArrayList<Integer> max = findMax(influences);

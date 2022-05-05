@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
+import it.polimi.ingsw.Server.Model.Phases.Phase;
 
 //todo check if the bag does not have enough students at the end of the game
 
@@ -12,6 +14,7 @@ public class Game{
     protected final GameInitializer gameInit;
     protected final RoundHandler round;
 
+    //not public only created by factory
     Game (int numOfPlayer, GameInitializer gameInit, RoundHandler round) {
         this.numOfPlayer = numOfPlayer;
         this.gameInit = gameInit;
