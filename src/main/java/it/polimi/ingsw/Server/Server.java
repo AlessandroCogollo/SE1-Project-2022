@@ -10,29 +10,41 @@ public class Server
     private int port;
     private ServerSocket server = null;
     private int numOfPlayers = 0;
+    private boolean isFirstConnected = false;
 
 
     public Server(int port) {
+
         this.port = port;
-        try {
-            server = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Executor e = Executors.newFixedThreadPool(4);
-        Runnable task = () -> {
+        ClientHandler c = null;
+
+        while(!isFirstConnected){
             try {
-                ClientHandler(server.accept());
+                server = new ServerSocket(port);
+                Socket client = server.accept();
+                c = new ClientHandler(this, client);
+                e.execute(c);
+                //while the server is connected and has not decided the number of players
+                while(numOfPlayers == 0 && client.isConnected()){
+                }
+                //if the player disconnected and hadn't decided the number of players yet, redo this cycle
+                if(!client.isConnected()){
+                    this.isFirstConnected = false;
+                }
+                else{
+                    isFirstConnected = true;
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        };
-        e.execute(task);
-        while(numOfPlayers == 0){
         }
 
-        //now the client is connected: waiting for 60 seconds for the number of players
-        if(this.numOfPlayers == 0){
+
+
+
+        //now the client is connected: waiting (for 60 seconds) for the number of players
+        if(this.numOfPlayers == -1){
             System.out.println("Timeout occurred: unspecified number of players.");
             System.out.println("Disconnecting...");
             try {
@@ -43,84 +55,35 @@ public class Server
         }
         else{
             for(int i=0; i<numOfPlayers-1; i++){
-                e.execute(task);
+                try {
+                    c = new ClientHandler(this, server.accept());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                e.execute(c);
             }
         }
 
     }
 
-    void ClientHandler(Socket client){
-
-        BufferedReader in = null;
-        PrintWriter out = null;
-
-        try {
-            System.out.println("Client accepted");
-
-            // takes input from the client socket
-            in = new BufferedReader(
-                    new InputStreamReader(client.getInputStream()));
-            out = new PrintWriter(
-                    client.getOutputStream(), true);
-            out.println("Hi");
-
-            String line = "";
-
-            if(this.numOfPlayers == 0){
-                System.out.println("Sending numOfPlayers request...");
-                out.println("How many players will the game be composed of?");
-                line = in.readLine();
-                System.out.println("Received: " + line);
-                this.numOfPlayers = Integer.parseInt(line);
-                out.write("Creating a game composed by " + this.numOfPlayers + " players...");
-
-            }
-            // reads message from client until "END" is sent
-            while (!line.equals("END")) {
-                try {
-                    System.out.println("Listening...");
-                    line = in.readLine();
-                    System.out.println("#" + port + " --> Received : " + line);
-                    out.println(line);
-
-
-                    if(line.equals("ping")){
-                        System.out.println("PONG --> #" + port);
-                        out.write("your ip: " + client.getInetAddress().getHostAddress() + ", your port: " + client.getPort() + ", my ip: " + client.getLocalAddress() + ", my port: " + client.getLocalPort() + ", my socket address: " + client.getLocalSocketAddress() + ", are you connected? " + client.isConnected());
-                    }
-
-                } catch (IOException i) {
-                    System.out.println(i);
-                    System.out.println("Closing connection");
-                    stop(in, out, client, server);
-                    break;
-                }
-            }
-            if(line.equals("END")){
-                try {
-                    System.out.println("Closing connection");
-                    stop(in, out, client, server);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("IOException : Closing connection...");
-            try {
-                stop(in, out, client, server);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-        }
+    public int getNumOfPlayers() {
+        return numOfPlayers;
     }
 
-    void stop(BufferedReader in, PrintWriter out, Socket client, ServerSocket server) throws IOException {
-        in.close();
-        out.close();
-        client.close();
-        server.close();
+    public ServerSocket getServer() {
+        return server;
+    }
+
+    public boolean isFirstConnected() {
+        return isFirstConnected;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    protected void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
     }
 
     public static void main(String[] args) throws IOException {
