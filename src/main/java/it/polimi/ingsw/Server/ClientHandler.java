@@ -15,13 +15,14 @@ public class ClientHandler implements Runnable{
     private BufferedReader in = null;
     private PrintWriter out = null;
     private int port = 0;
-    private int myId = -1;
+    private int id;
 
-    public ClientHandler(Server s, Socket client){
+    public ClientHandler(Server s, Socket client, int id){
         this.client = client;
         this.server = s.getServer();
         this.port = s.getPort();
         this.s = s;
+        this.id = id;
         try {
             this.in = new BufferedReader(
                     new InputStreamReader(client.getInputStream()));
@@ -44,7 +45,7 @@ public class ClientHandler implements Runnable{
             firstClient();
         }
 
-        idRequest();
+        out.println("your id is: " + this.id);
 
         Parrot();
     }
@@ -72,33 +73,6 @@ public class ClientHandler implements Runnable{
 
         this.s.setNumOfPlayers(num);
         out.println("Creating a game composed by " + this.s.getNumOfPlayers() + " players...");
-    }
-
-    void idRequest(){
-        String line = "";
-        System.out.println("Sending id request...");
-        out.println("What's your ID?");
-        int id = -1;
-        while(id == -1){
-            try{
-                line = read();
-                System.out.println("Received: " + line);
-                id = Integer.parseInt(line);
-                while(s.getIds().contains(id)){
-                    out.println("Id already in use, please choose another one: ");
-                    line = read();
-                    System.out.println("Received: " + line);
-                    id = Integer.parseInt(line);
-                }
-            }catch(Exception ex){
-                out.println("Please use a valid id: ");
-                id = -1;
-            }
-        }
-        s.addId(id);
-        this.myId = id;
-        out.println("Your id is: " + id);
-
     }
 
     void Parrot(){

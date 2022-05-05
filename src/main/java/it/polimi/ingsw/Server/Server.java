@@ -25,7 +25,7 @@ public class Server
             try {
                 server = new ServerSocket(port);
                 Socket client = server.accept();
-                c = new ClientHandler(this, client);
+                c = new ClientHandler(this, client, 0);
                 e.execute(c);
                 //while the server is connected and has not decided the number of players
                 while(numOfPlayers == 0 && client.isConnected()){}
@@ -55,13 +55,12 @@ public class Server
             }
         }
         else{
-            for(int i=0; i<numOfPlayers-1; i++){
+            for(int i=1; i<numOfPlayers; i++){
                 try {
-                    c = new ClientHandler(this, server.accept());
+                    e.execute(new ClientHandler(this, server.accept(), i));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                e.execute(c);
             }
         }
 
