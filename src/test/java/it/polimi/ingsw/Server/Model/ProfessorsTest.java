@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
-import org.junit.jupiter.api.RepeatedTest;
+import it.polimi.ingsw.Enum.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

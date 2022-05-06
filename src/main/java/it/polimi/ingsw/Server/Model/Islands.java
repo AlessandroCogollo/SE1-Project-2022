@@ -2,9 +2,9 @@ package it.polimi.ingsw.Server.Model;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Random;
-import it.polimi.ingsw.Server.Model.Characters.*;
+
+import it.polimi.ingsw.Enum.Color;
 
 public class Islands implements Iterable<Island>{
     private final LinkedList<Island> islands;
@@ -37,11 +37,11 @@ public class Islands implements Iterable<Island>{
                 is.addStudent(firstStudents[i++]);
     }
 
-    int getIslandsNumber (){
+    public int getIslandsNumber (){
         return this.islands.size();
     }
 
-    Island getMotherNature() {
+    public Island getMotherNature() {
         return motherNature;
     }
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Server.Model.Phases;
+package it.polimi.ingsw.Enum.Phases;
 
 public enum ActionPhase {
     NotActionPhase,

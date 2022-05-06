@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
-import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -144,18 +145,18 @@ public class CharacterTest {
         Assertions.assertEquals(21, er.getCode());
 
 
-        for (int i = 0; i < testCases.length; i++) {
-            er = Cleric.canActivateEffect(testCases[i]);
-            if (testCases[i].length != 2)
+        for (int[] testCase : testCases) {
+            er = Cleric.canActivateEffect(testCase);
+            if (testCase.length != 2)
                 //wrong length
                 Assertions.assertEquals(21, er.getCode());
-            else if (testCases[i][0] < 0 || testCases[i][0] > 4)
+            else if (testCase[0] < 0 || testCase[0] > 4)
                 //invalid colorId
                 Assertions.assertEquals(14, er.getCode());
-            else if (!g.getIslands().existsIsland(testCases[i][1]))
+            else if (!g.getIslands().existsIsland(testCase[1]))
                 //invalid islandId
                 Assertions.assertEquals(15, er.getCode());
-            else if (tempStudents[testCases[i][0]] <= 0)
+            else if (tempStudents[testCase[0]] <= 0)
                 //the card hasn't the students color
                 Assertions.assertEquals(10, er.getCode());
             else

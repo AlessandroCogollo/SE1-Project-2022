@@ -1,10 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import it.polimi.ingsw.Server.Errors;
-import org.junit.jupiter.api.RepeatedTest;
+import it.polimi.ingsw.Enum.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

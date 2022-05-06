@@ -1,6 +1,9 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Message;
 
-import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
@@ -142,10 +145,11 @@ public class ModelMessage {
 
     private final int activeCharacterId;
 
-    private ModelMessage(GameInitializer g, Errors er) {
+    protected ModelMessage(GameInitializer g, Errors er) {
         Islands s = g.getIslands();
         GameBoard b = g.getBoard();
         RoundHandler r = g.getRoundHandler();
+
         this.winnerId = g.getWinningPlayerId();
         this.errorCode = er.getCode();
         this.time = Instant.now().toString();
@@ -198,13 +202,9 @@ public class ModelMessage {
             else
                 this.activeCharacterId = -1;
         }
-        else{
+        else {
             this.characterList = null;
             this.activeCharacterId = -1;
         }
-    }
-
-    static ModelMessage modelMessageBuilder (GameInitializer g, Errors er){
-        return new ModelMessage(g, er);
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Assistant;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

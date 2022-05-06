@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Color;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
 // sub class of player that add the play character methods and the management of characters

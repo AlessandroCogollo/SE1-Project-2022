@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
@@ -33,7 +34,7 @@ public class GameBoard implements Iterable<Cloud>{
     }
 
 
-    Character getActiveCharacter() {
+    public Character getActiveCharacter() {
         return activeCharacter;
     }
 
@@ -47,7 +48,7 @@ public class GameBoard implements Iterable<Cloud>{
         return exist;
     }
 
-    boolean existsCharacter (int characterId){
+    public boolean existsCharacter (int characterId){
         boolean exists = false;
         for (Character c : charactersDeck)
             if (c.getId() == characterId){
@@ -57,14 +58,14 @@ public class GameBoard implements Iterable<Cloud>{
         return  exists;
     }
 
-    Cloud getCloudById(int cloudId) {
+    public Cloud getCloudById(int cloudId) {
         for (Cloud c: clouds)
             if (c.getId() == cloudId)
                 return c;
         return null;
     }
 
-    Character getCharacterById(int characterId) {
+    public Character getCharacterById(int characterId) {
         for (Character x: charactersDeck)
             if (x.getId() == characterId)
                 return x;
@@ -72,23 +73,23 @@ public class GameBoard implements Iterable<Cloud>{
     }
 
     //reset all cloud at the end of a round
-    void populateClouds(){
+    public void populateClouds(){
         for(Cloud cloud : clouds){
             cloud.setStudents();
         }
     }
 
-    void playCharacter(Character c, Object obj) {
+    public void playCharacter(Character c, Object obj) {
         this.activeCharacter = c;
         if (c != null)
             c.use(obj);
     }
 
-    boolean isCharacterPlayed (){
+    public boolean isCharacterPlayed (){
         return this.activeCharacter != null;
     }
 
-    void moveMotherNature(int count){
+    public void moveMotherNature(int count){
 
         //move mother nature of count position
         islands.nextMotherNature(count);

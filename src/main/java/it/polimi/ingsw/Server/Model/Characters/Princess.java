@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
-import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.*;
 
 import java.util.Arrays;

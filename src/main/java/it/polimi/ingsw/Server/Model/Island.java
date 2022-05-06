@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Color;
+
 public class Island {
 
     private final int id;
@@ -8,7 +10,7 @@ public class Island {
     private int banCard;
     private int towerCount;
 
-    Island(int id){
+    public Island(int id){
         this.id = id;
 
         this.students = new int[Color.getNumberOfColors()];
@@ -21,11 +23,11 @@ public class Island {
         this.banCard = 0;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    int getTowerCount() {
+    public int getTowerCount() {
         return towerCount;
     }
 

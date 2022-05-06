@@ -1,26 +1,26 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Server.Errors;
-import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
-import it.polimi.ingsw.Server.Model.Phases.Phase;
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.ModelMessageBuilder;
+import it.polimi.ingsw.Server.Model.Characters.Character;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
 
 //todo check if the bag does not have enough students at the end of the game
 
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{
 
-    private final int numOfPlayer;
-
     protected final GameInitializer gameInit;
     protected final RoundHandler round;
 
     //not public only created by factory
-    Game (int numOfPlayer, GameInitializer gameInit, RoundHandler round) {
-        this.numOfPlayer = numOfPlayer;
+    Game (GameInitializer gameInit, RoundHandler round) {
         this.gameInit = gameInit;
         this.round = round;
     }
-
 
     public int playAssistant (int playerId, int assistantValue){
 
@@ -68,6 +68,7 @@ public class Game{
         if (!round.getPhase().equals(Phase.Action) || !round.getActionPhase().equals(ActionPhase.MoveStudent))
             return Errors.NOT_RIGHT_PHASE.getCode();
 
+        int numOfPlayer = gameInit.getPlayersNumber();
         //check if the player can still move student
         //the check is already done in round handler and this one is redundant because if you have already moved all the students in this turn the phase is automatically updated
         int movementDone = round.getStudentMovedInThisTurn();
@@ -105,7 +106,12 @@ public class Game{
         if (!round.getPhase().equals(Phase.Action) || !round.getActionPhase().equals(ActionPhase.MoveMotherNature))
             return Errors.NOT_RIGHT_PHASE.getCode();
 
-        if (position > p.getActiveAssistant().getMaxMovement())
+        int gameMode = gameInit.getGameMode();
+        int maxMovement = p.getActiveAssistant().getMaxMovement();
+        boolean specialMovement = gameMode == 1 && gameInit.getBoard().isCharacterPlayed() && gameInit.getBoard().getActiveCharacter().getId() == 9;
+        if (specialMovement)
+            maxMovement += 2;
+        if (position > maxMovement)
             return Errors.MOVEMENTS_TOO_HIGH.getCode();
 
         p.moveMotherNature(position);
@@ -138,6 +144,45 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
+    public int playCharacter(int playerId, int characterId, Object obj) {
+
+        int gameMode = gameInit.getGameMode();
+
+        if (gameMode != 1)
+            return Errors.INVALID_MOVE.getCode();
+
+        if (!gameInit.existsPlayer(playerId))
+            return Errors.PLAYER_NOT_EXIST.getCode();
+        if (!gameInit.getBoard().existsCharacter(characterId))
+            return Errors.NO_SUCH_CHARACTER.getCode();
+
+        AdvancedPlayer p = (AdvancedPlayer)gameInit.getPlayerById(playerId);
+        Character x = gameInit.getBoard().getCharacterById(characterId);
+
+        if (p != round.getCurrent())
+            return Errors.NOT_CURRENT_PLAYER.getCode();
+        if (round.getPhase().equals(Phase.Planning) || round.getActionPhase().equals(ActionPhase.NotActionPhase))
+            return Errors.NOT_RIGHT_PHASE.getCode();
+
+        //check already played a character
+        if (gameInit.getBoard().isCharacterPlayed())
+            return Errors.CHARACTER_YET_PLAYED.getCode();
+
+        //todo check if is a good move (es. play a character during the choose Cloud phase is may an error) ?
+
+        if (p.getCoins() < x.getCost())
+            return Errors.NOT_ENOUGH_COINS.getCode();
+
+        //check if the object passed is correct and if the action performed by the character it's valid
+        Errors er = x.canActivateEffect(obj);
+        if (!er.equals(Errors.NO_ERROR))
+            return er.getCode();
+
+        p.playCharacter(x, obj);
+
+        return Errors.NO_ERROR.getCode();
+    }
+
     //return the correct interface for the parameter passed, in case of four player the teammates need to have the same final bit (in decimal same team all odds or all even, and the other team the opposite)
     static public Game getGameModel (int[] ids, int gameMode){
 
@@ -158,9 +203,11 @@ public class Game{
         //check same id
         boolean sameId = false;
         for (int i = 0; i < ids.length && !sameId; i++) {
-            for (int j = i + 1; j < ids.length && !sameId; j++){
-                if (ids[i] == ids[j])
+            for (int j = i + 1; j < ids.length; j++){
+                if (ids[i] == ids[j]) {
                     sameId = true;
+                    break;
+                }
             }
         }
         if (sameId){
@@ -192,11 +239,10 @@ public class Game{
         gInit.createAllGame(ids, roundHandler);
         roundHandler.start();
 
+        //starting model message builder
+        ModelMessageBuilder.getModelMessageBuilder().setGameInitializer(gInit);
 
-        //advanced or normal game
-        if (gameMode == 0)
-            return new Game(ids.length, gInit, roundHandler);
-        else
-            return new AdvancedGame(ids.length, gInit, roundHandler);
+
+        return new Game(gInit, roundHandler);
     }
 }

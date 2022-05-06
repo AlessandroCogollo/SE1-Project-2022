@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Color;
+
 import java.util.Arrays;
 import java.util.Random;
 

@@ -1,5 +1,5 @@
 package it.polimi.ingsw.Server.Model.Characters;
-import it.polimi.ingsw.Server.Errors;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
 final public class Knight extends Character {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
-import java.lang.reflect.Array;
+import it.polimi.ingsw.Enum.Color;
+
 import java.util.Arrays;
 
 //The school class implements a container for all the stuffs of the player during the game and can only be modified from the class Student itself

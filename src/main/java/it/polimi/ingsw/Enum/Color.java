@@ -1,6 +1,4 @@
-package it.polimi.ingsw.Server.Model;
-
-import java.util.Optional;
+package it.polimi.ingsw.Enum;
 
 public enum Color {
     Blue (0),

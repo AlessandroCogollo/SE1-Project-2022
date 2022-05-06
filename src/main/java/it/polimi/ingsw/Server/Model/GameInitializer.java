@@ -10,6 +10,7 @@ public class GameInitializer implements Iterable<Player>{
 
     private final int gameMode;
     private final int playerNumber;
+
     private Collection<Player> players = null;
     private Bag bag = null;
     private Professors professors = null;
@@ -36,11 +37,11 @@ public class GameInitializer implements Iterable<Player>{
         this.roundHandler = roundHandler;
     }
 
-    int getGameMode() {
+    public int getGameMode() {
         return gameMode;
     }
 
-    int getPlayersNumber() {
+    public int getPlayersNumber() {
         return playerNumber;
     }
 
@@ -48,7 +49,7 @@ public class GameInitializer implements Iterable<Player>{
         return bag;
     }
 
-    Professors getProfessors() {
+    public Professors getProfessors() {
         return professors;
     }
 
@@ -68,7 +69,7 @@ public class GameInitializer implements Iterable<Player>{
         return winningPlayerId;
     }
 
-    Player getPlayerById (int id){
+    public Player getPlayerById (int id){
         for (Player x: players){
             if (x.getId() == id)
                 return x;

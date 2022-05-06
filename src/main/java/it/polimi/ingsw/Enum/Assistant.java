@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Enum;
 
 import java.util.ArrayList;
 import java.util.Collection;

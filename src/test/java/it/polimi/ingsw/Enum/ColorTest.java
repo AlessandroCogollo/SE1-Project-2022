@@ -1,5 +1,6 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Enum;
 
+import it.polimi.ingsw.Enum.Color;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,7 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Server.Model.Phases.ActionPhase;
-import it.polimi.ingsw.Server.Model.Phases.Phase;
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ public class RoundHandler {
     // random for the initial player
     private final Random rand;
 
-    RoundHandler(GameInitializer gameInitializer) {
+    public RoundHandler(GameInitializer gameInitializer) {
         this.current = null;
         this.rand = new Random(System.currentTimeMillis());
 
@@ -42,19 +43,19 @@ public class RoundHandler {
         return current;
     }
 
-    Phase getPhase() {
+    public Phase getPhase() {
         return phase;
     }
 
-    ActionPhase getActionPhase() {
+    public ActionPhase getActionPhase() {
         return actionPhase;
     }
 
-    int getStudentMovedInThisTurn() {
+    public int getStudentMovedInThisTurn() {
         return studentMovedInThisTurn;
     }
 
-    boolean getIsFinalRound() {
+    public boolean getIsFinalRound() {
         return isFinalRound;
     }
 

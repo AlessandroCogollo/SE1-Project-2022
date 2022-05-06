@@ -1,5 +1,6 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Enum;
 
+import it.polimi.ingsw.Enum.Assistant;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

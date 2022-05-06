@@ -1,17 +1,19 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Color;
+
 import java.util.Arrays;
 
-class Professors {
+public class Professors {
 
     private final int[] professors;
     private final GameInitializer gInit;
 
-    int[] getProfessorsCopy(){
+    public int[] getProfessorsCopy(){
         return Arrays.copyOf(professors, professors.length);
     }
 
-    Professors(GameInitializer gInit){
+    public Professors(GameInitializer gInit){
         this.professors = new int[Color.getNumberOfColors()];
         for(int i=0; i<Color.getNumberOfColors(); i++){
             professors[i] = -1;

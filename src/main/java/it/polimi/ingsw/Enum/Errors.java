@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Server;
+package it.polimi.ingsw.Enum;
 
 //todo upscale error code and description
 public enum Errors {
@@ -24,7 +24,9 @@ public enum Errors {
     NOT_ENOUGH_TOKEN (18, "There are not enough token to perform this action"),
     NOT_RIGHT_PARAMETER (19, "The parameter for character passed aren't correct"),
     MOVEMENT_NOT_VALID (20, "the number of position moved by mother nature must be over or equal to 1 and less or equal than the value on the assistant card"),
-    ILLEGAL_INPUT(21, "Expected an array with certain length, received an odd lenght/empty array/array with more than 4 elements");
+    ILLEGAL_INPUT(21, "Expected an array with certain length, received an odd lenght/empty array/array with more than 4 elements"),
+    INVALID_MOVE (22, "Cannot play a character in a normal game"),
+    MOVE_NOT_FIND (201, "There isn't any move in the model queue");
 
     private final int code;
     private final String description;

@@ -1,14 +1,12 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Enum.Phase;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ActionPhaseTest {
-
+class PhaseTest {
     @Test
-    void ActionPhaseTest (){
+    void TestPhase(){
         assertTrue(true);
     }
-
 }
