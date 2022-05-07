@@ -2,6 +2,7 @@ package it.polimi.ingsw.Message;
 
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,7 @@ class ClientMessageTest {
         ClientMessage m4 = new ChooseCloudMessage(Errors.NO_ERROR, "Choose Clouds", 2);
         ClientMessage m5 = new PlayCharacterMessage(Errors.NO_ERROR, "Play Character", 9, null);
 
-        assertTrue(m1.executeMove(g, 0) > 0);
+        assertTrue(m1.executeMove(g, 0) >= 0); //the only one >= 0 because is the only one that can return no error
         assertTrue(m2.executeMove(g, 0) > 0);
         assertTrue(m3.executeMove(g, 0) > 0);
         assertTrue(m4.executeMove(g, 0) > 0);
