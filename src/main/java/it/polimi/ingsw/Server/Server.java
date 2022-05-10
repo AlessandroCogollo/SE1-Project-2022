@@ -94,8 +94,14 @@ public class Server
         return new ArrayList<>(this.ids);
     }
 
-    public static void main(String[] args) throws IOException {
-        Server server = new Server(5088);
+    public static void main(String[] args) {
+        int port = 5088; //used for testing
+        if(args.length != 1)
+            System.out.println("Error missing arguments");
+        else
+            port = Integer.parseInt(args[0]);
+
+        new Server(port);
     }
 
 }

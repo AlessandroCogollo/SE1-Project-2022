@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -102,11 +104,20 @@ public class StarterHelper{
                     if (temp) {
                         //if they are equal true we will start the client with given ip and port of the server
                         int portNumber = Integer.parseInt(cmd.getOptionValue('p'));
-                        System.out.println("Starting client with server ip: " + cmd.getOptionValue("ip") + " and port: " + portNumber);
+                        String serverIp = cmd.getOptionValue("ip");
+                        System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber);
+
+                        //configure args
+                        String[] args = new String[2];
+                        args[0] = ((Integer)portNumber).toString();
+                        args[1] = serverIp;
+
+                        Client.main(args);
                         return 101;
                     }
                     //if they are equal false we will start the client and he will search for some udp message from the server
                     System.out.println("Starting default client");
+                    System.out.println("Not yet implemented please use -c with -ip and -p options");
                     return 102;
                 }
                 //need both ip and port for client or no of them if using udp message
@@ -134,9 +145,17 @@ public class StarterHelper{
                     int portNumber = Integer.parseInt(cmd.getOptionValue('p'));
 
                     System.out.println("Starting server with port: " + portNumber);
+
+                    //create the args for server
+                    String[] args = new String[1];
+                    args[0] = ((Integer)portNumber).toString();
+
+                    Server.main(args);
                     return hasIP ? 503 : 103;
                 }
                 System.out.println("Starting default server");
+                System.out.println("Not yet implemented, use -s and -p for start the server");
+
                 return hasIP ? 504 : 104;
             }
         };

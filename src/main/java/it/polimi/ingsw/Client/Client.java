@@ -95,9 +95,16 @@ public class Client
         socket.close();
     }
 
-    public static void main(String args[])
-    {
-        Client client = new Client("127.0.0.1", 5088);
+    public static void main(String args[]){
+        int port = 5088; //used for testing
+        String ip = "127.0.0.1";
+        if(args.length != 2)
+            System.out.println("Error missing arguments");
+        else {
+            port = Integer.parseInt(args[0]);
+            ip = args[1];
+        }
+        new Client(ip, port);
     }
 }
 
