@@ -9,14 +9,13 @@ class ColorTest {
 
     @Test
     void getIndex() {
-        //trivial
-        assertTrue(true);
+        for (Color c: Color.values())
+            assertTrue(c.getIndex() >= 0);
     }
 
     @Test
     void getNumberOfColors() {
-        //trivial
-        assertTrue(true);
+        assertEquals(Color.values().length, Color.getNumberOfColors());
     }
 
     @Test
@@ -33,5 +32,19 @@ class ColorTest {
             assertTrue(Color.isColorIdValid(c.getIndex()));
         assertFalse(Color.isColorIdValid(-1));
         assertFalse(Color.isColorIdValid(5));
+    }
+
+    @Test
+    void values() {
+        // enum specific
+        Color.values();
+        assertTrue(true);
+    }
+
+    @Test
+    void valueOf() {
+        // enum specific
+        Color.valueOf("Yellow");
+        assertTrue(true);
     }
 }

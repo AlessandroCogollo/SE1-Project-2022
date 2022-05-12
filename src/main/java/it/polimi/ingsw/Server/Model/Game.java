@@ -8,7 +8,9 @@ import it.polimi.ingsw.Server.Model.Characters.Character;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
 
-//todo check if the bag does not have enough students at the end of the game
+/* todo
+ *   - check if the bag does not have enough students at the end of the game
+*/
 
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{

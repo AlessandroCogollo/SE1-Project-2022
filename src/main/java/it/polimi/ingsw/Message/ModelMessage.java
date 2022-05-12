@@ -207,4 +207,8 @@ public class ModelMessage {
             this.activeCharacterId = -1;
         }
     }
+
+    public boolean gameIsOver (){
+        return this.winnerId != -1;
+    }
 }

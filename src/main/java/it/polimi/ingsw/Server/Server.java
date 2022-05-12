@@ -1,108 +1,162 @@
 package it.polimi.ingsw.Server;
-import java.net.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.concurrent.*;
+import it.polimi.ingsw.Enum.Errors;
 
-public class Server
-{
+/**
+ * Main class of the Server
+ */
+public class Server {
 
-    private int port;
-    private ServerSocket server = null;
-    private int numOfPlayers = 0;
-    private boolean isFirstConnected = false;
-    private ArrayList<Integer> ids;
+    /**
+     * Lobby for the connection to the player
+     */
+    //private final Lobby lobby;
 
+    /**
+     * Ids of the Players, set by the lobby after all the players have connected
+     */
+    private int[] ids;
+    /**
+     * Game mode of the game, set by the lobby after all the players have connected
+     */
+    private int gameMode;
 
-    public Server(int port) {
+    /**
+     * Queue Organizer, created after all the players have connected
+     */
+    private QueueOrganizer queueOrganizer;
+    /**
+     * Model Thread, created after all the players have connected
+     */
+    private ModelHandler model;
 
-        ids = new ArrayList<>();
-        this.port = port;
-        Executor e = Executors.newFixedThreadPool(4);
-        ClientHandler c = null;
+    /**
+     * Error used for perform some specific action in this Thread
+     */
+    private Errors code;
+    /**
+     * A temp object used as a lock while modifying the error code
+     */
+    private final Object lock;
 
-        while(!isFirstConnected){
-            try {
-                server = new ServerSocket(port);
-                Socket client = server.accept();
-                c = new ClientHandler(this, client, 0);
-                e.execute(c);
-                //while the server is connected and has not decided the number of players
-                while(numOfPlayers == 0 && client.isConnected()){}
-                //if the player disconnected and hadn't decided the number of players yet, redo this cycle
-                if(!client.isConnected()){
-                    this.isFirstConnected = false;
-                }
-                else{
-                    isFirstConnected = true;
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+    /**
+     * Constructor of the Server, set all his parameter
+     * @param port passed to the lobby for create the server socket
+     */
+    public Server (int port){
+        //create lobby
+        //this.lobby = new Lobby(port, this);
 
+        //set the placeholder for information
+        this.ids = null;
+        this.gameMode = -1;
+        this.queueOrganizer = null;
+        this.model = null;
 
+        //set the lock for thread wait
+        this.code = Errors.NOTHING_TODO;
+        this.lock = new Object();
+    }
 
+    /**
+     * Start the main Thread of the server
+     */
+    public void start (){
 
-        //now the client is connected: waiting (for 60 seconds) for the number of players
-        if(this.numOfPlayers == -1){
-            System.out.println("Timeout occurred: unspecified number of players.");
-            System.out.println("Disconnecting...");
-            try {
-                server.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        else{
-            for(int i=1; i<numOfPlayers; i++){
+        //new Thread(lobby).start();
+
+        synchronized(this.lock) {
+            while(doSomething()) {
                 try {
-                    e.execute(new ClientHandler(this, server.accept(), i));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                    this.lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         }
 
+        //came here only when the server has to shutdown
+        shutdownAll();
     }
 
-    public int getNumOfPlayers() {
-        return numOfPlayers;
+    /**
+     * Close all running operation and stop the server
+     */
+    private void shutdownAll() {
+        // stop model thread
+        if (this.model != null && this.model.getHasToRun()){
+            this.model.stopModel();
+        }
+
+        // todo lobby
     }
 
-    public ServerSocket getServer() {
-        return server;
+    /**
+     * The method that choose what to do thanks to the error code place with {@link #setCode(Errors) setCode}.
+     * @return always true except when the code tell the Server to shutdown
+     */
+    //this method is invoked any time someone modify the code, so the server know what to do.
+    private boolean doSomething() {
+        //return false only when the Server need to shutdown otherwise return always true
+        if (this.code.equals(Errors.PLAYER_DISCONNECTED) || this.code.equals(Errors.GAME_OVER)){
+            //todo handling of this codes
+
+            return false;
+        }
+
+        //all other possible code
+        switch (this.code){
+            case CREATE_MODEL -> startGame();
+        }
+
+        //reset code
+        this.code = Errors.NOTHING_TODO;
+        return true;
     }
 
-    public boolean isFirstConnected() {
-        return isFirstConnected;
+    /**
+     * Start the real game
+     */
+    private void startGame() {
+        if (this.model == null) {
+            this.queueOrganizer = new QueueOrganizer(this.ids);
+            this.model = new ModelHandler(this.ids, this.gameMode, this, this.queueOrganizer);
+            //todo give lobby queue organizer
+        }
+        if (!this.model.getHasToRun())
+            new Thread(this.model).start();
     }
 
-    public int getPort() {
-        return port;
+    /**
+     * Set the code of the server and notify it that there is something to do
+     * @param er the error that notify something to the server
+     */
+    //meant to be used only outside the server class
+    public void setCode (Errors er){
+        synchronized(this.lock) {
+            this.code = er;
+            this.lock.notifyAll();
+        }
     }
 
-    void setNumOfPlayers(int numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
+    /**
+     * Used to set the game properties from the lobby after all the players have connected
+     * @param ids ids of players
+     * @param gameMode game mode of the game
+     */
+    //meant to be used only outside the server class
+    public void setGameProperties (int[] ids, int gameMode){
+        this.ids = ids;
+        this.gameMode = gameMode;
+        setCode(Errors.CREATE_MODEL);
     }
 
-    void addId(int id){
-        ids.add(id);
-    }
-
-    public ArrayList<Integer> getIds() {
-        return new ArrayList<>(this.ids);
-    }
-
+    /**
+     * Used only in testing for start the server without have to write the parameter
+     * @param args standard main args param
+     */
     public static void main(String[] args) {
-        int port = 5088; //used for testing
-        if(args.length != 1)
-            System.out.println("Error missing arguments");
-        else
-            port = Integer.parseInt(args[0]);
-        //todo add a method to stop server
-        //deactivate for pass auto test
-        //new Server(port);
+        Server server = new Server(5088);
+        server.start();
     }
-
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+
 class QueueOrganizerTest {
     QueueOrganizer getClass (int playerNumber){
         int[] ids = null;
