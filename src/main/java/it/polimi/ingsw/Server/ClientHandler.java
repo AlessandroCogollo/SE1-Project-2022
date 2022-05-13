@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.Message;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -12,25 +12,29 @@ public class ClientHandler implements Runnable{
     private Server s;
     private Socket client = null;
     private ServerSocket server = null;
-    private BufferedReader in = null;
-    private PrintWriter out = null;
+    private ObjectInputStream in = null;
+    private ObjectOutputStream out = null;
     private int port = 0;
     private int id;
+    private Lobby l;
 
-    public ClientHandler(Server s, Socket client, int id){
+    public ClientHandler(Server s, Socket client, int id, Lobby l){
         this.client = client;
         this.server = s.getServer();
-        this.port = s.getPort();
         this.s = s;
         this.id = id;
         try {
-            this.in = new BufferedReader(
-                    new InputStreamReader(client.getInputStream()));
-            this.out = new PrintWriter(
-                    client.getOutputStream(), true);
+
+            FileOutputStream fileOut = new FileOutputStream("out.txt");
+            this.out = new ObjectOutputStream(fileOut);
+
+            FileInputStream fileStream = new FileInputStream("in.txt");
+            this.in = new ObjectInputStream(fileStream);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.l = l;
 
     }
 
@@ -39,18 +43,55 @@ public class ClientHandler implements Runnable{
 
         System.out.println("Client accepted");
 
-        out.println("Hi");
+        try {
+            ReceiveFirstMessage();
 
-        if(!s.isFirstConnected()){
-            firstClient();
+
+            SendFirstMessage();
+
+            ReceiveData();
+
+            SendId();
+
+            ReceiveConfirm();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        out.println("your id is: " + this.id);
+        //l.SetOk(id);
+        
+        Ping ping = new Ping();
+        new Thread(ping).start();
 
-        Parrot();
     }
 
-    void firstClient(){
+    void ReceiveFirstMessage() throws IOException, ClassNotFoundException {
+        Message m = (Message) in.readObject();
+        System.out.println(m.getError() + ", " + m.getMessage());
+
+    }
+
+    void SendFirstMessage() throws IOException {
+        Message m = new Message(Errors.NO_ERROR, "Welcome Client");
+        out.writeObject(m);
+    }
+
+    void ReceiveData(){
+
+    }
+
+    void SendId(){
+
+    }
+
+    void ReceiveConfirm(){
+
+    }
+    /*
+    void firstMessageClient(){
         String line = "";
         System.out.println("Sending numOfPlayers request...");
         out.println("How many players will the game be composed of?");
@@ -95,7 +136,7 @@ public class ClientHandler implements Runnable{
         System.out.println("Closing connection");
         stop();
     }
-
+    */
     String read(){
         String line = "";
         try {
@@ -118,5 +159,13 @@ public class ClientHandler implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+}
+
+class Ping implements Runnable{
+
+    @Override
+    public void run() {
+
     }
 }
