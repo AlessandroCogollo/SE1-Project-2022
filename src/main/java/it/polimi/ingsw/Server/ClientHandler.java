@@ -8,7 +8,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable{
+    @Override
+    public void run() {
 
+    }
+/*
     private Server s;
     private Socket client = null;
     private ServerSocket server = null;
@@ -159,7 +163,7 @@ public class ClientHandler implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
 
 class Ping implements Runnable{

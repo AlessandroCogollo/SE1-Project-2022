@@ -62,10 +62,10 @@ public class CharacterTest {
                     } else {
                         if (i == 0) {
                             // check error catch: NOT_ENOUGH_TOKEN
-                            Assertions.assertEquals(18, er.getCode());
+                            Assertions.assertEquals(Errors.NOT_ENOUGH_TOKEN, er);
                         } else {
                             // check error catch: NOT_VALID_DESTINATION
-                            Assertions.assertEquals(15, er.getCode());
+                            Assertions.assertEquals(Errors.NOT_VALID_DESTINATION, er);
                         }
                     }
                 }
@@ -98,7 +98,7 @@ public class CharacterTest {
             if (er == Errors.NO_ERROR) {
                 Bard.activateEffect(testCase);
             } else {
-                Assertions.assertEquals(21, er.getCode());
+                Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
             }
         }
     }
@@ -142,26 +142,26 @@ public class CharacterTest {
         //wrong object
         int x = 0;
         Errors er = Cleric.canActivateEffect(x);
-        Assertions.assertEquals(21, er.getCode());
+        Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
 
 
         for (int[] testCase : testCases) {
             er = Cleric.canActivateEffect(testCase);
             if (testCase.length != 2)
                 //wrong length
-                Assertions.assertEquals(21, er.getCode());
+                Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
             else if (testCase[0] < 0 || testCase[0] > 4)
                 //invalid colorId
-                Assertions.assertEquals(14, er.getCode());
+                Assertions.assertEquals(Errors.NOT_VALID_COLOR, er);
             else if (!g.getIslands().existsIsland(testCase[1]))
                 //invalid islandId
-                Assertions.assertEquals(15, er.getCode());
+                Assertions.assertEquals(Errors.NOT_VALID_DESTINATION, er);
             else if (tempStudents[testCase[0]] <= 0)
                 //the card hasn't the students color
-                Assertions.assertEquals(10, er.getCode());
+                Assertions.assertEquals(Errors.NO_STUDENT, er);
             else
                 //no error
-                Assertions.assertEquals(0, er.getCode());
+                Assertions.assertEquals(Errors.NO_ERROR, er);
 
 
             /*try {
@@ -209,7 +209,7 @@ public class CharacterTest {
             }
             else {
                 if (i > 4) {
-                    Assertions.assertEquals(14, er.getCode());
+                    Assertions.assertEquals(Errors.NOT_VALID_COLOR, er);
                 }
             }
         }

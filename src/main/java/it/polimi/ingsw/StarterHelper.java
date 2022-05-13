@@ -1,6 +1,5 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -8,26 +7,50 @@ import org.jetbrains.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.Collection;
 
-//todo arguments sanitize
+/**
+ * Cli argument parser Class, for start the server or the client
+ */
+/* todo
+*   - arguments sanitize
+*   - cli and gui client option
+*/
 public class StarterHelper{
 
+    /**
+     * Collection of Option
+     */
     private final Collection<OptionHandler> options;
+    /**
+     * there can be only one help option in the collection
+     */
     private boolean hasHelp; //help is a special option that if present in command, is the only one executed
 
 
-    @VisibleForTesting StarterHelper() {
+    /**
+     * Class Constructor
+     */
+    public StarterHelper() {
         this.options = new ArrayList<>();
         this.hasHelp = false;
     }
 
-    @VisibleForTesting Options getOptions(){
+    /**
+     * Return the options Set for parse the args
+     * @return The org.apache.commons.cli.Options Object
+     */
+    public Options getOptions(){
         Options options = new Options();
         for (OptionHandler o: this.options)
             options.addOption(o.getOp());
         return options;
     }
 
-    @VisibleForTesting boolean add(OptionHandler optionHandler) {
+    /**
+     * Add the OptionHandler to the collection, duplicates are not allowed and there can only be one help option
+     * @param optionHandler the option handler to add
+     * @return true for successful operation, false otherwise
+     */
+    public boolean add(OptionHandler optionHandler) {
         //can't have more than 1 help options
         if (optionHandler.getIsHelp()) {
             if (this.hasHelp) {
@@ -59,7 +82,12 @@ public class StarterHelper{
         return true;
     }
 
-    @VisibleForTesting Collection<Integer> start (CommandLine cmd) {
+    /**
+     * Start to handle all options included in the args
+     * @param cmd options in the args
+     * @return A collection with all the return value of the OptionHandler.manageOption()
+     */
+    public Collection<Integer> start (CommandLine cmd) {
         Options opts = getOptions();
         Collection<Integer> returnValues;
         if (this.hasHelp) {
@@ -82,7 +110,11 @@ public class StarterHelper{
         return returnValues;
     }
 
-    @VisibleForTesting static Collection<OptionHandler> getOptionHandlers (){
+    /**
+     * Retrieve all the OptionHandlers of this Project
+     * @return A collection of OptionHandler
+     */
+    public static Collection<OptionHandler> getOptionHandlers (){
 
         Collection<OptionHandler> collection = new ArrayList<>(5);
 
@@ -107,12 +139,7 @@ public class StarterHelper{
                         String serverIp = cmd.getOptionValue("ip");
                         System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber);
 
-                        //configure args
-                        String[] args = new String[2];
-                        args[0] = ((Integer)portNumber).toString();
-                        args[1] = serverIp;
-
-                        Client.main(args);
+                        // todo start the client
                         return 101;
                     }
                     //if they are equal false we will start the client and he will search for some udp message from the server
@@ -146,11 +173,10 @@ public class StarterHelper{
 
                     System.out.println("Starting server with port: " + portNumber);
 
-                    //create the args for server
-                    String[] args = new String[1];
-                    args[0] = ((Integer)portNumber).toString();
+                    Server server = new Server(portNumber);
+                    // todo set a timer for stop the server automatically during the test
+                    //server.start();
 
-                    Server.main(args);
                     return hasIP ? 503 : 103;
                 }
                 System.out.println("Starting default server");
@@ -208,19 +234,6 @@ public class StarterHelper{
         return collection;
     }
 
-    private static void manageReturnValue(Collection<Integer> tested) {
-        //manage arguments exception when the arguments used produce nothing
-        boolean allZero = true;
-        for (Integer i: tested){
-            if (i != 0){
-                allZero = false;
-                break;
-            }
-        }
-        if (allZero)
-            System.out.println("The arguments passed hasn't done anything. Type -help or -h.");
-    }
-
     /*
     reminder for manage options return value
      - Error invalid arguments or other error not specified /result = -1
@@ -237,6 +250,10 @@ public class StarterHelper{
 
     */
 
+    /**
+     * Main of the project
+     * @param args default args
+     */
     public static void main(String[] args) {
 
         //setting all options and relative handler
@@ -258,6 +275,6 @@ public class StarterHelper{
             System.exit(-1);
         }
 
-        manageReturnValue(main.start(cmd));
+        main.start(cmd);
     }
 }

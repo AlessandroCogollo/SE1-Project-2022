@@ -11,20 +11,19 @@ class AssistantTest {
 
     @Test
     void getValue() {
-        //trivial
-        assertTrue(true);
+        for (Assistant a : Assistant.values())
+            assertTrue(a.getValue() > 0);
     }
 
     @Test
     void getMaxMovement() {
-        //trivial
-        assertTrue(true);
+        for (Assistant a : Assistant.values())
+            assertTrue(a.getMaxMovement() > 0);
     }
 
     @Test
     void getNumberOfAssistants() {
-        //trivial
-        assertTrue(true);
+        assertEquals(Assistant.values().length, Assistant.getNumberOfAssistants());
     }
 
     @Test
@@ -39,15 +38,28 @@ class AssistantTest {
     void getNewAssistantDeck() {
         Collection<Assistant> x = Assistant.getNewAssistantDeck();
         boolean all = true;
-        for (Assistant a: Assistant.values()) {
+        for (Assistant a : Assistant.values()) {
             if (!x.contains(a)) {
                 all = false;
                 break;
-            }
-            else
+            } else
                 x.remove(a);
         }
         assertTrue(all);
         assertEquals(0, x.size());
+    }
+
+    @Test
+    void values() {
+        // enum specific
+        Assistant.values();
+        assertTrue(true);
+    }
+
+    @Test
+    void valueOf() {
+        // enum specific
+        Assistant.valueOf("Lion");
+        assertTrue(true);
     }
 }

@@ -9,33 +9,102 @@ import it.polimi.ingsw.Server.Model.Game;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The creator and manager of the model server side
+ */
 public class ModelHandler implements Runnable{
 
+    /**
+     * Server main Thread, used to send information about game progress
+     */
+    private final Server server;
+    /**
+     * Model of the game
+     */
     private final Game model;
+    /**
+     * Queue Organizer
+     */
     private final QueueOrganizer queues;
+    /**
+     * Ids of the players
+     */
     private final int[] ids;
+    /**
+     * Gson converter
+     */
+    private final Gson gson;
 
-    private volatile boolean hasToRun; //VOLATILE GUARANTEES UPDATED VALUE VISIBLE TO ALL
+    /**
+     * Boolean used to stop the Model Thread (Volatile guarantees updated value always visible)
+     */
+    private volatile boolean hasToRun;
 
-    public ModelHandler(int[] ids, int gameMode, QueueOrganizer q) {
+    /**
+     * Constructor of the class
+     * @param ids Ids of the players
+     * @param gameMode gamemode to thart the right type of game
+     * @param server Server main Thread
+     * @param q the Queue Organizer
+     */
+    public ModelHandler(int[] ids, int gameMode, Server server, QueueOrganizer q) {
+        this.server = server;
         this.model = Game.getGameModel(ids, gameMode);
         this.queues = q;
         this.ids = ids;
+
         this.hasToRun = false;
+
+        //this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.gson = new GsonBuilder().create();
     }
 
+    /**
+     * Retrieve if the model is working or not
+     * @return true if the model is running, false otherwise
+     */
     public boolean getHasToRun() {
         return hasToRun;
     }
 
+    /**
+     * Set if the Model has to stop or to go
+     * @param hasToRun if is false it will stop the model, otherwise is not very useful
+     */
     public void setHasToRun(boolean hasToRun) {
         this.hasToRun = hasToRun;
     }
 
+    /**
+     * stop the model within 100 millisecond and take at least one other message and send one other message to the players
+     */
+    public void stopModel () {
+        this.hasToRun = false;
+    }
+
+    /**
+     * Thread of the Model
+     *
+     * First it send to all the player the first model message.
+     * Then it waits for some move from the players and execute them, resending to player the result.
+     *
+     * Finally start again to wait for some moves from players until another thread set to stop, or the game finish.
+     */
     @Override
     public void run() {
+
         //set to run
         this.hasToRun = true;
+
+        //first send to player the first model message
+        ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(Errors.NO_ERROR);
+        String message = this.gson.toJson(m);
+        for (Integer id : ids){
+            sendMessageToPlayer(message, id);
+        }
+
+
+        //then wait for player move
 
         while (hasToRun){
 
@@ -57,16 +126,25 @@ public class ModelHandler implements Runnable{
         }
     }
 
+    /**
+     * Prepare the message to the player, The Model Message if the move was valid and the model is updated, otherwise an error message
+     * @param errorCode the error from the model (0 == No Error)
+     * @param playerId the player id that has done the move
+     */
     private void updateClients(int errorCode, int playerId) {
         String message;
         Errors er = Errors.getErrorsByCode(errorCode);
 
-        //Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Gson gson = new GsonBuilder().create();
+
 
         if (Errors.NO_ERROR.equals(er)) {
             //if no error the model is updated
             ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(er);
+
+            //if the game is over communicates it to the main server thread
+            if (m.gameIsOver()){
+                server.setCode(Errors.GAME_OVER);
+            }
 
             message = gson.toJson(m);
         }
@@ -82,6 +160,11 @@ public class ModelHandler implements Runnable{
         }
     }
 
+    /**
+     * Send the message prepared by @{link#updateClients(int, int) updateClients} to the player
+     * @param message message prepared
+     * @param playerId the player id to send the message
+     */
     private void sendMessageToPlayer (String message, int playerId){
         //using executor for not blocking the model queue
         new Thread(new Runnable() {
@@ -103,10 +186,5 @@ public class ModelHandler implements Runnable{
                 }
             }
         }.init(message, queues.getPlayerQueue(playerId))).start();
-    }
-
-    //stop the model within 100 millisecond and take at least one other message
-    public void stopModel () {
-        this.hasToRun = false;
     }
 }

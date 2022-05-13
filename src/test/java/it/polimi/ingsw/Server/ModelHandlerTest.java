@@ -148,7 +148,9 @@ class ModelHandlerTest {
     void run(ClientMessageDecorator move) {
         int[] ids = getIds(3);
         QueueOrganizer q = new QueueOrganizer(ids);
-        ModelHandler x = new ModelHandler(ids, 1, q);
+
+        //set to null server so the game can't finish or it will trigger an error
+        ModelHandler x = new ModelHandler(ids, 1, null, q);
 
         Producer p = new Producer(q.getModelQueue(), move);
 
