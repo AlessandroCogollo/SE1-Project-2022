@@ -6,36 +6,16 @@ import it.polimi.ingsw.Enum.Errors;
  */
 public class Server {
 
-    /**
-     * Lobby for the connection to the player
-     */
     //private final Lobby lobby;
 
-    /**
-     * Ids of the Players, set by the lobby after all the players have connected
-     */
+
     private int[] ids;
-    /**
-     * Game mode of the game, set by the lobby after all the players have connected
-     */
     private int gameMode;
 
-    /**
-     * Queue Organizer, created after all the players have connected
-     */
     private QueueOrganizer queueOrganizer;
-    /**
-     * Model Thread, created after all the players have connected
-     */
     private ModelHandler model;
 
-    /**
-     * Error used for perform some specific action in this Thread
-     */
     private Errors code;
-    /**
-     * A temp object used as a lock while modifying the error code
-     */
     private final Object lock;
 
     /**
@@ -75,13 +55,10 @@ public class Server {
             }
         }
 
-        //came here only when the server has to shut down
+        //came here only when the server has to shutdown
         shutdownAll();
     }
 
-    /**
-     * Close all running operation and stop the server
-     */
     private void shutdownAll() {
         // stop model thread
         if (this.model != null && this.model.getHasToRun()){
@@ -91,11 +68,7 @@ public class Server {
         // todo lobby
     }
 
-    /**
-     * The method that choose what to do thanks to the error code place with {@link #setCode(Errors) setCode}.
-     * @return always true except when the code tell the Server to shut down
-     */
-    //this method is invoked any time someone modifies the code, so the server know what to do.
+    //this method is invoked any time someone modify the code, so the server know what to do.
     private boolean doSomething() {
         //return false only when the Server needs to shut down otherwise return always true
         if (this.code.equals(Errors.PLAYER_DISCONNECTED) || this.code.equals(Errors.GAME_OVER)){
@@ -114,9 +87,6 @@ public class Server {
         return true;
     }
 
-    /**
-     * Start the real game
-     */
     private void startGame() {
         if (this.model == null) {
             this.queueOrganizer = new QueueOrganizer(this.ids);

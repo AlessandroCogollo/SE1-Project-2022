@@ -14,31 +14,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class ModelHandler implements Runnable{
 
-    /**
-     * Server main Thread, used to send information about game progress
-     */
     private final Server server;
-    /**
-     * Model of the game
-     */
     private final Game model;
-    /**
-     * Queue Organizer
-     */
     private final QueueOrganizer queues;
-    /**
-     * Ids of the players
-     */
     private final int[] ids;
-    /**
-     * Gson converter
-     */
     private final Gson gson;
-
-    /**
-     * Boolean used to stop the Model Thread (Volatile guarantees updated value always visible)
-     */
-    private volatile boolean hasToRun;
+    private volatile boolean hasToRun; //Volatile guarantees updated value always visible
 
     /**
      * Constructor of the class
@@ -65,14 +46,6 @@ public class ModelHandler implements Runnable{
      */
     public boolean getHasToRun() {
         return hasToRun;
-    }
-
-    /**
-     * Set if the Model has to stop or to go
-     * @param hasToRun if is false it will stop the model, otherwise is not very useful
-     */
-    public void setHasToRun(boolean hasToRun) {
-        this.hasToRun = hasToRun;
     }
 
     /**

@@ -4,30 +4,14 @@ package it.polimi.ingsw.Enum;
  * Enum of color for the students of the game
  */
 public enum Color {
-    /**
-     * Blue
-     */
+
     Blue (0),
-    /**
-     * Green
-     */
     Green (1),
-    /**
-     * Purple
-     */
     Purple (2),
-    /**
-     * Red
-     */
     Red (3),
-    /**
-     * Yellow
-     */
     Yellow (4);
 
-    /**
-     * Index used in array for catalog the color
-     */
+
     private final int index;
 
     /**
@@ -39,7 +23,7 @@ public enum Color {
     }
 
     /**
-     *
+     * Getter of Index
      * @return the index of the color
      */
     public int getIndex() {
@@ -47,7 +31,7 @@ public enum Color {
     }
 
     /**
-     *
+     * Return the number of Colors
      * @return the number of color that exists in this game
      */
     public static int getNumberOfColors (){
@@ -55,7 +39,7 @@ public enum Color {
     }
 
     /**
-     *
+     * Return the color with index passed
      * @param index the index of the color needed
      * @return the corresponding color or null if the index does not exists (see {@link #isColorIdValid(int) isColorIdValid} for further details)
      */
@@ -68,7 +52,7 @@ public enum Color {
     }
 
     /**
-     *
+     * Check if the index of the colo exists
      * @param colorId the color index to check the validity
      * @return true if the index is valid false otherwise (if this method return true, the method {@link #getColorById(int) getColorById} never return null if the same index value is used)
      */

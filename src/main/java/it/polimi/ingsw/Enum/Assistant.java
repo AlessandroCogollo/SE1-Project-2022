@@ -19,13 +19,7 @@ public enum Assistant {
     Elephant (9, 5),
     Turtle (10, 5);
 
-    /**
-     * Value of the assistant, it is used during the Planning phase to choose the order of the player (before the lower value)
-     */
     private final int value;
-    /**
-     * Max Movement that mother nature could do
-     */
     private final int maxMovement;
 
     /**

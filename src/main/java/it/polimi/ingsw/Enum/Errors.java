@@ -3,9 +3,11 @@ package it.polimi.ingsw.Enum;
 /**
  * Errors code for the whole project divided in:
  * <ul>
- * <li> Global Code (various code for various scope) (code from 0 to 100)</li>
- * <li>Model Error (code from 201 to 300)</li>
- * <li>Server Error (code from 301 to 400)</li>
+ * <li>Global Codes (various code for various scope) (code from 0 to 100)</li>
+ * <li>Model Errors (code from 201 to 300)</li>
+ * <li>Server Errors (code from 301 to 400)</li>
+ * <li>Communications Codes - Server Side (code from 401 to 450)</li>
+ * <li>Communications Codes - Client Side (code from 451 to 500)</li>
  * </ul>
  * Duplicated code are not valid
  */
@@ -16,27 +18,24 @@ public enum Errors {
     /*
       List of Global Error (code from 0 to 100)
      */
-
-
-
     /**
      * No error code
      */
     NO_ERROR (0, "No Error"),
-
     /**
      * Null pointer Code
      */
     NULL_POINTER (1, "Null Pointer"),
+    /**
+     * Ping Code
+     */
+    PING (10, "Ping"),
 
 
 
     /*
       List of Model Error (code from 201 to 300)
      */
-
-
-
     /**
      * Error description: The player who call this method isn't the current one
      */
@@ -129,45 +128,75 @@ public enum Errors {
 
 
     /*
-      List of Server Error (code from 301 to 400)
+      List of Server of client Error (code from 301 to 400)
      */
-
-
-
     /**
-     * Error description: The server main thread has nothing to do
+     * Error description: The server or client main thread has nothing to do
      */
-    NOTHING_TODO (301, "The server main thread has nothing to do"),
+    NOTHING_TODO (301, "The server or client main thread has nothing to do"),
     /**
      * Error description: All players have connected, the main server start the real game
      */
     CREATE_MODEL (302, "All players have connected, the main server start the real game"),
     /**
-     * Error description: The game has to be stopped, due to a disconnection
+     * Error description: The game has to be stopped, due to a disconnection of player
      */
     PLAYER_DISCONNECTED (303, "The game has to be stopped, due to a disconnection"),
     /**
-     * Error description: There is a winner and the server will be shutdown
+     * Error description: The game has to be stopped because the server went down
      */
-    GAME_OVER(304, "There is a winner and the server will be shutdown"),
+    SERVER_DOWN (304, "The game has to be stopped because the server went down"),
+    /**
+     * Error description: There is a winner and the server or client will be shutdown
+     */
+    GAME_OVER(305, "There is a winner and the server or client will be shutdown"),
     /**
      * Error description: There isn't any move in the model queue
      */
     MOVE_NOT_FIND (310, "There isn't any move in the model queue"),
+
+
+
+    /*
+        List of Code for Communications  - Server Side (code from 401 to 450)
+     */
+    /**
+     * Code used when starting the handbrake between server and client from server, it will ask to player their information
+     */
+    FIRST_MESSAGE_SERVER (401, "I'm the Eriantys Server, give me the login."),
+    /**
+     * Code used by server when sending the answer to client info with his id
+     */
+    INFO_RECEIVED (402, "I'm the Eriantys Server, received login. Wait for the start of the game"),
+
+
+
+    /*
+        List of Code for Communications  - Client Side (code from 451 to 500)
+     */
+    /**
+     * Code used when starting the handbrake between server and client from client
+     */
+    FIRST_MESSAGE_CLIENT (451, "I'm an Eriantys Client."),
+    /**
+     * Code used for not first player that only have to send his username and the wizard choosen
+     */
+    NOT_FIRST_CLIENT (452, "I'm the Eriantys Client, sent login info"),
+    /**
+     * Code used by first player that also has to choose the game properties
+     */
+    FIRST_CLIENT (453, "I'm the first Eriantys Client, sended login and game Info"),
+    /**
+     * Code that tells the server that for the client the setup is finish and he is ready to receive the model message and start the game
+     */
+    CLIENT_READY (453, "I'm the Eriantys Client, received id. I'll wait."),
     /**
      * Error description: Invalid number of player chosen
      */
     NUM_OF_PLAYER_ERROR (311, "Min 2 players, max 4 players");
 
 
-    /**
-     * Code of the error
-     */
     private final int code;
-
-    /**
-     * Description of the error
-     */
     private final String description;
 
     /**

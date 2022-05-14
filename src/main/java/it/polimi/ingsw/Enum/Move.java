@@ -25,13 +25,7 @@ public enum Move {
      */
     PLAY_CHARACTER (5, "Play the character using your coins.");
 
-    /**
-     * Code of the move
-     */
     private final int code;
-    /**
-     * Description of the move
-     */
     private final String description;
 
     /**

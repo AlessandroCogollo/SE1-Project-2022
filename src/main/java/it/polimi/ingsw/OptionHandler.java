@@ -10,13 +10,9 @@ import java.util.Objects;
  * Abstract Class for add to all option a method manage option and clean the code
  */
 public abstract class OptionHandler {
-    /**
-     * The option
-     */
+
     private final Option op;
-    /**
-     * Is of type help (like -h)
-     */
+
     private final boolean isHelp;
 
     /**

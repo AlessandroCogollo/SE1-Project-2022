@@ -16,13 +16,7 @@ import java.util.Collection;
 */
 public class StarterHelper{
 
-    /**
-     * Collection of Option
-     */
     private final Collection<OptionHandler> options;
-    /**
-     * there can be only one help option in the collection
-     */
     private boolean hasHelp; //help is a special option that if present in command, is the only one executed
 
 

@@ -12,14 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class QueueOrganizer {
 
-    /**
-     * The model Queue, use messages yet parsed
-     */
     private final BlockingQueue<ClientMessageDecorator> modelQueue;
-
-    /**
-     * Map for maintaining all the queue from the model to the client
-     */
     private final Map<Integer, BlockingQueue<String>> playersQueue;
 
     /**

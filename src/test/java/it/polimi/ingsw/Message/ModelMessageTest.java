@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //todo
 class ModelMessageTest {
 
-    @RepeatedTest(10) //for test over more type of character
+    @RepeatedTest(1) //for test over more type of character
     void toJsonObject() {
         ModelMessageBuilder b = ModelMessageBuilder.getModelMessageBuilder();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().create();
 
         GameInitializer g = GameInitializerTest.setGameInitializer(4, 1);
         b.setGameInitializer(g);
@@ -32,5 +32,12 @@ class ModelMessageTest {
 
         ModelMessage m2 = b.buildModelMessage(Errors.NO_ERROR);
         System.out.println(gson.toJson(m2));
+
+        String J = gson.toJson(m2);
+
+        Message m3 = gson.fromJson(J, Message.class);
+        ModelMessage m4 = gson.fromJson(J, ModelMessage.class);
+        System.out.println(m4.gameIsOver());
+        System.out.println(m3.getError());
     }
 }

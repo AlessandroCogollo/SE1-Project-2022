@@ -70,12 +70,6 @@ class ModelHandlerTest {
     }
 
     @Test
-    void setHasToRun() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
     void stopModel() {
         //cannot assert the thread is stopped, it works because is checked in the method under this one
         assertTrue(true);
