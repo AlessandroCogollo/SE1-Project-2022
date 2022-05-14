@@ -53,4 +53,7 @@ public class Lobby implements Runnable{
 
     }
 
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
 }

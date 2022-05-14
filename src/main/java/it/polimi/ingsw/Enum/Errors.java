@@ -153,7 +153,11 @@ public enum Errors {
     /**
      * Error description: There isn't any move in the model queue
      */
-    MOVE_NOT_FIND (310, "There isn't any move in the model queue");
+    MOVE_NOT_FIND (310, "There isn't any move in the model queue"),
+    /**
+     * Error description: Invalid number of player chosen
+     */
+    NUM_OF_PLAYER_ERROR (311, "Min 2 players, max 4 players");
 
 
     /**

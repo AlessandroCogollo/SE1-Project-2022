@@ -1,11 +1,11 @@
 package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable{
     private PrintWriter out = null;
     private int port = 0;
     private int id;
+    private String username;
     private Lobby l;
     public ClientHandler (Server s, ServerSocket server, Socket client, int id, Lobby l){
         this.s = s;
@@ -54,6 +55,12 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public void Send(Message m){
+        Gson gson = new Gson();
+        String json = gson.toJson(m);
+        out.println(json);
+    }
+
     @Override
     public void run() {
 
@@ -79,7 +86,7 @@ public class ClientHandler implements Runnable{
 
         //l.SetOk(id);
         
-        Ping ping = new Ping();
+        Ping ping = new Ping(this);
         new Thread(ping).start();
 
     }
@@ -91,97 +98,95 @@ public class ClientHandler implements Runnable{
     }
 
     void SendFirstMessage() throws IOException {
-        Message m = new Message(Errors.NO_ERROR, "Welcome Client");
-        //out.writeObject(m);
+        Send(new Message(Errors.NO_ERROR, "Welcome Client"));
+        if(this.id == 0){
+            FirstClientMessage();
+        }
+        Send(new Message(Errors.NO_ERROR, "Choose your username"));
     }
 
     void ReceiveData(){
-
+        Message m = readJson();
+        this.username = m.getMessage();
     }
 
     void SendId(){
-
+        Send(new Message(Errors.NO_ERROR, String.valueOf(this.id)));
     }
 
     void ReceiveConfirm(){
-
+        Message m = readJson();
+        System.out.println(m.getError() + ", " + m.getMessage());
     }
-    /*
-    void firstMessageClient(){
-        String line = "";
-        System.out.println("Sending numOfPlayers request...");
-        out.println("How many players will the game be composed of?");
 
+    void FirstClientMessage(){
+
+        Send(new Message(Errors.NO_ERROR, "How many players will the game be composed of?"));
         int num = -1;
         while(num == -1){
             try{
-                line = read();
-                System.out.println("Received: " + line);
-                num = Integer.parseInt(line);
+                Message m = readJson();
+                System.out.println("Received: " + m.getMessage());
+                num = Integer.parseInt(m.getMessage());
                 if(num<2 || num>4){
-                    out.println("Please select a valid number (2-4): ");
+                    out.println(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
                     num = -1;
                 }
             }catch(Exception e){
-                out.println("Please select a valid number (2-4): ");
+                out.println(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
                 num = -1;
             }
         }
-
-        this.s.setNumOfPlayers(num);
-        out.println("Creating a game composed by " + this.s.getNumOfPlayers() + " players...");
+        this.l.setNumOfPlayers(num);
     }
 
-    void Parrot(){
-        String line = "";
-
-        // reads message from client and send it back until "END" is sent
-        while (!line.equals("END")) {
-            System.out.println("Listening...");
-            line = read();
-            System.out.println("#" + client.getPort() + " --> Received : " + line);
-            out.println(line);
-
-
-            if(line.equals("ping")){
-                System.out.println("PONG --> #" + port);
-                out.println("your ip: " + client.getInetAddress().getHostAddress() + ", your port: " + client.getPort() + ", my ip: " + client.getLocalAddress() + ", my port: " + client.getLocalPort() + ", my socket address: " + client.getLocalSocketAddress() + ", are you connected? " + client.isConnected());
-            }
-
-        }
-        System.out.println("Closing connection");
-        stop();
-    }
-    */
-    String read(){
-        String line = "";
-        try {
-            line = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Stopping service...");
-            stop();
-        }
-        return line;
-
-    }
 
     void stop(){
         try {
             in.close();
             out.close();
             client.close();
-            server.close();
+            //server.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Socket getClient() {
+        return client;
     }
 }
 
 class Ping implements Runnable{
 
+    private ClientHandler ch;
+
+    public Ping(ClientHandler ch){
+        this.ch = ch;
+    }
+
     @Override
     public void run() {
+        Socket client = ch.getClient();
+        InetAddress inet = client.getInetAddress();
+        boolean isReachable;
+
+        while(true){
+            try {
+                isReachable = inet.isReachable(5000);
+                if(isReachable){
+                    System.out.println("Host is Reachable");
+                }
+                else{
+                    System.out.println("Host is not reachable. Closing connection...");
+                    ch.stop();
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
 }
