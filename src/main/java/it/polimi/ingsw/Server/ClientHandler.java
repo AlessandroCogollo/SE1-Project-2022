@@ -84,10 +84,12 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
 
-        //l.SetOk(id);
+        l.SetOk(id);
         
         Ping ping = new Ping(this);
         new Thread(ping).start();
+
+
 
     }
 
