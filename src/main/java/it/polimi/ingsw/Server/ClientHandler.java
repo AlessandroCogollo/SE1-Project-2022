@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 
@@ -8,38 +10,48 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable{
-    @Override
-    public void run() {
-
-    }
-/*
     private Server s;
     private Socket client = null;
     private ServerSocket server = null;
-    private ObjectInputStream in = null;
-    private ObjectOutputStream out = null;
+    private BufferedReader in = null;
+    private PrintWriter out = null;
     private int port = 0;
     private int id;
     private Lobby l;
-
-    public ClientHandler(Server s, Socket client, int id, Lobby l){
-        this.client = client;
-        this.server = s.getServer();
+    public ClientHandler (Server s, ServerSocket server, Socket client, int id, Lobby l){
         this.s = s;
+        this.server = server;
+        this.client = client;
         this.id = id;
+        this.l = l;
         try {
-
-            FileOutputStream fileOut = new FileOutputStream("out.txt");
-            this.out = new ObjectOutputStream(fileOut);
-
-            FileInputStream fileStream = new FileInputStream("in.txt");
-            this.in = new ObjectInputStream(fileStream);
-
+            this.in = new BufferedReader(
+                    new InputStreamReader(client.getInputStream()));
+            this.out = new PrintWriter(
+                    client.getOutputStream(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.l = l;
 
+    }
+
+    public Message readJson(){
+        Gson gson = new Gson();
+        StringBuilder sb = new StringBuilder();
+        try {
+            String line;
+            while ( (line = in.readLine()) != null) {
+                sb.append(line).append(System.lineSeparator());
+            }
+            String content = sb.toString();
+            System.out.println(content);
+            String json = gson.toJson(content);
+            Message m = gson.fromJson(json, Message.class);
+            return m;
+        } catch(IOException ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -48,8 +60,8 @@ public class ClientHandler implements Runnable{
         System.out.println("Client accepted");
 
         try {
-            ReceiveFirstMessage();
 
+            ReceiveFirstMessage();
 
             SendFirstMessage();
 
@@ -73,14 +85,14 @@ public class ClientHandler implements Runnable{
     }
 
     void ReceiveFirstMessage() throws IOException, ClassNotFoundException {
-        Message m = (Message) in.readObject();
+        Message m = readJson();
         System.out.println(m.getError() + ", " + m.getMessage());
 
     }
 
     void SendFirstMessage() throws IOException {
         Message m = new Message(Errors.NO_ERROR, "Welcome Client");
-        out.writeObject(m);
+        //out.writeObject(m);
     }
 
     void ReceiveData(){
@@ -163,7 +175,7 @@ public class ClientHandler implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }
 
 class Ping implements Runnable{

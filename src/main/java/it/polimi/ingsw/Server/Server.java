@@ -75,7 +75,7 @@ public class Server {
             }
         }
 
-        //came here only when the server has to shutdown
+        //came here only when the server has to shut down
         shutdownAll();
     }
 
@@ -93,11 +93,11 @@ public class Server {
 
     /**
      * The method that choose what to do thanks to the error code place with {@link #setCode(Errors) setCode}.
-     * @return always true except when the code tell the Server to shutdown
+     * @return always true except when the code tell the Server to shut down
      */
-    //this method is invoked any time someone modify the code, so the server know what to do.
+    //this method is invoked any time someone modifies the code, so the server know what to do.
     private boolean doSomething() {
-        //return false only when the Server need to shutdown otherwise return always true
+        //return false only when the Server needs to shut down otherwise return always true
         if (this.code.equals(Errors.PLAYER_DISCONNECTED) || this.code.equals(Errors.GAME_OVER)){
             //todo handling of this codes
 

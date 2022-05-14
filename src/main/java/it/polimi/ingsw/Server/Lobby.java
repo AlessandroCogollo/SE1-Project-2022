@@ -20,6 +20,11 @@ public class Lobby implements Runnable{
         ids = new ArrayList<>();
         this.port = port;
         this.s = s;
+        try {
+            this.server = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void run(){
         ClientHandler c = null;
@@ -27,7 +32,7 @@ public class Lobby implements Runnable{
         while(!isFirstConnected){
             try {
                 Socket client = server.accept();
-                c = new ClientHandler(s, client, 0, this);
+                c = new ClientHandler(s, server, client, 0, this);
                 Thread t = new Thread(c);
                 e.execute(c);
                 //while the server is connected and has not decided the number of players
