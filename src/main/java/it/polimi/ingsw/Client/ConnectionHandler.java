@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -45,8 +46,9 @@ public class ConnectionHandler implements Runnable{
      * @param defaultTimeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
      * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
      */
-    public ConnectionHandler(String serverHost, int serverPort, Graphic graphic, Duration defaultTimeout, @Nullable TimerTask errorTask) {
+    public ConnectionHandler(String serverHost, int serverPort, Graphic graphic, Duration defaultTimeout, @Nullable Callable errorTask) {
 
+        //first create the socket
         try{
             this.socket = new Socket(serverHost, serverPort);
         } catch (UnknownHostException e) {
@@ -58,9 +60,9 @@ public class ConnectionHandler implements Runnable{
             throw new RuntimeException(e);
         }
 
+        //initialize input and output from server
         InputStream fromSocket;
         OutputStream toSocket;
-        //initialize input and output from server
         try {
             fromSocket = socket.getInputStream();
             toSocket = socket.getOutputStream();
@@ -68,41 +70,47 @@ public class ConnectionHandler implements Runnable{
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        TimerTask sendPing = new TimerTask() {
+
+        //create function for pint timer
+        Callable sendPing = new Callable() {
             private PrintWriter printer;
             private String ping;
 
-            public TimerTask init(String ping, OutputStream outputStream){
+            public Callable init(String ping, OutputStream outputStream){
                 this.printer = new PrintWriter(outputStream);
                 this.ping = ping;
                 return this;
             }
             @Override
-            public void run() {
+            public Object call() {
                 this.printer.println(ping);
+                return null;
             }
         }.init(new Gson().toJson(new Ping()), toSocket);
 
+        Callable errorCall;
         if (errorTask != null)
-            this.pingTimer = new PingTimer(defaultTimeout, sendPing, errorTask);
+            errorCall = errorTask;
         else{
-            this.pingTimer = new PingTimer(defaultTimeout, sendPing, new TimerTask() {
+            errorCall = new Callable() {
                 private Graphic g;
                 private ConnectionHandler c;
-                public TimerTask init(Graphic g, ConnectionHandler c){
+                public Callable init(Graphic g, ConnectionHandler c){
                     this.g = g;
                     this.c = c;
                     return this;
                 }
                 @Override
-                public void run() {
+                public Object call() {
                     g.displayMessage("Server Disconnected");
                     System.out.println("Server Disconnected");
                     c.stopConnectionHandler();
+                    return null;
                 }
-            }.init(graphic, this));
+            }.init(graphic, this);
         }
 
+        this.pingTimer = new PingTimer(defaultTimeout, new TimerTaskCloneable(sendPing), new TimerTaskCloneable(errorCall));
         this.talker = new Talker(this.out, toSocket, pingTimer);
         this.listener = new Listener(this.in, fromSocket, pingTimer);
 
@@ -254,14 +262,14 @@ public class ConnectionHandler implements Runnable{
             //listener thread
             this.go = true;
             while (go){
-
                 //retrieve message from server
-                String message;
+                String message = null;
                 try {
-                    message = in.readLine();
+                    while (message == null)
+                        message = in.readLine();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
+                    if (go) //if catch a exception and the thread still need to go print error
+                        e.printStackTrace();
                 }
 
                 if (message != null){
@@ -296,18 +304,18 @@ public class ConnectionHandler implements Runnable{
 
     class PingTimer implements Runnable{
 
-        private final Timer sendTimer = new Timer("sendTimer");
-        private final TimerTask sendPingTask;
+        private Timer sendTimer = new Timer("sendTimer");
+        private final TimerTaskCloneable sendPingTask;
         private final Duration sendTimeout;
-        private final Timer receiveTimer = new Timer("receiveTimer");
-        private final TimerTask errorTask;
+        private Timer receiveTimer = new Timer("receiveTimer");
+        private final TimerTaskCloneable errorTask;
         private final Duration receiveTimeout;
 
-        public PingTimer(Duration defaultTimeout, TimerTask sendPingTask, TimerTask errorTask){
+        public PingTimer(Duration defaultTimeout, TimerTaskCloneable sendPingTask, TimerTaskCloneable errorTask){
             this(defaultTimeout, defaultTimeout.multipliedBy(2), sendPingTask, errorTask);
         }
 
-        public PingTimer(Duration sendTimeout, Duration receiveTimeout, TimerTask sendPingTask, TimerTask errorTask) {
+        public PingTimer(Duration sendTimeout, Duration receiveTimeout, TimerTaskCloneable sendPingTask, TimerTaskCloneable errorTask) {
             this.sendTimeout = sendTimeout;
             this.receiveTimeout = receiveTimeout;
             this.sendPingTask = sendPingTask;
@@ -328,7 +336,8 @@ public class ConnectionHandler implements Runnable{
          */
         public void resetSendTimer (){
             stopSendTimer();
-            this.sendTimer.schedule(this.sendPingTask, this.sendTimeout.toMillis(), this.sendTimeout.toMillis());
+            this.sendTimer = new Timer("sendTimer");
+            this.sendTimer.schedule(this.sendPingTask.clone(), this.sendTimeout.toMillis(), this.sendTimeout.toMillis());
         }
 
         /**
@@ -336,7 +345,8 @@ public class ConnectionHandler implements Runnable{
          */
         public void resetReceiveTimer (){
             stopReceiveTimer();
-            this.receiveTimer.schedule(this.errorTask, this.receiveTimeout.toMillis(), this.receiveTimeout.toMillis());
+            this.receiveTimer = new Timer("receiveTimer");
+            this.receiveTimer.schedule(this.errorTask.clone(), this.receiveTimeout.toMillis(), this.receiveTimeout.toMillis());
         }
 
         public void stopSendTimer(){

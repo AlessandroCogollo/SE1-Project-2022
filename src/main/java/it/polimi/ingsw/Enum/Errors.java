@@ -151,6 +151,14 @@ public enum Errors {
      */
     GAME_OVER(305, "There is a winner and the server or client will be shutdown"),
     /**
+     * Error description: The server is up but haven't send the right message within the max time
+     */
+    SERVER_NOT_RESPONDING (306, "The server is up but haven't send the right message within the max time"),
+    /**
+     * Error description: The client has finished the setup of the connection and it will start to wait for the first game model
+     */
+    SETUP_FINISHED (307, "The client has finished the setup of the connection and it will start to wait for the first game model"),
+    /**
      * Error description: There isn't any move in the model queue
      */
     MOVE_NOT_FIND (310, "There isn't any move in the model queue"),

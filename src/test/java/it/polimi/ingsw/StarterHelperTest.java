@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StarterHelperTest {
 
+    static Random rand = new Random(System.currentTimeMillis());
+
     //could be used for test the output on terminal
     /*private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -92,7 +94,16 @@ class StarterHelperTest {
     private static Collection<String> convert(Integer[] comb, List<String[]> values) {
         Collection<String> c = new ArrayList<>();
         for (Integer i: comb){
-                c.addAll(Arrays.asList(values.get(i)));
+                if (i == 4){
+                    String p = "-p";
+                    int po = rand.nextInt(5000, 8000);
+                    String stringPort = String.valueOf(po);
+                    String[] portRandom = new String[]{p, stringPort};
+                    c.addAll(Arrays.asList(portRandom));
+                }
+                else {
+                    c.addAll(Arrays.asList(values.get(i)));
+                }
         }
         return c;
     }
@@ -177,11 +188,11 @@ class StarterHelperTest {
         String stringPort = "8123";
         String h = "-h";
         Collection<String[]> collection = new ArrayList<>(5);
-        collection.add(new String[]{c});
-        collection.add(new String[]{s});
-        collection.add(new String[]{h});
-        collection.add(new String[]{ip, stringIp});
-        collection.add(new String[]{p, stringPort});
+        collection.add(new String[]{c}); //0
+        collection.add(new String[]{s}); //1
+        collection.add(new String[]{h}); //2
+        collection.add(new String[]{ip, stringIp}); //3
+        collection.add(new String[]{p, stringPort}); //4
 
         return allPossibilities(collection);
     }
@@ -371,7 +382,7 @@ class StarterHelperTest {
 
     @ParameterizedTest
     @MethodSource("argsMethod")
-    void main (String[] args) {
+    void main (String[] args) throws InterruptedException {
         //testing only our arguments
         Collection<OptionHandler> collection = StarterHelper.getOptionHandlers();
 
@@ -446,6 +457,9 @@ class StarterHelperTest {
             assertTrue(find);
         }
         //ip and port doesn't need any test
+
+        //added delay for random port resulting in bind error if too much close
+        Thread.sleep(100);
     }
     /*
     reminder for manage options return value

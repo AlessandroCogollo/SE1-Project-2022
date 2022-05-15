@@ -9,7 +9,6 @@ import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 
 import java.time.Duration;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
 /**
@@ -54,20 +53,26 @@ public class Client{
      */
     public Client(Graphic graphic, String serverHost, int serverPort, Duration defaultTimeout) {
         this.graphic = graphic;
-        TimerTask er = new TimerTask() {
+        Callable er = new Callable() {
             private Client c;
 
-            public TimerTask init (Client c){
+            public Callable init (Client c){
                 this.c = c;
                 return this;
             }
             @Override
-            public void run() {
+            public Object call() {
                 this.c.setCode(Errors.SERVER_DOWN);
+                return null;
             }
         }.init(this);
         this.connection = new ConnectionHandler(serverHost, serverPort, graphic, defaultTimeout, er);
     }
+
+
+
+
+
 
     /**
      * Ask the player what type of interface he prefers, CLi or Gui
@@ -76,7 +81,7 @@ public class Client{
     public static Graphic askGraphic() {
 
         //todo
-        return null;
+        return new Cli();
     }
 
     /**
@@ -86,19 +91,9 @@ public class Client{
 
         new Thread(this.connection).start();
 
-        int id = -1;
-        //setup of connection between client and server
-        try { //surround with try catch for wait for response timeout if the server go down during the setup of the connection of don't send the right message for too much time
-            id = setupConnection();
-        }catch (TimeoutException e) {
-            graphic.displayMessage(e.getMessage());
-        }
+        Thread setupThread = new Thread(this::setupConnectionAndStartGame);
+        setupThread.start();
 
-        this.game = new GameHandler(id, this.connection, this.graphic);
-
-        this.graphic.displayMessage("Ready to play, waiting for the start of the game");
-
-        new Thread(this.game).start();
 
         //do nothing until some other thread tells him what to do with a code
 
@@ -114,21 +109,29 @@ public class Client{
         }
 
         //came here only when the client has to shutdown
-        shutdownAll();
+        shutdownAll(setupThread);
     }
 
-    private void shutdownAll() {
-        this.connection.stopConnectionHandler();
+    private void shutdownAll(Thread setupThread) {
+        if (setupThread.isAlive())
+            setupThread.interrupt();
+        if (this.connection.isRunning())
+            this.connection.stopConnectionHandler();
+        //todo stop gameHandler
+
     }
 
     private boolean doSomething() {
         //return false only when the Server need to shutdown otherwise return always true
-        if (this.code.equals(Errors.SERVER_DOWN) || this.code.equals(Errors.GAME_OVER)){
+        if (this.code.equals(Errors.SERVER_DOWN) || this.code.equals(Errors.GAME_OVER) || this.code.equals(Errors.SERVER_NOT_RESPONDING)){
             //todo handling of this codes
 
             return false;
         }
 
+        switch (this.code) {
+            case SETUP_FINISHED -> new Thread(this.game).start();
+        }
         //reset code
         this.code = Errors.NOTHING_TODO;
         return true;
@@ -145,35 +148,58 @@ public class Client{
         }
     }
 
-    private int setupConnection() throws TimeoutException{
 
+
+
+
+
+
+    //method for set the initial connection
+
+    private void setupConnectionAndStartGame() {
+        int id;
         //this operation are done without the intervention of user and must be done in this order, so is not needed for have multiple thread (except for the timeout)
 
         //start the handbrake with server
-        sendMessage(Errors.FIRST_MESSAGE_CLIENT, Errors.FIRST_MESSAGE_CLIENT.getDescription());
+        try {
+            sendMessage(Errors.FIRST_MESSAGE_CLIENT, Errors.FIRST_MESSAGE_CLIENT.getDescription());
 
-        //wait for the first answer from server
-        JsonElement answer = waitForResponse(Errors.FIRST_MESSAGE_SERVER, Duration.ofSeconds(120)); //longer timeout for let server start
-        NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
+            //wait for the first answer from server
+            JsonElement answer = waitForResponse(Errors.FIRST_MESSAGE_SERVER, Duration.ofSeconds(120));
+
+            NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
 
 
-        //ask for information about game only if needed
-        JsonElement info;
-        if (npM.isYouAreFirst())
-            info = first();
-        else
-            info = notFirst();
+            //ask for information about game only if needed
+            JsonElement info;
+            if (npM.isYouAreFirst())
+                info = first();
+            else
+                info = notFirst();
 
-        //send info to server
-        sendMessage(info);
+            //send info to server
+            sendMessage(info);
 
-        answer = waitForResponse(Errors.INFO_RECEIVED, Duration.ofSeconds(60));
-        IdMessage idM = gson.fromJson(answer, IdMessage.class);
+            answer = waitForResponse(Errors.INFO_RECEIVED, Duration.ofSeconds(60));
+            IdMessage idM = gson.fromJson(answer, IdMessage.class);
 
-        //finish the setup
-        sendMessage(Errors.CLIENT_READY, Errors.CLIENT_READY.getDescription());
+            //finish the setup
+            sendMessage(Errors.CLIENT_READY, Errors.CLIENT_READY.getDescription());
 
-        return idM.getPlayerId();
+            //get the player id
+            id = idM.getPlayerId();
+        } catch (TimeoutException e) {
+            this.graphic.displayMessage(e.getMessage());
+            this.setCode(Errors.SERVER_NOT_RESPONDING);
+            return;
+        }
+
+        //create gameHandler
+        this.game = new GameHandler(id, this.connection, this.graphic);
+
+        this.graphic.displayMessage("Ready to play, waiting for the start of the game");
+
+        this.setCode(Errors.SETUP_FINISHED);
     }
 
     private JsonElement notFirst() {
@@ -218,7 +244,7 @@ public class Client{
                 message = getAnswer(timeout);
             } catch (TimeoutException e) {
                 e.printStackTrace();
-                throw new TimeoutException("Timer over while waiting for" + correctCode);
+                throw new TimeoutException("Timer over while waiting for " + correctCode);
             }
 
             Message temp = this.gson.fromJson(message, Message.class);
@@ -229,12 +255,12 @@ public class Client{
 
     private JsonElement getAnswer (Duration timeout) throws TimeoutException {
 
-        JsonElement message;
+        JsonElement message = null;
         try {
             message = this.connection.getQueueFromServer().poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            this.graphic.displayMessage("Server went down");
         }
 
         if (message == null)
@@ -242,6 +268,9 @@ public class Client{
 
         return message;
     }
+
+
+    //test method
 
     public static void main(String[] args){
         Client client = new Client (new Cli(), "127.0.0.1", 5088);
