@@ -6,15 +6,11 @@ import it.polimi.ingsw.Enum.Errors;
  */
 public class Server {
 
-    //private final Lobby lobby;
-
-
+    private final Lobby lobby;
     private int[] ids;
     private int gameMode;
-
     private QueueOrganizer queueOrganizer;
     private ModelHandler model;
-
     private Errors code;
     private final Object lock;
 
@@ -24,7 +20,7 @@ public class Server {
      */
     public Server (int port){
         //create lobby
-        //this.lobby = new Lobby(port, this);
+        this.lobby = new Lobby(port, this);
 
         //set the placeholder for information
         this.ids = null;
@@ -42,7 +38,7 @@ public class Server {
      */
     public void start (){
 
-        //new Thread(lobby).start();
+        new Thread(lobby).start();
 
         synchronized(this.lock) {
             while(doSomething()) {
@@ -64,8 +60,9 @@ public class Server {
         if (this.model != null && this.model.getHasToRun()){
             this.model.stopModel();
         }
-
-        // todo lobby
+        if (this.lobby != null) {
+            this.lobby.shutDownLobby();
+        }
     }
 
     //this method is invoked any time someone modify the code, so the server know what to do.

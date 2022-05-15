@@ -84,12 +84,10 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
 
-        l.SetOk(id);
+        l.SetOk(id, username);
         
         Ping ping = new Ping(this);
         new Thread(ping).start();
-
-
 
     }
 
@@ -139,7 +137,12 @@ public class ClientHandler implements Runnable{
                 num = -1;
             }
         }
-        this.l.setNumOfPlayers(num);
+        // this.l.setNumOfPlayers(num);
+        this.l.setParameters(num, 0);
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
 

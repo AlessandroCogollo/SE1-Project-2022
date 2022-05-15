@@ -4,60 +4,75 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Lobby implements Runnable{
+public class Lobby implements Runnable {
 
-    private int port;
-    private ServerSocket server = null;
-    private int numOfPlayers = 0;
+    private final Server server;
+    private final ServerSocket serverSocket;
     private boolean isFirstConnected = false;
-    private ArrayList<Integer> ids;
-    private Server s;
-
-    public Lobby(int port, Server s){
-        ids = new ArrayList<>();
-        this.port = port;
-        this.s = s;
+    private final ArrayList<Integer> ids;
+    private final ArrayList<String> usernames  = null;
+    private int numOfPlayers = 0;
+    private int gameMode;
+    private final ExecutorService exec;
+    public Lobby(int port, Server server) {
+        this.ids = null;
+        this.server = null;
+        this.exec = Executors.newFixedThreadPool(4);
         try {
-            this.server = new ServerSocket(port);
+            this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-    public void run(){
-        ClientHandler c = null;
-        Executor e = Executors.newFixedThreadPool(4);
-        while(!isFirstConnected){
+
+    @Override
+    public void run() {
+        Socket client;
+        while (!isFirstConnected) {
             try {
-                Socket client = server.accept();
-                c = new ClientHandler(s, server, client, 0, this);
-                Thread t = new Thread(c);
-                e.execute(c);
-                //while the server is connected and has not decided the number of players
-                while(numOfPlayers == 0 && client.isConnected()){}
-                //if the player disconnected and hadn't decided the number of players yet, redo this cycle
-                if(!client.isConnected()){
-                    this.isFirstConnected = false;
-                }
-                else{
-                    isFirstConnected = true;
-                }
+                client = serverSocket.accept();
+                ClientHandler c = new ClientHandler(this.server, this.serverSocket, client, 0, this);
+                exec.execute(c);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        for (int i = 1; i < numOfPlayers; i++) {
+            try {
+                client = this.serverSocket.accept();
+                exec.execute(new ClientHandler(this.server, this.serverSocket, client, i, this));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-    }
-    void SetQueue(){
-
-    }
-
-    public void setNumOfPlayers(int numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
+        int[] ids = this.ids.stream().mapToInt(i -> i).toArray();
+        this.server.setGameProperties(ids, this.gameMode);
     }
 
-    public void SetOk(int id){
+    public void shutDownLobby() {
+        this.exec.shutdownNow();
+    }
 
+    /*
+    public void setNumOfPlayers(int num) {
+        this.numOfPlayers = num;
+    }
+    */
+
+    // stands for setNumOfPlayers (temporarily)
+    public void setParameters(int num, int gameMode) {
+        this.numOfPlayers = num;
+        this.gameMode = gameMode;
+    }
+
+    public void SetOk(int id, String username) {
+        if (id == 0) {
+            this.isFirstConnected = true;
+        }
+        ids.add(id);
+        this.usernames.add(username);
     }
 }
