@@ -19,12 +19,14 @@ public class ClientHandler implements Runnable{
     private int id;
     private String username;
     private Lobby l;
+    Gson gson;
     public ClientHandler (Server s, ServerSocket server, Socket client, int id, Lobby l){
         this.s = s;
         this.server = server;
         this.client = client;
         this.id = id;
         this.l = l;
+        this.gson = new Gson();
         try {
             this.in = new BufferedReader(
                     new InputStreamReader(client.getInputStream()));
@@ -37,7 +39,6 @@ public class ClientHandler implements Runnable{
     }
 
     public Message readJson(){
-        Gson gson = new Gson();
         StringBuilder sb = new StringBuilder();
         try {
             String line;
@@ -46,8 +47,8 @@ public class ClientHandler implements Runnable{
             }
             String content = sb.toString();
             System.out.println(content);
-            String json = gson.toJson(content);
-            Message m = gson.fromJson(json, Message.class);
+            String json = this.gson.toJson(content);
+            Message m = this.gson.fromJson(json, Message.class);
             return m;
         } catch(IOException ex){
             ex.printStackTrace();
@@ -56,8 +57,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void Send(Message m){
-        Gson gson = new Gson();
-        String json = gson.toJson(m);
+        String json = this.gson.toJson(m);
         out.println(json);
     }
 
@@ -100,7 +100,9 @@ public class ClientHandler implements Runnable{
     void SendFirstMessage() throws IOException {
         Send(new Message(Errors.NO_ERROR, "Welcome Client"));
         if(this.id == 0){
-            FirstClientMessage();
+            int num = SendNumOfPlayersRequest();
+            int gameMode = SendGameModeRequest();
+            this.l.setParameters(num, gameMode);
         }
         Send(new Message(Errors.NO_ERROR, "Choose your username"));
     }
@@ -119,7 +121,7 @@ public class ClientHandler implements Runnable{
         System.out.println(m.getError() + ", " + m.getMessage());
     }
 
-    void FirstClientMessage(){
+    int SendNumOfPlayersRequest(){
 
         Send(new Message(Errors.NO_ERROR, "How many players will the game be composed of?"));
         int num = -1;
@@ -137,8 +139,28 @@ public class ClientHandler implements Runnable{
                 num = -1;
             }
         }
-        // this.l.setNumOfPlayers(num);
-        this.l.setParameters(num, 0);
+        return num;
+    }
+
+    int SendGameModeRequest(){
+        Send(new Message(Errors.NO_ERROR, "Select the game mode (0 - Normal, 1 - Advanced) : "));
+        int num = -1;
+        while(num == -1){
+            try{
+                Message m = readJson();
+                System.out.println("Received: " + m.getMessage());
+                num = Integer.parseInt(m.getMessage());
+                if(num != 0 || num != 1){
+                    out.println(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0/1): "));
+                    num = -1;
+                }
+            }catch(Exception e){
+                out.println(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0/1): "));
+                num = -1;
+            }
+        }
+        return num;
+
     }
 
     public String getUsername() {
