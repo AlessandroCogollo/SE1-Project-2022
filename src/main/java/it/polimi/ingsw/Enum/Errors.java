@@ -205,7 +205,15 @@ public enum Errors {
     /**
      * Error description: Invalid game mode chosen
      */
-    WRONG_GAME_MODE(312, "Game mode can be 0 or 1");
+    WRONG_GAME_MODE(312, "Game mode can be 0 or 1"),
+    /**
+     * Error description: Username not available
+     */
+    USERNAME_NOT_AVAILABLE(313, "Username not available"),
+    /**
+     * Error description: Wizard not available
+     */
+    WIZARD_NOT_AVAILABLE(314, "Wizard not available");
 
     private final int code;
     private final String description;

@@ -2,7 +2,8 @@ package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.Enum.Errors;
-import it.polimi.ingsw.Message.Message;
+import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Message.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -19,6 +20,7 @@ public class ClientHandler implements Runnable{
     private int id;
     private String username;
     private Lobby l;
+    private Wizard wizard;
     Gson gson;
     public ClientHandler (Server s, ServerSocket server, Socket client, int id, Lobby l){
         this.s = s;
@@ -72,7 +74,11 @@ public class ClientHandler implements Runnable{
 
             SendFirstMessage();
 
-            ReceiveData();
+            if (this.id == 0) {
+                ReceiveFirstPlayerData();
+            } else {
+                ReceiveData();
+            }
 
             SendId();
 
@@ -84,7 +90,7 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
 
-        l.SetOk(id, username);
+        l.SetOk(this.id, this.username, this.wizard);
         
         Ping ping = new Ping(this);
         new Thread(ping).start();
@@ -93,27 +99,47 @@ public class ClientHandler implements Runnable{
 
     void ReceiveFirstMessage() throws IOException, ClassNotFoundException {
         Message m = readJson();
-        System.out.println(m.getError() + ", " + m.getMessage());
+        System.out.println(m.getMessage());
 
     }
 
     void SendFirstMessage() throws IOException {
-        Send(new Message(Errors.NO_ERROR, "Welcome Client"));
-        if(this.id == 0){
-            int num = SendNumOfPlayersRequest();
-            int gameMode = SendGameModeRequest();
-            this.l.setParameters(num, gameMode);
-        }
-        Send(new Message(Errors.NO_ERROR, "Choose your username"));
+        Send(new NewPlayerMessage("Welcome!", this.id == 0));
     }
 
+    void ReceiveFirstPlayerData(){
+        FirstPlayerMessage m = (FirstPlayerMessage) readJson();
+        this.username = m.getUsername();
+        this.wizard = m.getWizard();
+        while(m.getNumOfPlayer() < 2 || m.getNumOfPlayer()< 4 || m.getGameMode() < 0 || m.getGameMode() < 1){
+            if(m.getNumOfPlayer() < 2 || m.getNumOfPlayer()< 4){
+                Send(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
+            }
+            else if(m.getGameMode() < 0 || m.getGameMode() < 1){
+                Send(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0-1): "));
+            }
+            m = (FirstPlayerMessage) readJson();
+        }
+        this.l.setParameters(m.getNumOfPlayer(), m.getGameMode());
+    }
+    
     void ReceiveData(){
-        Message m = readJson();
-        this.username = m.getMessage();
+        NotFirstPlayerMessage m = (NotFirstPlayerMessage) readJson();
+        while(l.getUsernames().contains(m.getUsername()) || l.getWizards().contains(m.getWizard())){
+            if(l.getUsernames().contains(m.getUsername()) ){
+                Send(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            }
+            else if(l.getWizards().contains(m.getWizard())){
+                Send(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
+            }
+            m = (NotFirstPlayerMessage) readJson();
+        }
+        this.username = m.getUsername();
+        this.wizard = m.getWizard();
     }
 
     void SendId(){
-        Send(new Message(Errors.NO_ERROR, String.valueOf(this.id)));
+        Send(new IdMessage("Your id is: ", this.id));
     }
 
     void ReceiveConfirm(){
@@ -121,52 +147,13 @@ public class ClientHandler implements Runnable{
         System.out.println(m.getError() + ", " + m.getMessage());
     }
 
-    int SendNumOfPlayersRequest(){
-
-        Send(new Message(Errors.NO_ERROR, "How many players will the game be composed of?"));
-        int num = -1;
-        while(num == -1){
-            try{
-                Message m = readJson();
-                System.out.println("Received: " + m.getMessage());
-                num = Integer.parseInt(m.getMessage());
-                if(num<2 || num>4){
-                    out.println(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
-                    num = -1;
-                }
-            }catch(Exception e){
-                out.println(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
-                num = -1;
-            }
-        }
-        return num;
-    }
-
-    int SendGameModeRequest(){
-        Send(new Message(Errors.NO_ERROR, "Select the game mode (0 - Normal, 1 - Advanced) : "));
-        int num = -1;
-        while(num == -1){
-            try{
-                Message m = readJson();
-                System.out.println("Received: " + m.getMessage());
-                num = Integer.parseInt(m.getMessage());
-                if(num != 0 || num != 1){
-                    out.println(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0/1): "));
-                    num = -1;
-                }
-            }catch(Exception e){
-                out.println(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0/1): "));
-                num = -1;
-            }
-        }
-        return num;
-
-    }
-
     public String getUsername() {
         return this.username;
     }
 
+    public int getId() {
+        return id;
+    }
 
     void stop(){
         try {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Enum.Wizard;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,6 +16,7 @@ public class Lobby implements Runnable {
     private boolean isFirstConnected = false;
     private final ArrayList<Integer> ids;
     private final ArrayList<String> usernames  = null;
+    private final ArrayList<Wizard> wizards  = null;
     private int numOfPlayers = 0;
     private int gameMode;
     private final ExecutorService exec;
@@ -68,11 +71,20 @@ public class Lobby implements Runnable {
         this.gameMode = gameMode;
     }
 
-    public void SetOk(int id, String username) {
+    public void SetOk(int id, String username, Wizard w) {
         if (id == 0) {
             this.isFirstConnected = true;
         }
         ids.add(id);
         this.usernames.add(username);
+        this.wizards.add(w);
+    }
+
+    public ArrayList<String> getUsernames() {
+        return (ArrayList<String>) usernames.clone();
+    }
+
+    public ArrayList<Wizard> getWizards() {
+        return wizards;
     }
 }
