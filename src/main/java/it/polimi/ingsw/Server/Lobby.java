@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,8 +17,8 @@ public class Lobby implements Runnable {
     private final Server server;
     private final ServerSocket serverSocket;
     private boolean isFirstConnected = false;
-    private final ArrayList<Integer> ids;
-    private final ArrayList<String> usernames  = null;
+    private ArrayList<Integer> ids;
+    private ArrayList<String> usernames  = null;
     private final ArrayList<Wizard> wizards  = null;
     private int numOfPlayers = 0;
     private int gameMode;
@@ -103,5 +104,9 @@ public class Lobby implements Runnable {
 
     @VisibleForTesting ArrayList<String> getUsernames() {
         return this.usernames;
+    }
+
+    @VisibleForTesting ArrayList<Wizard> getWizards() {
+        return this.wizards;
     }
 }
