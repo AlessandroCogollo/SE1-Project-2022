@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server;
 
+import org.jetbrains.annotations.VisibleForTesting;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,14 +14,16 @@ public class Lobby implements Runnable {
     private final Server server;
     private final ServerSocket serverSocket;
     private boolean isFirstConnected = false;
-    private final ArrayList<Integer> ids;
-    private final ArrayList<String> usernames  = null;
+    private ArrayList<Integer> ids;
+    private ArrayList<String> usernames;
     private int numOfPlayers = 0;
     private int gameMode;
-    private final ExecutorService exec;
+    private ExecutorService exec;
     public Lobby(int port, Server server) {
         this.ids = null;
         this.server = null;
+        this.ids = new ArrayList<>();
+        this.usernames = new ArrayList<>();
         this.exec = Executors.newFixedThreadPool(4);
         try {
             this.serverSocket = new ServerSocket(port);
@@ -40,20 +44,25 @@ public class Lobby implements Runnable {
                 throw new RuntimeException(e);
             }
         }
-        for (int i = 1; i < numOfPlayers; i++) {
+        int i = 1;
+        while (i < numOfPlayers) {
             try {
                 client = this.serverSocket.accept();
-                exec.execute(new ClientHandler(this.server, this.serverSocket, client, i, this));
+                if (client != null) {
+                    exec.execute(new ClientHandler(this.server, this.serverSocket, client, i, this));
+                    i++;
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        int[] ids = this.ids.stream().mapToInt(i -> i).toArray();
+        int[] ids = this.ids.stream().mapToInt(l -> l).toArray();
         this.server.setGameProperties(ids, this.gameMode);
     }
 
-    public void shutDownLobby() {
+    @VisibleForTesting boolean shutDownLobby() {
         this.exec.shutdownNow();
+        return exec.isTerminated();
     }
 
     /*
@@ -68,11 +77,27 @@ public class Lobby implements Runnable {
         this.gameMode = gameMode;
     }
 
-    public void SetOk(int id, String username) {
+    public void setOk(int id, String username) {
         if (id == 0) {
             this.isFirstConnected = true;
         }
-        ids.add(id);
+        this.ids.add(id);
         this.usernames.add(username);
+    }
+
+    @VisibleForTesting int getNumOfPlayers() {
+        return this.numOfPlayers;
+    }
+
+    @VisibleForTesting int getGameMode() {
+        return this.gameMode;
+    }
+
+    @VisibleForTesting ArrayList<Integer> getIds() {
+        return this.ids;
+    }
+
+    @VisibleForTesting ArrayList<String> getUsernames() {
+        return this.usernames;
     }
 }

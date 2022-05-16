@@ -16,6 +16,7 @@ public class ClientHandler implements Runnable{
     private BufferedReader in = null;
     private PrintWriter out = null;
     private int port = 0;
+    // private int gameMode = 0;
     private int id;
     private String username;
     private Lobby l;
@@ -84,7 +85,7 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
 
-        l.SetOk(id, username);
+        l.setOk(id, username);
         
         Ping ping = new Ping(this);
         new Thread(ping).start();
