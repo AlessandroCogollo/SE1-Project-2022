@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Enum.Errors;
+import org.jetbrains.annotations.VisibleForTesting;
 
 /**
  * Main class of the Server
@@ -31,6 +32,10 @@ public class Server {
         //set the lock for thread wait
         this.code = Errors.NOTHING_TODO;
         this.lock = new Object();
+    }
+
+    @VisibleForTesting Lobby getLobby() {
+        return this.lobby;
     }
 
     /**
