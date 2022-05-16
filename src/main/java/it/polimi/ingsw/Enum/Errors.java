@@ -201,8 +201,11 @@ public enum Errors {
     /**
      * Error description: Invalid number of player chosen
      */
-    NUM_OF_PLAYER_ERROR (311, "Min 2 players, max 4 players");
-
+    NUM_OF_PLAYER_ERROR (311, "Min 2 players, max 4 players"),
+    /**
+     * Error description: Invalid game mode chosen
+     */
+    WRONG_GAME_MODE(312, "Game mode can be 0 or 1");
 
     private final int code;
     private final String description;
