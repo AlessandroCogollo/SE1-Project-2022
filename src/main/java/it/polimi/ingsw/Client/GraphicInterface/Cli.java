@@ -2,15 +2,29 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
 
+import java.io.*;
+
 public class Cli implements Graphic{
+
+    private final Console console = System.console();
+
     @Override
     public void displayMessage(String message) {
-        System.out.println(message);
+        this.console.writer().println(message);
     }
 
     @Override
     public Wizard getWizard() {
-        return null;
+        Wizard w = null;
+        while (w == null){
+            String s = this.console.readLine();
+            try {
+                w = Wizard.valueOf(s);
+            }catch (IllegalArgumentException e){
+                w = null;
+            }
+        }
+        return w;
     }
 
     @Override

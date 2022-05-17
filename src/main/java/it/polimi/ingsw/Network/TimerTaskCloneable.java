@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client;
+package it.polimi.ingsw.Network;
 
 import java.util.TimerTask;
 import java.util.concurrent.Callable;

@@ -2,11 +2,11 @@ package it.polimi.ingsw.Client;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;
-import org.junit.jupiter.api.RepeatedTest;
+import it.polimi.ingsw.Network.ConnectionHandler;
+import it.polimi.ingsw.Network.TimerTaskCloneable;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -41,7 +41,7 @@ class ConnectionHandlerTest {
     @Test
     void isRunning() throws IOException, InterruptedException {
         ServerSocket s = new ServerSocket(5087);
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), new Cli(), Duration.ofSeconds(60), null);
+        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
         t.start();
@@ -86,7 +86,7 @@ class ConnectionHandlerTest {
 
 
         ServerSocket s = new ServerSocket(5088);
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), new Cli(), Duration.ofSeconds(60), null);
+        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
         t.start();
@@ -179,7 +179,7 @@ class ConnectionHandlerTest {
             }
         }.init(serverIsUp);
 
-        c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), new Cli(), Duration.ofSeconds(2), call);
+        c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(2), call);
         serverIsUp.setC(c);
 
         t = new Thread(c);
@@ -357,7 +357,7 @@ class ConnectionHandlerTest {
     @Test
     void stopConnectionHandler() throws IOException, InterruptedException {
         ServerSocket s = new ServerSocket(5088);
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), new Cli(), Duration.ofSeconds(60), null);
+        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
         t.start();

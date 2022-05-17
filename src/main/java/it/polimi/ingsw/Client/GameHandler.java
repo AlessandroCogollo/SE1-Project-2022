@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Message.ModelMessage;
+import it.polimi.ingsw.Network.ConnectionHandler;
 
 
 public class GameHandler implements Runnable{

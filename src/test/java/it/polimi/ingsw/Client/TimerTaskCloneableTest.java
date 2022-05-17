@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Network.TimerTaskCloneable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Timer;
-import java.util.concurrent.Callable;
 
 import static org.junit.jupiter.api.Assertions.*;
 

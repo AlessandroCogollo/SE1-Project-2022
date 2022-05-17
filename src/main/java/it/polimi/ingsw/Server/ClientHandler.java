@@ -44,14 +44,17 @@ public class ClientHandler implements Runnable{
 
     public Message readJson(){
         Message m = null;
-        do{
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
             try {
-                String line;
+                String content = null;
+                while (content == null){
+                    content = in.readLine();
+                }
+                /*String line;
                 while ( (line = in.readLine()) != null) {
                     sb.append(line).append(System.lineSeparator());
                 }
-                String content = sb.toString();
+                String content = sb.toString();*/
                 System.out.println(content);
                 JsonElement messageJ = this.gson.fromJson(content, JsonElement.class);
 
@@ -62,12 +65,7 @@ public class ClientHandler implements Runnable{
                 ex.printStackTrace();
                 return null;
             }
-
-        }while(m.getError() == Errors.PING);
         return m;
-
-
-
     }
 
     public void Send(Message m){

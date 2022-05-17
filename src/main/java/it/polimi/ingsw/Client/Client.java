@@ -7,7 +7,9 @@ import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Network.ConnectionHandler;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.*;
 
@@ -66,7 +68,13 @@ public class Client{
                 return null;
             }
         }.init(this);
-        this.connection = new ConnectionHandler(serverHost, serverPort, graphic, defaultTimeout, er);
+        try {
+            this.connection = new ConnectionHandler(serverHost, serverPort, defaultTimeout, er);
+        } catch (IOException e) {
+            e.printStackTrace();
+            graphic.displayMessage("Error connecting to " + serverHost + " at " + serverPort);
+            throw new RuntimeException("Error connecting to " + serverHost + " at " + serverPort);
+        }
     }
 
 
@@ -180,6 +188,7 @@ public class Client{
             //send info to server
             sendMessage(info);
 
+            //todo possible error message from server
             answer = waitForResponse(Errors.INFO_RECEIVED, Duration.ofSeconds(60));
             IdMessage idM = gson.fromJson(answer, IdMessage.class);
 

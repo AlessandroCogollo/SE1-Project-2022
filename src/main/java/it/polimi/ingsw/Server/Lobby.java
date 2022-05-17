@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server;
 
-import it.polimi.ingsw.Client.ConnectionHandler;
 import it.polimi.ingsw.Enum.Wizard;
 
 import org.jetbrains.annotations.VisibleForTesting;
@@ -16,7 +15,7 @@ public class Lobby implements Runnable {
 
     private final Server server;
     private final ServerSocket serverSocket;
-    private boolean isFirstConnected = false;
+    private volatile boolean isFirstConnected = false;
     private ArrayList<Integer> ids;
     private ArrayList<String> usernames  = null;
     private final ArrayList<Wizard> wizards  = null;
