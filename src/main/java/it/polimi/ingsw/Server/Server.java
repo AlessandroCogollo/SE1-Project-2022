@@ -42,7 +42,7 @@ public class Server {
      * Start the main Thread of the server
      */
     public void start (){
-
+        System.out.println("Main Server: " + "Server started");
         new Thread(lobby).start();
 
         synchronized(this.lock) {
@@ -55,7 +55,7 @@ public class Server {
                 }
             }
         }
-
+        System.out.println("Main Server: " + "Server shutdown");
         //came here only when the server has to shutdown
         shutdownAll();
     }
@@ -81,7 +81,10 @@ public class Server {
 
         //all other possible code
         switch (this.code){
-            case CREATE_MODEL -> startGame();
+            case CREATE_MODEL -> {
+                System.out.println("Main Server: " + "Creating model");
+                startGame();
+            }
         }
 
         //reset code

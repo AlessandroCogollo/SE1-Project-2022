@@ -75,6 +75,6 @@ public class LobbyTest {
         lobby.SetOk(randId, username, w);
 
         assertTrue(lobby.getIds().contains(randId));
-        assertTrue(lobby.getUsernames().contains(username));
+        assertTrue(lobby.getUsernames().containsValue(username));
     }
 }

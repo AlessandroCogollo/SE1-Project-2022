@@ -70,7 +70,7 @@ public class ClientHandler implements Runnable{
                 J = this.net.getQueueFromServer().poll(200, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                System.out.println("readJson method in Client handler interrupted");
+                System.err.println("readJson method in Client handler interrupted");
             }
         }
         return J;
@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable{
             this.net.getQueueToServer().put(m);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.out.println("send method in Client handler interrupted");
+            System.err.println("send method in Client handler interrupted");
         }
     }
 
@@ -93,24 +93,34 @@ public class ClientHandler implements Runnable{
     public void run() {
 
         new Thread(this.net).start();
-
-        System.out.println("Client accepted");
+        System.out.println("Client Handler Started id: " + this.id);
 
         ReceiveFirstMessage();
 
+        System.out.println("ClientHandler: " + this.id + ". " + "Received first message from client");
+
         SendFirstMessage();
+
+        System.out.println("ClientHandler: " + this.id + ". " + "Sent if client is first client");
 
         if (this.id == 0)
             ReceiveFirstPlayerData();
         else
             ReceiveData();
 
+        System.out.println("ClientHandler: " + this.id + ". " + "Received data from client client");
+
         SendId();
+
+        System.out.println("ClientHandler: " + this.id + ". " + "Sent Id");
 
         ReceiveConfirm();
 
+        System.out.println("ClientHandler: " + this.id + ". " + "This client is ready");
+
         l.SetOk(this.id, this.username, this.wizard);
 
+        //todo wait until lobby gives you the queues
     }
 
     void ReceiveFirstMessage() {
@@ -142,9 +152,9 @@ public class ClientHandler implements Runnable{
             m = this.gson.fromJson(Jm, FirstPlayerMessage.class);
             playerN = m.getNumOfPlayer();
             gamemode = m.getGameMode();
-            if (l.getUsernames().contains(m.getUsername())) {
+            if (l.getUsernames().containsValue(m.getUsername())) {
                 Send(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
-            } else if (l.getWizards().contains(m.getWizard())) {
+            } else if (l.getWizards().containsValue(m.getWizard())) {
                 Send(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
             } else if (playerN < 2 || playerN > 4){
                 Send(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
@@ -170,9 +180,9 @@ public class ClientHandler implements Runnable{
                 temp = this.gson.fromJson(Jm, Message.class);
             }
             m = this.gson.fromJson(Jm, NotFirstPlayerMessage.class);
-            if (l.getUsernames().contains(m.getUsername())) {
+            if (l.getUsernames().containsValue(m.getUsername())) {
                 Send(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
-            } else if (l.getWizards().contains(m.getWizard())) {
+            } else if (l.getWizards().containsValue(m.getWizard())) {
                 Send(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
             } else {
                 ok = true;

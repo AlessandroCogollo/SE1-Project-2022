@@ -83,7 +83,7 @@ public class ConnectionHandler implements Runnable{
                 }
                 @Override
                 public Object call() {
-                    System.out.println("Server Disconnected");
+                    System.err.println("Disconnected, run default action (stop only connection handler)");
                     c.stopConnectionHandler();
                     return null;
                 }
@@ -94,7 +94,7 @@ public class ConnectionHandler implements Runnable{
         this.talker = new Talker(this.out, toSocket, pingTimer);
         this.listener = new Listener(this.in, fromSocket, pingTimer);
 
-        System.out.println("Connected to server at " + socket.getInetAddress().getHostAddress() + " at port " + socket.getLocalPort());
+        System.out.println("Connected at " + socket.getInetAddress().getHostAddress() + " at port " + socket.getLocalPort());
     }
 
     /**

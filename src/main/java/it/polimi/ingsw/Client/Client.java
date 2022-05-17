@@ -8,10 +8,14 @@ import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Network.ConnectionHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Main Client class
@@ -64,6 +68,7 @@ public class Client{
             }
             @Override
             public Object call() {
+                System.err.println("Server Down");
                 this.c.setCode(Errors.SERVER_DOWN);
                 return null;
             }
@@ -115,7 +120,7 @@ public class Client{
                 }
             }
         }
-
+        this.graphic.displayMessage("Client is shutting down");
         //came here only when the client has to shutdown
         shutdownAll(setupThread);
     }
@@ -166,34 +171,38 @@ public class Client{
 
     private void setupConnectionAndStartGame() {
         int id;
+        Collection <Errors> temp = new ArrayList<>();
         //this operation are done without the intervention of user and must be done in this order, so is not needed for have multiple thread (except for the timeout)
 
         //start the handbrake with server
         try {
+
             sendMessage(Errors.FIRST_MESSAGE_CLIENT, Errors.FIRST_MESSAGE_CLIENT.getDescription());
 
+            System.out.println("Sent first message to server");
+
+            temp.add(Errors.FIRST_MESSAGE_SERVER);
             //wait for the first answer from server
-            JsonElement answer = waitForResponse(Errors.FIRST_MESSAGE_SERVER, Duration.ofSeconds(120));
+            JsonElement answer = waitForResponse(temp, Duration.ofSeconds(60));
+            temp.clear();
+
+            System.out.println("Received first message from server");
 
             NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
 
+            this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client");
 
-            //ask for information about game only if needed
-            JsonElement info;
-            if (npM.isYouAreFirst())
-                info = first();
-            else
-                info = notFirst();
+            //ask for information about game only if needed and send this information to server waiting for answer that are correct
+            answer = sendInfo(npM.isYouAreFirst(), temp);
 
-            //send info to server
-            sendMessage(info);
+            System.out.println("Sent correct info to server");
 
-            //todo possible error message from server
-            answer = waitForResponse(Errors.INFO_RECEIVED, Duration.ofSeconds(60));
             IdMessage idM = gson.fromJson(answer, IdMessage.class);
 
             //finish the setup
             sendMessage(Errors.CLIENT_READY, Errors.CLIENT_READY.getDescription());
+
+            System.out.println("Sent Client ready");
 
             //get the player id
             id = idM.getPlayerId();
@@ -211,21 +220,46 @@ public class Client{
         this.setCode(Errors.SETUP_FINISHED);
     }
 
-    private JsonElement notFirst() {
-        Wizard w = this.graphic.getWizard();
-        String username = this.graphic.getUsername();
-
-        NotFirstPlayerMessage m = new NotFirstPlayerMessage(Errors.NOT_FIRST_CLIENT.getDescription(), username, w);
-        return gson.toJsonTree(m);
+    private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws TimeoutException {
+        JsonElement answer = null;
+        coll.add(Errors.INFO_RECEIVED); // all info are right
+        coll.add(Errors.WIZARD_NOT_AVAILABLE);
+        coll.add(Errors.USERNAME_NOT_AVAILABLE);
+        if (first) {
+            coll.add(Errors.NUM_OF_PLAYER_ERROR);
+            coll.add(Errors.WRONG_GAME_MODE);
+        }
+        boolean ok = false;
+        String error = null;
+        while (!ok) {
+            JsonElement m = getInfo(error, first);
+            sendMessage(m);
+            answer = waitForResponse(coll, Duration.ofSeconds(60));
+            Message temp = this.gson.fromJson(answer, Message.class);
+            if (Errors.INFO_RECEIVED.equals(temp.getError())) {
+                ok = true;
+            } else {
+                error = temp.getMessage();
+            }
+        }
+        return answer;
     }
 
-    private JsonElement first() {
+    private JsonElement getInfo (@Nullable String message, boolean first){
+        if (message != null)
+            this.graphic.displayMessage(message);
+
         Wizard w = this.graphic.getWizard();
         String username = this.graphic.getUsername();
-        int numOfPlayer = this.graphic.getNumOfPLayer();
-        int gameMode = this.graphic.getGameMode();
 
-        FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
+        if (first){
+            int numOfPlayer = this.graphic.getNumOfPLayer();
+            int gameMode = this.graphic.getGameMode();
+            FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
+            return gson.toJsonTree(m);
+        }
+
+        NotFirstPlayerMessage m = new NotFirstPlayerMessage(Errors.NOT_FIRST_CLIENT.getDescription(), username, w);
         return gson.toJsonTree(m);
     }
 
@@ -243,21 +277,27 @@ public class Client{
         }
     }
 
-    private JsonElement waitForResponse(Errors correctCode, Duration timeout) throws TimeoutException{
+    private JsonElement waitForResponse(Collection<Errors> corrects, Duration timeout) throws TimeoutException{
 
         JsonElement message = null;
-        int codeReceived = -1;
-        int correct = correctCode.getCode();
-        while (correct != codeReceived){
+        Errors codeReceived = null;
+        while (!corrects.contains(codeReceived)){
             try{
                 message = getAnswer(timeout);
             } catch (TimeoutException e) {
                 e.printStackTrace();
-                throw new TimeoutException("Timer over while waiting for " + correctCode);
+                StringBuilder erString = null;
+                for (Errors er: corrects){
+                    if (erString == null)
+                        erString = new StringBuilder(er.toString() + " ");
+                    else
+                        erString.append(er.toString()).append(" ");
+                }
+                throw new TimeoutException("Timer over while waiting for " + erString);
             }
 
             Message temp = this.gson.fromJson(message, Message.class);
-            codeReceived = temp.getError().getCode();
+            codeReceived = temp.getError();
         }
         return message;
     }

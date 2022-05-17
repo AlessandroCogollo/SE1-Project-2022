@@ -32,6 +32,10 @@ public class PingTimer implements Runnable{
         this.receiveTimer.schedule(this.errorTask, this.receiveTimeout.toMillis(), this.receiveTimeout.toMillis());
     }
 
+    public void triggerServerError(){
+        new Thread(this.errorTask).start();
+    }
+
     /**
      * Reset the send timer stopping it and rescheduling it whit the same arguments
      */

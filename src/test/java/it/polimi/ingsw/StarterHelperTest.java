@@ -16,19 +16,6 @@ class StarterHelperTest {
 
     static Random rand = new Random(System.currentTimeMillis());
 
-    //could be used for test the output on terminal
-    /*private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-    void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-    public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }*/
     private static long factorial (int x){
         if (x < 0) {
             System.out.println("Factorial of negative number");

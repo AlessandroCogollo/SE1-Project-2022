@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 
 public class Listener implements Runnable{
@@ -43,12 +44,15 @@ public class Listener implements Runnable{
                 while (message == null)
                     message = in.readLine();
             } catch (IOException e) {
-                if (go) //if catches an exception and the thread still need to go print error
-                    e.printStackTrace();
+                if (e instanceof SocketException) {
+                    System.err.println("Socket Close");
+                    this.ping.triggerServerError();
+                    go = false;
+                }
+                e.printStackTrace();
             }
 
             if (message != null){
-
                 //if not null
 
                 //reset the ping timer of receiver

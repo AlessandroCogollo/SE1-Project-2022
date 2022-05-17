@@ -176,6 +176,22 @@ public enum Errors {
      * Code used by server when sending the answer to client info with his id
      */
     INFO_RECEIVED (402, "I'm the Eriantys Server, received login. Wait for the start of the game"),
+    /**
+     * Error description: Invalid number of player chosen
+     */
+    NUM_OF_PLAYER_ERROR (403, "Min 2 players, max 4 players"),
+    /**
+     * Error description: Invalid game mode chosen
+     */
+    WRONG_GAME_MODE(404, "Game mode can be 0 or 1"),
+    /**
+     * Error description: Username not available
+     */
+    USERNAME_NOT_AVAILABLE(405, "Username not available"),
+    /**
+     * Error description: Wizard not available
+     */
+    WIZARD_NOT_AVAILABLE(406, "Wizard not available"),
 
 
 
@@ -197,23 +213,7 @@ public enum Errors {
     /**
      * Code that tells the server that for the client the setup is finish and he is ready to receive the model message and start the game
      */
-    CLIENT_READY (453, "I'm the Eriantys Client, received id. I'll wait."),
-    /**
-     * Error description: Invalid number of player chosen
-     */
-    NUM_OF_PLAYER_ERROR (311, "Min 2 players, max 4 players"),
-    /**
-     * Error description: Invalid game mode chosen
-     */
-    WRONG_GAME_MODE(312, "Game mode can be 0 or 1"),
-    /**
-     * Error description: Username not available
-     */
-    USERNAME_NOT_AVAILABLE(313, "Username not available"),
-    /**
-     * Error description: Wizard not available
-     */
-    WIZARD_NOT_AVAILABLE(314, "Wizard not available");
+    CLIENT_READY (454, "I'm the Eriantys Client, received id. I'll wait.");
 
     private final int code;
     private final String description;

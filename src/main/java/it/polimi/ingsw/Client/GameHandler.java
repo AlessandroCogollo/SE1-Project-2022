@@ -25,13 +25,13 @@ public class GameHandler implements Runnable{
         //the setup of the connection is done, now the client wait for the start of the game
 
         //todo the stop and the handling of error
-        while (true){
+        /*while (true){
             this.model = waitForModel();
 
             JsonElement move = elaborateModel(this.model, g);
 
             sendMove(move);
-        }
+        }*/
     }
     //TODO
 
