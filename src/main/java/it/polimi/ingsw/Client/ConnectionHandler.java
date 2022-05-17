@@ -268,7 +268,7 @@ public class ConnectionHandler implements Runnable{
                     while (message == null)
                         message = in.readLine();
                 } catch (IOException e) {
-                    if (go) //if catch a exception and the thread still need to go print error
+                    if (go) //if catches an exception and the thread still need to go print error
                         e.printStackTrace();
                 }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Enum.Wizard;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,8 +70,9 @@ public class LobbyTest {
         Lobby lobby = server.getLobby();
         int randId = (int)(Math.random() * lobby.getNumOfPlayers());
         String username = "test";
+        Wizard w = Wizard.King;
 
-        lobby.setOk(randId, username);
+        lobby.SetOk(randId, username, w);
 
         assertTrue(lobby.getIds().contains(randId));
         assertTrue(lobby.getUsernames().contains(username));

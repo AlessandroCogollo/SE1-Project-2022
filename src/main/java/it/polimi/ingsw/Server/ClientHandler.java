@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
@@ -9,6 +10,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import it.polimi.ingsw.Client.*;
 
 public class ClientHandler implements Runnable{
     private Server s;
@@ -22,7 +24,7 @@ public class ClientHandler implements Runnable{
     private Lobby l;
     private Wizard wizard;
     Gson gson;
-    public ClientHandler (Server s, ServerSocket server, Socket client, int id, Lobby l){
+    public ClientHandler(Server s, ServerSocket server, Socket client, int id, Lobby l){
         this.s = s;
         this.server = server;
         this.client = client;
@@ -41,21 +43,31 @@ public class ClientHandler implements Runnable{
     }
 
     public Message readJson(){
-        StringBuilder sb = new StringBuilder();
-        try {
-            String line;
-            while ( (line = in.readLine()) != null) {
-                sb.append(line).append(System.lineSeparator());
+        Message m = null;
+        do{
+            StringBuilder sb = new StringBuilder();
+            try {
+                String line;
+                while ( (line = in.readLine()) != null) {
+                    sb.append(line).append(System.lineSeparator());
+                }
+                String content = sb.toString();
+                System.out.println(content);
+                JsonElement messageJ = this.gson.fromJson(content, JsonElement.class);
+
+                //check if the message is not only a ping message
+                m = this.gson.fromJson(messageJ, Message.class);
+
+            } catch(IOException ex){
+                ex.printStackTrace();
+                return null;
             }
-            String content = sb.toString();
-            System.out.println(content);
-            String json = this.gson.toJson(content);
-            Message m = this.gson.fromJson(json, Message.class);
-            return m;
-        } catch(IOException ex){
-            ex.printStackTrace();
-            return null;
-        }
+
+        }while(m.getError() == Errors.PING);
+        return m;
+
+
+
     }
 
     public void Send(Message m){
@@ -67,6 +79,9 @@ public class ClientHandler implements Runnable{
     public void run() {
 
         System.out.println("Client accepted");
+
+        CHPing chPing = new CHPing();
+        new Thread(chPing).start();
 
         try {
 
@@ -91,9 +106,6 @@ public class ClientHandler implements Runnable{
         }
 
         l.SetOk(this.id, this.username, this.wizard);
-        
-        Ping ping = new Ping(this);
-        new Thread(ping).start();
 
     }
 
@@ -169,38 +181,20 @@ public class ClientHandler implements Runnable{
     public Socket getClient() {
         return client;
     }
-}
 
-class Ping implements Runnable{
+    class CHPing implements Runnable {
 
-    private ClientHandler ch;
+        @Override
+        public void run() {
+            InetAddress inet = client.getInetAddress();
+            boolean isReachable;
 
-    public Ping(ClientHandler ch){
-        this.ch = ch;
-    }
-
-    @Override
-    public void run() {
-        Socket client = ch.getClient();
-        InetAddress inet = client.getInetAddress();
-        boolean isReachable;
-
-        while(true){
-            try {
-                isReachable = inet.isReachable(5000);
-                if(isReachable){
-                    System.out.println("Host is Reachable");
-                }
-                else{
-                    System.out.println("Host is not reachable. Closing connection...");
-                    ch.stop();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            while (true) {
+                Ping ping = (Ping) readJson();
+                Send(new Ping());
             }
+
+
         }
-
-
     }
 }

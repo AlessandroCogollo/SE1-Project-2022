@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Client.ConnectionHandler;
 import it.polimi.ingsw.Enum.Wizard;
 
 import org.jetbrains.annotations.VisibleForTesting;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
