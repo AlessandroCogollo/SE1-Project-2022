@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import org.junit.jupiter.api.Test;
-import it.polimi.ingsw.Server.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -10,139 +10,173 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 import it.polimi.ingsw.Client.*;
+import it.polimi.ingsw.Network.ConnectionHandler;
+
+import javax.print.attribute.standard.NumberOfDocuments;
 
 public class ClientHandler implements Runnable{
-    private Server s;
-    private Socket client = null;
-    private ServerSocket server = null;
-    private BufferedReader in = null;
-    private PrintWriter out = null;
-    private int port = 0;
-    private int id;
+    private final Server s;
+    private final Socket client;
+    private final int id;
+    private final Lobby l;
+    private final ConnectionHandler net;
+    private final Gson gson = new Gson();
+
     private String username;
-    private Lobby l;
     private Wizard wizard;
-    Gson gson;
-    public ClientHandler(Server s, ServerSocket server, Socket client, int id, Lobby l){
+
+    public ClientHandler(Server s, Socket client, int id, Lobby l){
         this.s = s;
-        this.server = server;
         this.client = client;
         this.id = id;
         this.l = l;
-        this.gson = new Gson();
-        try {
-            this.in = new BufferedReader(
-                    new InputStreamReader(client.getInputStream()));
-            this.out = new PrintWriter(
-                    client.getOutputStream(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.net = new ConnectionHandler(client, Duration.ofSeconds(60), this::stop);
     }
 
-    public Message readJson(){
-        Message m = null;
-            //StringBuilder sb = new StringBuilder();
+    /**
+     * Used only by the timer in connection handler if the client go down
+     * @return always null for override call method of Callable
+     */
+    public Object stop (){
+        this.net.stopConnectionHandler();
+        //todo
+        return null;
+    }
+
+    public Socket getClient() {
+        return client;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Wizard getWizard() {
+        return wizard;
+    }
+
+    public JsonElement readJson(){
+        JsonElement J = null;
+        while (J == null) {
             try {
-                String content = null;
-                while (content == null){
-                    content = in.readLine();
-                }
-                /*String line;
-                while ( (line = in.readLine()) != null) {
-                    sb.append(line).append(System.lineSeparator());
-                }
-                String content = sb.toString();*/
-                System.out.println(content);
-                JsonElement messageJ = this.gson.fromJson(content, JsonElement.class);
-
-                //check if the message is not only a ping message
-                m = this.gson.fromJson(messageJ, Message.class);
-
-            } catch(IOException ex){
-                ex.printStackTrace();
-                return null;
+                J = this.net.getQueueFromServer().poll(200, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.out.println("readJson method in Client handler interrupted");
             }
-        return m;
+        }
+        return J;
     }
 
-    public void Send(Message m){
-        String json = this.gson.toJson(m);
-        out.println(json);
+    public void Send (JsonElement m){
+        try {
+            this.net.getQueueToServer().put(m);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("send method in Client handler interrupted");
+        }
+    }
+
+    public void Send (Message m){
+        Send(this.gson.toJsonTree(m));
     }
 
     @Override
     public void run() {
 
+        new Thread(this.net).start();
+
         System.out.println("Client accepted");
 
-        CHPing chPing = new CHPing();
-        new Thread(chPing).start();
+        ReceiveFirstMessage();
 
-        try {
+        SendFirstMessage();
 
-            ReceiveFirstMessage();
+        if (this.id == 0)
+            ReceiveFirstPlayerData();
+        else
+            ReceiveData();
 
-            SendFirstMessage();
+        SendId();
 
-            if (this.id == 0) {
-                ReceiveFirstPlayerData();
-            } else {
-                ReceiveData();
-            }
-
-            SendId();
-
-            ReceiveConfirm();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        ReceiveConfirm();
 
         l.SetOk(this.id, this.username, this.wizard);
 
     }
 
-    void ReceiveFirstMessage() throws IOException, ClassNotFoundException {
-        Message m = readJson();
-        System.out.println(m.getMessage());
-
+    void ReceiveFirstMessage() {
+        Message m = null;
+        while (m == null){
+            JsonElement j = readJson();
+            Message temp = this.gson.fromJson(j, Message.class);
+            if (temp.getError().equals(Errors.FIRST_MESSAGE_CLIENT))
+                m = temp;
+        }
     }
 
-    void SendFirstMessage() throws IOException {
+    void SendFirstMessage() {
         Send(new NewPlayerMessage("Welcome!", this.id == 0));
     }
 
     void ReceiveFirstPlayerData(){
-        FirstPlayerMessage m = (FirstPlayerMessage) readJson();
+        boolean ok = false;
+        int playerN = -1;
+        int gamemode = -1;
+        FirstPlayerMessage m = null;
+        while (!ok) {
+            JsonElement Jm = readJson();
+            Message temp = this.gson.fromJson(Jm, Message.class);
+            while (!temp.getError().equals(Errors.FIRST_CLIENT)) {
+                Jm = readJson();
+                temp = this.gson.fromJson(Jm, Message.class);
+            }
+            m = this.gson.fromJson(Jm, FirstPlayerMessage.class);
+            playerN = m.getNumOfPlayer();
+            gamemode = m.getGameMode();
+            if (l.getUsernames().contains(m.getUsername())) {
+                Send(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            } else if (l.getWizards().contains(m.getWizard())) {
+                Send(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
+            } else if (playerN < 2 || playerN > 4){
+                Send(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
+            } else if (gamemode < 0 || gamemode > 1){
+                Send(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0-1): "));
+            } else {
+                ok = true;
+            }
+        }
+        this.l.setParameters(playerN, gamemode);
         this.username = m.getUsername();
         this.wizard = m.getWizard();
-        while(m.getNumOfPlayer() < 2 || m.getNumOfPlayer()< 4 || m.getGameMode() < 0 || m.getGameMode() < 1){
-            if(m.getNumOfPlayer() < 2 || m.getNumOfPlayer()< 4){
-                Send(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
-            }
-            else if(m.getGameMode() < 0 || m.getGameMode() < 1){
-                Send(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0-1): "));
-            }
-            m = (FirstPlayerMessage) readJson();
-        }
-        this.l.setParameters(m.getNumOfPlayer(), m.getGameMode());
     }
     
     void ReceiveData(){
-        NotFirstPlayerMessage m = (NotFirstPlayerMessage) readJson();
-        while(l.getUsernames().contains(m.getUsername()) || l.getWizards().contains(m.getWizard())){
-            if(l.getUsernames().contains(m.getUsername()) ){
+        boolean ok = false;
+        NotFirstPlayerMessage m = null;
+        while (!ok) {
+            JsonElement Jm = readJson();
+            Message temp = this.gson.fromJson(Jm, Message.class);
+            while (!temp.getError().equals(Errors.NOT_FIRST_CLIENT)) {
+                Jm = readJson();
+                temp = this.gson.fromJson(Jm, Message.class);
+            }
+            m = this.gson.fromJson(Jm, NotFirstPlayerMessage.class);
+            if (l.getUsernames().contains(m.getUsername())) {
                 Send(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
-            }
-            else if(l.getWizards().contains(m.getWizard())){
+            } else if (l.getWizards().contains(m.getWizard())) {
                 Send(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
+            } else {
+                ok = true;
             }
-            m = (NotFirstPlayerMessage) readJson();
         }
         this.username = m.getUsername();
         this.wizard = m.getWizard();
@@ -153,46 +187,12 @@ public class ClientHandler implements Runnable{
     }
 
     void ReceiveConfirm(){
-        Message m = readJson();
-        System.out.println(m.getError() + ", " + m.getMessage());
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    void stop(){
-        try {
-            in.close();
-            out.close();
-            client.close();
-            //server.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Socket getClient() {
-        return client;
-    }
-
-    class CHPing implements Runnable {
-
-        @Override
-        public void run() {
-            InetAddress inet = client.getInetAddress();
-            boolean isReachable;
-
-            while (true) {
-                Ping ping = (Ping) readJson();
-                Send(new Ping());
-            }
-
-
+        Message m = null;
+        while (m == null){
+            JsonElement j = readJson();
+            Message temp = this.gson.fromJson(j, Message.class);
+            if (temp.getError().equals(Errors.CLIENT_READY))
+                m = temp;
         }
     }
 }

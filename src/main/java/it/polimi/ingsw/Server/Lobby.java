@@ -41,7 +41,7 @@ public class Lobby implements Runnable {
         while (!isFirstConnected) {
             try {
                 client = serverSocket.accept();
-                ClientHandler c = new ClientHandler(this.server, this.serverSocket, client, 0, this);
+                ClientHandler c = new ClientHandler(this.server, client, 0, this);
                 exec.execute(c);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -52,7 +52,7 @@ public class Lobby implements Runnable {
             try {
                 client = this.serverSocket.accept();
                 if (client != null) {
-                    exec.execute(new ClientHandler(this.server, this.serverSocket, client, i, this));
+                    exec.execute(new ClientHandler(this.server, client, i, this));
                     i++;
                 }
             } catch (IOException ex) {

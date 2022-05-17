@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client;
+package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Network.TimerTaskCloneable;
 import org.junit.jupiter.api.Test;

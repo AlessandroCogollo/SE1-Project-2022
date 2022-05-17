@@ -35,6 +35,12 @@ public class ConnectionHandler implements Runnable{
     private volatile boolean hasToRun;
     private final Object lock = new Object();
 
+    /**
+     * Create connection Handler
+     * @param socket socket used for this connection
+     * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
+     * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
+     */
     public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable errorTask){
         this.socket = socket;
         //initialize input and output from server
@@ -92,7 +98,7 @@ public class ConnectionHandler implements Runnable{
     }
 
     /**
-     * Create the ConnectionHandler
+     * Create the ConnectionHandler with the creation of a client socket
      * @param serverHost the ip of the server
      * @param serverPort the port of the server
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )

@@ -225,7 +225,7 @@ public class Client{
         int numOfPlayer = this.graphic.getNumOfPLayer();
         int gameMode = this.graphic.getGameMode();
 
-        FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_MESSAGE_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
+        FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
         return gson.toJsonTree(m);
     }
 
