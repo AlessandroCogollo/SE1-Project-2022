@@ -12,6 +12,8 @@
 
 target/**
 
+
+
 # Package Files #
 *.jar
 *.war
@@ -20,6 +22,9 @@ target/**
 *.zip
 *.tar.gz
 *.rar
+
+#jar finale
+!out/artifacts/AM56_jar/AM56.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

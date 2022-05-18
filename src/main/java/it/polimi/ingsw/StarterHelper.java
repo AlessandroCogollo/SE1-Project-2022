@@ -1,5 +1,9 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.GraphicInterface.Cli;
+import it.polimi.ingsw.Client.GraphicInterface.Graphic;
+import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -12,11 +16,11 @@ import java.util.Collection;
  */
 /* todo
 *   - arguments sanitize
-*   - cli and gui client option
 */
 public class StarterHelper{
 
     private final Collection<OptionHandler> options;
+    private static boolean run = true;
     private boolean hasHelp; //help is a special option that if present in command, is the only one executed
 
 
@@ -26,6 +30,16 @@ public class StarterHelper{
     public StarterHelper() {
         this.options = new ArrayList<>();
         this.hasHelp = false;
+        run = true;
+    }
+
+    /**
+     * Class Constructor
+     */
+    public StarterHelper(boolean debug) {
+        this.options = new ArrayList<>();
+        this.hasHelp = false;
+        run = debug;
     }
 
     /**
@@ -110,7 +124,8 @@ public class StarterHelper{
      */
     public static Collection<OptionHandler> getOptionHandlers (){
 
-        Collection<OptionHandler> collection = new ArrayList<>(5);
+        Collection<OptionHandler> collection = new ArrayList<>(6);
+
 
         Option client = Option.builder("c").longOpt("client").desc("Start a client").hasArg(false).build();
         OptionHandler clientHandler = new OptionHandler(client, false){
@@ -124,20 +139,63 @@ public class StarterHelper{
 
                 Option port = opts.getOption("p");
                 Option ip = opts.getOption("ip");
-                boolean temp = cmd.hasOption(port);
+                Option graphic = opts.getOption("g");
+                boolean hasPort = cmd.hasOption(port);
+                boolean hasIp = cmd.hasOption(ip);
+                boolean hasGraphic = cmd.hasOption(graphic);
 
-                if (temp == cmd.hasOption(ip)) {
-                    if (temp) {
+                //Possible graphic value
+                String cli = "Cli";
+                String gui = "Gui";
+
+
+                if (hasPort == hasIp) {
+                    if (hasIp) {
                         //if they are equal true we will start the client with given ip and port of the server
                         int portNumber = Integer.parseInt(cmd.getOptionValue('p'));
                         String serverIp = cmd.getOptionValue("ip");
-                        System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber);
 
-                        // todo start the client
+                        if (hasGraphic){
+                            String graphicString = cmd.getOptionValue("g");
+                            if (cli.equals(graphicString)){
+                                System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with Cli.");
+                                startClient(serverIp, portNumber, new Cli());
+                                return 101;
+                            }
+                            if (gui.equals(graphicString)){
+                                System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with Gui.");
+                                startClient(serverIp, portNumber, new Gui());
+                                return 101;
+                            }
+                            System.out.println("Error illegal argument for client -c option. Type -help or -h.");
+                            return -1;
+                        }
+                        //no graphic passed
+                        System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with default Cli.");
+                        startClient(serverIp, portNumber, new Cli());
                         return 101;
                     }
+
                     //if they are equal false we will start the client and he will search for some udp message from the server
-                    System.out.println("Starting default client");
+
+                    if (hasGraphic){
+                        String graphicString = cmd.getOptionValue("g");
+                        if (cli.equals(graphicString)){
+                            System.out.println("Starting default client with Cli.");
+                            System.out.println("Not yet implemented please use -c with -ip and -p options");
+                            return 101;
+                        }
+                        if (gui.equals(graphicString)){
+                            System.out.println("Starting default client with Gui.");
+                            System.out.println("Not yet implemented please use -c with -ip and -p options");
+                            return 101;
+                        }
+                        System.out.println("Error illegal argument for client -c option. Type -help or -h.");
+                        return -1;
+                    }
+                    //no graphic passed
+
+                    System.out.println("Starting default client with default Cli");
                     System.out.println("Not yet implemented please use -c with -ip and -p options");
                     return 102;
                 }
@@ -158,25 +216,24 @@ public class StarterHelper{
                     return -1;
                 }
                 boolean hasIP = cmd.hasOption(opts.getOption("ip"));
+                boolean hasGraphic = cmd.hasOption("g");
                 if (hasIP) //ip option in server is useless
                     System.out.println("Used -ip option with -s server option, ignored.");
+                if (hasGraphic) //p option in server is useless
+                    System.out.println("Used -g option with -s server option, ignored.");
 
                 if (cmd.hasOption(opts.getOption("p"))){
                     //start the server at this port
                     int portNumber = Integer.parseInt(cmd.getOptionValue('p'));
 
                     System.out.println("Starting server with port: " + portNumber);
-
-                    Server server = new Server(portNumber);
-                    // todo set a timer for stop the server automatically during the test
-                    //server.start();
-
-                    return hasIP ? 503 : 103;
+                    startServer(portNumber);
+                    return (hasIP || hasGraphic) ? 503 : 103;
                 }
                 System.out.println("Starting default server");
                 System.out.println("Not yet implemented, use -s and -p for start the server");
 
-                return hasIP ? 504 : 104;
+                return (hasIP || hasGraphic) ? 504 : 104;
             }
         };
 
@@ -203,6 +260,16 @@ public class StarterHelper{
         };
 
 
+        Option graphic = Option.builder("g").longOpt("graphic").desc("Set the graphic of the client, is useful only with -c option").hasArg().build();
+        OptionHandler graphicHandler = new OptionHandler(graphic, false) {
+            @Override
+            public int manageOption(CommandLine cmd, Options opts) {
+                //data options, do nothing
+                return 0;
+            }
+        };
+
+
 
         Option help = new Option("h", "help", false, "Display this help list");
         OptionHandler helpHandler = new OptionHandler(help, true) {
@@ -219,13 +286,28 @@ public class StarterHelper{
             }
         };
 
+
+
         collection.add(clientHandler);
         collection.add(serverHandler);
         collection.add(portHandler);
         collection.add(ipHandler);
+        collection.add(graphicHandler);
         collection.add(helpHandler);
 
         return collection;
+    }
+
+
+    //possible starter
+    private static void startServer(int port){
+        if (run)
+            new Server(port).start();
+    }
+
+    private static void startClient(String ip, int port, Graphic graphic){
+        if (run)
+            new Client(graphic, ip, port).start();
     }
 
     /*
@@ -239,8 +321,8 @@ public class StarterHelper{
      es:
      101 start client with server ip and port
      102 start client without server ip and port, must have a server with udp broadcast of his address
-     103 start server with port given       503 ip arg was ignored
-     104 start server without port given    504 ip arg was ignored
+     103 start server with port given       503 ip or g arg was ignored
+     104 start server without port given    504 ip or g arg was ignored
 
     */
 

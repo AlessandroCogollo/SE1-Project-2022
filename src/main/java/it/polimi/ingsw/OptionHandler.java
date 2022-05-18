@@ -55,8 +55,8 @@ public abstract class OptionHandler {
      *      es: <br>
      *      101 start client with server ip and port <br>
      *      102 start client without server ip and port, must have a server with udp broadcast of his address <br>
-     *      103 start server with port given       503 ip arg was ignored <br>
-     *      104 start server without port given    504 ip arg was ignored <br>
+     *      103 start server with port given       503 ip or g arg was ignored <br>
+     *      104 start server without port given    504 ip or g arg was ignored <br>
      *      </pre>
      */
     abstract public int manageOption (CommandLine cmd, Options opts);

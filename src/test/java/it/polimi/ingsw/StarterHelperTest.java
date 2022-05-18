@@ -174,12 +174,15 @@ class StarterHelperTest {
         String p = "-p";
         String stringPort = "8123";
         String h = "-h";
+        String g = "-g";
+        String stringGraphic = "Cli";
         Collection<String[]> collection = new ArrayList<>(5);
         collection.add(new String[]{c}); //0
         collection.add(new String[]{s}); //1
         collection.add(new String[]{h}); //2
         collection.add(new String[]{ip, stringIp}); //3
         collection.add(new String[]{p, stringPort}); //4
+        collection.add(new String[]{g, stringGraphic}); //5
 
         return allPossibilities(collection);
     }
@@ -374,7 +377,7 @@ class StarterHelperTest {
         Collection<OptionHandler> collection = StarterHelper.getOptionHandlers();
 
 
-        StarterHelper main = new StarterHelper();
+        StarterHelper main = new StarterHelper(false);
         for (OptionHandler o : collection)
             main.add(o);
 
@@ -396,6 +399,7 @@ class StarterHelperTest {
         boolean ip = cmd.hasOption("ip");
         boolean client = cmd.hasOption("c");
         boolean server = cmd.hasOption("s");
+        boolean graphic = cmd.hasOption("g");
 
 
         if (help) {
