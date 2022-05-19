@@ -15,7 +15,10 @@ import java.util.Collection;
  * Cli argument parser Class, for start the server or the client
  */
 /* todo
-*   - arguments sanitize
+*   - arguments sanitize StarterHelper
+*   - finish server Server, Lobby, ClientHandler, GameHandler
+*   - set all test
+*   - add resume game to model GameInitializer
 */
 public class StarterHelper{
 

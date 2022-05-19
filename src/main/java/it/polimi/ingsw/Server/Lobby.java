@@ -47,7 +47,7 @@ public class Lobby implements Runnable {
             System.out.println("Lobby: " + "Waiting for First Client connected");
             client = serverSocket.accept();
             System.out.println("Lobby: " + "First Client connected");
-            ClientHandler c = new ClientHandler(this.server, client, 0, this);
+            ClientHandler c = new ClientHandler(client, 0, this);
             exec.execute(c);
             this.abstractClients.put(0, c);
         } catch (IOException e) {
@@ -70,7 +70,7 @@ public class Lobby implements Runnable {
                 client = this.serverSocket.accept();
                 System.out.println("Lobby: " + "New Player Connected");
                 if (client != null) {
-                    ClientHandler c = new ClientHandler(this.server, client, i, this);
+                    ClientHandler c = new ClientHandler(client, i, this);
                     exec.execute(c);
                     this.abstractClients.put(i, c);
                     i++;
@@ -91,6 +91,7 @@ public class Lobby implements Runnable {
             }
         }
         //todo give to all client handler the right queue
+
     }
 
     @VisibleForTesting boolean shutDownLobby() {

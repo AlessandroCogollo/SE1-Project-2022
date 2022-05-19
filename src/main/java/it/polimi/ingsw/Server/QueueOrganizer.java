@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Message.ClientMessageDecorator;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class QueueOrganizer {
 
     private final BlockingQueue<ClientMessageDecorator> modelQueue;
-    private final Map<Integer, BlockingQueue<String>> playersQueue;
+    private final Map<Integer, BlockingQueue<JsonElement>> playersQueue;
 
     /**
      * Constructor of QueueOrganizer class
@@ -40,7 +41,7 @@ public class QueueOrganizer {
      * @param id request the queue to the player with this id
      * @return the players thread-safe queue
      */
-    public BlockingQueue<String> getPlayerQueue(int id){
+    public BlockingQueue<JsonElement> getPlayerQueue(int id){
         return this.playersQueue.get(id);
     }
 }

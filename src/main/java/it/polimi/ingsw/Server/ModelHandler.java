@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Server.Model.Game;
@@ -71,7 +72,7 @@ public class ModelHandler implements Runnable{
 
         //first send to player the first model message
         ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(Errors.NO_ERROR);
-        String message = this.gson.toJson(m);
+        JsonElement message = this.gson.toJsonTree(m);
         for (Integer id : ids){
             sendMessageToPlayer(message, id);
         }
@@ -105,7 +106,7 @@ public class ModelHandler implements Runnable{
      * @param playerId the player id that has done the move
      */
     private void updateClients(int errorCode, int playerId) {
-        String message;
+        JsonElement message;
         Errors er = Errors.getErrorsByCode(errorCode);
 
 
@@ -119,14 +120,14 @@ public class ModelHandler implements Runnable{
                 server.setCode(Errors.GAME_OVER);
             }
 
-            message = gson.toJson(m);
+            message = gson.toJsonTree(m);
         }
         else {
             //if error return the message
             //todo retrieve username from lobby
             Message m = new Message(er, "The player " + playerId + " commit an error: " + er.getDescription());
 
-            message = gson.toJson(m);
+            message = gson.toJsonTree(m);
         }
         for (Integer id : ids){
             sendMessageToPlayer(message, id);
@@ -138,13 +139,13 @@ public class ModelHandler implements Runnable{
      * @param message message prepared
      * @param playerId the player id to send the message
      */
-    private void sendMessageToPlayer (String message, int playerId){
+    private void sendMessageToPlayer (JsonElement message, int playerId){
         //using executor for not blocking the model queue
         new Thread(new Runnable() {
-            private String message;
-            private BlockingQueue<String> queue;
+            private JsonElement message;
+            private BlockingQueue<JsonElement> queue;
 
-            public Runnable init(String myParam, BlockingQueue<String> queue) {
+            public Runnable init(JsonElement myParam, BlockingQueue<JsonElement> queue) {
                 this.message = myParam;
                 this.queue = queue;
                 return this;
