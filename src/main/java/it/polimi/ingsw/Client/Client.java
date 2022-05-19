@@ -128,8 +128,7 @@ public class Client{
     private void shutdownAll(Thread setupThread) {
         if (setupThread.isAlive())
             setupThread.interrupt();
-        if (this.connection.isRunning())
-            this.connection.stopConnectionHandler();
+        this.connection.stopConnectionHandler();
         //todo stop gameHandler
 
     }

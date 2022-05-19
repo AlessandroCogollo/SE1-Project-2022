@@ -21,6 +21,7 @@ public class TimerTaskCloneable extends TimerTask implements Cloneable {
         try {
             this.call.call();
         } catch (Exception e) {
+            System.err.println("TimerTaskCloneable: Error while executing the task");
             throw new RuntimeException(e);
         }
     }

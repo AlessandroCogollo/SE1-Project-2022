@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import org.junit.jupiter.api.Test;
@@ -106,11 +107,11 @@ class ModelHandlerTest {
     }
 
     static class Consumer implements Runnable {
-        private final BlockingQueue<String> q;
+        private final BlockingQueue<JsonElement> q;
 
         private boolean run;
 
-        public Consumer (BlockingQueue<String> q) {
+        public Consumer (BlockingQueue<JsonElement> q) {
             this.q = q;
             this.run = false;
         }
@@ -123,7 +124,7 @@ class ModelHandlerTest {
         public void run() {
             this.run = true;
             while (this.run){
-                String s = null;
+                JsonElement s = null;
                 try {
                     s = q.poll(100, TimeUnit.MILLISECONDS);
                     System.out.println(s);
@@ -139,7 +140,7 @@ class ModelHandlerTest {
 
     @ParameterizedTest
     @MethodSource("argsMethod")
-    void run(ClientMessageDecorator move) {
+    void run(ClientMessageDecorator move) throws InterruptedException {
         int[] ids = getIds(3);
         QueueOrganizer q = new QueueOrganizer(ids);
 

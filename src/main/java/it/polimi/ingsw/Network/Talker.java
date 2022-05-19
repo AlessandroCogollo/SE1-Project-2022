@@ -24,31 +24,29 @@ public class Talker implements Runnable{
         this.ping = ping;
     }
 
-    public boolean isRunning() {
-        return go;
-    }
-
     @Override
     public void run() {
         this.go = true;
-        while (go){
+        while (this.go){
 
             //retrieve the message to send if it is present
             JsonElement messageJ = null;
             try {
                 messageJ = messageSource.poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Listener: Error while retrieving the message to send");
+                this.go = false;
             }
 
-            if (messageJ != null) {
+            if (messageJ == null)
+                continue;
 
-                //if there is a message to send, send it and reset the ping timer for sender
-                String message = this.gson.toJson(messageJ);
-                this.out.println(message);
-                this.ping.resetSendTimer();
-            }
+            //if there is a message to send, send it and reset the ping timer for sender
+            String message = this.gson.toJson(messageJ);
+            this.out.println(message);
+            this.ping.resetSendTimer();
         }
+        System.out.println("Talker Stopped");
     }
 
     public void stopTalker(){

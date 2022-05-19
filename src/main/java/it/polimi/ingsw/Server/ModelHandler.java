@@ -8,6 +8,8 @@ import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Server.Model.Game;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +22,9 @@ public class ModelHandler implements Runnable{
     private final QueueOrganizer queues;
     private final int[] ids;
     private final Gson gson;
-    private volatile boolean hasToRun; //Volatile guarantees updated value always visible
+    private final ExecutorService main = Executors.newSingleThreadExecutor();
+
+    private volatile boolean go = true;
 
     /**
      * Constructor of the class
@@ -34,26 +38,19 @@ public class ModelHandler implements Runnable{
         this.model = Game.getGameModel(ids, gameMode);
         this.queues = q;
         this.ids = ids;
-
-        this.hasToRun = false;
-
         //this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.gson = new GsonBuilder().create();
     }
 
     /**
-     * Retrieve if the model is working or not
-     * @return true if the model is running, false otherwise
+     * stop the model in 500 millisecond and take at least one other message and send one other message to the players
      */
-    public boolean getHasToRun() {
-        return hasToRun;
-    }
+    public void stopModel () throws InterruptedException {
+        this.go = false;
+        //let finish the last send of files;
+        Thread.sleep(500);
 
-    /**
-     * stop the model within 100 millisecond and take at least one other message and send one other message to the players
-     */
-    public void stopModel () {
-        this.hasToRun = false;
+        this.main.shutdownNow();
     }
 
     /**
@@ -66,9 +63,10 @@ public class ModelHandler implements Runnable{
      */
     @Override
     public void run() {
+        this.main.execute(this::main);
+    }
 
-        //set to run
-        this.hasToRun = true;
+    private void main() {
 
         //first send to player the first model message
         ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(Errors.NO_ERROR);
@@ -80,32 +78,27 @@ public class ModelHandler implements Runnable{
 
         //then wait for player move
 
-        while (hasToRun){
+        while (this.go){
 
             ClientMessageDecorator move = null;
             try {
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted while waiting for some move from clients ModelHandlers line: " + new Throwable().getStackTrace()[0].getLineNumber());
             }
-            if (move != null) {
+            if (move == null)
+                continue;
 
-                int playerId = move.playerId();
-                ClientMessage moveReceived = move.message();
+            int playerId = move.playerId();
+            ClientMessage moveReceived = move.message();
 
-                int error = moveReceived.executeMove(model, playerId);
+            int error = moveReceived.executeMove(this.model, playerId);
 
-                updateClients(error, playerId);
-            }
+            updateClients(error, playerId);
         }
     }
-
-    /**
-     * Prepare the message to the player, The Model Message if the move was valid and the model is updated, otherwise an error message
-     * @param errorCode the error from the model (0 == No Error)
-     * @param playerId the player id that has done the move
-     */
     private void updateClients(int errorCode, int playerId) {
+
         JsonElement message;
         Errors er = Errors.getErrorsByCode(errorCode);
 
@@ -117,6 +110,7 @@ public class ModelHandler implements Runnable{
 
             //if the game is over communicates it to the main server thread
             if (m.gameIsOver()){
+                this.go = false;
                 server.setCode(Errors.GAME_OVER);
             }
 
@@ -124,21 +118,16 @@ public class ModelHandler implements Runnable{
         }
         else {
             //if error return the message
-            //todo retrieve username from lobby
+
             Message m = new Message(er, "The player " + playerId + " commit an error: " + er.getDescription());
 
             message = gson.toJsonTree(m);
         }
-        for (Integer id : ids){
-            sendMessageToPlayer(message, id);
+
+        for (Integer id : this.ids){
+            sendMessageToPlayer (message, id);
         }
     }
-
-    /**
-     * Send the message prepared by @{link#updateClients(int, int) updateClients} to the player
-     * @param message message prepared
-     * @param playerId the player id to send the message
-     */
     private void sendMessageToPlayer (JsonElement message, int playerId){
         //using executor for not blocking the model queue
         new Thread(new Runnable() {
@@ -156,7 +145,7 @@ public class ModelHandler implements Runnable{
                 try {
                     queue.put(message);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.err.println("Error put interrupted in ModelHandler line: " + new Throwable().getStackTrace()[0].getLineNumber());
                 }
             }
         }.init(message, queues.getPlayerQueue(playerId))).start();

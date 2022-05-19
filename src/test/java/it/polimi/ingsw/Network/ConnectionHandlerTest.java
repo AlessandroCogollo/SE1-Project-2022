@@ -19,6 +19,8 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,32 +29,25 @@ class ConnectionHandlerTest {
 
 
     @Test
-    void getQueueToServer() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
-    void getQueueFromServer() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
-    void isRunning() throws IOException, InterruptedException {
-        ServerSocket s = new ServerSocket(5087);
+    void getQueueToServer() throws IOException {
+        ServerSocket s = new ServerSocket(5088);
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
         t.start();
-        s.accept();
-        Thread.sleep(500);
-        assertTrue(c.isRunning());
+        Socket ser = s.accept();
+        assertNotNull(c.getQueueToServer());
+    }
 
-        c.stopConnectionHandler();
-        s.close();
-        t.join(); //assure that all thread has finished
-        assertFalse(c.isRunning());
+    @Test
+    void getQueueFromServer() throws IOException {
+        ServerSocket s = new ServerSocket(5088);
+        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
+
+        Thread t = new Thread(c);
+        t.start();
+        Socket ser = s.accept();
+        assertNotNull(c.getQueueFromServer());;
     }
 
     class UtilClass {
@@ -232,7 +227,6 @@ class ConnectionHandlerTest {
         Thread.sleep(4000); //the timeout for the server is double the timeout to send the ping
 
         assertFalse(serverIsUp.isBool());
-        assertFalse(c.isRunning());
 
         s.close();
         t.join(); //assure that all thread has finished
@@ -359,14 +353,17 @@ class ConnectionHandlerTest {
         ServerSocket s = new ServerSocket(5088);
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
-        Thread t = new Thread(c);
-        t.start();
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        ex.execute(c);
         s.accept();
 
-        Thread.sleep(20);
+        Thread.sleep(200);
+
         c.stopConnectionHandler();
+        ex.shutdown();
         s.close();
-        t.join(); //assure that all thread has finished
-        assertTrue(true);
+        Thread.sleep(200);
+
+        assertTrue(ex.isTerminated());
     }
 }

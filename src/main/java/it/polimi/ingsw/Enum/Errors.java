@@ -128,7 +128,7 @@ public enum Errors {
 
 
     /*
-      List of Server of client Error (code from 301 to 400)
+      List of Server or Client Error (code from 301 to 400)
      */
     /**
      * Error description: The server or client main thread has nothing to do

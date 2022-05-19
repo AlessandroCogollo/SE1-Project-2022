@@ -29,15 +29,11 @@ public class Listener implements Runnable{
         this.ping = ping;
     }
 
-    public boolean isRunning() {
-        return go;
-    }
-
     @Override
     public void run() {
         //listener thread
         this.go = true;
-        while (go){
+        while (this.go){
             //retrieve message from server
             String message = null;
             try {
@@ -45,35 +41,36 @@ public class Listener implements Runnable{
                     message = in.readLine();
             } catch (IOException e) {
                 if (e instanceof SocketException) {
-                    System.err.println("Socket Close");
+                    System.err.println("Listener: Socket Close");
                     this.ping.triggerServerError();
-                    go = false;
+                    this.go = false;
                 }
-                e.printStackTrace();
+                else
+                    System.err.println("Listener: Error while reading from socket");
+
+                continue;
             }
 
-            if (message != null){
-                //if not null
+            //reset the ping timer of receiver
+            this.ping.resetReceiveTimer();
 
-                //reset the ping timer of receiver
-                this.ping.resetReceiveTimer();
+            //convert the message
+            JsonElement messageJ = this.gson.fromJson(message, JsonElement.class);
 
-                //convert the message
-                JsonElement messageJ = this.gson.fromJson(message, JsonElement.class);
+            //check if the message is not only a ping message
+            Message m = this.gson.fromJson(messageJ, Message.class);
+            if (m.getError() != Errors.PING) {
 
-                //check if the message is not only a ping message
-                Message m = this.gson.fromJson(messageJ, Message.class);
-                if (m.getError() != Errors.PING) {
-
-                    //if is not a ping message put it in the out queue
-                    try {
-                        this.messageDest.put(messageJ);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                //if is not a ping message put it in the out queue
+                try {
+                    this.messageDest.put(messageJ);
+                } catch (InterruptedException e) {
+                    System.err.println("Listener: Interrupted when putting data in the queue");
+                    this.go = false;
                 }
             }
         }
+        System.out.println("Listener Stopped");
     }
 
     public void stopListener(){

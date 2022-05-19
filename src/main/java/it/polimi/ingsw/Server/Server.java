@@ -2,18 +2,23 @@ package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Enum.Errors;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import javax.swing.*;
+
 /**
  * Main class of the Server
  */
 public class Server {
 
     private final Lobby lobby;
-    private int[] ids;
-    private int gameMode;
-    private QueueOrganizer queueOrganizer;
-    private ModelHandler model;
-    private Errors code;
-    private final Object lock;
+
+    private final Object lock = new Object();
+
+    private int[] ids = null;
+    private int gameMode = -1;
+    private QueueOrganizer queueOrganizer = null;
+    private ModelHandler model = null;
+    private Errors code = Errors.NOTHING_TODO;
+
 
     /**
      * Constructor of the Server, set all his parameter
@@ -22,84 +27,6 @@ public class Server {
     public Server (int port){
         //create lobby
         this.lobby = new Lobby(port, this);
-
-        //set the placeholder for information
-        this.ids = null;
-        this.gameMode = -1;
-        this.queueOrganizer = null;
-        this.model = null;
-
-        //set the lock for thread wait
-        this.code = Errors.NOTHING_TODO;
-        this.lock = new Object();
-    }
-
-    @VisibleForTesting Lobby getLobby() {
-        return this.lobby;
-    }
-
-    /**
-     * Start the main Thread of the server
-     */
-    public void start (){
-        System.out.println("Main Server: " + "Server started");
-        new Thread(lobby).start();
-
-        synchronized(this.lock) {
-            while(doSomething()) {
-                try {
-                    this.lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        System.out.println("Main Server: " + "Server shutdown");
-        //came here only when the server has to shutdown
-        shutdownAll();
-    }
-
-    private void shutdownAll() {
-        // stop model thread
-        if (this.model != null && this.model.getHasToRun()){
-            this.model.stopModel();
-        }
-        if (this.lobby != null) {
-            this.lobby.shutDownLobby();
-        }
-    }
-
-    //this method is invoked any time someone modify the code, so the server know what to do.
-    private boolean doSomething() {
-        //return false only when the Server needs to shut down otherwise return always true
-        if (this.code.equals(Errors.PLAYER_DISCONNECTED) || this.code.equals(Errors.GAME_OVER)){
-            //todo handling of this codes
-
-            return false;
-        }
-
-        //all other possible code
-        switch (this.code){
-            case CREATE_MODEL -> {
-                System.out.println("Main Server: " + "Creating model");
-                startGame();
-            }
-        }
-
-        //reset code
-        this.code = Errors.NOTHING_TODO;
-        return true;
-    }
-
-    private void startGame() {
-        if (this.model == null) {
-            this.queueOrganizer = new QueueOrganizer(this.ids);
-            this.model = new ModelHandler(this.ids, this.gameMode, this, this.queueOrganizer);
-            //todo give lobby queue organizer
-        }
-        if (!this.model.getHasToRun())
-            new Thread(this.model).start();
     }
 
     /**
@@ -124,6 +51,94 @@ public class Server {
         this.ids = ids;
         this.gameMode = gameMode;
         setCode(Errors.CREATE_MODEL);
+    }
+
+    /**
+     * Start the main Thread of the server
+     */
+    public void start (){
+        System.out.println("Main Server: " + "Server started");
+
+        new Thread(this.lobby).start();
+
+        synchronized(this.lock) {
+            while(doSomething()) {
+                try {
+                    this.lock.wait();
+                } catch (InterruptedException e) {
+                   System.err.println("Main Server: Error while waiting setting to shutdown");
+                   this.code = Errors.GAME_OVER;
+                }
+            }
+        }
+
+        System.out.println("Main Server: " + "Server shutdown");
+        //came here only when the server has to shutdown
+        shutdownAll();
+    }
+
+    //this method is invoked any time someone modify the code, so the server know what to do.
+    private boolean doSomething() {
+
+        boolean go = true;
+
+        switch (this.code){
+            case CREATE_MODEL -> {
+                System.out.println("Main Server: " + "Creating model");
+                startGame();
+            }
+            case PLAYER_DISCONNECTED -> {
+                //all message for the disconnection of the player are sent by the lobby, so the Main server has only to shut down itself
+                System.out.println("Main Server: " + "A player has been disconnected, shutting down the server");
+                go = false;
+            }
+            case GAME_OVER -> {
+                //the game is finished and the last model message is in the queues to the players, need only to wait some times and shut down the server
+                System.out.println("Main Server: " + "The game has finished, shutting down the server");
+                go = false;
+            }
+        }
+
+        //return false only when the Server needs to be shut down otherwise return always true
+
+        //reset code
+        this.code = Errors.NOTHING_TODO;
+
+        return go;
+    }
+
+    private void shutdownAll() {
+
+        //first thing to shutdown if present because it waits for the last message to be sent
+        if (this.model != null){
+            boolean done = false;
+            while (!done) {
+                try {
+                    this.model.stopModel();
+                } catch (InterruptedException e) {
+                    System.err.println("Error, fail shutdown the model Server line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    continue;
+                }
+                done = true;
+            }
+        }
+
+        if (this.lobby != null) {
+            this.lobby.shutDownLobby();
+        }
+    }
+
+    private void startGame() {
+        this.queueOrganizer = new QueueOrganizer(this.ids);
+
+        this.model = new ModelHandler(this.ids, this.gameMode, this, this.queueOrganizer);
+        new Thread(this.model).start();
+
+        this.lobby.setQueues(this.queueOrganizer);
+    }
+
+    @VisibleForTesting Lobby getLobby() {
+        return this.lobby;
     }
 
     /**

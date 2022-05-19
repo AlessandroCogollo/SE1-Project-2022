@@ -39,7 +39,7 @@ public class ConnectionHandler implements Runnable{
      * Create connection Handler
      * @param socket socket used for this connection
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
-     * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
+     * @param errorTask the task to do if the server go down and don't answer the ping message, by default it only stop the connection handler, if the task is not null it will run the task and after close the connection handler
      */
     public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable errorTask){
         this.socket = socket;
@@ -50,6 +50,7 @@ public class ConnectionHandler implements Runnable{
             fromSocket = socket.getInputStream();
             toSocket = socket.getOutputStream();
         } catch (IOException e) {
+            System.err.println("ConnectionHandler: Error while getting the stream of the socket");
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -71,24 +72,30 @@ public class ConnectionHandler implements Runnable{
             }
         }.init(new Gson().toJson(new Ping()), toSocket);
 
-        Callable errorCall;
-        if (errorTask != null)
-            errorCall = errorTask;
-        else{
-            errorCall = new Callable() {
-                private ConnectionHandler c;
-                public Callable init(ConnectionHandler c){
-                    this.c = c;
-                    return this;
+        Callable errorCall = new Callable() {
+            private ConnectionHandler c;
+            private Callable task;
+            public Callable init(ConnectionHandler c, Callable task){
+                this.c = c;
+                this.task = task;
+                return this;
+            }
+            @Override
+            public Object call() {
+                if (task == null)
+                    System.err.println("ConnectionHandler: Disconnected, run default action (stop only connection handler)");
+                else{
+                    System.err.println("ConnectionHandler: Disconnected, run the passed task and stop the connection handler");
+                    try {
+                        this.task.call();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                @Override
-                public Object call() {
-                    System.err.println("Disconnected, run default action (stop only connection handler)");
-                    c.stopConnectionHandler();
-                    return null;
-                }
-            }.init(this);
-        }
+                c.stopConnectionHandler();
+                return null;
+            }
+        }.init(this, errorTask);
 
         this.pingTimer = new PingTimer(timeout, new TimerTaskCloneable(sendPing), new TimerTaskCloneable(errorCall));
         this.talker = new Talker(this.out, toSocket, pingTimer);
@@ -125,59 +132,28 @@ public class ConnectionHandler implements Runnable{
     }
 
     /**
-     * Return if the ConnectionHandler is running or not
-     * @return true if this class thread is running, of false otherwise
-     */
-    public boolean isRunning() {
-        return hasToRun;
-    }
-
-    /**
      * Start all the thread needed for handling the connection
      */
     @Override
     public void run() {
-
-        //set to run
-        this.hasToRun = true;
-
         new Thread(this.pingTimer).start();
         new Thread(this.listener).start();
         new Thread(this.talker).start();
-
-
-        synchronized (this.lock) {
-            while (hasToRun) {
-                try {
-                    this.lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
-        }
     }
 
     /**
      * Stop the ConnectionHandler and all his inner class including all thread created by him, close also the socket
      */
     public void stopConnectionHandler (){
-        synchronized(this.lock) {
-            this.hasToRun = false;
-            this.lock.notifyAll();
-        }
-
-        this.pingTimer.stopPing();
-        if (this.listener.isRunning())
-            this.listener.stopListener();
-        if (this.talker.isRunning())
-            this.talker.stopTalker();
 
         try {
             this.socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
+            System.err.println("ConnectionHandler: Error when closing the socket");
         }
+
+        this.pingTimer.stopPing();
+        this.listener.stopListener();
+        this.talker.stopTalker();
     }
 }
