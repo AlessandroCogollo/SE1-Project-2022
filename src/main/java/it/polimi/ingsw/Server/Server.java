@@ -137,10 +137,6 @@ public class Server {
         this.lobby.setQueues(this.queueOrganizer);
     }
 
-    @VisibleForTesting Lobby getLobby() {
-        return this.lobby;
-    }
-
     /**
      * Used only in testing for start the server without have to write the parameter
      * @param args standard main args param

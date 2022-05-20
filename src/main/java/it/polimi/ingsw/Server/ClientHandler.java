@@ -50,6 +50,7 @@ public class ClientHandler implements Runnable{
      * @return always null for override call method of Callable
      */
     public Object clientDown (){
+        System.err.println("ClientHandler: " + this.id + " this player has been disconnected.");
         this.l.clientDown(this.id);
         return null;
     }
@@ -186,22 +187,22 @@ public class ClientHandler implements Runnable{
 
             ReceiveFirstMessage();
 
-            System.out.println("ClientHandler: " + this.id + ". " + "Received first message from client");
+            System.out.println("ClientHandler: " + this.id + " Received first message from client");
 
             SendFirstMessage();
 
-            System.out.println("ClientHandler: " + this.id + ". " + "Sent if client is first client");
+            System.out.println("ClientHandler: " + this.id + " Sent if client is first client");
 
             if (this.id == 0)
                 ReceiveFirstPlayerData();
             else
                 ReceiveData();
 
-            System.out.println("ClientHandler: " + this.id + ". " + "Received data from client client");
+            System.out.println("ClientHandler: " + this.id + " Received data from client");
 
             SendId();
 
-            System.out.println("ClientHandler: " + this.id + ". " + "Sent Id");
+            System.out.println("ClientHandler: " + this.id + " Sent Id");
 
             ReceiveConfirm();
         } catch (InterruptedException e){
@@ -209,7 +210,7 @@ public class ClientHandler implements Runnable{
             return;
         }
 
-        System.out.println("ClientHandler: " + this.id + ". " + "This client is ready");
+        System.out.println("ClientHandler: " + this.id + " This client is ready");
 
         l.SetOk(this.id, this.username, this.wizard);
 
@@ -226,7 +227,11 @@ public class ClientHandler implements Runnable{
         return this.net.getQueueFromServer().take();
     }
 
-    private void sendJsonToClient(JsonElement m){
+    /**
+     * Used by the Lobby for send the message ia a player disconnected when the setup isn' finished
+     * @param m JsonElement that will be converted to a string and sent to the Client
+     */
+    public void sendJsonToClient(JsonElement m){
         try {
             this.net.getQueueToServer().put(m);
         } catch (InterruptedException e) {

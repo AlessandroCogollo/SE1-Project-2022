@@ -99,7 +99,7 @@ public class Lobby implements Runnable {
      * @param id the id of the player disconnected
      */
     public void clientDown (int id){
-        String errorMessage = "The player " + this.usernames.get(id) + " with id " + id + "disconnected. The game will be stopped.";
+        String errorMessage = "The player " + this.usernames.get(id) + " with id " + id + " disconnected. The game will be stopped.";
         System.out.println("Lobby: " + errorMessage);
 
         sendDisconnectedMessage (errorMessage);
@@ -149,18 +149,31 @@ public class Lobby implements Runnable {
     private void sendDisconnectedMessage(String errorMessage) {
         Message m = new Message(Errors.PLAYER_DISCONNECTED, errorMessage);
         JsonElement mJ = new Gson().toJsonTree(m);
-        for (Integer id: this.ids){
-            boolean done = false;
-            while (!done){
-                try {
-                    this.queues.getPlayerQueue(id).put(mJ);
-                } catch (InterruptedException e) {
-                    System.err.println("Error interrupted while sending last message to player " + id + " Lobby line: " + new Throwable().getStackTrace()[0].getLineNumber());
-                    continue;
-                }
-                done = true;
-            }
 
+        //two case
+        if (this.queues == null){
+            System.err.println("Lobby: send player disconnected message when the setup is not completed");
+            // 1 we are in setup mode
+            for (Integer id: this.ids){
+                this.abstractClients.get(id).sendJsonToClient(mJ);
+            }
+        }
+        else {
+            // 2 we are in the real game
+            for (Integer id: this.ids){
+                System.err.println("Lobby: send player disconnected message when the setup is completed");
+                boolean done = false;
+                while (!done){
+                    try {
+                        this.queues.getPlayerQueue(id).put(mJ);
+                    } catch (InterruptedException e) {
+                        System.err.println("Error interrupted while sending last message to player " + id + " Lobby line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                        continue;
+                    }
+                    done = true;
+                }
+
+            }
         }
     }
 
@@ -190,7 +203,7 @@ public class Lobby implements Runnable {
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("Lobby:  receiving data from client line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    System.err.println("Lobby:  interrupted receiving data from client line: " + new Throwable().getStackTrace()[0].getLineNumber());
                     return;
                 }
             }

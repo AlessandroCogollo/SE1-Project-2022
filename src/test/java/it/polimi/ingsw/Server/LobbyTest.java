@@ -1,80 +1,170 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
 import it.polimi.ingsw.Enum.Wizard;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+//real test done while testing the connection between server and client
 public class LobbyTest {
     @Test
-    void run() {
-        int portNum = (int)(Math.random()*64512) + 1024;
-        Server server = new Server(portNum);
+    void run() throws InterruptedException {
+        Lobby l = new Lobby(21431, null);
 
-        //create a thread that stops the server after some time
-        new Thread(new ServerTest.ServerStopper(500, server)).start();
-        server.start();
+        new Thread(l).start();
 
-        // connect a random number of clients (between 2 and 4)
-        for (int i = 0; i < (int)(Math.random() * 3) + 2; i++) {
-            Client client = new Client("127.0.0.1", portNum);
-            System.out.println(i);
+        Thread.sleep(500);
+
+        //setParameters done by the first client thread
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            Client c = new Client(new TestingCli(), "127.0.0.1", 21431);
+            executorService.execute(c::start);
         }
 
-        // TODO: actual testing
+        Thread.sleep(500);
+
+        executorService.shutdownNow();
+        l.shutDownLobby();
+        Thread.sleep(500);
         assertTrue(true);
     }
 
     @Test
-    void shutDownLobby() {
-        int portNum = (int)(Math.random()*64512) + 1024;
-        Server server = new Server(portNum);
+    void shutDownLobby() throws InterruptedException {
+        Lobby l = new Lobby(17431, null);
 
-        //create a thread that stops the server after some time
-        new Thread(new ServerTest.ServerStopper(500, server)).start();
-        server.start();
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        ex.execute(l);
 
-        Lobby lobby = server.getLobby();
-        //todo
+        Thread.sleep(1000);
+        System.out.println("Shutting down lobby");
+        l.shutDownLobby();
+
+        ex.shutdown(); // if not shutdown executors are anyway considered not terminated even if their task are completed
+        Thread.sleep(20);
+        assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
+
     }
 
     @Test
-    void setParameters() {
-        int portNum = (int)(Math.random()*65534);
-        Server server = new Server(portNum);
+    void setParameters() throws InterruptedException {
+        Lobby l = new Lobby(17431, null);
 
-        new Thread(new ServerTest.ServerStopper(500, server)).start();
-        server.start();
+        new Thread(l).start();
 
-        int randPlayers = (int)(Math.random() * 4);
-        int randGameMode = (int)(Math.random() * 2);
+        Thread.sleep(500);
 
-        Lobby lobby = server.getLobby();
+        //setParameters done by the first client thread
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            Client c = new Client(new TestingCli(), "127.0.0.1", 17431);
+            executorService.execute(c::start);
+        }
 
-        lobby.setParameters(randPlayers, randGameMode);
-        /*
-        assertEquals(randPlayers, lobby.getNumOfPlayers());
-        assertEquals(randGameMode, lobby.getGameMode());*/
+        Thread.sleep(500);
+
+        executorService.shutdownNow();
+        l.shutDownLobby();
+        Thread.sleep(500);
+        assertTrue(true);
     }
 
     @Test
-    void setOk() {
-        int portNum = (int)(Math.random()*64512) + 1024;
-        Server server = new Server(portNum);
+    void setOk() throws InterruptedException {
+        Lobby l = new Lobby(17441, null);
 
-        new Thread(new ServerTest.ServerStopper(500, server)).start();
-        server.start();
-/*
-        Lobby lobby = server.getLobby();
-        int randId = (int)(Math.random() * lobby.getNumOfPlayers());
-        String username = "test";
-        Wizard w = Wizard.King;
+        new Thread(l).start();
 
-        lobby.SetOk(randId, username, w);
+        Thread.sleep(2000);
 
-        assertTrue(lobby.getIds().contains(randId));
-        assertTrue(lobby.getUsernames().containsValue(username));*/
+        //setOk done by all the client thread
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            Client c = new Client(new TestingCli(), "127.0.0.1", 17441);
+            executorService.execute(c::start);
+        }
+
+        Thread.sleep(5000);
+        for (int i = 0; i < 4; i++){
+            String user = l.getUsernames().get(i);
+            Wizard w = l.getWizards().get(i);
+            assertNotNull(user);
+            assertNotNull(w);
+            assertTrue(l.getUsernames().remove(i, user));
+            assertTrue(l.getWizards().remove(i, w));
+            assertFalse(l.getUsernames().containsValue(user));
+            assertFalse(l.getWizards().containsValue(w));
+        }
+
+        executorService.shutdownNow();
+        l.shutDownLobby();
+        Thread.sleep(500);
+        assertTrue(true);
+    }
+
+    @Test
+    void setQueues() throws InterruptedException {
+        Lobby l = new Lobby(17531, null);
+
+        new Thread(l).start();
+
+        int[] ids = {0, 1, 2, 3};
+
+        QueueOrganizer q = new QueueOrganizer(ids);
+
+        l.setQueues(q);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            Client c = new Client(new TestingCli(), "127.0.0.1", 17531);
+            executorService.execute(c::start);
+        }
+
+        Thread.sleep(500);
+
+        executorService.shutdownNow();
+        l.shutDownLobby();
+        Thread.sleep(500);
+        assertTrue(true);
+    }
+
+    @Test
+    void clientDown() throws InterruptedException {
+        Server s = new Server(16323); // placeholder, not used
+        Lobby l = new Lobby(18531, s);
+
+        new Thread(l).start();
+
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            Client c = new Client(new TestingCli(), "127.0.0.1", 18531);
+            executorService.execute(c::start);
+        }
+
+        Thread.sleep(500);
+        l.clientDown(1);
+
+        executorService.shutdownNow();
+        l.shutDownLobby();
+        Thread.sleep(500);
+        assertTrue(true);
+
+    }
+
+    @Test
+    void getUsernames() {
+        assertNotNull(new Lobby(17324, null).getUsernames());
+    }
+
+    @Test
+    void getWizards() {
+        assertNotNull(new Lobby(17325, null).getWizards());
     }
 }

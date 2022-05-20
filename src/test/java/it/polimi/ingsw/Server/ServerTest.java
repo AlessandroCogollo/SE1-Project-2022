@@ -13,14 +13,12 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//real test done while testing the connection between server and client like in this run test
 class ServerTest {
-    @Test
-    void getLobby() {
-        assertNotNull(new Server(8123).getLobby());
-    }
 
     static class ServerStopper extends ServerCodeSetter{
         public ServerStopper(long timeDelta, Server server) {
@@ -54,7 +52,7 @@ class ServerTest {
         }
     }
 
-    @Test
+    @Test //todo activate before push
     void start() throws InterruptedException {
 
         Server server = new Server(5078);
@@ -94,7 +92,6 @@ class ServerTest {
         assertFalse(executorService.isTerminated());
 
         Thread.sleep(1000);
-
         executorService.shutdownNow();
 
         Thread.sleep(1000);
@@ -104,10 +101,8 @@ class ServerTest {
         System.out.println("Client is terminated wait 2 minutes and half");
 
         //wait
-
-        Thread.sleep(150000);
         ex.shutdown();
-        assertTrue(ex.isTerminated());
+        assertTrue(ex.awaitTermination(3, TimeUnit.MINUTES));
     }
 
     @Test
@@ -125,27 +120,11 @@ class ServerTest {
         assertTrue(true);
     }
 
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-
-    void setUpStreams() {
-        System.setOut(new PrintStream(outContent, true));
-        System.setErr(new PrintStream(errContent, true));
-    }
-
-    public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }
-
     static Random rand = new Random();
     @Test
     void setGameProperties() throws InterruptedException {
         int port = rand.nextInt(5000, 50000);
         Server server = new Server(port);
-        setUpStreams();
         ExecutorService ex = Executors.newSingleThreadExecutor();
         ex.execute(server::start);
 
@@ -157,15 +136,12 @@ class ServerTest {
 
 
         Thread.sleep(1000);
-        String s = outContent.toString();
-        restoreStreams();
 
-        assertTrue(s.contains("Main Server: " + "Creating model"));
         executorService.shutdownNow();
         server.setCode(Errors.GAME_OVER);
         ex.shutdown();
-        outContent.reset();
         Thread.sleep(1000);
+        assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
     }
 
     private void mainServer (){
@@ -177,6 +153,6 @@ class ServerTest {
         ex.execute(this::mainServer);
         ex.shutdownNow();
         Thread.sleep(20);
-        assertTrue(ex.isTerminated());
+        assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
     }
 }

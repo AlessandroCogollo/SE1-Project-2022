@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -64,16 +66,20 @@ class ModelHandlerTest {
         return args.stream().map(Arguments::of);
     }
 
+    //real test done in Server class test and in the method below
     @Test
-    void getHasToRun() {
-        //trivial
-        assertTrue(true);
-    }
+    void stopModel() throws InterruptedException {
+        int[] ids = getIds(3);
+        QueueOrganizer q = new QueueOrganizer(ids);
 
-    @Test
-    void stopModel() {
-        //cannot assert the thread is stopped, it works because is checked in the method under this one
-        assertTrue(true);
+        //set to null server so the game can't finish or it will trigger an error
+        ModelHandler x = new ModelHandler(ids, 1, null, q);
+
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        ex.execute(x);
+        x.stopModel();
+        ex.shutdown();
+        assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
     }
 
     static class Producer implements Runnable {

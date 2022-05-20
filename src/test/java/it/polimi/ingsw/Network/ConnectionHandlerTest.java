@@ -30,7 +30,7 @@ class ConnectionHandlerTest {
 
     @Test
     void getQueueToServer() throws IOException {
-        ServerSocket s = new ServerSocket(5088);
+        ServerSocket s = new ServerSocket(8743);
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
@@ -41,7 +41,7 @@ class ConnectionHandlerTest {
 
     @Test
     void getQueueFromServer() throws IOException {
-        ServerSocket s = new ServerSocket(5088);
+        ServerSocket s = new ServerSocket(4321);
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
