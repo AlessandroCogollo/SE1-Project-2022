@@ -211,4 +211,20 @@ public class ModelMessage {
     public boolean gameIsOver (){
         return this.winnerId != -1;
     }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
+    }
+
+    public String getActualPhase() {
+        return actualPhase;
+    }
+
+    public String getActualActionPhase() {
+        return actualActionPhase;
+    }
+
+    public int getStudentsMoved() {
+        return studentsMoved;
+    }
 }

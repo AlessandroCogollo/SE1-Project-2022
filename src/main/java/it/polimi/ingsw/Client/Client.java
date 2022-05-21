@@ -4,27 +4,33 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
+import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Network.ConnectionHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 /**
  * Main Client class
  */
+
+//todo add player disconnected to stop the game
 public class Client{
 
     private final Graphic graphic;
     private final ConnectionHandler connection;
     private final Gson gson = new GsonBuilder().create();
+
+    private ExecutorService executors = null;
 
     private GameHandler game = null;
 
@@ -59,22 +65,8 @@ public class Client{
      */
     public Client(Graphic graphic, String serverHost, int serverPort, Duration defaultTimeout) {
         this.graphic = graphic;
-        Callable er = new Callable() {
-            private Client c;
-
-            public Callable init (Client c){
-                this.c = c;
-                return this;
-            }
-            @Override
-            public Object call() {
-                System.err.println("Server Down");
-                this.c.setCode(Errors.SERVER_DOWN);
-                return null;
-            }
-        }.init(this);
         try {
-            this.connection = new ConnectionHandler(serverHost, serverPort, defaultTimeout, er);
+            this.connection = new ConnectionHandler(serverHost, serverPort, defaultTimeout, this::serverDown);
         } catch (IOException e) {
             e.printStackTrace();
             graphic.displayMessage("Error connecting to " + serverHost + " at " + serverPort);
@@ -83,18 +75,19 @@ public class Client{
     }
 
 
-
-
-
-
     /**
      * Ask the player what type of interface he prefers, CLi or Gui
      * @return the chosen interface
      */
     public static Graphic askGraphic() {
-
-        //todo
-        return new Cli();
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        String s = null;
+        while ((!"Cli".equals(s) && !"Gui".equals(s))){
+            try {
+                s = input.readLine();
+            } catch (IOException ignored) {}
+        }
+        return "Cli".equals(s) ? new Cli() : new Gui();
     }
 
     /**
@@ -104,8 +97,8 @@ public class Client{
 
         new Thread(this.connection).start();
 
-        Thread setupThread = new Thread(this::setupConnectionAndStartGame);
-        setupThread.start();
+        this.executors = Executors.newSingleThreadExecutor();
+        executors.execute(this::setupConnectionAndStartGame);
 
 
         //do nothing until some other thread tells him what to do with a code
@@ -115,38 +108,14 @@ public class Client{
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
+                    System.err.println("Client main Thread interrupted");
+                    this.code = Errors.GAME_OVER; //only possible in tests
                 }
             }
         }
         this.graphic.displayMessage("Client is shutting down");
         //came here only when the client has to shutdown
-        shutdownAll(setupThread);
-    }
-
-    private void shutdownAll(Thread setupThread) {
-        if (setupThread.isAlive())
-            setupThread.interrupt();
-        this.connection.stopConnectionHandler();
-        //todo stop gameHandler
-
-    }
-
-    private boolean doSomething() {
-        //return false only when the Server need to shutdown otherwise return always true
-        if (this.code.equals(Errors.SERVER_DOWN) || this.code.equals(Errors.GAME_OVER) || this.code.equals(Errors.SERVER_NOT_RESPONDING)){
-            //todo handling of this codes
-
-            return false;
-        }
-
-        switch (this.code) {
-            case SETUP_FINISHED -> new Thread(this.game).start();
-        }
-        //reset code
-        this.code = Errors.NOTHING_TODO;
-        return true;
+        shutdownAll();
     }
 
     /**
@@ -163,7 +132,41 @@ public class Client{
 
 
 
+    private void shutdownAll() {
+        executors.shutdownNow();
+        this.connection.stopConnectionHandler();
+        if (this.game != null)
+            this.game.stopGameHandler();
+    }
 
+    private Object serverDown() {
+        setCode(Errors.SERVER_DOWN);
+        return null;
+    }
+
+    private boolean doSomething() {
+        boolean go = true;
+
+        //return false only when the Server need to shutdown otherwise return always true
+        switch (this.code) {
+            case SETUP_FINISHED -> {
+                this.graphic.displayMessage("Ready to play, waiting for the start of the game");
+                new Thread(this.game).start();
+            }
+            case SERVER_DOWN -> {
+                this.graphic.displayMessage("The server go down, shutting down");
+                go = false;
+            }
+            case GAME_OVER -> {
+                this.graphic.displayMessage("The game is finished, shutting down");
+                go = false;
+            }
+        }
+
+        //reset code
+        this.code = Errors.NOTHING_TODO;
+        return go;
+    }
 
 
     //method for set the initial connection
@@ -182,7 +185,7 @@ public class Client{
 
             temp.add(Errors.FIRST_MESSAGE_SERVER);
             //wait for the first answer from server
-            JsonElement answer = waitForResponse(temp, Duration.ofSeconds(60));
+            JsonElement answer = waitForResponse(temp);
             temp.clear();
 
             System.out.println("Received first message from server");
@@ -205,21 +208,19 @@ public class Client{
 
             //get the player id
             id = idM.getPlayerId();
-        } catch (TimeoutException e) {
-            this.graphic.displayMessage(e.getMessage());
-            this.setCode(Errors.SERVER_NOT_RESPONDING);
+        } catch (IOException | InterruptedException e) {
+            System.err.println(e.getMessage());
+            //this.setCode(Errors.SERVER_NOT_RESPONDING);
             return;
         }
 
         //create gameHandler
-        this.game = new GameHandler(id, this.connection, this.graphic);
+        this.game = new GameHandler(id, this.connection, this.graphic, this);
 
-        this.graphic.displayMessage("Ready to play, waiting for the start of the game");
-
-        this.setCode(Errors.SETUP_FINISHED);
+        setCode(Errors.SETUP_FINISHED);
     }
 
-    private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws TimeoutException {
+    private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws IOException, InterruptedException {
         JsonElement answer = null;
         coll.add(Errors.INFO_RECEIVED); // all info are right
         coll.add(Errors.WIZARD_NOT_AVAILABLE);
@@ -233,7 +234,7 @@ public class Client{
         while (!ok) {
             JsonElement m = getInfo(error, first);
             sendMessage(m);
-            answer = waitForResponse(coll, Duration.ofSeconds(60));
+            answer = waitForResponse(coll);
             Message temp = this.gson.fromJson(answer, Message.class);
             if (Errors.INFO_RECEIVED.equals(temp.getError())) {
                 ok = true;
@@ -244,12 +245,13 @@ public class Client{
         return answer;
     }
 
-    private JsonElement getInfo (@Nullable String message, boolean first){
+    private JsonElement getInfo (@Nullable String message, boolean first) throws IOException, InterruptedException {
         if (message != null)
             this.graphic.displayMessage(message);
 
-        Wizard w = this.graphic.getWizard();
         String username = this.graphic.getUsername();
+        Wizard w = this.graphic.getWizard();
+
 
         if (first){
             int numOfPlayer = this.graphic.getNumOfPLayer();
@@ -276,12 +278,13 @@ public class Client{
         }
     }
 
-    private JsonElement waitForResponse(Collection<Errors> corrects, Duration timeout) throws TimeoutException{
+    //private JsonElement waitForResponse(Collection<Errors> corrects, Duration timeout) throws TimeoutException, InterruptedException
+    private JsonElement waitForResponse(Collection<Errors> corrects) throws InterruptedException {
 
         JsonElement message = null;
         Errors codeReceived = null;
         while (!corrects.contains(codeReceived)){
-            try{
+            /*try{
                 message = getAnswer(timeout);
             } catch (TimeoutException e) {
                 e.printStackTrace();
@@ -293,7 +296,9 @@ public class Client{
                         erString.append(er.toString()).append(" ");
                 }
                 throw new TimeoutException("Timer over while waiting for " + erString);
-            }
+            }*/
+
+            message = this.connection.getQueueFromServer().take();
 
             Message temp = this.gson.fromJson(message, Message.class);
             codeReceived = temp.getError();
@@ -301,6 +306,7 @@ public class Client{
         return message;
     }
 
+    /*
     private JsonElement getAnswer (Duration timeout) throws TimeoutException {
 
         JsonElement message = null;
@@ -316,7 +322,7 @@ public class Client{
 
         return message;
     }
-
+    */
 
     //test method
 

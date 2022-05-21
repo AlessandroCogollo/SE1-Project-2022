@@ -1,12 +1,14 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Message.*;
+
+import java.io.IOException;
 
 public class TestingCli implements Graphic {
 
     static int wI = 0;
     static int uI = 0;
-
 
     @Override
     public void displayMessage(String message) {
@@ -71,5 +73,30 @@ public class TestingCli implements Graphic {
     @Override
     public int getGameMode() {
         return 1;
+    }
+
+    @Override
+    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
     }
 }

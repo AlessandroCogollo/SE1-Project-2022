@@ -1,12 +1,18 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Message.*;
 
 import java.io.*;
-
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+//todo stop scanner after shutdown
 public class Cli implements Graphic{
 
-    private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader input = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
+    private String userName = null;
+
+    //private Wizard wizard = null;
 
     @Override
     public void displayMessage(String message) {
@@ -14,102 +20,115 @@ public class Cli implements Graphic{
     }
 
     @Override
-    public Wizard getWizard() {
+    public Wizard getWizard() throws IOException {
         Wizard w = null;
         while (w == null){
-            String s = null;
-            try {
-                System.out.println("Cli: Insert a wizard");
-                s = input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("IOException Cli line 24");
+            displayMessage("Insert your Wizard");
+            String s = this.input.readLine();
+            if (s.isEmpty() || s.isBlank()){
+                displayMessage("Insert a valid username");
+                continue;
             }
-            if (s != null) {
-                try {
-                    w = Wizard.valueOf(s);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Cli: Please insert a valid name of wizard");
-                }
+            try {
+                w = Wizard.valueOf(s);
+            } catch (IllegalArgumentException e) {
+                displayMessage("Please insert a valid name of wizard");
             }
         }
         return w;
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername() throws IOException {
         String user = null;
         while (user == null){
-            String s = null;
-            try {
-                System.out.println("Cli: Insert your username");
-                s = input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("IOException Cli line 24");
+            displayMessage("Insert your Username");
+            String s = this.input.readLine();
+
+            if (s.isEmpty() || s.isBlank()){
+                displayMessage("Insert a valid username");
+                continue;
             }
             user = s;
         }
+        this.userName = user;
         return user;
     }
 
     @Override
-    public int getNumOfPLayer() {
+    public int getNumOfPLayer() throws IOException {
         int numOfPlayer = -1;
         while (numOfPlayer == -1){
-            String s = null;
+            displayMessage("Insert the number of player for this game");
+            String s = this.input.readLine();
+
+            if (s.isEmpty() || s.isBlank()){
+                displayMessage("Insert a valid number between 2 and 4");
+                continue;
+            }
+
+            int temp;
             try {
-                System.out.println("Cli: Insert the number of player for this game");
-                s = input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("IOException Cli line 24");
+                temp = Integer.parseInt(s);
+                if (temp < 2 || temp > 4)
+                    throw new NumberFormatException();
+            }catch (NumberFormatException e){
+                displayMessage("Insert a valid number between 2 and 4");
+                continue;
             }
-            if (s != null) {
-                int temp;
-                try {
-                    temp = Integer.parseInt(s);
-                    if (temp < 2 || temp > 4)
-                        throw new NumberFormatException();
-                }catch (NumberFormatException e){
-                    System.out.println("Cli: Insert a valid number between 2 and 4");
-                    temp = -1;
-                }
-                if (temp != -1){
-                    numOfPlayer = temp;
-                }
-            }
+            numOfPlayer = temp;
         }
         return numOfPlayer;
     }
 
     @Override
-    public int getGameMode() {
+    public int getGameMode() throws IOException {
         int gameMode = -1;
         while (gameMode == -1){
-            String s = null;
+            String s = this.input.readLine();
+            displayMessage("Insert the gamemode for this game, 0 normal 1, advanced");
+
+            if (s.isEmpty() || s.isBlank()){
+                displayMessage("Insert a valid number between 0 and 1");
+                continue;
+            }
+
+            int temp;
             try {
-                System.out.println("Cli: Insert the gamemode for this game, 0 normal 1, advanced");
-                s = input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("IOException Cli line 24");
+                temp = Integer.parseInt(s);
+                if (temp < 0 || temp > 1)
+                    throw new NumberFormatException();
+            }catch (NumberFormatException e){
+                displayMessage("Insert a valid number between 0 and 1");
+                continue;
             }
-            if (s != null) {
-                int temp;
-                try {
-                    temp = Integer.parseInt(s);
-                    if (temp < 0 || temp > 1)
-                        throw new NumberFormatException();
-                }catch (NumberFormatException e){
-                    System.out.println("Cli: Insert a valid number between 0 and 1");
-                    temp = -1;
-                }
-                if (temp != -1){
-                    gameMode = temp;
-                }
-            }
+            gameMode = temp;
         }
         return gameMode;
+    }
+
+    @Override
+    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
     }
 }

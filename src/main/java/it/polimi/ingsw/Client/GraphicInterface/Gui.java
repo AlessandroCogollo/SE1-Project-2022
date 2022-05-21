@@ -2,11 +2,14 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
 
+import it.polimi.ingsw.Message.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Gui extends Application implements Graphic {
     @Override
@@ -32,6 +35,31 @@ public class Gui extends Application implements Graphic {
     @Override
     public int getGameMode() {
         return 0;
+    }
+
+    @Override
+    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
     }
 
     public static void main(String[] args) {
