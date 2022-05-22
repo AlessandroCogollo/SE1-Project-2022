@@ -57,17 +57,19 @@ public class Server {
      * Start the main Thread of the server
      */
     public void start (){
+        Thread.currentThread().setName("Main Server Thread");
         System.out.println("Main Server: " + "Server started");
 
-        new Thread(this.lobby).start();
+        new Thread(this.lobby, "Lobby").start();
 
         synchronized(this.lock) {
             while(doSomething()) {
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                   System.err.println("Main Server: Error while waiting setting to shutdown");
-                   this.code = Errors.GAME_OVER;
+                   System.err.println("Main Server: Thread interrupted, shutting down");
+                   Thread.currentThread().interrupt(); //reset interrupted flag on the thread
+                   break;
                 }
             }
         }
@@ -79,6 +81,11 @@ public class Server {
 
     //this method is invoked any time someone modify the code, so the server know what to do.
     private boolean doSomething() {
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.err.println("Main Server: Thread interrupted, shutting down");
+            return false;
+        }
 
         boolean go = true;
 
@@ -108,31 +115,17 @@ public class Server {
     }
 
     private void shutdownAll() {
-
-        //first thing to shutdown if present because it waits for the last message to be sent
         if (this.model != null){
-            boolean done = false;
-            while (!done) {
-                try {
-                    this.model.stopModel();
-                } catch (InterruptedException e) {
-                    System.err.println("Error, fail shutdown the model Server line: " + new Throwable().getStackTrace()[0].getLineNumber());
-                    continue;
-                }
-                done = true;
-            }
+           this.model.stopModel();
         }
-
-        if (this.lobby != null) {
-            this.lobby.shutDownLobby();
-        }
+        this.lobby.shutDownLobby();
     }
 
     private void startGame() {
         this.queueOrganizer = new QueueOrganizer(this.ids);
 
         this.model = new ModelHandler(this.ids, this.gameMode, this, this.queueOrganizer);
-        new Thread(this.model).start();
+        new Thread(this.model, "Model").start();
 
         this.lobby.setQueues(this.queueOrganizer);
     }

@@ -79,4 +79,9 @@ public interface Graphic {
      * @return the move to play the character chosen
      */
     PlayCharacterMessage askCharacter (ModelMessage model, int playerId) throws IOException, InterruptedException;
+
+    /**
+     * Stop any io method that is running throwing some exception
+     */
+    void stopInput();
 }

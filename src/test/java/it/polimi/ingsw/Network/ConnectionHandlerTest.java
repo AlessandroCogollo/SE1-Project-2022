@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;
-import it.polimi.ingsw.Network.ConnectionHandler;
-import it.polimi.ingsw.Network.TimerTaskCloneable;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -27,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectionHandlerTest {
 
-
     @Test
     void getQueueToServer() throws IOException {
         ServerSocket s = new ServerSocket(8743);
@@ -36,7 +33,7 @@ class ConnectionHandlerTest {
         Thread t = new Thread(c);
         t.start();
         Socket ser = s.accept();
-        assertNotNull(c.getQueueToServer());
+        assertNotNull(c.getOutQueue());
     }
 
     @Test
@@ -47,7 +44,7 @@ class ConnectionHandlerTest {
         Thread t = new Thread(c);
         t.start();
         Socket ser = s.accept();
-        assertNotNull(c.getQueueFromServer());;
+        assertNotNull(c.getInQueue());;
     }
 
     class UtilClass {
@@ -90,8 +87,8 @@ class ConnectionHandlerTest {
         BufferedReader serverIn = new BufferedReader(new InputStreamReader(ser.getInputStream()));
         PrintWriter serverOut = new PrintWriter(ser.getOutputStream(), true);
 
-        BlockingQueue <JsonElement> clientIn = c.getQueueFromServer();
-        BlockingQueue <JsonElement> clientOut = c.getQueueToServer();
+        BlockingQueue <JsonElement> clientIn = c.getInQueue();
+        BlockingQueue <JsonElement> clientOut = c.getOutQueue();
 
         //set ping from server to client
         Callable pingSender = new Callable() {

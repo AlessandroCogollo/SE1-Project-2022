@@ -62,6 +62,11 @@ public class Gui extends Application implements Graphic {
         return null;
     }
 
+    @Override
+    public void stopInput() {
+
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

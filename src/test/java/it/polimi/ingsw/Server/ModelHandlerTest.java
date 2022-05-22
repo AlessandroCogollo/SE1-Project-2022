@@ -68,18 +68,29 @@ class ModelHandlerTest {
 
     //real test done in Server class test and in the method below
     @Test
-    void stopModel() throws InterruptedException {
+    void stopModel() {
         int[] ids = getIds(3);
         QueueOrganizer q = new QueueOrganizer(ids);
 
         //set to null server so the game can't finish or it will trigger an error
         ModelHandler x = new ModelHandler(ids, 1, null, q);
 
-        ExecutorService ex = Executors.newSingleThreadExecutor();
-        ex.execute(x);
-        x.stopModel();
-        ex.shutdown();
-        assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            x.stopModel();
+        }).start();
+
+        x.run();
+
+        assertTrue(q.getPlayerQueue(0).size() > 0);
+        assertTrue(q.getPlayerQueue(1).size() > 0);
+        assertTrue(q.getPlayerQueue(2).size() > 0);
+
+        assertTrue(true);
     }
 
     static class Producer implements Runnable {

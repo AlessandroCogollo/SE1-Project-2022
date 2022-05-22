@@ -151,6 +151,7 @@ class ServerTest {
     void main() throws InterruptedException {
         ExecutorService ex = Executors.newSingleThreadExecutor();
         ex.execute(this::mainServer);
+        Thread.sleep(20);
         ex.shutdownNow();
         Thread.sleep(20);
         assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));

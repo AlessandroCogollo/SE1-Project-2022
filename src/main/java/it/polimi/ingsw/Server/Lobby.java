@@ -2,23 +2,17 @@ package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 
 import it.polimi.ingsw.Message.Message;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Class that manage all the client handler
@@ -32,9 +26,9 @@ public class Lobby implements Runnable {
     private final Map <Integer, Wizard> wizards  = new HashMap<>();
     private final Map <Integer, ClientHandler> abstractClients = new HashMap<>();
 
-    private final ExecutorService main = Executors.newSingleThreadExecutor();
-
     private final Object lock = new Object();
+
+    private Thread thread = null;
 
     private int numOfPlayers = -1;
     private int gameMode = -1;
@@ -47,13 +41,15 @@ public class Lobby implements Runnable {
      */
     public Lobby(int port, Server server) {
         this.server = server;
+        ServerSocket s = null;
         try {
-            this.serverSocket = new ServerSocket(port);
+            s = new ServerSocket(port);
         } catch (IOException e) {
-            System.err.println("Server socket error");
+            System.err.println("Lobby: error while creating serverSocket at this port: " + port);
             e.printStackTrace();
-            throw new RuntimeException(e);
+            System.exit(-1);
         }
+        this.serverSocket = s;
     }
 
     /**
@@ -102,8 +98,12 @@ public class Lobby implements Runnable {
         String errorMessage = "The player " + this.usernames.get(id) + " with id " + id + " disconnected. The game will be stopped.";
         System.out.println("Lobby: " + errorMessage);
 
-        sendDisconnectedMessage (errorMessage);
+        this.ids.remove((Integer)id);
+        ClientHandler disc = this.abstractClients.get(id);
+        disc.shutdown();
+        this.abstractClients.remove(id, disc);
 
+        sendDisconnectedMessage (errorMessage);
         this.server.setCode(Errors.PLAYER_DISCONNECTED);
     }
 
@@ -111,12 +111,42 @@ public class Lobby implements Runnable {
      * Method for stop the main thread of Lobby and all sub thread, this includes all clientHandler already created
      */
     public void shutDownLobby() {
-        try {
-            this.serverSocket.close();
-        } catch (IOException ignored){}
-        this.main.shutdownNow();
+
+        if (this.thread == null){
+            System.out.println("Cannot shut down lobby if it is stopped yet");
+            return;
+        }
+
+        //first try to stop the main thread of lobby with interrupt
+        this.thread.interrupt();
+
+        //assert that all message to player are sent
+        boolean allDone = false;
+        while (!allDone){
+            allDone = true;
+            for (Integer id: this.ids){
+                if (!this.abstractClients.get(id).allMessageSent()){
+                    allDone = false;
+                    break;
+                }
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ignored) {}
+        }
+
+
+        //then close all the abstract client started
         for (Integer id: this.ids){
             this.abstractClients.get(id).shutdown();
+        }
+
+        try {
+            this.serverSocket.close();
+        } catch (IOException e){
+            System.err.println("Lobby: cannot close the serverSocket");
+            e.printStackTrace();
+            System.exit(-1);
         }
     }
 
@@ -143,104 +173,66 @@ public class Lobby implements Runnable {
      */
     @Override
     public void run() {
-        this.main.execute(this::main);
-    }
 
-    private void sendDisconnectedMessage(String errorMessage) {
-        Message m = new Message(Errors.PLAYER_DISCONNECTED, errorMessage);
-        JsonElement mJ = new Gson().toJsonTree(m);
+        this.thread = Thread.currentThread();
 
-        //two case
-        if (this.queues == null){
-            System.err.println("Lobby: send player disconnected message when the setup is not completed");
-            // 1 we are in setup mode
-            for (Integer id: this.ids){
-                this.abstractClients.get(id).sendJsonToClient(mJ);
-            }
-        }
-        else {
-            // 2 we are in the real game
-            for (Integer id: this.ids){
-                System.err.println("Lobby: send player disconnected message when the setup is completed");
-                boolean done = false;
-                while (!done){
-                    try {
-                        this.queues.getPlayerQueue(id).put(mJ);
-                    } catch (InterruptedException e) {
-                        System.err.println("Error interrupted while sending last message to player " + id + " Lobby line: " + new Throwable().getStackTrace()[0].getLineNumber());
-                        continue;
-                    }
-                    done = true;
-                }
-
-            }
-        }
-    }
-
-
-    //thread method
-    private void main (){
-        System.out.println("Lobby: " + "Waiting for First Client connected");
         int i = 0;
-        Socket client;
-        ClientHandler temp;
-        try {
-            client = this.serverSocket.accept();
-        } catch (IOException e) {
-            System.err.println("Lobby: Error connecting to client line: " + new Throwable().getStackTrace()[0].getLineNumber());
+
+
+        acceptNewClient(i, -1);
+
+        if (this.thread.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
             return;
         }
 
-        System.out.println("Lobby: " + "First Client connected");
-        temp = new ClientHandler(client, i, this);
-        new Thread(temp).start();
-        this.abstractClients.put(0, temp);
-        this.ids.add(0);
-
-        System.out.println("Lobby: " + "Waiting for first player to send data");
+        System.out.println("Lobby: waiting for first player to send data");
         synchronized (this.lock) {
             while (this.numOfPlayers < 2 || this.numOfPlayers > 4 || gameMode < 0 || gameMode > 1){
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("Lobby:  interrupted receiving data from client line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    System.out.println("Lobby: interrupted while waiting data from first client line due to shutdown of the server");
                     return;
                 }
             }
         }
 
+        if (this.thread.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
+            return;
+        }
+
         i++;
 
         while (i < this.numOfPlayers) {
-            System.out.println("Lobby: " + "Waiting for other " + (this.numOfPlayers - i) + " players");
-            try {
-                client = this.serverSocket.accept();
-            } catch (IOException e) {
-                System.err.println("Lobby: Error connecting to client line: " + new Throwable().getStackTrace()[0].getLineNumber());
+            acceptNewClient(i, this.numOfPlayers);
+            if (this.thread.isInterrupted()) {
+                System.out.println("Lobby: my main loop interrupted");
                 return;
             }
-            System.out.println("Lobby: " + "New Player Connected");
-            temp = new ClientHandler(client, i, this);
-            new Thread(temp).start();
-            this.abstractClients.put(i, temp);
-            this.ids.add(i);
             i++;
         }
 
-        System.out.println("Lobby: " + "Waiting for all players finish setup");
+        System.out.println("Lobby: waiting for all players finish setup");
 
         synchronized (this.lock) {
             while (this.usernames.size() < this.numOfPlayers || this.wizards.size() < this.numOfPlayers){
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("Error wait interrupt while waiting for the all players to finish their setup line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    System.out.println("Lobby: interrupted while waiting for all clients ready");
                     return;
                 }
             }
         }
 
-        System.out.println("Lobby: " + "All players finished setup");
+        if (this.thread.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
+            return;
+        }
+
+        System.out.println("Lobby: All players finished setup");
 
         int[] ids = this.ids.stream().mapToInt(l -> l).toArray();
         this.server.setGameProperties(ids, this.gameMode);
@@ -250,17 +242,61 @@ public class Lobby implements Runnable {
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("Error wait interrupt while waiting for the start of the game line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    System.out.println("Lobby: interrupted while waiting for the start of the game");
                     return;
                 }
             }
         }
 
-        System.out.println("Lobby: " + "Setting all player handler to start the game");
+        if (this.thread.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
+            return;
+        }
+
+        System.out.println("Lobby: setting all player handler to start the game");
 
         for (Integer id: this.ids){
             this.abstractClients.get(id).setQueues(this.queues.getModelQueue(), this.queues.getPlayerQueue(id));
         }
+
+        System.out.println("Main Thread Lobby: nothing else to do");
         //At this point the lobby is only useful for stop all the connection handler and for some method but his main thread can stop
+    }
+
+    private void acceptNewClient (int id, int maxPlayers){
+        //no check over thread interrupted because this operation if the accept() succeed must be done
+        Socket client;
+        ClientHandler temp;
+        System.out.println("Lobby: waiting for " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " Client to connect" + ((id > 0) ? (" out of " + maxPlayers) : ""));
+        try {
+            client = this.serverSocket.accept();
+        } catch (IOException e) {
+            //when the server need to shutdown
+            System.out.println("Lobby: ServerSocket closed while connecting to the " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " client line due to the shutdown of the server");
+            return;
+        }
+
+        System.out.println("Lobby: " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " Client connected");
+        temp = new ClientHandler(client, id, this);
+        new Thread(temp, "ClientHandler " + id).start();
+        this.abstractClients.put(id, temp);
+        this.ids.add(id);
+    }
+
+    private void sendDisconnectedMessage(String errorMessage) {
+        Message m = new Message(Errors.PLAYER_DISCONNECTED, errorMessage);
+        JsonElement mJ = new Gson().toJsonTree(m);
+
+        System.out.println("Lobby: sending player disconnected message");
+
+        for (Integer id: this.ids){
+            boolean done = false;
+            while (!done){
+                try {
+                    this.abstractClients.get(id).sendMessage(mJ);
+                    done = true;
+                } catch (InterruptedException ignored) {}
+            }
+        }
     }
 }

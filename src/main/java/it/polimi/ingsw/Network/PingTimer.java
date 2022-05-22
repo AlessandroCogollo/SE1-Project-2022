@@ -32,10 +32,6 @@ public class PingTimer implements Runnable{
         this.receiveTimer.schedule(this.errorTask, this.receiveTimeout.toMillis(), this.receiveTimeout.toMillis());
     }
 
-    public void triggerServerError(){
-        new Thread(this.errorTask).start();
-    }
-
     /**
      * Reset the send timer stopping it and rescheduling it whit the same arguments
      */
@@ -54,16 +50,25 @@ public class PingTimer implements Runnable{
         this.receiveTimer.schedule(this.errorTask.clone(), this.receiveTimeout.toMillis(), this.receiveTimeout.toMillis());
     }
 
+    /**
+     * Stop the send timer
+     */
     public void stopSendTimer(){
         this.sendTimer.cancel();
         this.sendTimer.purge();
     }
 
+    /**
+     * Stop the receive timer
+     */
     public void  stopReceiveTimer (){
         this.receiveTimer.cancel();
         this.receiveTimer.purge();
     }
 
+    /**
+     * Stop all Timer started by this class
+     */
     public void stopPing (){
         stopReceiveTimer();
         stopSendTimer();

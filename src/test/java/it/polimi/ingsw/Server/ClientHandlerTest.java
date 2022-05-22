@@ -130,7 +130,7 @@ class ClientHandlerTest {
         server.execute(cH);
         Thread.sleep(500);
         JsonElement j = new Gson().toJsonTree(new Message(Errors.NO_ERROR, "TEST"));
-        cH.sendJsonToClient(j);
+        cH.sendMessage(j);
 
         assertTrue(true);
         cH.shutdown();

@@ -8,6 +8,8 @@ import it.polimi.ingsw.Message.*;
 
 import java.net.Socket;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.*;
 
 import it.polimi.ingsw.Network.ConnectionHandler;
@@ -22,7 +24,7 @@ public class ClientHandler implements Runnable{
     private final ConnectionHandler net;
     private final Gson gson = new Gson();
 
-    private final ExecutorService main = Executors.newSingleThreadExecutor();
+    private Thread thread = null;
     private ExecutorService executors = null;
 
     private final Object lock = new Object();
@@ -42,7 +44,7 @@ public class ClientHandler implements Runnable{
     public ClientHandler(Socket client, int id, Lobby lobby){
         this.id = id;
         this.l = lobby;
-        this.net = new ConnectionHandler(client, Duration.ofSeconds(60), this::clientDown);
+        this.net = new ConnectionHandler(client, Duration.ofSeconds(15), this::clientDown); //todo
     }
 
     /**
@@ -50,7 +52,7 @@ public class ClientHandler implements Runnable{
      * @return always null for override call method of Callable
      */
     public Object clientDown (){
-        System.err.println("ClientHandler: " + this.id + " this player has been disconnected.");
+        System.out.println("ClientHandler: " + this.id + " this player has been disconnected.");
         this.l.clientDown(this.id);
         return null;
     }
@@ -59,14 +61,18 @@ public class ClientHandler implements Runnable{
      * Method for stop all thread of this class, can only be used after the run command
      */
     public void shutdown (){
-        System.out.println("Client Handler " + this.id + " shutting down.");
+
+        if (this.thread == null){
+            System.out.println("Cannot stop the ClientHandler if it is not running");
+            return;
+        }
 
         this.net.stopConnectionHandler();
 
         //this is for stop the main class if it's still going
-        this.main.shutdownNow();
+        this.thread.interrupt(); //this thread not use any io method so it finish gratefully
 
-        if (this.executors != null && !this.executors.isTerminated())
+        if (this.executors != null)
             this.executors.shutdownNow();
     }
 
@@ -84,41 +90,56 @@ public class ClientHandler implements Runnable{
     }
 
     /**
+     * Method used by the lobby for ensures that all message are sent to the player
+     * @return if all message are sent to the client and the queue out is empty
+     */
+    public boolean allMessageSent(){
+        return this.net.getOutQueue().isEmpty();
+    }
+
+    /**
      * Main thread of ClientHandler, first start a thread for handling the setup of the connection.
      * Then wait until the game has to start, and finally start two thread for exchange message between client and model
      */
     @Override
     public void run() {
 
+        this.thread = Thread.currentThread();
+
         //don't used executors because the Connection handler class has his own method to be turned off
-        new Thread(this.net).start();
+        new Thread(this.net, "ConnectionHandler " + this.id).start();
 
-        this.main.execute(this::main);
-    }
+        if (this.thread.isInterrupted()){
+            System.out.println("Client Handler " + this.id + ": my main thread interrupted");
+            return;
+        }
 
-    //thread method
-
-    private void main (){
         System.out.println("Client Handler Started id: " + this.id);
 
-        this.executors = Executors.newSingleThreadExecutor();
-        this.executors.execute(this::setupConnection);
+        setupConnection();
 
+        if (this.thread.isInterrupted()){
+            System.out.println("Client Handler " + this.id + ": my main thread interrupted");
+            return;
+        }
+
+        System.out.println("Client Handler " + this.id + " waiting for the start of the game");
 
         synchronized (this.lock){
             while ((this.toClient == null || this.toModel == null)){
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("lock wait interrupted while waiting for queues in ClientHandler " + this.id + " line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                    System.out.println("ClientHandler " + this.id + ": interrupt when waiting for the start of the game");
                     return;
                 }
             }
         }
 
-        this.executors.shutdownNow();
-
-        this.executors = null;
+        if (this.thread.isInterrupted()){
+            System.out.println("Client Handler " + this.id + ": my main thread interrupted");
+            return;
+        }
 
         System.out.println("Client Handler " + this.id + " game started.");
 
@@ -130,27 +151,34 @@ public class ClientHandler implements Runnable{
         //now only the two executors continue to exchange message
     }
 
+    //thread method
+
     private void senderModelToClient (){
-        while (true){
+        while (!Thread.currentThread().isInterrupted()){
             JsonElement messageToClient;
             try {
                 messageToClient = this.toClient.take();
             } catch (InterruptedException e) {
-                System.err.println("Interrupted while waiting for some message from the model ClientHandler " + this.id);
+                System.out.println("ClientHandler " + this.id + ": Interrupted while waiting for some message from the model");
                 return;
             }
 
-            sendJsonToClient(messageToClient);
+            try {
+                sendMessage(messageToClient);
+            } catch (InterruptedException e) {
+                System.out.println("ClientHandler " + this.id + ": Interrupted while sending some message to client");
+                return;
+            }
         }
     }
 
     private void senderClientToModel () {
-        while (true){
+        while (!Thread.currentThread().isInterrupted()){
             JsonElement messageFromClient;
             try {
-                messageFromClient = readJsonFromClient();
+                messageFromClient = readMessageFromClient();
             } catch (InterruptedException e) {
-                System.err.println("Interrupted while waiting some message from the client ClientHandler " + this.id);
+                System.out.println("ClientHandler " + this.id + ": Interrupted while waiting for some message from the client");
                 return;
             }
 
@@ -175,23 +203,26 @@ public class ClientHandler implements Runnable{
             try {
                 this.toModel.put(m);
             } catch (InterruptedException e) {
-                System.err.println("Interrupted while waiting to put some message in the queue to the model ClientHandler " + this.id);
+                System.out.println("ClientHandler " + this.id + ": Interrupted while sending some message to the model");
                 return;
             }
         }
     }
 
     private void setupConnection () {
-
+        Collection<Errors> temp = new ArrayList<>();
         try {
 
-            ReceiveFirstMessage();
+            temp.add(Errors.FIRST_MESSAGE_CLIENT);
+            waitForResponse(temp);
 
             System.out.println("ClientHandler: " + this.id + " Received first message from client");
 
-            SendFirstMessage();
+            sendMessage(new NewPlayerMessage("Welcome!", this.id == 0));
 
             System.out.println("ClientHandler: " + this.id + " Sent if client is first client");
+
+            temp.clear();
 
             if (this.id == 0)
                 ReceiveFirstPlayerData();
@@ -200,21 +231,24 @@ public class ClientHandler implements Runnable{
 
             System.out.println("ClientHandler: " + this.id + " Received data from client");
 
-            SendId();
+            sendMessage(new IdMessage("Your id is: ", this.id));
 
             System.out.println("ClientHandler: " + this.id + " Sent Id");
 
-            ReceiveConfirm();
+            temp.clear();
+
+            temp.add(Errors.CLIENT_READY);
+            waitForResponse(temp);
+
         } catch (InterruptedException e){
-            System.err.println("Interrupted while setup the connection with the player ClientHandler " + this.id);
+            System.out.println("ClientHandler " + this.id + ": Interrupted while setup the connection with the player at line:" + e.getStackTrace()[0].getLineNumber());
+            this.thread.interrupt(); // reset the interrupt flag
             return;
         }
 
         System.out.println("ClientHandler: " + this.id + " This client is ready");
 
         l.SetOk(this.id, this.username, this.wizard);
-
-        System.out.println("Client Handler " + this.id + " waiting for the start of the game");
     }
 
 
@@ -223,106 +257,89 @@ public class ClientHandler implements Runnable{
 
 
 
-    private JsonElement readJsonFromClient() throws InterruptedException {
-        return this.net.getQueueFromServer().take();
+    private JsonElement readMessageFromClient() throws InterruptedException {
+        return this.net.getInQueue().take();
     }
 
     /**
-     * Used by the Lobby for send the message ia a player disconnected when the setup isn' finished
+     * Used by the Lobby for send the message ia a player disconnected when the setup isn't finished
      * @param m JsonElement that will be converted to a string and sent to the Client
      */
-    public void sendJsonToClient(JsonElement m){
-        try {
-            this.net.getQueueToServer().put(m);
-        } catch (InterruptedException e) {
-            System.err.println("Send method interrupted ClientHandler " + this.id + " line: " + new Throwable().getStackTrace()[0].getLineNumber());
+    public void sendMessage(JsonElement m) throws InterruptedException {
+        this.net.getOutQueue().put(m);
+    }
+
+    private void sendMessage (Message m) throws InterruptedException {
+        sendMessage(this.gson.toJsonTree(m));
+    }
+
+    private JsonElement waitForResponse (Collection<Errors> corrects) throws InterruptedException {
+        JsonElement message = null;
+        Errors codeReceived = null;
+        while (!corrects.contains(codeReceived)){
+            message = readMessageFromClient();
+            Message temp = this.gson.fromJson(message, Message.class);
+            codeReceived = temp.getError();
         }
-    }
-
-    private void sendMessageToClient(Message m){
-        sendJsonToClient(this.gson.toJsonTree(m));
-    }
-
-    private void ReceiveFirstMessage() throws InterruptedException {
-        Message m = null;
-        while (m == null){
-            JsonElement j = readJsonFromClient();
-            Message temp = this.gson.fromJson(j, Message.class);
-            if (temp.getError().equals(Errors.FIRST_MESSAGE_CLIENT))
-                m = temp;
-        }
-    }
-
-    private void SendFirstMessage() {
-        sendMessageToClient(new NewPlayerMessage("Welcome!", this.id == 0));
+        return message;
     }
 
     private void ReceiveFirstPlayerData() throws InterruptedException {
+
+        Collection<Errors> temp = new ArrayList<>();
+
+        temp.add(Errors.FIRST_CLIENT);
+
         boolean ok = false;
-        int playerN = -1;
-        int gameMode = -1;
-        FirstPlayerMessage m = null;
-        while (!ok) {
-            JsonElement Jm = readJsonFromClient();
-            Message temp = this.gson.fromJson(Jm, Message.class);
-            while (!temp.getError().equals(Errors.FIRST_CLIENT)) {
-                Jm = readJsonFromClient();
-                temp = this.gson.fromJson(Jm, Message.class);
-            }
-            m = this.gson.fromJson(Jm, FirstPlayerMessage.class);
-            playerN = m.getNumOfPlayer();
-            gameMode = m.getGameMode();
-            if (l.getUsernames().containsValue(m.getUsername())) {
-                sendMessageToClient(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
-            } else if (l.getWizards().containsValue(m.getWizard())) {
-                sendMessageToClient(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
-            } else if (playerN < 2 || playerN > 4){
-                sendMessageToClient(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
-            } else if (gameMode < 0 || gameMode > 1){
-                sendMessageToClient(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0-1): "));
+        FirstPlayerMessage data = null;
+
+        while (!ok){
+            JsonElement jM = waitForResponse(temp);
+            data = this.gson.fromJson(jM, FirstPlayerMessage.class);
+
+            //check correct value
+            int tempN = data.getNumOfPlayer();
+            int tempG = data.getGameMode();
+            if (l.getUsernames().containsValue(data.getUsername())) {
+                sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            } else if (l.getWizards().containsValue(data.getWizard())) {
+                sendMessage(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
+            } else if (tempN < 2 || tempN > 4){
+                sendMessage(new Message(Errors.NUM_OF_PLAYER_ERROR, "Please select a valid number (2-4): "));
+            } else if (tempG < 0 || tempG > 1){
+                sendMessage(new Message(Errors.WRONG_GAME_MODE, "Please select a valid game mode (0-1): "));
             } else {
                 ok = true;
             }
         }
-        this.l.setParameters(playerN, gameMode);
-        this.username = m.getUsername();
-        this.wizard = m.getWizard();
+        this.l.setParameters(data.getNumOfPlayer(), data.getGameMode());
+        this.username = data.getUsername();
+        this.wizard = data.getWizard();
     }
 
     private void ReceiveData() throws InterruptedException {
+        Collection<Errors> temp = new ArrayList<>();
+
+        temp.add(Errors.NOT_FIRST_CLIENT);
+
         boolean ok = false;
-        NotFirstPlayerMessage m = null;
-        while (!ok) {
-            JsonElement Jm = readJsonFromClient();
-            Message temp = this.gson.fromJson(Jm, Message.class);
-            while (!temp.getError().equals(Errors.NOT_FIRST_CLIENT)) {
-                Jm = readJsonFromClient();
-                temp = this.gson.fromJson(Jm, Message.class);
-            }
-            m = this.gson.fromJson(Jm, NotFirstPlayerMessage.class);
-            if (l.getUsernames().containsValue(m.getUsername())) {
-                sendMessageToClient(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
-            } else if (l.getWizards().containsValue(m.getWizard())) {
-                sendMessageToClient(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
+        NotFirstPlayerMessage data = null;
+
+        while (!ok){
+            JsonElement jM = waitForResponse(temp);
+            data = this.gson.fromJson(jM, NotFirstPlayerMessage.class);
+
+            //check correct value
+            if (l.getUsernames().containsValue(data.getUsername())) {
+                sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            } else if (l.getWizards().containsValue(data.getWizard())) {
+                sendMessage(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
             } else {
                 ok = true;
             }
         }
-        this.username = m.getUsername();
-        this.wizard = m.getWizard();
-    }
 
-    private void SendId(){
-        sendMessageToClient(new IdMessage("Your id is: ", this.id));
-    }
-
-    private void ReceiveConfirm() throws InterruptedException {
-        Message m = null;
-        while (m == null){
-            JsonElement j = readJsonFromClient();
-            Message temp = this.gson.fromJson(j, Message.class);
-            if (temp.getError().equals(Errors.CLIENT_READY))
-                m = temp;
-        }
+        this.username = data.getUsername();
+        this.wizard = data.getWizard();
     }
 }

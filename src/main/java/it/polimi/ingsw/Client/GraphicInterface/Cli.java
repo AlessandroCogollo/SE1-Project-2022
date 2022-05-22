@@ -22,10 +22,10 @@ public class Cli implements Graphic{
     @Override
     public Wizard getWizard() throws IOException {
         Wizard w = null;
-        while (w == null){
+        while (w == null && !Thread.currentThread().isInterrupted()){
             displayMessage("Insert your Wizard");
             String s = this.input.readLine();
-            if (s.isEmpty() || s.isBlank()){
+            if (s == null || s.isEmpty() || s.isBlank()){
                 displayMessage("Insert a valid username");
                 continue;
             }
@@ -41,11 +41,11 @@ public class Cli implements Graphic{
     @Override
     public String getUsername() throws IOException {
         String user = null;
-        while (user == null){
+        while (user == null && !Thread.currentThread().isInterrupted()){
             displayMessage("Insert your Username");
             String s = this.input.readLine();
 
-            if (s.isEmpty() || s.isBlank()){
+            if (s == null || s.isEmpty() || s.isBlank()){
                 displayMessage("Insert a valid username");
                 continue;
             }
@@ -58,11 +58,11 @@ public class Cli implements Graphic{
     @Override
     public int getNumOfPLayer() throws IOException {
         int numOfPlayer = -1;
-        while (numOfPlayer == -1){
+        while (numOfPlayer == -1 && !Thread.currentThread().isInterrupted()){
             displayMessage("Insert the number of player for this game");
             String s = this.input.readLine();
 
-            if (s.isEmpty() || s.isBlank()){
+            if (s == null || s.isEmpty() || s.isBlank()){
                 displayMessage("Insert a valid number between 2 and 4");
                 continue;
             }
@@ -84,11 +84,11 @@ public class Cli implements Graphic{
     @Override
     public int getGameMode() throws IOException {
         int gameMode = -1;
-        while (gameMode == -1){
+        while (gameMode == -1 && !Thread.currentThread().isInterrupted()){
             String s = this.input.readLine();
             displayMessage("Insert the gamemode for this game, 0 normal 1, advanced");
 
-            if (s.isEmpty() || s.isBlank()){
+            if (s == null || s.isEmpty() || s.isBlank()){
                 displayMessage("Insert a valid number between 0 and 1");
                 continue;
             }
@@ -130,5 +130,16 @@ public class Cli implements Graphic{
     @Override
     public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
+    }
+
+    @Override
+    public void stopInput() {
+        try {
+            this.input.close();
+        } catch (IOException e) {
+            System.err.println("Cli: Error while closing the input stream");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
@@ -13,45 +12,49 @@ import it.polimi.ingsw.Message.ModelMessage;
 import it.polimi.ingsw.Network.ConnectionHandler;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.BlockingQueue;
 
 
 public class GameHandler implements Runnable{
 
     private final int myId;
-    private final ConnectionHandler net;
+    private final BlockingQueue<JsonElement> in;
+    private final BlockingQueue<JsonElement> out;
     private final Graphic g;
     private final Client client;
-    private final ExecutorService main = Executors.newSingleThreadExecutor();
     private final Gson gson = new Gson();
+
+    private Thread thread = null;
 
     private ModelMessage model;
 
-    public GameHandler(int myId, ConnectionHandler net, Graphic g, Client client) {
+    public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, Graphic g, Client client) {
         this.myId = myId;
-        this.net = net;
+        this.in = in;
+        this.out = out;
         this.g = g;
         this.client = client;
     }
 
     public void stopGameHandler (){
-        this.main.shutdownNow();
+        if (this.thread == null){
+            System.out.println("Cannot stop GameHandler if is it not running");
+            return;
+        }
+        this.thread.interrupt();
     }
 
     @Override
     public void run() {
+
+        this.thread = Thread.currentThread();
+
         //the setup of the connection is done, now the client wait for the start of the game
-
-        this.main.execute(this::main);
-    }
-
-    private void main(){
-        while (true){
+        while (!this.thread.isInterrupted()){
             try {
                 waitForModel();
             } catch (InterruptedException e) {
-                System.err.println("Error while waiting for some message from server");
+                System.out.println("GameHandler: Interrupted while waiting for some message from server");
                 return;
             }
 
@@ -59,14 +62,14 @@ public class GameHandler implements Runnable{
             try {
                 move = elaborateModel();
             } catch (IOException | InterruptedException e) {
-                System.err.println(e.getMessage());
+                System.out.println("GameHandler: Interrupted while waiting for move from player");
                 return;
             }
 
             try {
                 sendMove(move);
             } catch (InterruptedException e) {
-                System.err.println("Error while waiting to send message to server");
+                System.out.println("GameHandler: Interrupted while waiting to send message to server");
                 return;
             }
         }
@@ -76,7 +79,7 @@ public class GameHandler implements Runnable{
         if (move == null)
             return;
 
-        this.net.getQueueToServer().put(move);
+        this.out.put(move);
     }
 
     private JsonElement elaborateModel() throws IOException, InterruptedException {
@@ -123,10 +126,9 @@ public class GameHandler implements Runnable{
         JsonElement mJ = null;
 
         while (temp == null || !Errors.NO_ERROR.equals(temp.getError())) {
-            mJ = this.net.getQueueFromServer().take();
+            mJ = this.in.take();
 
             temp = this.gson.fromJson(mJ, Message.class);
-
             if (!Errors.NO_ERROR.equals(temp.getError())){
                 this.g.displayMessage(temp.getMessage());
             }

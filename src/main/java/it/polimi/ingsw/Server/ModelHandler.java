@@ -7,6 +7,7 @@ import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Server.Model.Game;
 
+import javax.swing.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,9 +23,8 @@ public class ModelHandler implements Runnable{
     private final QueueOrganizer queues;
     private final int[] ids;
     private final Gson gson;
-    private final ExecutorService main = Executors.newSingleThreadExecutor();
 
-    private volatile boolean go = true;
+    private Thread thread = null;
 
     /**
      * Constructor of the class
@@ -45,12 +45,8 @@ public class ModelHandler implements Runnable{
     /**
      * stop the model in 500 millisecond and take at least one other message and send one other message to the players
      */
-    public void stopModel () throws InterruptedException {
-        this.go = false;
-        //let finish the last send of files;
-        Thread.sleep(500);
-
-        this.main.shutdownNow();
+    public void stopModel () {
+        this.thread.interrupt();
     }
 
     /**
@@ -63,28 +59,26 @@ public class ModelHandler implements Runnable{
      */
     @Override
     public void run() {
-        this.main.execute(this::main);
-    }
 
-    private void main() {
+        this.thread = Thread.currentThread();
 
         //first send to player the first model message
         ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(Errors.NO_ERROR);
         JsonElement message = this.gson.toJsonTree(m);
-        for (Integer id : ids){
-            sendMessageToPlayer(message, id);
+
+        if (!this.thread.isInterrupted()){
+            sendMessageToPlayers(message);
         }
-
-
         //then wait for player move
 
-        while (this.go){
+        while (!this.thread.isInterrupted()){
 
             ClientMessageDecorator move = null;
             try {
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 System.err.println("Interrupted while waiting for some move from clients ModelHandlers line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                break;
             }
             if (move == null)
                 continue;
@@ -92,9 +86,10 @@ public class ModelHandler implements Runnable{
             int playerId = move.playerId();
             ClientMessage moveReceived = move.message();
 
-            int error = moveReceived.executeMove(this.model, playerId);
-
-            updateClients(error, playerId);
+            if (!this.thread.isInterrupted()) {
+                int error = moveReceived.executeMove(this.model, playerId);
+                updateClients(error, playerId);
+            }
         }
     }
     private void updateClients(int errorCode, int playerId) {
@@ -109,8 +104,7 @@ public class ModelHandler implements Runnable{
             ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(er);
 
             //if the game is over communicates it to the main server thread
-            if (m.gameIsOver()){
-                this.go = false;
+            if (m.gameIsOver() && !this.thread.isInterrupted()){
                 server.setCode(Errors.GAME_OVER);
             }
 
@@ -124,30 +118,19 @@ public class ModelHandler implements Runnable{
             message = gson.toJsonTree(m);
         }
 
-        for (Integer id : this.ids){
-            sendMessageToPlayer (message, id);
-        }
+        sendMessageToPlayers(message);
     }
-    private void sendMessageToPlayer (JsonElement message, int playerId){
-        //using executor for not blocking the model queue
-        new Thread(new Runnable() {
-            private JsonElement message;
-            private BlockingQueue<JsonElement> queue;
 
-            public Runnable init(JsonElement myParam, BlockingQueue<JsonElement> queue) {
-                this.message = myParam;
-                this.queue = queue;
-                return this;
-            }
-
-            @Override
-            public void run() {
+    private void sendMessageToPlayers (JsonElement m){
+        //send message to all players
+        for (int id: this.ids){
+            boolean done = false;
+            while (!done) {
                 try {
-                    queue.put(message);
-                } catch (InterruptedException e) {
-                    System.err.println("Error put interrupted in ModelHandler line: " + new Throwable().getStackTrace()[0].getLineNumber());
-                }
+                    this.queues.getPlayerQueue(id).put(m);
+                    done = true;
+                } catch (InterruptedException ignored){} //this action need to be done for all player in any case if it is started
             }
-        }.init(message, queues.getPlayerQueue(playerId))).start();
+        }
     }
 }

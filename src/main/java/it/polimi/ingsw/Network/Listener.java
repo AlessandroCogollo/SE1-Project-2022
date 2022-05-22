@@ -21,7 +21,7 @@ public class Listener implements Runnable{
     private final PingTimer ping;
 
 
-    private volatile boolean go = false;
+    private Thread thread = null;
 
     public Listener(BlockingQueue<JsonElement> messageSource, InputStream inputStream, PingTimer ping) {
         this.messageDest = messageSource;
@@ -32,25 +32,20 @@ public class Listener implements Runnable{
     @Override
     public void run() {
         //listener thread
-        this.go = true;
-        while (this.go){
+        this.thread = Thread.currentThread();
+
+        while (!this.thread.isInterrupted()){
             //retrieve message from server
             String message = null;
             try {
-                while (message == null)
+                while (message == null && !this.thread.isInterrupted()) {
                     message = in.readLine();
-            } catch (IOException e) {
-                if (e instanceof SocketException) {
-                    System.err.println("Listener: Socket Close");
-                    this.ping.triggerServerError();
-                    this.go = false;
+                    Thread.sleep(100);
                 }
-                else
-                    System.err.println("Listener: Error while reading from socket");
-
-                continue;
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Listener: socket close");
+                return;
             }
-
             //reset the ping timer of receiver
             this.ping.resetReceiveTimer();
 
@@ -65,15 +60,18 @@ public class Listener implements Runnable{
                 try {
                     this.messageDest.put(messageJ);
                 } catch (InterruptedException e) {
-                    System.err.println("Listener: Interrupted when putting data in the queue");
-                    this.go = false;
+                    System.out.println("Listener: Interrupted when putting data in the queue");
+                    return;
                 }
             }
         }
-        System.out.println("Listener Stopped");
+        System.out.println("Listener: Stopped");
     }
 
     public void stopListener(){
-        this.go = false;
+        if (this.thread == null){
+            System.out.println("Cannot stop Listener if is it not running");
+        }
+        this.thread.interrupt();
     }
 }

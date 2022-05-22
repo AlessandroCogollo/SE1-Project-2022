@@ -99,4 +99,9 @@ public class TestingCli implements Graphic {
     public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
+
+    @Override
+    public void stopInput() {
+
+    }
 }

@@ -17,7 +17,8 @@ import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Main Client class
@@ -29,8 +30,10 @@ public class Client{
     private final Graphic graphic;
     private final ConnectionHandler connection;
     private final Gson gson = new GsonBuilder().create();
+    private final BlockingQueue<JsonElement> filteredIn = new LinkedBlockingQueue<>();
 
-    private ExecutorService executors = null;
+    private Thread setup = null;
+    private Thread filter = null;
 
     private GameHandler game = null;
 
@@ -53,7 +56,7 @@ public class Client{
      * @param serverPort port of server
      */
     public Client (Graphic graphic, String serverIp, int serverPort){
-        this( graphic, serverIp, serverPort, Duration.ofSeconds(60));
+        this( graphic, serverIp, serverPort, Duration.ofSeconds(15)); //todo
     }
 
     /**
@@ -65,13 +68,16 @@ public class Client{
      */
     public Client(Graphic graphic, String serverHost, int serverPort, Duration defaultTimeout) {
         this.graphic = graphic;
+        ConnectionHandler temp = null;
         try {
-            this.connection = new ConnectionHandler(serverHost, serverPort, defaultTimeout, this::serverDown);
+            temp = new ConnectionHandler(serverHost, serverPort, defaultTimeout, this::serverDown);
         } catch (IOException e) {
+            this.graphic.displayMessage("Error connecting to " + serverHost + " at " + serverPort);
+            System.err.println("Error connecting to " + serverHost + " at " + serverPort);
             e.printStackTrace();
-            graphic.displayMessage("Error connecting to " + serverHost + " at " + serverPort);
-            throw new RuntimeException("Error connecting to " + serverHost + " at " + serverPort);
+            System.exit(-1);
         }
+        this.connection = temp;
     }
 
 
@@ -95,10 +101,15 @@ public class Client{
      */
     public void start() {
 
-        new Thread(this.connection).start();
+        Thread.currentThread().setName("Main thread Client");
 
-        this.executors = Executors.newSingleThreadExecutor();
-        executors.execute(this::setupConnectionAndStartGame);
+
+
+        new Thread(this.connection, "Connection Handler").start();
+
+        new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();
+
+        new Thread(this::playerDisconnectedFilter, "Client Filter").start();
 
 
         //do nothing until some other thread tells him what to do with a code
@@ -108,8 +119,8 @@ public class Client{
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                    System.err.println("Client main Thread interrupted");
-                    this.code = Errors.GAME_OVER; //only possible in tests
+                    System.out.println("Client main Thread interrupted");
+                    break;
                 }
             }
         }
@@ -133,10 +144,13 @@ public class Client{
 
 
     private void shutdownAll() {
-        executors.shutdownNow();
+        if (this.setup != null)
+            this.setup.interrupt();
+        this.filter.interrupt();
         this.connection.stopConnectionHandler();
         if (this.game != null)
             this.game.stopGameHandler();
+        this.graphic.stopInput();
     }
 
     private Object serverDown() {
@@ -161,6 +175,10 @@ public class Client{
                 this.graphic.displayMessage("The game is finished, shutting down");
                 go = false;
             }
+            case PLAYER_DISCONNECTED -> {
+                this.graphic.displayMessage("A player go down, shutting down the client");
+                go = false;
+            }
         }
 
         //reset code
@@ -168,10 +186,43 @@ public class Client{
         return go;
     }
 
+    private void playerDisconnectedFilter () {
+        this.filter = Thread.currentThread();
+        BlockingQueue<JsonElement> netIn = this.connection.getInQueue();
+        while (!this.filter.isInterrupted()){
+
+            JsonElement jM;
+            try {
+                jM = netIn.take();
+            } catch (InterruptedException e) {
+                System.out.println("Client Filter: interrupted while waiting for some message");
+                return;
+            }
+
+            Message temp = this.gson.fromJson(jM, Message.class);
+
+            if (Errors.PLAYER_DISCONNECTED.equals(temp.getError())) {
+                this.graphic.displayMessage(temp.getMessage());
+                setCode(Errors.PLAYER_DISCONNECTED);
+                return;
+            }
+
+            try {
+                this.filteredIn.put(jM);
+            } catch (InterruptedException e) {
+                System.out.println("Client Filter: interrupted while waiting for put message in filtered queue");
+                return;
+            }
+        }
+    }
+
 
     //method for set the initial connection
 
     private void setupConnectionAndStartGame() {
+
+        this.setup = Thread.currentThread();
+
         int id;
         Collection <Errors> temp = new ArrayList<>();
         //this operation are done without the intervention of user and must be done in this order, so is not needed for have multiple thread (except for the timeout)
@@ -209,15 +260,16 @@ public class Client{
             //get the player id
             id = idM.getPlayerId();
         } catch (IOException | InterruptedException e) {
-            System.err.println(e.getMessage());
-            //this.setCode(Errors.SERVER_NOT_RESPONDING);
+            System.out.println("Interrupted during setup of the connection at line: " + e.getStackTrace()[0].getLineNumber());
             return;
         }
 
         //create gameHandler
-        this.game = new GameHandler(id, this.connection, this.graphic, this);
+        this.game = new GameHandler(id, this.filteredIn, this.connection.getOutQueue(), this.graphic, this);
 
         setCode(Errors.SETUP_FINISHED);
+
+        this.setup = null;
     }
 
     private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws IOException, InterruptedException {
@@ -231,8 +283,12 @@ public class Client{
         }
         boolean ok = false;
         String error = null;
+        if (this.setup.isInterrupted())
+            throw new InterruptedException("Client Setup: interrupted");
         while (!ok) {
             JsonElement m = getInfo(error, first);
+            if (this.setup.isInterrupted())
+                throw new InterruptedException("Client Setup: interrupted");
             sendMessage(m);
             answer = waitForResponse(coll);
             Message temp = this.gson.fromJson(answer, Message.class);
@@ -249,12 +305,20 @@ public class Client{
         if (message != null)
             this.graphic.displayMessage(message);
 
+        if (this.setup.isInterrupted())
+            throw new InterruptedException("Client Setup: interrupted");
         String username = this.graphic.getUsername();
+        if (this.setup.isInterrupted())
+            throw new InterruptedException("Client Setup: interrupted");
         Wizard w = this.graphic.getWizard();
+        if (this.setup.isInterrupted())
+            throw new InterruptedException("Client Setup: interrupted");
 
 
         if (first){
             int numOfPlayer = this.graphic.getNumOfPLayer();
+            if (this.setup.isInterrupted())
+                throw new InterruptedException("Client Setup: interrupted");
             int gameMode = this.graphic.getGameMode();
             FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
             return gson.toJsonTree(m);
@@ -264,18 +328,13 @@ public class Client{
         return gson.toJsonTree(m);
     }
 
-    private void sendMessage (Errors codeMessage, String desc) {
+    private void sendMessage (Errors codeMessage, String desc) throws InterruptedException {
         Message m = new Message(codeMessage, desc);
         sendMessage(this.gson.toJsonTree(m));
     }
 
-    private void sendMessage (JsonElement json){
-        try {
-            this.connection.getQueueToServer().put(json);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    private void sendMessage (JsonElement json) throws InterruptedException {
+        this.connection.getOutQueue().put(json);
     }
 
     //private JsonElement waitForResponse(Collection<Errors> corrects, Duration timeout) throws TimeoutException, InterruptedException
@@ -298,7 +357,7 @@ public class Client{
                 throw new TimeoutException("Timer over while waiting for " + erString);
             }*/
 
-            message = this.connection.getQueueFromServer().take();
+            message = this.filteredIn.take();
 
             Message temp = this.gson.fromJson(message, Message.class);
             codeReceived = temp.getError();

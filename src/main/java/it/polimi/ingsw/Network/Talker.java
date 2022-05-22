@@ -16,7 +16,7 @@ public class Talker implements Runnable{
     private final PrintWriter out;
     private final PingTimer ping;
 
-    private volatile boolean go = false;
+    private Thread thread = null;
 
     public Talker(BlockingQueue<JsonElement> messageSource, OutputStream outputStream, PingTimer ping) {
         this.messageSource = messageSource;
@@ -26,20 +26,18 @@ public class Talker implements Runnable{
 
     @Override
     public void run() {
-        this.go = true;
-        while (this.go){
+        this.thread = Thread.currentThread();
+
+        while (!this.thread.isInterrupted()){
 
             //retrieve the message to send if it is present
-            JsonElement messageJ = null;
+            JsonElement messageJ;
             try {
-                messageJ = messageSource.poll(100, TimeUnit.MILLISECONDS);
+                messageJ = messageSource.take();
             } catch (InterruptedException e) {
-                System.err.println("Listener: Error while retrieving the message to send");
-                this.go = false;
+                System.out.println("Talker: Error while waiting for data to be send");
+                return;
             }
-
-            if (messageJ == null)
-                continue;
 
             //if there is a message to send, send it and reset the ping timer for sender
             String message = this.gson.toJson(messageJ);
@@ -50,6 +48,9 @@ public class Talker implements Runnable{
     }
 
     public void stopTalker(){
-        this.go = false;
+        if (this.thread == null){
+            System.out.println("Cannot stop Talker if is it not running");
+        }
+        this.thread.interrupt();
     }
 }
