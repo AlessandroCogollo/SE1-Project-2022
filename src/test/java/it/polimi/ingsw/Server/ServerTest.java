@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -52,10 +54,10 @@ class ServerTest {
         }
     }
 
-    @Test //todo activate before push
+    @Test
     void start() throws InterruptedException {
 
-        Server server = new Server(5078);
+        Server server = new Server(PortGetter.getPort());
 
         //create a thread for stop the server after some times
         new Thread(new ServerStopper(500, server)).start();
@@ -72,8 +74,8 @@ class ServerTest {
         Thread.sleep(1000);
         System.out.print(System.lineSeparator() + System.lineSeparator());
 
-
-        server = new Server(5088);
+        int port = PortGetter.getPort();
+        server = new Server(port);
 
         ExecutorService ex = Executors.newSingleThreadExecutor();
         ex.execute(server::start);
@@ -84,7 +86,7 @@ class ServerTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 5088);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -107,7 +109,7 @@ class ServerTest {
 
     @Test
     void setCode() {
-        Server server = new Server(5068);
+        Server server = new Server(PortGetter.getPort());
 
         //create a thread for set a lot of times a code
         new Thread(new ServerCodeSetter(10, 50, Errors.NOTHING_TODO, server));
@@ -123,7 +125,7 @@ class ServerTest {
     static Random rand = new Random();
     @Test
     void setGameProperties() throws InterruptedException {
-        int port = rand.nextInt(5000, 50000);
+        int port = PortGetter.getPort();
         Server server = new Server(port);
         ExecutorService ex = Executors.newSingleThreadExecutor();
         ex.execute(server::start);

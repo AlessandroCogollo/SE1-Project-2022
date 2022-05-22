@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ModelMessage {
 
-    private class PlayerSerializable{
+    public class PlayerSerializable{
         private final int id;
         private final int towerColor;
         private final int[] assistantDeck;
@@ -42,9 +42,33 @@ public class ModelMessage {
             else
                 this.coins = ((AdvancedPlayer)p).getCoins();
         }
+
+        public int getId() {
+            return id;
+        }
+
+        public int getTowerColor() {
+            return towerColor;
+        }
+
+        public int[] getAssistantDeck() {
+            return assistantDeck;
+        }
+
+        public int getActiveAssistant() {
+            return activeAssistant;
+        }
+
+        public School getSchool() {
+            return school;
+        }
+
+        public int getCoins() {
+            return coins;
+        }
     }
 
-    private class CloudSerializable{
+    public class CloudSerializable{
 
         private final int id;
         private final int[] drawnStudents;
@@ -55,7 +79,7 @@ public class ModelMessage {
         }
     }
 
-    private class normalCharacterSerializable{
+    public class normalCharacterSerializable{
         private final int id;
         private final int cost;
         private final boolean used;
@@ -67,7 +91,7 @@ public class ModelMessage {
         }
     }
 
-    private final class ApothecarySerializable extends normalCharacterSerializable{
+    public final class ApothecarySerializable extends normalCharacterSerializable{
         private final int banCard;
 
         ApothecarySerializable(Apothecary c) {
@@ -76,7 +100,7 @@ public class ModelMessage {
         }
     }
 
-    private final class CookSerializable extends normalCharacterSerializable{
+    public final class CookSerializable extends normalCharacterSerializable{
         private final int colorId;
 
         public CookSerializable(Cook c) {
@@ -89,7 +113,7 @@ public class ModelMessage {
         }
     }
 
-    private final class ClericSerializable extends normalCharacterSerializable{
+    public final class ClericSerializable extends normalCharacterSerializable{
         private final int[] students;
 
         ClericSerializable(Cleric c) {
@@ -98,7 +122,7 @@ public class ModelMessage {
         }
     }
 
-    private final class JesterSerializable extends normalCharacterSerializable{
+    public final class JesterSerializable extends normalCharacterSerializable{
         private final int[] students;
 
         JesterSerializable(Jester c) {
@@ -107,7 +131,7 @@ public class ModelMessage {
         }
     }
 
-    private final class PrincessSerializable extends normalCharacterSerializable{
+    public final class PrincessSerializable extends normalCharacterSerializable{
         private final int[] students;
 
         PrincessSerializable(Princess c) {
@@ -226,5 +250,25 @@ public class ModelMessage {
 
     public int getStudentsMoved() {
         return studentsMoved;
+    }
+
+    public List<Island> getIslandList() {
+        return islandList;
+    }
+
+    public int getMotherNatureIslandId() {
+        return motherNatureIslandId;
+    }
+
+    public int[] getProfessorsList() {
+        return professorsList;
+    }
+
+    public int[] getBag() {
+        return bag;
+    }
+
+    public List<PlayerSerializable> getPlayerList() {
+        return playerList;
     }
 }

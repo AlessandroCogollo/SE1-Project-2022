@@ -1,8 +1,5 @@
 package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Enum.Errors;
-import org.jetbrains.annotations.VisibleForTesting;
-
-import javax.swing.*;
 
 /**
  * Main class of the Server
@@ -67,7 +64,7 @@ public class Server {
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
-                   System.err.println("Main Server: Thread interrupted, shutting down");
+                   System.out.println("Main Server: Thread interrupted, shutting down");
                    Thread.currentThread().interrupt(); //reset interrupted flag on the thread
                    break;
                 }

@@ -5,14 +5,14 @@ import java.util.concurrent.Callable;
 
 public class TimerTaskCloneable extends TimerTask implements Cloneable {
 
-    private final Callable call;
+    private final Callable<Object> call;
 
-    public TimerTaskCloneable(Callable call) {
+    public TimerTaskCloneable(Callable<Object> call) {
         super();
         this.call = call;
     }
 
-    public Callable getCall() {
+    public Callable<Object> getCall() {
         return call;
     }
 
@@ -28,6 +28,9 @@ public class TimerTaskCloneable extends TimerTask implements Cloneable {
 
     @Override
     public TimerTaskCloneable clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException ignored) {}
         return new TimerTaskCloneable(this.call);
     }
 }

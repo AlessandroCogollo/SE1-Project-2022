@@ -337,25 +337,11 @@ public class Client{
         this.connection.getOutQueue().put(json);
     }
 
-    //private JsonElement waitForResponse(Collection<Errors> corrects, Duration timeout) throws TimeoutException, InterruptedException
     private JsonElement waitForResponse(Collection<Errors> corrects) throws InterruptedException {
 
         JsonElement message = null;
         Errors codeReceived = null;
         while (!corrects.contains(codeReceived)){
-            /*try{
-                message = getAnswer(timeout);
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-                StringBuilder erString = null;
-                for (Errors er: corrects){
-                    if (erString == null)
-                        erString = new StringBuilder(er.toString() + " ");
-                    else
-                        erString.append(er.toString()).append(" ");
-                }
-                throw new TimeoutException("Timer over while waiting for " + erString);
-            }*/
 
             message = this.filteredIn.take();
 
@@ -364,24 +350,6 @@ public class Client{
         }
         return message;
     }
-
-    /*
-    private JsonElement getAnswer (Duration timeout) throws TimeoutException {
-
-        JsonElement message = null;
-        try {
-            message = this.connection.getQueueFromServer().poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            this.graphic.displayMessage("Server went down");
-        }
-
-        if (message == null)
-            throw new TimeoutException();
-
-        return message;
-    }
-    */
 
     //test method
 

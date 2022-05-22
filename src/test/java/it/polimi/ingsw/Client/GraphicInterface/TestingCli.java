@@ -104,4 +104,9 @@ public class TestingCli implements Graphic {
     public void stopInput() {
 
     }
+
+    @Override
+    public void displayModel(ModelMessage model) {
+        new Cli().displayModel(model);
+    }
 }

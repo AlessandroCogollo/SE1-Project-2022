@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LobbyTest {
     @Test
     void run() throws InterruptedException {
-        Lobby l = new Lobby(21431, null);
+        int port = PortGetter.getPort();
+        Lobby l = new Lobby(port, null);
 
         new Thread(l).start();
 
@@ -24,7 +25,7 @@ public class LobbyTest {
         //setParameters done by the first client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 21431);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -38,7 +39,7 @@ public class LobbyTest {
 
     @Test
     void shutDownLobby() throws InterruptedException {
-        Lobby l = new Lobby(17431, null);
+        Lobby l = new Lobby(PortGetter.getPort(), null);
 
         ExecutorService ex = Executors.newSingleThreadExecutor();
         ex.execute(l);
@@ -50,12 +51,12 @@ public class LobbyTest {
         ex.shutdown(); // if not shutdown executors are anyway considered not terminated even if their task are completed
         Thread.sleep(20);
         assertTrue(ex.awaitTermination(2, TimeUnit.MINUTES));
-
     }
 
     @Test
     void setParameters() throws InterruptedException {
-        Lobby l = new Lobby(17431, null);
+        int port = PortGetter.getPort();
+        Lobby l = new Lobby(port, null);
 
         new Thread(l).start();
 
@@ -64,7 +65,7 @@ public class LobbyTest {
         //setParameters done by the first client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 17431);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -78,7 +79,8 @@ public class LobbyTest {
 
     @Test
     void setOk() throws InterruptedException {
-        Lobby l = new Lobby(17441, null);
+        int port = PortGetter.getPort();
+        Lobby l = new Lobby(port, null);
 
         new Thread(l).start();
 
@@ -87,7 +89,7 @@ public class LobbyTest {
         //setOk done by all the client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 17441);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -111,7 +113,8 @@ public class LobbyTest {
 
     @Test
     void setQueues() throws InterruptedException {
-        Lobby l = new Lobby(17531, null);
+        int port = PortGetter.getPort();
+        Lobby l = new Lobby(port, null);
 
         new Thread(l).start();
 
@@ -123,7 +126,7 @@ public class LobbyTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 17531);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -137,14 +140,15 @@ public class LobbyTest {
 
     @Test
     void clientDown() throws InterruptedException {
-        Server s = new Server(16323); // placeholder, not used
-        Lobby l = new Lobby(18531, s);
+        Server s = new Server(PortGetter.getPort()); // placeholder, not used
+        int port = PortGetter.getPort();
+        Lobby l = new Lobby(port, s);
 
         new Thread(l).start();
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", 18531);
+            Client c = new Client(new TestingCli(), "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -160,11 +164,11 @@ public class LobbyTest {
 
     @Test
     void getUsernames() {
-        assertNotNull(new Lobby(17324, null).getUsernames());
+        assertNotNull(new Lobby(PortGetter.getPort(), null).getUsernames());
     }
 
     @Test
     void getWizards() {
-        assertNotNull(new Lobby(17325, null).getWizards());
+        assertNotNull(new Lobby(PortGetter.getPort(), null).getWizards());
     }
 }

@@ -11,10 +11,10 @@ public class School {
     private final int[] room;
     private int towers;
 
-    int[] getCopyOfEntrance (){
+    public int[] getCopyOfEntrance (){
         return Arrays.copyOf(entrance, entrance.length);
     }
-    int[] getCopyOfRoom (){
+    public int[] getCopyOfRoom (){
         return Arrays.copyOf(room, room.length);
     }
     School(int towers, int entranceStudent, Bag bag) {
@@ -24,7 +24,7 @@ public class School {
         this.entrance = bag.drawStudents(entranceStudent);
     }
 
-    int getTowers() {
+    public int getTowers() {
         return towers;
     }
 

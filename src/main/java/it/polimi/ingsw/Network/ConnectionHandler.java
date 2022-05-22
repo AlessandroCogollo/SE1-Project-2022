@@ -34,7 +34,7 @@ public class ConnectionHandler implements Runnable{
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
      * @param errorTask the task to do if the server go down and don't answer the ping message, by default it only stop the connection handler, if the task is not null it will run the task and after close the connection handler
      */
-    public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable errorTask){
+    public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable<Object> errorTask){
         this.socket = socket;
         //initialize input and output from server
         InputStream fromSocket;
@@ -49,11 +49,11 @@ public class ConnectionHandler implements Runnable{
         }
 
         //create function for pint timer
-        Callable sendPing = new Callable() {
+        Callable<Object> sendPing = new Callable<Object>() {
             private PrintWriter printer;
             private String ping;
 
-            public Callable init(String ping, OutputStream outputStream){
+            public Callable<Object> init(String ping, OutputStream outputStream){
                 this.printer = new PrintWriter(outputStream);
                 this.ping = ping;
                 return this;
@@ -66,10 +66,10 @@ public class ConnectionHandler implements Runnable{
             }
         }.init(new Gson().toJson(new Ping()), toSocket);
 
-        Callable errorCall = new Callable() {
+        Callable<Object> errorCall = new Callable<Object>() {
             private ConnectionHandler c;
-            private Callable task;
-            public Callable init(ConnectionHandler c, Callable task){
+            private Callable<Object> task;
+            public Callable<Object> init(ConnectionHandler c, Callable<Object> task){
                 this.c = c;
                 this.task = task;
                 return this;
@@ -105,7 +105,7 @@ public class ConnectionHandler implements Runnable{
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
      * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
      */
-    public ConnectionHandler(String serverHost, int serverPort, Duration timeout, @Nullable Callable errorTask) throws IOException {
+    public ConnectionHandler(String serverHost, int serverPort, Duration timeout, @Nullable Callable<Object> errorTask) throws IOException {
         this(new Socket(serverHost, serverPort), timeout, errorTask);
     }
 

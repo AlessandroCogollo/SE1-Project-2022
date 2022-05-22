@@ -10,13 +10,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 
 public class Listener implements Runnable{
 
     private final Gson gson = new GsonBuilder().create();
-    private final BlockingQueue<JsonElement> messageDest;
+    private final BlockingQueue<JsonElement> messageDestination;
     private final BufferedReader in;
     private final PingTimer ping;
 
@@ -24,7 +23,7 @@ public class Listener implements Runnable{
     private Thread thread = null;
 
     public Listener(BlockingQueue<JsonElement> messageSource, InputStream inputStream, PingTimer ping) {
-        this.messageDest = messageSource;
+        this.messageDestination = messageSource;
         this.in = new BufferedReader(new InputStreamReader(inputStream));
         this.ping = ping;
     }
@@ -58,7 +57,7 @@ public class Listener implements Runnable{
 
                 //if is not a ping message put it in the out queue
                 try {
-                    this.messageDest.put(messageJ);
+                    this.messageDestination.put(messageJ);
                 } catch (InterruptedException e) {
                     System.out.println("Listener: Interrupted when putting data in the queue");
                     return;

@@ -20,7 +20,7 @@ public interface Graphic {
      * Ask the player to choose a valid wizard
      * @return the wizard chosen to the caller
      */
-    Wizard getWizard() throws IOException;
+    Wizard getWizard() throws IOException, InterruptedException;
 
     /**
      * Ask the player to choose a username
@@ -32,13 +32,13 @@ public interface Graphic {
      * Ask the player to choose the player number of the game, 2, 3 or 4
      * @return the number chosen
      */
-    int getNumOfPLayer() throws IOException;
+    int getNumOfPLayer() throws IOException, InterruptedException;
 
     /**
      * Ask the player to choose the gamemode of the game: 0 normal, 1 advanced
      * @return the number chosen
      */
-    int getGameMode() throws IOException;
+    int getGameMode() throws IOException, InterruptedException;
 
     /**
      * Display some information for help the player to choose, and ask him what types of Assistant he want to play
@@ -84,4 +84,10 @@ public interface Graphic {
      * Stop any io method that is running throwing some exception
      */
     void stopInput();
+
+    /**
+     * Display the model or update it on the screen
+     * @param model model to display or the update of it
+     */
+    void displayModel(ModelMessage model);
 }

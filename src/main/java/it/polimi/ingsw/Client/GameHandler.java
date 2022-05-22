@@ -9,7 +9,6 @@ import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.ModelMessage;
-import it.polimi.ingsw.Network.ConnectionHandler;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -27,6 +26,7 @@ public class GameHandler implements Runnable{
     private Thread thread = null;
 
     private ModelMessage model;
+    private boolean firstModel = false;
 
     public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, Graphic g, Client client) {
         this.myId = myId;
@@ -86,13 +86,23 @@ public class GameHandler implements Runnable{
         if (this.model == null)
             return null;
 
+        if (!firstModel){
+            this.g.displayMessage("Game started");
+            this.g.displayMessage("First Model received");
+            firstModel = true;
+        }
+
         if (this.model.gameIsOver()){
             gameOver();
             return null;
         }
 
-        if (this.model.getCurrentPlayerId() != this.myId)
+        if (this.model.getCurrentPlayerId() != this.myId){
+            this.g.displayMessage("Model Received");
+            this.g.displayModel(this.model);
             return null;
+        }
+
 
         this.g.displayMessage("It's your turn");
         return askMove();
@@ -129,11 +139,16 @@ public class GameHandler implements Runnable{
             mJ = this.in.take();
 
             temp = this.gson.fromJson(mJ, Message.class);
+
             if (!Errors.NO_ERROR.equals(temp.getError())){
+
                 this.g.displayMessage(temp.getMessage());
+
+                if (this.model != null && this.model.getCurrentPlayerId() == this.myId)
+                    return;
             }
         }
-        //todo idea say that the prec player has done his move
+        //todo idea say that the precedent player has done his move
         this.model = this.gson.fromJson(mJ, ModelMessage.class);
     }
 }

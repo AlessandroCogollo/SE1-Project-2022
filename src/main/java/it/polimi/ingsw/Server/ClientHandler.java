@@ -182,8 +182,8 @@ public class ClientHandler implements Runnable{
                 return;
             }
 
-            ClientMessage temp = this.gson.fromJson(messageFromClient, ClientMessage.class);
-            int moveId = temp.getMoveId();
+
+            int moveId = messageFromClient.getAsJsonObject().get("moveId").getAsInt();
 
             if (moveId < 1 || moveId > 5){
                 System.err.println("Move Id not exists, ClientHandler " + this.id);

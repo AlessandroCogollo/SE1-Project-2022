@@ -67,6 +67,11 @@ public class Gui extends Application implements Graphic {
 
     }
 
+    @Override
+    public void displayModel(ModelMessage model) {
+
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

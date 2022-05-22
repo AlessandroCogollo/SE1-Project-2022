@@ -6,11 +6,6 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Server.Model.Game;
-
-import javax.swing.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,7 +24,7 @@ public class ModelHandler implements Runnable{
     /**
      * Constructor of the class
      * @param ids Ids of the players
-     * @param gameMode gamemode to thart the right type of game
+     * @param gameMode game mode to that the right type of game
      * @param server Server main Thread
      * @param q the Queue Organizer
      */
@@ -73,7 +68,7 @@ public class ModelHandler implements Runnable{
 
         while (!this.thread.isInterrupted()){
 
-            ClientMessageDecorator move = null;
+            ClientMessageDecorator move;
             try {
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {

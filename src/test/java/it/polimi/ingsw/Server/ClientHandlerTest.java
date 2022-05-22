@@ -21,22 +21,7 @@ class ClientHandlerTest {
 
     @Test
     void clientDown() throws IOException, InterruptedException {
-        ExecutorService client = Executors.newSingleThreadExecutor();
-        ExecutorService server = Executors.newSingleThreadExecutor();
-        Server se = new Server(16329); //used as placeholder
-        Lobby l = new Lobby(43621, se); //used as placeholder
-
-        ServerSocket s = new ServerSocket(15342);
-
-        Client c = new Client(new TestingCli(), "127.0.0.1", 15342);
-        Socket skt = s.accept();
-        client.execute(c::start);
-        ClientHandler cH = new ClientHandler(skt, 0, l);
-        server.execute(cH);
-
-        Thread.sleep(1000);
-
-        cH.clientDown();
+        //done while testing the entire setup of connection
 
         assertTrue(true);
     }
@@ -45,10 +30,10 @@ class ClientHandlerTest {
     void shutdown() throws IOException, InterruptedException {
         ExecutorService client = Executors.newSingleThreadExecutor();
         ExecutorService server = Executors.newSingleThreadExecutor();
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
 
-        ServerSocket s = new ServerSocket(8374);
-
-        Client c = new Client(new TestingCli(), "127.0.0.1", 8374);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -71,10 +56,10 @@ class ClientHandlerTest {
 
         ExecutorService client = Executors.newSingleThreadExecutor();
         ExecutorService server = Executors.newSingleThreadExecutor();
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
 
-        ServerSocket s = new ServerSocket(19374);
-
-        Client c = new Client(new TestingCli(), "127.0.0.1", 19374);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -97,10 +82,10 @@ class ClientHandlerTest {
     void run() throws IOException, InterruptedException {
         ExecutorService client = Executors.newSingleThreadExecutor();
         ExecutorService server = Executors.newSingleThreadExecutor();
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
 
-        ServerSocket s = new ServerSocket(1975);
-
-        Client c = new Client(new TestingCli(), "127.0.0.1", 1975);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -119,11 +104,11 @@ class ClientHandlerTest {
     void sendJsonToClient() throws IOException, InterruptedException {
         ExecutorService client = Executors.newSingleThreadExecutor();
         ExecutorService server = Executors.newSingleThreadExecutor();
-        Lobby l = new Lobby(12365, null); //used as placeholder
+        Lobby l = new Lobby(PortGetter.getPort(), null); //used as placeholder
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
 
-        ServerSocket s = new ServerSocket(7623);
-
-        Client c = new Client(new TestingCli(), "127.0.0.1", 7623);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, l);
@@ -135,5 +120,32 @@ class ClientHandlerTest {
         assertTrue(true);
         cH.shutdown();
         client.shutdownNow();
+    }
+
+    @Test
+    void allMessageSent() throws IOException, InterruptedException {
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        Socket skt = s.accept();
+        new Thread(c::start).start();
+        ClientHandler cH = new ClientHandler(skt, 0, null);
+        new Thread(cH).start();
+        Thread.sleep(200);
+        assertTrue(cH.allMessageSent());
+    }
+
+    @Test
+    void sendMessage() throws IOException, InterruptedException {
+        int port = PortGetter.getPort();
+        ServerSocket s = new ServerSocket(port);
+        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        Socket skt = s.accept();
+        new Thread(c::start).start();
+        ClientHandler cH = new ClientHandler(skt, 0, null);
+        new Thread(cH).start();
+        Message m = new Message(Errors.NO_ERROR, "Test");
+        cH.sendMessage(new Gson().toJsonTree(m));
+        assertTrue(true);
     }
 }
