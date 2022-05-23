@@ -15,24 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientTest {
 
     @Test
-    void listen() {
-
-    }
-
-    @Test
-    void talk() {
-    }
-
-    @Test
-    void stopConnection() {
-    }
-
-    @Test
-    void askGraphic() {
-        //todo
-    }
-
-    @Test
     void start() throws IOException {
         //test that the client will stop after timeout x 2 sec
         ServerSocket s = new ServerSocket(5088);
@@ -66,5 +48,11 @@ class ClientTest {
 
     @Test
     void main() {
+    }
+
+    @Test
+    void AskGraphic() {
+        //not done because need input
+        assertTrue(true);
     }
 }

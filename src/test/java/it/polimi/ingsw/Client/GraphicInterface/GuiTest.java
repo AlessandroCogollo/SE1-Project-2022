@@ -33,7 +33,7 @@ class GuiTest {
 
     @Test
     void start() {
-        Gui g = new Gui();
-        g.start(new Stage());
+        //Gui g = new Gui();
+        //g.start(new Stage());
     }
 }

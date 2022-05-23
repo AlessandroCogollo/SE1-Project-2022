@@ -31,15 +31,15 @@ public class Island {
         return towerCount;
     }
 
-    int[] getStudents() {
+    public int[] getStudents() {
         return students;
     }
 
-    int getTowerColor() {
+    public int getTowerColor() {
         return towerColor;
     }
 
-    int getBanCard() {
+    public int getBanCard() {
         return banCard;
     }
 

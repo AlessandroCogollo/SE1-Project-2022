@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ModelMessage {
 
-    private class PlayerSerializable{
+    public class PlayerSerializable {
         private final int id;
         private final int towerColor;
         private final int[] assistantDeck;
@@ -31,20 +31,44 @@ public class ModelMessage {
                 this.activeAssistant = p.getActiveAssistant().getValue();
 
             int i = 0;
-            for (Assistant a: p)
+            for (Assistant a : p)
                 i++;
             this.assistantDeck = new int[i];
             i = 0;
-            for (Assistant a: p)
+            for (Assistant a : p)
                 this.assistantDeck[i++] = a.getValue();
             if (mode == 0)
                 this.coins = 0;
             else
-                this.coins = ((AdvancedPlayer)p).getCoins();
+                this.coins = ((AdvancedPlayer) p).getCoins();
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public int getTowerColor() {
+            return towerColor;
+        }
+
+        public int[] getAssistantDeck() {
+            return assistantDeck;
+        }
+
+        public int getActiveAssistant() {
+            return activeAssistant;
+        }
+
+        public School getSchool() {
+            return school;
+        }
+
+        public int getCoins() {
+            return coins;
         }
     }
 
-    private class CloudSerializable{
+    public class CloudSerializable {
 
         private final int id;
         private final int[] drawnStudents;
@@ -53,9 +77,17 @@ public class ModelMessage {
             this.id = c.getId();
             this.drawnStudents = c.getCopyOfDrawnStudents();
         }
+
+        public int getId() {
+            return id;
+        }
+
+        public int[] getDrawnStudents() {
+            return drawnStudents;
+        }
     }
 
-    private class normalCharacterSerializable{
+    public class normalCharacterSerializable {
         private final int id;
         private final int cost;
         private final boolean used;
@@ -67,7 +99,7 @@ public class ModelMessage {
         }
     }
 
-    private final class ApothecarySerializable extends normalCharacterSerializable{
+    public final class ApothecarySerializable extends normalCharacterSerializable {
         private final int banCard;
 
         ApothecarySerializable(Apothecary c) {
@@ -76,7 +108,7 @@ public class ModelMessage {
         }
     }
 
-    private final class CookSerializable extends normalCharacterSerializable{
+    public final class CookSerializable extends normalCharacterSerializable {
         private final int colorId;
 
         public CookSerializable(Cook c) {
@@ -89,7 +121,7 @@ public class ModelMessage {
         }
     }
 
-    private final class ClericSerializable extends normalCharacterSerializable{
+    public final class ClericSerializable extends normalCharacterSerializable {
         private final int[] students;
 
         ClericSerializable(Cleric c) {
@@ -98,7 +130,7 @@ public class ModelMessage {
         }
     }
 
-    private final class JesterSerializable extends normalCharacterSerializable{
+    public final class JesterSerializable extends normalCharacterSerializable {
         private final int[] students;
 
         JesterSerializable(Jester c) {
@@ -107,7 +139,7 @@ public class ModelMessage {
         }
     }
 
-    private final class PrincessSerializable extends normalCharacterSerializable{
+    public final class PrincessSerializable extends normalCharacterSerializable {
         private final int[] students;
 
         PrincessSerializable(Princess c) {
@@ -201,14 +233,86 @@ public class ModelMessage {
                 this.activeCharacterId = t.getId();
             else
                 this.activeCharacterId = -1;
-        }
-        else {
+        } else {
             this.characterList = null;
             this.activeCharacterId = -1;
         }
     }
 
-    public boolean gameIsOver (){
+    public boolean gameIsOver() {
         return this.winnerId != -1;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
+    }
+
+    public String getActualPhase() {
+        return actualPhase;
+    }
+
+    public String getActualActionPhase() {
+        return actualActionPhase;
+    }
+
+    public int getStudentsToMove() {
+        int max = (this.playerNumber == 3) ? 4 : 3;
+        return max - this.studentsMoved;
+    }
+
+    public List<Island> getIslandList() {
+        return islandList;
+    }
+
+    public boolean isIslandIdValid(int islandId) {
+        for (Island i : this.islandList) {
+            if (i.getId() == islandId)
+                return true;
+        }
+        return false;
+    }
+
+    public int getMotherNatureIslandId() {
+        return motherNatureIslandId;
+    }
+
+    public int[] getProfessorsList() {
+        return professorsList;
+    }
+
+    public int[] getBag() {
+        return bag;
+    }
+
+    public List<PlayerSerializable> getPlayerList() {
+        return playerList;
+    }
+
+    public PlayerSerializable getPlayerById(int playerId) {
+        for (PlayerSerializable p : this.playerList) {
+            if (p.getId() == playerId)
+                return p;
+        }
+        return null;
+    }
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public int getActiveCharacterId() {
+        return activeCharacterId;
+    }
+
+    public List<CloudSerializable> getCloudList() {
+        return cloudList;
+    }
+
+    public boolean isCloudValid (int cloudId){
+        for (CloudSerializable c : this.cloudList){
+            if (c.getId() == cloudId)
+                return true;
+        }
+        return false;
     }
 }

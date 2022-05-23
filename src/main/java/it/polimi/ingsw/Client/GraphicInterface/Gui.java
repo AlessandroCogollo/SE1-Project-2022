@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 
+import it.polimi.ingsw.Message.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -124,6 +125,41 @@ public class Gui extends Application implements Graphic {
         });
         while(queue.size()==0){}
         return queue.get(0);
+    }
+
+    @Override
+    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public void stopInput() {
+
+    }
+
+    @Override
+    public void displayModel(ModelMessage model) {
+
     }
 
     public <T> Optional<T> Choice(String title, String contentText, ArrayList<T> choices){

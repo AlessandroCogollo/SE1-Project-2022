@@ -1,21 +1,17 @@
 package it.polimi.ingsw.Network;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Enum.Errors;
-import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.time.Duration;
-import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A complete implementation that mask completely the network level and gives you two easy queue, one to the server and one from the server. <br>
@@ -32,16 +28,13 @@ public class ConnectionHandler implements Runnable{
     private final PingTimer pingTimer;
     private final Socket socket;
 
-    private volatile boolean hasToRun;
-    private final Object lock = new Object();
-
     /**
      * Create connection Handler
      * @param socket socket used for this connection
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
-     * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
+     * @param errorTask the task to do if the server go down and don't answer the ping message, by default it only stop the connection handler, if the task is not null it will run the task and after close the connection handler
      */
-    public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable errorTask){
+    public ConnectionHandler (Socket socket, Duration timeout, @Nullable Callable<Object> errorTask){
         this.socket = socket;
         //initialize input and output from server
         InputStream fromSocket;
@@ -50,45 +43,53 @@ public class ConnectionHandler implements Runnable{
             fromSocket = socket.getInputStream();
             toSocket = socket.getOutputStream();
         } catch (IOException e) {
+            System.err.println("ConnectionHandler: Error while getting the stream of the socket");
             e.printStackTrace();
             throw new RuntimeException(e);
         }
 
         //create function for pint timer
-        Callable sendPing = new Callable() {
+        Callable<Object> sendPing = new Callable<Object>() {
             private PrintWriter printer;
             private String ping;
 
-            public Callable init(String ping, OutputStream outputStream){
+            public Callable<Object> init(String ping, OutputStream outputStream){
                 this.printer = new PrintWriter(outputStream);
                 this.ping = ping;
                 return this;
             }
             @Override
             public Object call() {
-                this.printer.println(ping);
+                if (!this.printer.checkError())
+                    this.printer.println(ping);
                 return null;
             }
         }.init(new Gson().toJson(new Ping()), toSocket);
 
-        Callable errorCall;
-        if (errorTask != null)
-            errorCall = errorTask;
-        else{
-            errorCall = new Callable() {
-                private ConnectionHandler c;
-                public Callable init(ConnectionHandler c){
-                    this.c = c;
-                    return this;
+        Callable<Object> errorCall = new Callable<Object>() {
+            private ConnectionHandler c;
+            private Callable<Object> task;
+            public Callable<Object> init(ConnectionHandler c, Callable<Object> task){
+                this.c = c;
+                this.task = task;
+                return this;
+            }
+            @Override
+            public Object call() {
+                c.stopConnectionHandler();
+                if (task == null)
+                    System.out.println("ConnectionHandler: Disconnected, run default action (stop only connection handler)");
+                else{
+                    System.out.println("ConnectionHandler: Disconnected, run the passed task and stop the connection handler");
+                    try {
+                        this.task.call();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                @Override
-                public Object call() {
-                    System.err.println("Disconnected, run default action (stop only connection handler)");
-                    c.stopConnectionHandler();
-                    return null;
-                }
-            }.init(this);
-        }
+                return null;
+            }
+        }.init(this, errorTask);
 
         this.pingTimer = new PingTimer(timeout, new TimerTaskCloneable(sendPing), new TimerTaskCloneable(errorCall));
         this.talker = new Talker(this.out, toSocket, pingTimer);
@@ -104,7 +105,7 @@ public class ConnectionHandler implements Runnable{
      * @param timeout the default timeout for the ping (exactly fro the sender, x2 for the receiver )
      * @param errorTask the task to do if the server go down and don't answer the ping message, if null it will print that the timeout is occurred in the default system out and in the graphic environment, then it will close the ConnectionHandler
      */
-    public ConnectionHandler(String serverHost, int serverPort, Duration timeout, @Nullable Callable errorTask) throws IOException {
+    public ConnectionHandler(String serverHost, int serverPort, Duration timeout, @Nullable Callable<Object> errorTask) throws IOException {
         this(new Socket(serverHost, serverPort), timeout, errorTask);
     }
 
@@ -112,7 +113,7 @@ public class ConnectionHandler implements Runnable{
      * Getter for the queue to server, any message put in this queue is send to the server one by one in order of arrival in this queue
      * @return the queue that is used to send the message to the server
      */
-    public BlockingQueue<JsonElement> getQueueToServer() {
+    public BlockingQueue<JsonElement> getOutQueue() {
         return out;
     }
 
@@ -120,16 +121,8 @@ public class ConnectionHandler implements Runnable{
      * Getter for the queue from server, any message that has received from server is put in this queue and the first message returned is the older message not retrieved in this queue
      * @return the queue where are stored the message received from server
      */
-    public BlockingQueue<JsonElement> getQueueFromServer() {
+    public BlockingQueue<JsonElement> getInQueue() {
         return in;
-    }
-
-    /**
-     * Return if the ConnectionHandler is running or not
-     * @return true if this class thread is running, of false otherwise
-     */
-    public boolean isRunning() {
-        return hasToRun;
     }
 
     /**
@@ -137,47 +130,31 @@ public class ConnectionHandler implements Runnable{
      */
     @Override
     public void run() {
-
-        //set to run
-        this.hasToRun = true;
-
-        new Thread(this.pingTimer).start();
-        new Thread(this.listener).start();
-        new Thread(this.talker).start();
-
-
-        synchronized (this.lock) {
-            while (hasToRun) {
-                try {
-                    this.lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        new Thread(this.pingTimer, "Ping Timer").start();
+        new Thread(this.listener, "Listener").start();
+        new Thread(this.talker, "Talker").start();
     }
 
     /**
-     * Stop the ConnectionHandler and all his inner class including all thread created by him, close also the socket
+     * Stop the ConnectionHandler and all his inner class including all thread created by him
      */
     public void stopConnectionHandler (){
-        synchronized(this.lock) {
-            this.hasToRun = false;
-            this.lock.notifyAll();
-        }
 
+        //try to stop them with normal method
         this.pingTimer.stopPing();
-        if (this.listener.isRunning())
-            this.listener.stopListener();
-        if (this.talker.isRunning())
-            this.talker.stopTalker();
+        this.listener.stopListener();
+        this.talker.stopTalker();
 
+        //they can be stuck in io method, so we need also to close the socket
         try {
             this.socket.close();
-        } catch (IOException e) {
+        } catch (IOException e){
+            if (e instanceof SocketException && e.getMessage().contains("socket close"))
+                return;
+
+            System.err.println("ConnectionHandler: cannot close socket");
             e.printStackTrace();
-            throw new RuntimeException(e);
+            System.exit(-1);
         }
     }
 }

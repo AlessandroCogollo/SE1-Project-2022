@@ -10,73 +10,67 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 
 public class Listener implements Runnable{
 
     private final Gson gson = new GsonBuilder().create();
-    private final BlockingQueue<JsonElement> messageDest;
+    private final BlockingQueue<JsonElement> messageDestination;
     private final BufferedReader in;
     private final PingTimer ping;
 
 
-    private volatile boolean go = false;
+    private Thread thread = null;
 
     public Listener(BlockingQueue<JsonElement> messageSource, InputStream inputStream, PingTimer ping) {
-        this.messageDest = messageSource;
+        this.messageDestination = messageSource;
         this.in = new BufferedReader(new InputStreamReader(inputStream));
         this.ping = ping;
-    }
-
-    public boolean isRunning() {
-        return go;
     }
 
     @Override
     public void run() {
         //listener thread
-        this.go = true;
-        while (go){
+        this.thread = Thread.currentThread();
+
+        while (!this.thread.isInterrupted()){
             //retrieve message from server
             String message = null;
             try {
-                while (message == null)
+                while (message == null && !this.thread.isInterrupted()) {
                     message = in.readLine();
-            } catch (IOException e) {
-                if (e instanceof SocketException) {
-                    System.err.println("Socket Close");
-                    this.ping.triggerServerError();
-                    go = false;
+                    Thread.sleep(100);
                 }
-                e.printStackTrace();
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Listener: socket close");
+                return;
             }
+            //reset the ping timer of receiver
+            this.ping.resetReceiveTimer();
 
-            if (message != null){
-                //if not null
+            //convert the message
+            JsonElement messageJ = this.gson.fromJson(message, JsonElement.class);
 
-                //reset the ping timer of receiver
-                this.ping.resetReceiveTimer();
+            //check if the message is not only a ping message
+            Message m = this.gson.fromJson(messageJ, Message.class);
+            if (m.getError() != Errors.PING) {
 
-                //convert the message
-                JsonElement messageJ = this.gson.fromJson(message, JsonElement.class);
-
-                //check if the message is not only a ping message
-                Message m = this.gson.fromJson(messageJ, Message.class);
-                if (m.getError() != Errors.PING) {
-
-                    //if is not a ping message put it in the out queue
-                    try {
-                        this.messageDest.put(messageJ);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                //if is not a ping message put it in the out queue
+                try {
+                    this.messageDestination.put(messageJ);
+                } catch (InterruptedException e) {
+                    System.out.println("Listener: Interrupted when putting data in the queue");
+                    return;
                 }
             }
         }
+        System.out.println("Listener: Stopped");
     }
 
     public void stopListener(){
-        this.go = false;
+        if (this.thread == null){
+            System.out.println("Cannot stop Listener if is it not running");
+        }
+        this.thread.interrupt();
     }
 }

@@ -5,8 +5,7 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;
-import it.polimi.ingsw.Network.ConnectionHandler;
-import it.polimi.ingsw.Network.TimerTaskCloneable;
+import it.polimi.ingsw.Server.PortGetter;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -19,40 +18,34 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectionHandlerTest {
 
-
     @Test
-    void getQueueToServer() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
-    void getQueueFromServer() {
-        //trivial
-        assertTrue(true);
-    }
-
-    @Test
-    void isRunning() throws IOException, InterruptedException {
-        ServerSocket s = new ServerSocket(5087);
+    void getOutQueue() throws IOException {
+        ServerSocket s = new ServerSocket(PortGetter.getPort());
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
         t.start();
         s.accept();
-        Thread.sleep(500);
-        assertTrue(c.isRunning());
+        assertNotNull(c.getOutQueue());
+    }
 
-        c.stopConnectionHandler();
-        s.close();
-        t.join(); //assure that all thread has finished
-        assertFalse(c.isRunning());
+    @Test
+    void getInQueue() throws IOException {
+        ServerSocket s = new ServerSocket(PortGetter.getPort());
+        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
+
+        Thread t = new Thread(c);
+        t.start();
+        s.accept();
+        assertNotNull(c.getInQueue());;
     }
 
     class UtilClass {
@@ -85,7 +78,7 @@ class ConnectionHandlerTest {
 
 
 
-        ServerSocket s = new ServerSocket(5088);
+        ServerSocket s = new ServerSocket(PortGetter.getPort());
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
         Thread t = new Thread(c);
@@ -95,8 +88,8 @@ class ConnectionHandlerTest {
         BufferedReader serverIn = new BufferedReader(new InputStreamReader(ser.getInputStream()));
         PrintWriter serverOut = new PrintWriter(ser.getOutputStream(), true);
 
-        BlockingQueue <JsonElement> clientIn = c.getQueueFromServer();
-        BlockingQueue <JsonElement> clientOut = c.getQueueToServer();
+        BlockingQueue <JsonElement> clientIn = c.getInQueue();
+        BlockingQueue <JsonElement> clientOut = c.getOutQueue();
 
         //set ping from server to client
         Callable pingSender = new Callable() {
@@ -162,7 +155,7 @@ class ConnectionHandlerTest {
 
         //use a little class to pass information to runnable and verifying that everything works fine
         UtilClass serverIsUp = new UtilClass(true);
-        s = new ServerSocket(5088);
+        s = new ServerSocket(PortGetter.getPort());
         Callable call = new Callable() {
             private UtilClass b;
 
@@ -232,7 +225,6 @@ class ConnectionHandlerTest {
         Thread.sleep(4000); //the timeout for the server is double the timeout to send the ping
 
         assertFalse(serverIsUp.isBool());
-        assertFalse(c.isRunning());
 
         s.close();
         t.join(); //assure that all thread has finished
@@ -245,18 +237,23 @@ class ConnectionHandlerTest {
         Message last = null;
 
         //first ping
-        while (last == null){
+        while (last == null && !Thread.currentThread().isInterrupted()){
             String s = null;
-            while (s == null)
+            while (s == null && !Thread.currentThread().isInterrupted()) {
                 s = serverIn.readLine();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {}
+            }
+
 
             last = g.fromJson(s, Message.class);
             assertEquals(Errors.PING, last.getError());
         }
 
-        while (true){
+        while (!Thread.currentThread().isInterrupted()){
             String s = null;
-            while (s == null)
+            while (s == null && !Thread.currentThread().isInterrupted())
                 s = serverIn.readLine();
 
             Message newM = g.fromJson(s, Message.class);
@@ -356,17 +353,19 @@ class ConnectionHandlerTest {
     }
     @Test
     void stopConnectionHandler() throws IOException, InterruptedException {
-        ServerSocket s = new ServerSocket(5088);
+        ServerSocket s = new ServerSocket(PortGetter.getPort());
         ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
-        Thread t = new Thread(c);
-        t.start();
+        new Thread(c).start();
         s.accept();
 
-        Thread.sleep(20);
+        Thread.sleep(200);
+
         c.stopConnectionHandler();
-        s.close();
-        t.join(); //assure that all thread has finished
+        Thread.sleep(200);
+        System.out.println("Use dump to se if the thread listener talker and ping timer are running");
+        //done yet and setted true
+        Thread.sleep(5000);
         assertTrue(true);
     }
 }

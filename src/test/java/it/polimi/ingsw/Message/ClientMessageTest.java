@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Message;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
 import org.junit.jupiter.api.RepeatedTest;
@@ -33,5 +35,16 @@ class ClientMessageTest {
         assertTrue(m3.executeMove(g, 0) > 0);
         assertTrue(m4.executeMove(g, 0) > 0);
         assertTrue(m5.executeMove(g, 0) > 0);
+    }
+
+    @Test
+    void getElement (){
+        PlayAssistantMessage p = new PlayAssistantMessage(Errors.NO_ERROR, "", 1);
+
+        Gson g = new Gson();
+        JsonElement j = g.toJsonTree(p);
+        JsonElement x = j.getAsJsonObject().get("moveId");
+        int i = x.getAsInt();
+        assertEquals(1, i);
     }
 }

@@ -2,11 +2,10 @@ package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Server.Model.Game;
-
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,12 +18,13 @@ public class ModelHandler implements Runnable{
     private final QueueOrganizer queues;
     private final int[] ids;
     private final Gson gson;
-    private volatile boolean hasToRun; //Volatile guarantees updated value always visible
+
+    private Thread thread = null;
 
     /**
      * Constructor of the class
      * @param ids Ids of the players
-     * @param gameMode gamemode to thart the right type of game
+     * @param gameMode game mode to that the right type of game
      * @param server Server main Thread
      * @param q the Queue Organizer
      */
@@ -33,26 +33,15 @@ public class ModelHandler implements Runnable{
         this.model = Game.getGameModel(ids, gameMode);
         this.queues = q;
         this.ids = ids;
-
-        this.hasToRun = false;
-
         //this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.gson = new GsonBuilder().create();
     }
 
     /**
-     * Retrieve if the model is working or not
-     * @return true if the model is running, false otherwise
-     */
-    public boolean getHasToRun() {
-        return hasToRun;
-    }
-
-    /**
-     * stop the model within 100 millisecond and take at least one other message and send one other message to the players
+     * stop the model in 500 millisecond and take at least one other message and send one other message to the players
      */
     public void stopModel () {
-        this.hasToRun = false;
+        this.thread.interrupt();
     }
 
     /**
@@ -66,46 +55,41 @@ public class ModelHandler implements Runnable{
     @Override
     public void run() {
 
-        //set to run
-        this.hasToRun = true;
+        this.thread = Thread.currentThread();
 
         //first send to player the first model message
         ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(Errors.NO_ERROR);
-        String message = this.gson.toJson(m);
-        for (Integer id : ids){
-            sendMessageToPlayer(message, id);
+        JsonElement message = this.gson.toJsonTree(m);
+
+        if (!this.thread.isInterrupted()){
+            sendMessageToPlayers(message);
         }
-
-
         //then wait for player move
 
-        while (hasToRun){
+        while (!this.thread.isInterrupted()){
 
-            ClientMessageDecorator move = null;
+            ClientMessageDecorator move;
             try {
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Interrupted while waiting for some move from clients ModelHandlers");
+                break;
             }
-            if (move != null) {
+            if (move == null)
+                continue;
 
-                int playerId = move.playerId();
-                ClientMessage moveReceived = move.message();
+            int playerId = move.playerId();
+            ClientMessage moveReceived = move.message();
 
-                int error = moveReceived.executeMove(model, playerId);
-
+            if (!this.thread.isInterrupted()) {
+                int error = moveReceived.executeMove(this.model, playerId);
                 updateClients(error, playerId);
             }
         }
     }
-
-    /**
-     * Prepare the message to the player, The Model Message if the move was valid and the model is updated, otherwise an error message
-     * @param errorCode the error from the model (0 == No Error)
-     * @param playerId the player id that has done the move
-     */
     private void updateClients(int errorCode, int playerId) {
-        String message;
+
+        JsonElement message;
         Errors er = Errors.getErrorsByCode(errorCode);
 
 
@@ -115,49 +99,33 @@ public class ModelHandler implements Runnable{
             ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(er);
 
             //if the game is over communicates it to the main server thread
-            if (m.gameIsOver()){
+            if (m.gameIsOver() && !this.thread.isInterrupted()){
                 server.setCode(Errors.GAME_OVER);
             }
 
-            message = gson.toJson(m);
+            message = gson.toJsonTree(m);
         }
         else {
             //if error return the message
-            //todo retrieve username from lobby
+
             Message m = new Message(er, "The player " + playerId + " commit an error: " + er.getDescription());
 
-            message = gson.toJson(m);
+            message = gson.toJsonTree(m);
         }
-        for (Integer id : ids){
-            sendMessageToPlayer(message, id);
-        }
+
+        sendMessageToPlayers(message);
     }
 
-    /**
-     * Send the message prepared by @{link#updateClients(int, int) updateClients} to the player
-     * @param message message prepared
-     * @param playerId the player id to send the message
-     */
-    private void sendMessageToPlayer (String message, int playerId){
-        //using executor for not blocking the model queue
-        new Thread(new Runnable() {
-            private String message;
-            private BlockingQueue<String> queue;
-
-            public Runnable init(String myParam, BlockingQueue<String> queue) {
-                this.message = myParam;
-                this.queue = queue;
-                return this;
-            }
-
-            @Override
-            public void run() {
+    private void sendMessageToPlayers (JsonElement m){
+        //send message to all players
+        for (int id: this.ids){
+            boolean done = false;
+            while (!done) {
                 try {
-                    queue.put(message);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    this.queues.getPlayerQueue(id).put(m);
+                    done = true;
+                } catch (InterruptedException ignored){} //this action need to be done for all player in any case if it is started
             }
-        }.init(message, queues.getPlayerQueue(playerId))).start();
+        }
     }
 }

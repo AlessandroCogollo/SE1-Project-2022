@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -63,15 +66,30 @@ class ModelHandlerTest {
         return args.stream().map(Arguments::of);
     }
 
-    @Test
-    void getHasToRun() {
-        //trivial
-        assertTrue(true);
-    }
-
+    //real test done in Server class test and in the method below
     @Test
     void stopModel() {
-        //cannot assert the thread is stopped, it works because is checked in the method under this one
+        int[] ids = getIds(3);
+        QueueOrganizer q = new QueueOrganizer(ids);
+
+        //set to null server so the game can't finish or it will trigger an error
+        ModelHandler x = new ModelHandler(ids, 1, null, q);
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            x.stopModel();
+        }).start();
+
+        x.run();
+
+        assertTrue(q.getPlayerQueue(0).size() > 0);
+        assertTrue(q.getPlayerQueue(1).size() > 0);
+        assertTrue(q.getPlayerQueue(2).size() > 0);
+
         assertTrue(true);
     }
 
@@ -106,11 +124,11 @@ class ModelHandlerTest {
     }
 
     static class Consumer implements Runnable {
-        private final BlockingQueue<String> q;
+        private final BlockingQueue<JsonElement> q;
 
         private boolean run;
 
-        public Consumer (BlockingQueue<String> q) {
+        public Consumer (BlockingQueue<JsonElement> q) {
             this.q = q;
             this.run = false;
         }
@@ -123,7 +141,7 @@ class ModelHandlerTest {
         public void run() {
             this.run = true;
             while (this.run){
-                String s = null;
+                JsonElement s = null;
                 try {
                     s = q.poll(100, TimeUnit.MILLISECONDS);
                     System.out.println(s);
@@ -139,7 +157,7 @@ class ModelHandlerTest {
 
     @ParameterizedTest
     @MethodSource("argsMethod")
-    void run(ClientMessageDecorator move) {
+    void run(ClientMessageDecorator move) throws InterruptedException {
         int[] ids = getIds(3);
         QueueOrganizer q = new QueueOrganizer(ids);
 
