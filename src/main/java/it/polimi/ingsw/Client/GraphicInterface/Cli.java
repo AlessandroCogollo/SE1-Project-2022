@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
@@ -144,6 +145,8 @@ public class Cli implements Graphic{
         return gameMode;
     }
 
+
+
     @Override
     public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
         displayModel(model);
@@ -167,13 +170,9 @@ public class Cli implements Graphic{
     private int[] displayAssistant (ModelMessage model, int playerId) {
         displayMessage(this.userName + ", this are your assistant");
         System.out.println();
-        ModelMessage.PlayerSerializable actual = null;
-        for (ModelMessage.PlayerSerializable pl : model.getPlayerList()){
-            if (pl.getId() == playerId){
-                actual = pl;
-                break;
-            }
-        }
+
+        ModelMessage.PlayerSerializable actual = model.getPlayerById(playerId);
+
         //null pointer if no player in the game
         int[] ass = actual.getAssistantDeck();
 
@@ -187,17 +186,149 @@ public class Cli implements Graphic{
 
     @Override
     public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
+        displayModel(model);
+
+        int[] entrance = displayEntrance(model, playerId);
+
+        int chooseColor = -1;
+
+        while ((chooseColor < 0 || chooseColor > 4 || entrance[chooseColor] == 0) && !Thread.currentThread().isInterrupted()){
+            chooseColor = askInteger("Choose the color of the student to move, using the number of the left of the color", "please insert a valid students that you hava");
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askMovement interrupted");
+
+        displayRoom(model, playerId);
+
+        displayIslands (model);
+
+        int destination = -2;
+
+        while (destination != -1 && !model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
+            destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)", "Isnert -1 or a valid island id");
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askMovement interrupted");
+
+        return new MoveStudentMessage(Errors.NO_ERROR, "Moved a students", chooseColor, destination);
+    }
+
+    private void displayIslands(ModelMessage model) {
+        System.out.println();
+
+        System.out.println("#################### ISLANDS ###################");
+        //printing islands
+        List<Island> x = model.getIslandList();
+        for(Island is : x){
+            String towerColor = null;
+            if (is.getTowerColor() == -1) {
+                towerColor = " ";
+            }
+            else if (is.getTowerColor() == 1){
+                towerColor = " Black";
+            }
+            else if (is.getTowerColor() == 2){
+                towerColor = " White";
+            }
+            else if (is.getTowerColor() == 3){
+                towerColor = " Grey";
+            }
+            System.out.println(
+                    "{ID: " + is.getId() +
+                            " , STUDENTS: " + Arrays.toString(is.getStudents()) +
+                            " , TOWERS: " + is.getTowerCount()  + towerColor +
+                            " , BAN CARD: " + is.getBanCard() +
+                            "}" +
+                            (model.getMotherNatureIslandId() == is.getId() ? "  <-- MOTHER NATURE" : ""));
+
+        }
+        System.out.println("#####################################################################");
+        System.out.println();
+    }
+
+    private void displayRoom(ModelMessage model, int playerId) {
+        displayMessage(this.userName + ", this is your room");
+        System.out.println();
+
+        ModelMessage.PlayerSerializable actual = model.getPlayerById(playerId);
+        int[] room = actual.getSchool().getCopyOfRoom();
+
+        for (int i = 0; i < room.length; i++){
+            System.out.println(i + ". " + Color.getColorById(i).name() + " " + room[i]);
+        }
+        System.out.println();
+    }
+
+    int[] displayEntrance (ModelMessage model, int playerId){
+        displayMessage(this.userName + ", this is your entrance");
+        System.out.println();
+
+        ModelMessage.PlayerSerializable actual = model.getPlayerById(playerId);
+
+        int[] entrance = actual.getSchool().getCopyOfEntrance();
+
+        for (int i = 0; i < entrance.length; i++){
+            System.out.println(i + ". " + Color.getColorById(i).name() + " " + entrance[i]);
+        }
+        System.out.println();
+
+        return entrance;
     }
 
     @Override
     public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
+        displayModel(model);
+
+        displayIslands(model);
+
+        int movement = -1;
+        int max = Assistant.getAssistantByValue(model.getPlayerById(playerId).getActiveAssistant()).getMaxMovement();
+        if (model.getGameMode() == 1 && model.getActiveCharacterId() == 9) //is postman
+            max += 2;
+
+        System.out.println("You can move for max " + max + " position");
+
+        while (!Thread.currentThread().isInterrupted() && (movement < 1 || movement > max)){
+            movement = askInteger("Insert the number of movement for mother nature", "insert a number between 1 and " + max);
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askMNMovement interrupted");
+
+        return new MoveMotherNatureMessage(Errors.NO_ERROR, "Moved Mother Nature", movement);
     }
 
     @Override
-    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
+    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        displayModel(model);
+
+        List< ModelMessage.CloudSerializable> clouds = displayCloud (model);
+
+        int cloud = -1;
+
+        while (!Thread.currentThread().isInterrupted() && (!model.isCloudValid(cloud))){
+            cloud = askInteger("Insert the id of cloud to take the students", "insert a valid cloud id");
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askCloud interrupted");
+
+        return new ChooseCloudMessage(Errors.NO_ERROR, "Chose cloud", cloud);
+    }
+
+    private List<ModelMessage.CloudSerializable> displayCloud(ModelMessage model) {
+        List <ModelMessage.CloudSerializable> clouds = model.getCloudList();
+        System.out.println();
+        displayMessage(this.userName + ", these are the clouds");
+        for (ModelMessage.CloudSerializable c : clouds){
+            System.out.println("Cloud " + c.getId() + " -> " + Arrays.toString(c.getDrawnStudents()));
+        }
+
+
+        System.out.println();
+        return clouds;
     }
 
     @Override
@@ -223,32 +354,7 @@ public class Cli implements Graphic{
         System.out.println("############################## Model ##############################");
         System.out.println();
         //print game information
-        System.out.println("#################### ISLANDS ###################");
-        //printing islands
-        String towerColor = null;
-        for(Island is : model.getIslandList()){
-            if (is.getTowerColor() == -1) {
-                towerColor = " ";
-            }
-            else if (is.getTowerColor() == 1){
-                towerColor = " Black";
-            }
-            else if (is.getTowerColor() == 2){
-                towerColor = " White";
-            }
-            else if (is.getTowerColor() == 3){
-                towerColor = " Grey";
-            }
-            System.out.println(
-                    "{ID: " + is.getId() +
-                            " , STUDENTS: " + Arrays.toString(is.getStudents()) +
-                            " , TOWERS: " + is.getTowerCount()  + towerColor +
-                            " , BAN CARD: " + is.getBanCard() +
-                            "}" +
-                            (model.getMotherNatureIslandId() == is.getId() ? "  <-- MOTHER NATURE" : ""));
-
-        }
-        System.out.println("#####################################################################");
+        displayIslands(model);
         System.out.println("###### PROFESSORS ######");
         System.out.println(Arrays.toString(model.getProfessorsList()));
         System.out.println("########################");
@@ -258,6 +364,7 @@ public class Cli implements Graphic{
 
         System.out.println("###### SCHOOL ######");
         for (ModelMessage.PlayerSerializable pl : model.getPlayerList()){
+            String towerColor = null;
             int tColor = pl.getTowerColor();
             if (tColor == -1) {
                 towerColor = " ";

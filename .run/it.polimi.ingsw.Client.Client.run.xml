@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="it.polimi.ingsw.Client.Client" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.Client.Client" />
-    <module name="AM56" />
+    <module name="ingsw2022-AM56" />
     <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml" />
     <extension name="coverage">
       <pattern>

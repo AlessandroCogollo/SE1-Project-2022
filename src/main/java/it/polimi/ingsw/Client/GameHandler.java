@@ -123,7 +123,10 @@ public class GameHandler implements Runnable{
         }
         else {
             switch (aP) {
-                case MoveStudent -> cM = this.g.askStudentMovement(this.model, this.myId);
+                case MoveStudent -> {
+                    this.g.displayMessage("You have to move other " + this.model.getStudentsToMove());
+                    cM = this.g.askStudentMovement(this.model, this.myId);
+                }
                 case MoveMotherNature -> cM = this.g.askMNMovement(this.model, this.myId);
                 case ChooseCloud -> cM = this.g.askCloud(this.model, this.myId);
             }

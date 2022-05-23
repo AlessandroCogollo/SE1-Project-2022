@@ -72,7 +72,7 @@ public class ModelHandler implements Runnable{
             try {
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                System.err.println("Interrupted while waiting for some move from clients ModelHandlers line: " + new Throwable().getStackTrace()[0].getLineNumber());
+                System.out.println("Interrupted while waiting for some move from clients ModelHandlers");
                 break;
             }
             if (move == null)
