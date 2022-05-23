@@ -17,7 +17,6 @@ public final class PlayCharacterMessage extends ClientMessage{
 
     @Override
     public int executeMove(Game game, int playerId) {
-        //todo
         return game.playCharacter(playerId, characterId, attributes);
     }
 }

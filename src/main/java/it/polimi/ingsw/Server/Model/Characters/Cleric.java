@@ -13,7 +13,7 @@ final public class Cleric extends Character{
     private final int[] students;
 
     Cleric(GameInitializer gameInitializer) {
-        super (2, 1, gameInitializer);
+        super (2, 1, gameInitializer, "Cleric");
         this.students = super.gameInitializer.getBag().drawStudents(4);
     }
 

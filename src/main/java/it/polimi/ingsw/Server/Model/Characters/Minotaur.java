@@ -6,7 +6,7 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 final public class Minotaur extends Character {
 
     Minotaur(GameInitializer gameInitializer) {
-        super (8, 3, gameInitializer);
+        super (8, 3, gameInitializer, "Minotaur");
     }
 
     @Override

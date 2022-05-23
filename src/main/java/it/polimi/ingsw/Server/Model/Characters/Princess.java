@@ -11,7 +11,7 @@ final public class Princess extends Character {
     private final int[] students;
 
     Princess(GameInitializer gameInitializer) {
-        super (10, 2, gameInitializer);
+        super (10, 2, gameInitializer, "Princess");
         students = gameInitializer.getBag().drawStudents(4);
     }
 

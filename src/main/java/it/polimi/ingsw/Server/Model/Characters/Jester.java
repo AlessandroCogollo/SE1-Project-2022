@@ -12,7 +12,7 @@ final public class Jester extends Character {
     private final int[] students;
 
     Jester(GameInitializer gameInitializer) {
-        super (6, 1, gameInitializer);
+        super (6, 1, gameInitializer, "Jester");
         this.students = super.gameInitializer.getBag().drawStudents(6);
     }
 

@@ -7,11 +7,10 @@ import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelMessage {
+public class ModelMessage extends Message{
 
     public class PlayerSerializable {
         private final int id;
@@ -31,7 +30,7 @@ public class ModelMessage {
                 this.activeAssistant = p.getActiveAssistant().getValue();
 
             int i = 0;
-            for (Assistant a : p)
+            for (Assistant ignored : p)
                 i++;
             this.assistantDeck = new int[i];
             i = 0;
@@ -87,28 +86,52 @@ public class ModelMessage {
         }
     }
 
-    public class normalCharacterSerializable {
+    public class NormalCharacterSerializable {
+
         private final int id;
         private final int cost;
         private final boolean used;
+        private final String name;
 
-        public normalCharacterSerializable(Character c) {
+        public NormalCharacterSerializable(Character c) {
             this.id = c.getId();
-            this.cost = c.getCost();
             this.used = c.getUsed();
+            this.cost = (this.used) ? (c.getCost() - 1) : c.getCost();
+            this.name = c.getName();
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public boolean isUsed() {
+            return used;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
-    public final class ApothecarySerializable extends normalCharacterSerializable {
+    public final class ApothecarySerializable extends NormalCharacterSerializable {
+
         private final int banCard;
 
         ApothecarySerializable(Apothecary c) {
             super(c);
             this.banCard = c.getBanCard();
         }
+
+        public int getBanCard() {
+            return banCard;
+        }
     }
 
-    public final class CookSerializable extends normalCharacterSerializable {
+    public final class CookSerializable extends NormalCharacterSerializable {
         private final int colorId;
 
         public CookSerializable(Cook c) {
@@ -119,38 +142,51 @@ public class ModelMessage {
             else
                 this.colorId = temp.getIndex();
         }
+
+        public int getColorId() {
+            return colorId;
+        }
     }
 
-    public final class ClericSerializable extends normalCharacterSerializable {
+    public final class ClericSerializable extends NormalCharacterSerializable {
         private final int[] students;
 
         ClericSerializable(Cleric c) {
             super(c);
             this.students = c.getStudentsCopy();
         }
+
+        public int[] getStudents() {
+            return students;
+        }
     }
 
-    public final class JesterSerializable extends normalCharacterSerializable {
+    public final class JesterSerializable extends NormalCharacterSerializable {
         private final int[] students;
 
         JesterSerializable(Jester c) {
             super(c);
             this.students = c.getStudentsCopy();
         }
+
+        public int[] getStudents() {
+            return students;
+        }
     }
 
-    public final class PrincessSerializable extends normalCharacterSerializable {
+    public final class PrincessSerializable extends NormalCharacterSerializable {
         private final int[] students;
 
         PrincessSerializable(Princess c) {
             super(c);
             this.students = c.getStudentsCopy();
         }
+
+        public int[] getStudents() {
+            return students;
+        }
     }
 
-
-    private final String time;
-    private final int errorCode;
     private final int gameMode;
     private final int playerNumber;
     private final int winnerId;
@@ -173,18 +209,18 @@ public class ModelMessage {
 
     private final List<PlayerSerializable> playerList; //or advanced player if game mode 1
 
-    private final List<normalCharacterSerializable> characterList;
+    private final List<NormalCharacterSerializable> characterList;
 
     private final int activeCharacterId;
 
     protected ModelMessage(GameInitializer g, Errors er) {
+        super(er, "Model Message");
+
         Islands s = g.getIslands();
         GameBoard b = g.getBoard();
         RoundHandler r = g.getRoundHandler();
 
         this.winnerId = g.getWinningPlayerId();
-        this.errorCode = er.getCode();
-        this.time = Instant.now().toString();
         this.gameMode = g.getGameMode();
         this.playerNumber = g.getPlayersNumber();
         this.currentPlayerId = r.getCurrent().getId();
@@ -214,18 +250,14 @@ public class ModelMessage {
                 if (b.existsCharacter(i)) {
                     Character temp = b.getCharacterById(i);
                     int tempId = temp.getId();
-                    if (tempId == 0)
-                        this.characterList.add(new ApothecarySerializable((Apothecary) temp));
-                    else if (tempId == 3)
-                        this.characterList.add(new CookSerializable((Cook) temp));
-                    else if (tempId == 2)
-                        this.characterList.add(new ClericSerializable((Cleric) temp));
-                    else if (tempId == 6)
-                        this.characterList.add(new JesterSerializable((Jester) temp));
-                    else if (tempId == 10)
-                        this.characterList.add(new PrincessSerializable((Princess) temp));
-                    else
-                        this.characterList.add(new normalCharacterSerializable(temp));
+                    switch (tempId){
+                        case 0 -> this.characterList.add(new ApothecarySerializable((Apothecary) temp));
+                        case 3 -> this.characterList.add(new CookSerializable((Cook) temp));
+                        case 2 -> this.characterList.add(new ClericSerializable((Cleric) temp));
+                        case 6 -> this.characterList.add(new JesterSerializable((Jester) temp));
+                        case 10 -> this.characterList.add(new PrincessSerializable((Princess) temp));
+                        default -> this.characterList.add(new NormalCharacterSerializable(temp));
+                    }
                 }
             Character t = b.getActiveCharacter();
 
@@ -238,6 +270,8 @@ public class ModelMessage {
             this.activeCharacterId = -1;
         }
     }
+
+    //all getter
 
     public boolean gameIsOver() {
         return this.winnerId != -1;
@@ -310,9 +344,33 @@ public class ModelMessage {
 
     public boolean isCloudValid (int cloudId){
         for (CloudSerializable c : this.cloudList){
-            if (c.getId() == cloudId)
+            if (c.id == cloudId)
                 return true;
         }
         return false;
     }
+
+    public List<NormalCharacterSerializable> getCharacterList() {
+        return characterList;
+    }
+
+    public boolean isCharacterIdValid (int characterId){
+        for (NormalCharacterSerializable c: this.characterList){
+            if (c.id == characterId)
+                return true;
+        }
+        return false;
+    }
+
+    public NormalCharacterSerializable getCharacterById (int characterId){
+        for (NormalCharacterSerializable c: this.characterList){
+            if (c.id == characterId)
+                return c;
+        }
+        return null;
+    }
+    public int getWinnerId() {
+        return winnerId;
+    }
+
 }

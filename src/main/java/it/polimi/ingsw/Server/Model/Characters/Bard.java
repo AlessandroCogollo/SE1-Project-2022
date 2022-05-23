@@ -12,7 +12,7 @@ final public class Bard extends Character {
 
     //not public created only by factory in character class
     Bard(GameInitializer gameInitializer) {
-        super (1, 1, gameInitializer);
+        super (1, 1, gameInitializer, "Bard");
     }
 
     @Override

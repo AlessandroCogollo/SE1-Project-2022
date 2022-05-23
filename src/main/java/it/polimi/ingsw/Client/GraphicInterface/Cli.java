@@ -206,7 +206,7 @@ public class Cli implements Graphic{
         int destination = -2;
 
         while (destination != -1 && !model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
-            destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)", "Isnert -1 or a valid island id");
+            destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)", "Insert -1 or a valid island id");
         }
 
         if (Thread.currentThread().isInterrupted())
@@ -248,7 +248,7 @@ public class Cli implements Graphic{
         System.out.println();
     }
 
-    private void displayRoom(ModelMessage model, int playerId) {
+    private int[] displayRoom(ModelMessage model, int playerId) {
         displayMessage(this.userName + ", this is your room");
         System.out.println();
 
@@ -259,9 +259,10 @@ public class Cli implements Graphic{
             System.out.println(i + ". " + Color.getColorById(i).name() + " " + room[i]);
         }
         System.out.println();
+        return room;
     }
 
-    int[] displayEntrance (ModelMessage model, int playerId){
+    private int[] displayEntrance (ModelMessage model, int playerId){
         displayMessage(this.userName + ", this is your entrance");
         System.out.println();
 
@@ -304,7 +305,7 @@ public class Cli implements Graphic{
     public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
         displayModel(model);
 
-        List< ModelMessage.CloudSerializable> clouds = displayCloud (model);
+        displayCloud (model);
 
         int cloud = -1;
 
@@ -318,7 +319,7 @@ public class Cli implements Graphic{
         return new ChooseCloudMessage(Errors.NO_ERROR, "Chose cloud", cloud);
     }
 
-    private List<ModelMessage.CloudSerializable> displayCloud(ModelMessage model) {
+    private void displayCloud(ModelMessage model) {
         List <ModelMessage.CloudSerializable> clouds = model.getCloudList();
         System.out.println();
         displayMessage(this.userName + ", these are the clouds");
@@ -328,12 +329,160 @@ public class Cli implements Graphic{
 
 
         System.out.println();
-        return clouds;
     }
 
     @Override
     public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
+        displayModel(model);
+
+        displayCharacters(model);
+
+        int characterId = -1;
+
+        while (characterId == -1 && !Thread.currentThread().isInterrupted()){
+            characterId = askInteger("Choose the id of character that you want to play", "Choose a valid character");
+            ModelMessage.NormalCharacterSerializable c = model.getCharacterById(characterId);
+            if (c == null){
+                System.out.println("Choose a valid character");
+                characterId = -1;
+                continue;
+            }
+            int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
+            ModelMessage.PlayerSerializable p = model.getPlayerById(playerId);
+            if (p.getCoins() < cost){
+                System.out.println("You don't have enough coins for play this character, you have: " + p.getCoins() + " coins and this character costs " + cost + " coins");
+                characterId = -1;
+            }
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askCharacter interrupted");
+
+
+        Object obj = null;
+        switch (characterId){
+            case 0 -> {
+                displayIslands(model);
+
+                int destination = -1;
+
+                while (!model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
+                    destination = askInteger("Choose the island where put the ban card", "Insert a valid island id");
+                }
+
+                if (Thread.currentThread().isInterrupted())
+                    throw new InterruptedException("Cli: askBanCard interrupted");
+
+                obj = destination;
+            }
+            case 1 -> {
+
+                int number = -1;
+
+                while (number == -1 && !Thread.currentThread().isInterrupted()){
+                    number = askInteger("How many students you want to swap, 1, or 2?", "Insert a valid number, 1 or 2");
+                    if (number != 1 && number != 2){
+                        System.out.println("Insert a valid number, 1 or 2");
+                        number = -1;
+                    }
+                }
+
+                if (Thread.currentThread().isInterrupted())
+                    throw new InterruptedException("Cli: askBard interrupted");
+
+                int i = 0;
+                int[] x = new int[number << 1];
+                int[] en = displayEntrance(model, playerId);
+                int[] ro = displayRoom(model, playerId);
+                System.out.println("Choose the students to swap");
+                while (i < number && !Thread.currentThread().isInterrupted()){
+
+                    int temp = -1;
+                    while ((temp < 0 || temp > 4 || en[temp] == 0) && !Thread.currentThread().isInterrupted()){
+                        temp = askInteger("Choose the " + (i + 1) + "students to remove from the entrance and add to the room", "Insert a valid students that you have in the entrance");
+                    }
+                    if (Thread.currentThread().isInterrupted())
+                        throw new InterruptedException("Cli: askBard interrupted");
+
+                    x[i << 1] = temp;
+                    en[temp]--; //todo verify don't break anything
+
+                    temp = -1;
+                    while ((temp < 0 || temp > 4 || ro[temp] == 0) && !Thread.currentThread().isInterrupted()){
+                        temp = askInteger("Choose the " + (i + 1) + "students to remove from the room and add to the entrance", "Insert a valid students that you have in the room");
+                    }
+                    if (Thread.currentThread().isInterrupted())
+                        throw new InterruptedException("Cli: askBard interrupted");
+
+                    x[(i << 1) + 1] = temp;
+                    ro[temp]--; //todo verify don't break anything
+
+                    i++;
+                }
+                if (Thread.currentThread().isInterrupted())
+                    throw new InterruptedException("Cli: askBard interrupted");
+
+                obj = x;
+            }
+            case 2 -> {
+                //todo cleric
+            }
+            case 3 -> {
+                //todo cook
+            }
+            case 5 -> {
+                //todo herald
+            }
+            case 6 -> {
+                //todo jester
+            }
+            case 10 -> {
+                //todo princess
+            }
+            case 11 -> {
+                //todo thief
+            }
+            default -> {}
+        }
+
+
+        return new PlayCharacterMessage(Errors.NO_ERROR, "Played character", characterId, obj);
+    }
+
+    private void displayCharacters(ModelMessage model) {
+        System.out.println();
+        displayMessage(this.userName + ", these are the playable characters");
+        System.out.println();
+
+        for (ModelMessage.NormalCharacterSerializable c : model.getCharacterList()){
+            int id = c.getId();
+            int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
+            StringBuilder s = new StringBuilder(c.getName() + " id " + id + " cost " + cost);
+            switch (id){
+                case 0 -> {
+                    ModelMessage.ApothecarySerializable x = (ModelMessage.ApothecarySerializable) c;
+                    s.append(" with ").append(x.getBanCard()).append(" ban card");
+                }
+                //cook color is initialized only when is used and in this case this list in not useful, because the player has already play a character during his turn
+                case 2 -> {
+                    ModelMessage.ClericSerializable x = (ModelMessage.ClericSerializable) c;
+                    s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
+                }
+                case 6 -> {
+                    ModelMessage.JesterSerializable x = (ModelMessage.JesterSerializable) c;
+                    s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
+                }
+                case 10 -> {
+                    ModelMessage.PrincessSerializable x = (ModelMessage.PrincessSerializable) c;
+                    s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
+                }
+                default -> {}
+            }
+            System.out.println(s);
+        }
+
+
+        System.out.println();
     }
 
     @Override

@@ -11,7 +11,7 @@ final public class Cook extends Character {
     private Optional<Color> color;
 
     Cook(GameInitializer gameInitializer) {
-        super (3, 3, gameInitializer);
+        super (3, 3, gameInitializer, "Cook");
         this.color = Optional.empty();
     }
 
