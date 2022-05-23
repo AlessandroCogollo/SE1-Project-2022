@@ -6,7 +6,6 @@ import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Collection;
