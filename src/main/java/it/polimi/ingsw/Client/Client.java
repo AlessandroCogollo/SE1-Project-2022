@@ -249,8 +249,8 @@ public class Client{
         if (message != null)
             this.graphic.displayMessage(message);
 
-        Wizard w = this.graphic.getWizard();
         String username = this.graphic.getUsername();
+        Wizard w = this.graphic.getWizard();
 
         if (first){
             int numOfPlayer = this.graphic.getNumOfPLayer();
@@ -325,6 +325,5 @@ public class Client{
         Client client = new Client (new Cli(), "127.0.0.1", 5088);
         client.start();
     }
-
 }
 

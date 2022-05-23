@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.paint.Color?>
+
+<BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <SplitPane dividerPositions="0.25" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <SplitPane dividerPositions="0.65" layoutX="-2.0" layoutY="1.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="1195.0" style="-fx-background-color: black; -fx-border-width: 0px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #1E1F23 #1E1F23; -fx-border-width: 0;" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="423.0" prefWidth="1193.0" style="-fx-background-color: #1E1F23; -fx-border-width: 0;">
+                           <children>
+                              <TabPane layoutX="2.0" layoutY="91.0" prefHeight="373.0" prefWidth="1193.0" style="-fx-background-color: #1E1F23;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <tabs>
+                                  <Tab text="School">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Assistants">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #1E1F23;">
+                                             <children>
+                                                <ScrollPane hbarPolicy="NEVER" layoutX="-1.0" pannable="true" prefHeight="327.0" prefWidth="1197.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="335.0" prefWidth="1416.0" style="-fx-background-color: #1E1F23 #1E1F23;">
+                                                         <children>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="27.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(1).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="244.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(2).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="462.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(3).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="681.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(4).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="900.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(5).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fitHeight="285.0" fitWidth="330.0" layoutX="1120.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Assistenti/2x/Assistente%20(6).png" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" spread="0.4" width="50.0">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.14722754061222076" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                  </content>
+                                                </ScrollPane>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                    <Tab text="Characters">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </Tab>
+                                </tabs>
+                              </TabPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+         <cursor>
+            <Cursor fx:constant="CROSSHAIR" />
+         </cursor>
+      </SplitPane>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="30.0" prefWidth="1600.0" style="-fx-background-color: #1E1F23; -fx-border-color: #292a2d; -fx-border-width: 2;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="32.0" layoutY="6.0" prefHeight="16.0" prefWidth="109.0" text="Server Status:" textFill="WHITE" />
+            <Label layoutX="134.0" layoutY="7.0" prefHeight="16.0" prefWidth="109.0" text="Online" textFill="#0ead55" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>

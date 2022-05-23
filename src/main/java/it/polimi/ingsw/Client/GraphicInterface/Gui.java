@@ -5,16 +5,21 @@ import it.polimi.ingsw.Enum.Wizard;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -25,6 +30,9 @@ public class Gui extends Application implements Graphic {
     private Optional<String> username = Optional.empty();
     private Optional<Integer> numOfPlayers = Optional.empty();
     private Optional<Integer> gameMode = Optional.empty();
+    private Stage stage;
+    private Parent parent;
+    private Scene scene;
 
     public Gui() {
     }
@@ -32,12 +40,11 @@ public class Gui extends Application implements Graphic {
     @Override
     public void displayMessage(String message) {
         Platform.runLater(() -> {
-                    Dialog d = new Dialog();
-                    d.setTitle("Message");
-                    d.setContentText(message);
-                    d.show();
-                }
-                );
+            Dialog d = new Dialog();
+            d.setTitle("Message");
+            d.setContentText(message);
+            d.show();
+        });
     }
 
     @Override
@@ -70,8 +77,10 @@ public class Gui extends Application implements Graphic {
 
     @Override
     public String getUsername() {
+
         ArrayList<String> queue = new ArrayList<>();
         Platform.runLater(() -> {
+
             dialog.setTitle("Username");
             dialog.setContentText("Please enter your username:");
             Optional<String> result = dialog.showAndWait();
@@ -83,7 +92,6 @@ public class Gui extends Application implements Graphic {
         });
         while(this.username.isEmpty()){}
         return this.username.get();
-
     }
 
     @Override
@@ -133,21 +141,18 @@ public class Gui extends Application implements Graphic {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Eriantys");
-        Button btn = new Button();
-        btn.setText("Play");
+
+        try {
+            this.parent = FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml"));
+            Scene scene = new Scene(parent);
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
-        Executor e = Executors.newCachedThreadPool();
-
-        btn.setOnAction(event -> {
-            this.client = new Client (this, "127.0.0.1", 5088);
-            e.execute(client::start);
-        });
     }
 }
