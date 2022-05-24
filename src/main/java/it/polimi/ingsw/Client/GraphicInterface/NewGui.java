@@ -2,8 +2,8 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Message.*;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +17,6 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class NewGui extends Application implements Graphic {
 
@@ -28,6 +25,8 @@ public class NewGui extends Application implements Graphic {
     private Scene scene;
     private Parent parent;
     private Gui graphic;
+    private ArrayList<Parent> roots;
+    private int currentRoot;
 
     @FXML
     TextField usernameInput;
@@ -53,6 +52,65 @@ public class NewGui extends Application implements Graphic {
     @Override
     public int getGameMode() {
         return 0;
+    }
+
+    @Override
+    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public void stopInput() {
+
+    }
+
+    @Override
+    public void displayModel(ModelMessage model) {
+
+    }
+
+    public NewGui(){
+        roots = new ArrayList<>();
+        currentRoot = -1;
+        try {
+            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml")));
+            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/username.fxml")));
+            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/wizard.fxml")));
+            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/gamemode.fxml")));
+            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/maingame.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void Next(ActionEvent event){
+        this.parent = roots.get(currentRoot + 1);
+        currentRoot++;
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     public static void main(String[] args) {
