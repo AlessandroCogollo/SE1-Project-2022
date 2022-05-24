@@ -10,20 +10,20 @@ final public class Herald extends Character {
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] obj) {
 
-        int islandId = (Integer)obj;
+        int islandId = obj[0];
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
 
         gameInitializer.getBoard().calcInfluence(i);
     }
 
     @Override
-    public Errors canActivateEffect(Object island) {
-        if (!(island instanceof Integer))
+    public Errors canActivateEffect(int[] island) {
+        if (island.length != 1)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        int islandId = (Integer)island;
+        int islandId = island[0];
 
         if (!gameInitializer.getIslands().existsIsland(islandId))
             return Errors.NOT_VALID_DESTINATION;

@@ -6,13 +6,16 @@ import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 
 import it.polimi.ingsw.Message.Message;
+import it.polimi.ingsw.Message.Ping;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Class that manage all the client handler
@@ -25,10 +28,15 @@ public class Lobby implements Runnable {
     private final Map <Integer, String> usernames  = new HashMap<>();
     private final Map <Integer, Wizard> wizards  = new HashMap<>();
     private final Map <Integer, ClientHandler> abstractClients = new HashMap<>();
+    private final BlockingQueue<Socket> sockets = new LinkedBlockingQueue<>();
 
     private final Object lock = new Object();
 
-    private Thread thread = null;
+    private Thread main = null;
+
+    private Thread acceptor = null;
+    private int playerConnected = 0;
+    private final Timer tempPingSender = new Timer("TempPingSender");
 
     private int numOfPlayers = -1;
     private int gameMode = -1;
@@ -112,13 +120,15 @@ public class Lobby implements Runnable {
      */
     public void shutDownLobby() {
 
-        if (this.thread == null){
-            System.out.println("Cannot shut down lobby if it is stopped yet");
-            return;
-        }
+        //first try to stop the main thread and the acceptor of lobby with interrupt
 
-        //first try to stop the main thread of lobby with interrupt
-        this.thread.interrupt();
+        if (this.main != null)
+            this.main.interrupt();
+
+        if (this.acceptor != null)
+            this.acceptor.interrupt();
+
+        this.tempPingSender.cancel();
 
         //assert that all message to player are sent
         boolean allDone = false;
@@ -174,17 +184,26 @@ public class Lobby implements Runnable {
     @Override
     public void run() {
 
-        this.thread = Thread.currentThread();
+        this.main = Thread.currentThread();
 
-        int i = 0;
+        new Thread(this::accept, "Lobby-Acceptor").start();
 
+        //accept first
+        acceptNewClient(this.playerConnected++, -1);
 
-        acceptNewClient(i, -1);
-
-        if (this.thread.isInterrupted()) {
+        if (this.main.isInterrupted()) {
             System.out.println("Lobby: my main loop interrupted");
             return;
         }
+
+        //accept 2 in any case
+        acceptNewClient(this.playerConnected++, -1);
+
+        if (this.main.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
+            return;
+        }
+
 
         System.out.println("Lobby: waiting for first player to send data");
         synchronized (this.lock) {
@@ -198,20 +217,36 @@ public class Lobby implements Runnable {
             }
         }
 
-        if (this.thread.isInterrupted()) {
+        if (this.main.isInterrupted()) {
             System.out.println("Lobby: my main loop interrupted");
             return;
         }
 
-        i++;
-
-        while (i < this.numOfPlayers) {
-            acceptNewClient(i, this.numOfPlayers);
-            if (this.thread.isInterrupted()) {
+        while (this.playerConnected < this.numOfPlayers) {
+            acceptNewClient(this.playerConnected++, this.numOfPlayers);
+            if (this.main.isInterrupted()) {
                 System.out.println("Lobby: my main loop interrupted");
                 return;
             }
-            i++;
+        }
+
+        //send to the player that can't connect the message for let them know
+        this.tempPingSender.cancel();
+        String denyMessage = new Gson().toJson(new Message(Errors.CANNOT_ACCEPT, "This server cannot accept more player, the game is already started"));
+        while (this.sockets.size() > 0){
+            try {
+                Socket s = this.sockets.take();
+                PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+                p.println(denyMessage);
+                s.close();
+            } catch (InterruptedException e) {
+                this.main.interrupt(); //reset flag
+            } catch (IOException ignored) {} //socket already close
+        }
+
+        if (this.main.isInterrupted()) {
+            System.out.println("Lobby: my main loop interrupted");
+            return;
         }
 
         System.out.println("Lobby: waiting for all players finish setup");
@@ -227,7 +262,7 @@ public class Lobby implements Runnable {
             }
         }
 
-        if (this.thread.isInterrupted()) {
+        if (this.main.isInterrupted()) {
             System.out.println("Lobby: my main loop interrupted");
             return;
         }
@@ -248,7 +283,7 @@ public class Lobby implements Runnable {
             }
         }
 
-        if (this.thread.isInterrupted()) {
+        if (this.main.isInterrupted()) {
             System.out.println("Lobby: my main loop interrupted");
             return;
         }
@@ -258,26 +293,121 @@ public class Lobby implements Runnable {
         for (Integer id: this.ids){
             this.abstractClients.get(id).setQueues(this.queues.getModelQueue(), this.queues.getPlayerQueue(id));
         }
-
-        System.out.println("Main Thread Lobby: nothing else to do");
-        //At this point the lobby is only useful for stop all the connection handler and for some method but his main thread can stop
     }
+
+    private void accept() {
+
+        this.acceptor = Thread.currentThread();
+
+        int accepted = 0;
+
+
+        //first 2 only added to the queue because the can play in any case and they will have two client handler
+        while (!this.acceptor.isInterrupted() && accepted < 2){
+            Socket socket;
+            try {
+                socket = this.serverSocket.accept();
+            } catch (IOException e) {
+                //when the server need to shutdown
+                System.out.println("Lobby: ServerSocket closed while connecting to a client due to the shutdown of the server");
+                return;
+            }
+
+            accepted++;
+            this.sockets.add(socket);
+        }
+
+        if (this.acceptor.isInterrupted()){
+            System.out.println("Lobby-acceptor, interrupted");
+            return;
+        }
+
+        System.out.println("Lobby-acceptor, accepted first 2 client");
+
+        while (!this.acceptor.isInterrupted() && accepted < 4){ // the last two can play or not, for now we will send only ping for not interrupt the connection
+            Socket socket;
+            try {
+                socket = this.serverSocket.accept();
+            } catch (IOException e) {
+                //when the server need to shutdown
+                System.out.println("Lobby: ServerSocket closed while connecting to a client due to the shutdown of the server");
+                return;
+            }
+
+            //ping sender
+            TimerTask pingSender;
+            try {
+                pingSender = new TimerTask() {
+                    private PrintWriter p;
+                    private String s;
+
+                    public TimerTask init (PrintWriter p, String s){
+                        this.p = p;
+                        this.s = s;
+                        return this;
+                    }
+                    @Override
+                    public void run() {
+                        if (!p.checkError())
+                            p.println(s);
+                    }
+                }.init(new PrintWriter(socket.getOutputStream()), new Gson().toJson(new Ping()));
+            } catch (IOException e) {
+                //socket to the client is closed yet
+                continue;
+            }
+
+            this.tempPingSender.scheduleAtFixedRate(pingSender, 0, Duration.ofSeconds(15).toMillis());
+
+            accepted++;
+
+            this.sockets.add(socket);
+        }
+
+        if (this.acceptor.isInterrupted()){
+            System.out.println("Lobby-acceptor, interrupted");
+            return;
+        }
+
+        System.out.println("Lobby-acceptor, accepted first 4 client, deny the access to all the other one");
+
+        //now all possible client are connected so we can deny all the others
+
+        String denyMessage = new Gson().toJson(new Message(Errors.CANNOT_ACCEPT, "This server cannot accept more player, the game is already started"));
+
+        while (!this.acceptor.isInterrupted()){
+            Socket s;
+            try {
+                s = this.serverSocket.accept();
+            } catch (IOException e) {
+                System.out.println("Lobby-acceptor, socketserver is closed due to server shutdown");
+                return;
+            }
+            System.out.println("Lobby-acceptor, new client blocked");
+            try {
+                PrintWriter sender = new PrintWriter(s.getOutputStream(), true);
+                sender.println(denyMessage);
+                Thread.sleep(100);
+                s.close();
+            } catch (IOException | InterruptedException ignored) {} //if catch an exception here the socket is already close so the client is down, and for the server is not a problem
+        }
+    }
+
 
     private void acceptNewClient (int id, int maxPlayers){
         //no check over thread interrupted because this operation if the accept() succeed must be done
         Socket client;
-        ClientHandler temp;
-        System.out.println("Lobby: waiting for " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " Client to connect" + ((id > 0) ? (" out of " + maxPlayers) : ""));
+        System.out.println("Lobby: waiting for " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " Client to connect" + ((maxPlayers != -1) ? (" out of " + maxPlayers) : ""));
         try {
-            client = this.serverSocket.accept();
-        } catch (IOException e) {
+            client = this.sockets.take();
+        } catch (InterruptedException e) {
             //when the server need to shutdown
-            System.out.println("Lobby: ServerSocket closed while connecting to the " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " client line due to the shutdown of the server");
+            System.out.println("Lobby: ServerSocket closed while connecting to the " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " client due to the shutdown of the server");
             return;
         }
 
         System.out.println("Lobby: " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " Client connected");
-        temp = new ClientHandler(client, id, this);
+        ClientHandler temp  = new ClientHandler(client, id, this);
         new Thread(temp, "ClientHandler " + id).start();
         this.abstractClients.put(id, temp);
         this.ids.add(id);

@@ -18,7 +18,7 @@ public class AdvancedPlayer extends Player {
         return coins;
     }
 
-    public void playCharacter(Character c, Object obj) {
+    public void playCharacter(Character c, int[] obj) {
         if (c != null)
             coins -= c.getCost();
         gameInitializer.getBoard().playCharacter(c, obj);

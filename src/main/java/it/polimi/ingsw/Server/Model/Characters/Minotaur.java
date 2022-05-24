@@ -10,12 +10,12 @@ final public class Minotaur extends Character {
     }
 
     @Override
-    protected void activateEffect(Object object) {
+    protected void activateEffect(int[] object) {
         // calcInfluence() method already implemented in GameBoard
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(int[] obj) {
         // no further checks needed
         return Errors.NO_ERROR;
     }

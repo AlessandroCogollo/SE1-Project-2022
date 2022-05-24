@@ -10,12 +10,12 @@ final public class Postman extends Character {
     }
 
     @Override
-    protected void activateEffect(Object object) {
+    protected void activateEffect(int[] object) {
         // method already implemented in AdvancedGame
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(int[] obj) {
         return Errors.NO_ERROR;
     }
 }

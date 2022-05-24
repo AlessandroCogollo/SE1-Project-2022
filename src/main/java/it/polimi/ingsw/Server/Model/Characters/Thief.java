@@ -5,6 +5,8 @@ import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 
+import java.util.Objects;
+
 final public class Thief extends Character {
 
     Thief(GameInitializer gameInitializer) {
@@ -12,14 +14,14 @@ final public class Thief extends Character {
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] obj) {
 
-        int colorId = (Integer) obj;
+        int colorId = obj[0];
         Color c = Color.getColorById(colorId);
 
         for (Player p : gameInitializer) {
             int tempCount = 3;
-            while ((p.getSchool().getNumberOfStudentInRoomByColor(c) > 0) && (tempCount > 0)) {
+            while ((p.getSchool().getNumberOfStudentInRoomByColor(Objects.requireNonNull(c)) > 0) && (tempCount > 0)) {
                 p.getSchool().removeStudentFromRoom(c);
                 super.gameInitializer.getBag().addStudents(c);
                 tempCount--;
@@ -28,11 +30,11 @@ final public class Thief extends Character {
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
-        if (!(obj instanceof Integer))
+    public Errors canActivateEffect(int[] obj) {
+        if (obj.length != 1)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        int colorId = (Integer) obj;
+        int colorId = obj[0];
 
         if (!Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;

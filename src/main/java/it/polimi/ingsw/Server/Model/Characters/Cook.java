@@ -24,17 +24,17 @@ final public class Cook extends Character {
     }
 
     @Override
-    protected void activateEffect(Object color) {
-        int colorId = (Integer) color;
+    protected void activateEffect(int[] color) {
+        int colorId = color[0];
         this.color = Optional.ofNullable(Color.getColorById(colorId));
     }
 
     @Override
-    public Errors canActivateEffect(Object color) {
-        if (!(color instanceof Integer))
+    public Errors canActivateEffect(int[] color) {
+        if (color.length != 1)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        int colorId = (Integer) color;
+        int colorId = color[0];
 
         if (!Color.isColorIdValid(colorId))
             return Errors.NOT_VALID_COLOR;

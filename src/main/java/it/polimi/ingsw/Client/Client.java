@@ -23,7 +23,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Main Client class
  */
-// todo fix character serialize
 public class Client{
 
     private final Graphic graphic;
@@ -108,7 +107,7 @@ public class Client{
 
         new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();
 
-        new Thread(this::playerDisconnectedFilter, "Client Filter").start();
+        new Thread(this::messageFilter, "Client Filter").start();
 
 
         //do nothing until some other thread tells him what to do with a code
@@ -174,10 +173,7 @@ public class Client{
                 this.graphic.displayMessage("The game is finished, shutting down");
                 go = false;
             }
-            case PLAYER_DISCONNECTED -> {
-                this.graphic.displayMessage("A player go down, shutting down the client");
-                go = false;
-            }
+            case PLAYER_DISCONNECTED, CANNOT_ACCEPT -> go = false;
         }
 
         //reset code
@@ -185,7 +181,7 @@ public class Client{
         return go;
     }
 
-    private void playerDisconnectedFilter () {
+    private void messageFilter() {
         this.filter = Thread.currentThread();
         BlockingQueue<JsonElement> netIn = this.connection.getInQueue();
         while (!this.filter.isInterrupted()){
@@ -203,6 +199,12 @@ public class Client{
             if (Errors.PLAYER_DISCONNECTED.equals(temp.getError())) {
                 this.graphic.displayMessage(temp.getMessage());
                 setCode(Errors.PLAYER_DISCONNECTED);
+                return;
+            }
+
+            if (Errors.CANNOT_ACCEPT.equals(temp.getError())){
+                this.graphic.displayMessage(temp.getMessage());
+                setCode(Errors.CANNOT_ACCEPT);
                 return;
             }
 

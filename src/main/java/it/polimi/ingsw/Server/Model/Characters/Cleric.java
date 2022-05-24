@@ -26,10 +26,9 @@ final public class Cleric extends Character{
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] studentToIsland) {
 
         // color number is given by zero position of array, island id is given by first position of array
-        int[] studentToIsland = (int[]) obj;
 
         Color c = Color.getColorById(studentToIsland[0]);
         Island i = gameInitializer.getIslands().getIslandFromId(studentToIsland[1]);
@@ -42,13 +41,10 @@ final public class Cleric extends Character{
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
-
-        if (! (obj instanceof int[] studentToIsland))
-            return Errors.ILLEGAL_INPUT;
+    public Errors canActivateEffect(int[] studentToIsland) {
 
         if (studentToIsland.length != 2)
-            return Errors.ILLEGAL_INPUT;
+            return Errors.NOT_RIGHT_PARAMETER;
 
         int colorId = studentToIsland[0];
         int islandId = studentToIsland[1];

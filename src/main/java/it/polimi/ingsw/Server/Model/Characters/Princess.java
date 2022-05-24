@@ -24,9 +24,9 @@ final public class Princess extends Character {
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] obj) {
 
-        int colorId = (int) obj;
+        int colorId = obj[0];
 
         Color c = Color.getColorById(colorId);
         Player p = super.gameInitializer.getRoundHandler().getCurrent();
@@ -41,10 +41,12 @@ final public class Princess extends Character {
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
-        // todo implement actual color and player choosing
+    public Errors canActivateEffect(int[] obj) {
 
-        int colorId = (int) obj;
+        if (obj.length != 1)
+            return Errors.NOT_RIGHT_PARAMETER;
+
+        int colorId = obj[0];
         Player p = super.gameInitializer.getRoundHandler().getCurrent();
 
         if (!Color.isColorIdValid(colorId))

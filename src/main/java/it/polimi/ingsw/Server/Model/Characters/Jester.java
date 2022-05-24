@@ -6,7 +6,9 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 final public class Jester extends Character {
     private final int[] students;
@@ -17,22 +19,20 @@ final public class Jester extends Character {
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] chosenColor) {
 
         Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
         School currSchool = currPlayer.getSchool();
-
-        int[] chosenColor = (int[]) obj;
 
         for (int i = 0; i <= chosenColor.length; i++) {
             if (i%2==0) {
                 // even elements are those to be removed from this card
                 this.students[i]--;
-                currSchool.moveStudentToEntrance(Color.getColorById(i));
+                currSchool.moveStudentToEntrance(Objects.requireNonNull(Color.getColorById(i)));
             } else {
                 // odd elements are those to be added to this card
                 this.students[i]++;
-                currSchool.moveStudentFromEntrance(Color.getColorById(i));
+                currSchool.moveStudentFromEntrance(Objects.requireNonNull(Color.getColorById(i)));
             }
         }
     }
@@ -47,18 +47,18 @@ final public class Jester extends Character {
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(int[] obj) {
 
-        if (!(obj instanceof int[]))
+        System.err.println("received" + Arrays.toString(obj));
+
+        int length = obj.length;
+
+        if(length == 0 || length % 2 == 1 || length > 6)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        int[] tempStudents = this.students;
+        int[] tempStudents = Arrays.copyOf(this.students, this.students.length);
 
-        int length = ((int[]) obj).length;
-
-        if(length%2 == 1) {
-            return Errors.ILLEGAL_INPUT;
-        }
+        System.err.println("Jester" + Arrays.toString(tempStudents));
 
         for (int i = 0; i <= length; i++) {
             if (i%2==0) {

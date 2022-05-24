@@ -79,7 +79,7 @@ public class GameBoard implements Iterable<Cloud>{
         }
     }
 
-    public void playCharacter(Character c, Object obj) {
+    public void playCharacter(Character c, int[] obj) {
         this.activeCharacter = c;
         if (c != null)
             c.use(obj);
@@ -151,12 +151,12 @@ public class GameBoard implements Iterable<Cloud>{
         for (int i = 0; i < Color.getNumberOfColors(); i++){
 
             /* Cook effect */
-            if(activeCharacter != null && activeCharacter.getId() == 3 && ((Cook) getActiveCharacter()).getProfessor().isPresent() && Color.getColorById(i).equals(((Cook) getActiveCharacter()).getProfessor().get())){
+            if(activeCharacter != null && activeCharacter.getId() == 3 && ((Cook) getActiveCharacter()).getProfessor().isPresent() && Objects.requireNonNull(Color.getColorById(i)).equals(((Cook) getActiveCharacter()).getProfessor().get())){
                 p = gInit.getRoundHandler().getCurrent(); //if i is the cook-color, p is the current player
             }
 
             else{
-                p = this.professors.getPlayerWithProfessor(Color.getColorById(i)); // else p is who owns the i-color
+                p = this.professors.getPlayerWithProfessor(Objects.requireNonNull(Color.getColorById(i))); // else p is who owns the i-color
             }
             if (p != null) { //if somebody owns the professor of the i-color
                 playersInfluence.replace(p, playersInfluence.get(p) + students[i]); // sum the influence of the player
