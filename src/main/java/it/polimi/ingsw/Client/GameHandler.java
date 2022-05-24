@@ -8,7 +8,7 @@ import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.Message;
-import it.polimi.ingsw.Message.ModelMessage;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -109,7 +109,7 @@ public class GameHandler implements Runnable{
     }
 
     private void gameOver() {
-        //todo
+        //todo win message
         this.client.setCode(Errors.GAME_OVER);
     }
 
@@ -122,13 +122,18 @@ public class GameHandler implements Runnable{
             cM =  this.g.askAssistant(this.model, this.myId);
         }
         else {
-            switch (aP) {
-                case MoveStudent -> {
-                    this.g.displayMessage("You have to move other " + this.model.getStudentsToMove());
-                    cM = this.g.askStudentMovement(this.model, this.myId);
+            if (this.model.getGameMode() == 1){
+                cM = this.g.askCharacter(this.model, this.myId);
+            }
+            if (cM == null){
+                switch (aP) {
+                    case MoveStudent -> {
+                        this.g.displayMessage("You have to move other " + this.model.getStudentsToMove());
+                        cM = this.g.askStudentMovement(this.model, this.myId);
+                    }
+                    case MoveMotherNature -> cM = this.g.askMNMovement(this.model, this.myId);
+                    case ChooseCloud -> cM = this.g.askCloud(this.model, this.myId);
                 }
-                case MoveMotherNature -> cM = this.g.askMNMovement(this.model, this.myId);
-                case ChooseCloud -> cM = this.g.askCloud(this.model, this.myId);
             }
         }
         return this.gson.toJsonTree(cM);

@@ -23,8 +23,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Main Client class
  */
-
-//todo add player disconnected to stop the game
+// todo fix character serialize
 public class Client{
 
     private final Graphic graphic;

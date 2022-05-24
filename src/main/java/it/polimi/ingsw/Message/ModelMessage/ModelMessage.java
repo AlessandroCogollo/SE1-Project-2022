@@ -1,8 +1,7 @@
-package it.polimi.ingsw.Message;
+package it.polimi.ingsw.Message.ModelMessage;
 
-import it.polimi.ingsw.Enum.Assistant;
-import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
@@ -10,182 +9,7 @@ import it.polimi.ingsw.Server.Model.Characters.Character;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelMessage extends Message{
-
-    public class PlayerSerializable {
-        private final int id;
-        private final int towerColor;
-        private final int[] assistantDeck;
-        private final int activeAssistant;
-        private final School school;
-        private final int coins;
-
-        PlayerSerializable(Player p, int mode) {
-            this.id = p.getId();
-            this.towerColor = p.getTowerColor();
-            this.school = p.getSchool();
-            if (p.getActiveAssistant() == null)
-                this.activeAssistant = -1;
-            else
-                this.activeAssistant = p.getActiveAssistant().getValue();
-
-            int i = 0;
-            for (Assistant ignored : p)
-                i++;
-            this.assistantDeck = new int[i];
-            i = 0;
-            for (Assistant a : p)
-                this.assistantDeck[i++] = a.getValue();
-            if (mode == 0)
-                this.coins = 0;
-            else
-                this.coins = ((AdvancedPlayer) p).getCoins();
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public int getTowerColor() {
-            return towerColor;
-        }
-
-        public int[] getAssistantDeck() {
-            return assistantDeck;
-        }
-
-        public int getActiveAssistant() {
-            return activeAssistant;
-        }
-
-        public School getSchool() {
-            return school;
-        }
-
-        public int getCoins() {
-            return coins;
-        }
-    }
-
-    public class CloudSerializable {
-
-        private final int id;
-        private final int[] drawnStudents;
-
-        CloudSerializable(Cloud c) {
-            this.id = c.getId();
-            this.drawnStudents = c.getCopyOfDrawnStudents();
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public int[] getDrawnStudents() {
-            return drawnStudents;
-        }
-    }
-
-    public class NormalCharacterSerializable {
-
-        private final int id;
-        private final int cost;
-        private final boolean used;
-        private final String name;
-
-        public NormalCharacterSerializable(Character c) {
-            this.id = c.getId();
-            this.used = c.getUsed();
-            this.cost = (this.used) ? (c.getCost() - 1) : c.getCost();
-            this.name = c.getName();
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public int getCost() {
-            return cost;
-        }
-
-        public boolean isUsed() {
-            return used;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-    public final class ApothecarySerializable extends NormalCharacterSerializable {
-
-        private final int banCard;
-
-        ApothecarySerializable(Apothecary c) {
-            super(c);
-            this.banCard = c.getBanCard();
-        }
-
-        public int getBanCard() {
-            return banCard;
-        }
-    }
-
-    public final class CookSerializable extends NormalCharacterSerializable {
-        private final int colorId;
-
-        public CookSerializable(Cook c) {
-            super(c);
-            Color temp = c.getColor();
-            if (temp == null)
-                this.colorId = -1;
-            else
-                this.colorId = temp.getIndex();
-        }
-
-        public int getColorId() {
-            return colorId;
-        }
-    }
-
-    public final class ClericSerializable extends NormalCharacterSerializable {
-        private final int[] students;
-
-        ClericSerializable(Cleric c) {
-            super(c);
-            this.students = c.getStudentsCopy();
-        }
-
-        public int[] getStudents() {
-            return students;
-        }
-    }
-
-    public final class JesterSerializable extends NormalCharacterSerializable {
-        private final int[] students;
-
-        JesterSerializable(Jester c) {
-            super(c);
-            this.students = c.getStudentsCopy();
-        }
-
-        public int[] getStudents() {
-            return students;
-        }
-    }
-
-    public final class PrincessSerializable extends NormalCharacterSerializable {
-        private final int[] students;
-
-        PrincessSerializable(Princess c) {
-            super(c);
-            this.students = c.getStudentsCopy();
-        }
-
-        public int[] getStudents() {
-            return students;
-        }
-    }
+public class ModelMessage extends Message {
 
     private final int gameMode;
     private final int playerNumber;
@@ -209,7 +33,7 @@ public class ModelMessage extends Message{
 
     private final List<PlayerSerializable> playerList; //or advanced player if game mode 1
 
-    private final List<NormalCharacterSerializable> characterList;
+    private final List<CharacterSerializable> characterList;
 
     private final int activeCharacterId;
 
@@ -256,7 +80,7 @@ public class ModelMessage extends Message{
                         case 2 -> this.characterList.add(new ClericSerializable((Cleric) temp));
                         case 6 -> this.characterList.add(new JesterSerializable((Jester) temp));
                         case 10 -> this.characterList.add(new PrincessSerializable((Princess) temp));
-                        default -> this.characterList.add(new NormalCharacterSerializable(temp));
+                        default -> this.characterList.add(new CharacterSerializable(temp));
                     }
                 }
             Character t = b.getActiveCharacter();
@@ -344,27 +168,27 @@ public class ModelMessage extends Message{
 
     public boolean isCloudValid (int cloudId){
         for (CloudSerializable c : this.cloudList){
-            if (c.id == cloudId)
+            if (c.getId() == cloudId)
                 return true;
         }
         return false;
     }
 
-    public List<NormalCharacterSerializable> getCharacterList() {
+    public List<CharacterSerializable> getCharacterList() {
         return characterList;
     }
 
     public boolean isCharacterIdValid (int characterId){
-        for (NormalCharacterSerializable c: this.characterList){
-            if (c.id == characterId)
+        for (CharacterSerializable c: this.characterList){
+            if (c.getId() == characterId)
                 return true;
         }
         return false;
     }
 
-    public NormalCharacterSerializable getCharacterById (int characterId){
-        for (NormalCharacterSerializable c: this.characterList){
-            if (c.id == characterId)
+    public CharacterSerializable getCharacterById (int characterId){
+        for (CharacterSerializable c: this.characterList){
+            if (c.getId() == characterId)
                 return c;
         }
         return null;

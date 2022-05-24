@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.io.IOException;
 

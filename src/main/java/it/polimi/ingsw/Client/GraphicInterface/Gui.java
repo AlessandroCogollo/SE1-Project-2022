@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -13,10 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

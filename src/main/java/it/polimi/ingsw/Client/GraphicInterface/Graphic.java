@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.io.IOException;
 
@@ -73,10 +74,10 @@ public interface Graphic {
     ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
     /**
-     * Method usable only during the player's action phase and could be call in the other actionPhase method
+     * Method usable only during the player's action phase fro ask if he want to play a character and if positive the information to play it
      * @param model model to take the information
      * @param playerId id of the current player
-     * @return the move to play the character chosen
+     * @return the move to play the character chosen or null if the player don't want to play a character
      */
     PlayCharacterMessage askCharacter (ModelMessage model, int playerId) throws IOException, InterruptedException;
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Message;
+package it.polimi.ingsw.Message.ModelMessage;
 
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.GameInitializer;
