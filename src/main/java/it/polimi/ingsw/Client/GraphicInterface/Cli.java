@@ -405,9 +405,7 @@ public class Cli implements Graphic{
 
                 int[] x = new int[2];
 
-                ClericSerializable cleric = (ClericSerializable) character;
-
-                int[] students = cleric.getStudents();
+                int[] students = character.getStudents();
 
                 int color = askColor("Chose the students from the cleric to move to an island", "Insert a valid students that is on the card", students);
 
@@ -463,7 +461,7 @@ public class Cli implements Graphic{
                 int[] x = new int[number << 1];
 
                 int[] en = displayEntrance(model, playerId);
-                int[] st = ((JesterSerializable) character).getStudents();
+                int[] st = character.getStudents();
 
 
                 System.out.println("Choose the students to swap");
@@ -494,7 +492,7 @@ public class Cli implements Graphic{
                 obj = x;
             }
             case 10 -> {
-                int[] stu = ((PrincessSerializable) character).getStudents();
+                int[] stu = character.getStudents();
                 obj = askColor("Choose the students to add to your room", "Insert a valid students present in this card", stu);
             }
             case 11 -> {
@@ -592,27 +590,16 @@ public class Cli implements Graphic{
         StringBuilder s = new StringBuilder(c.getName() + " id " + id + " cost " + cost);
         switch (id){
             case 0 -> {
-                ApothecarySerializable x = (ApothecarySerializable) c;
-                s.append(" with ").append(x.getBanCard()).append(" ban card");
+                s.append(" with ").append(c.getBanCard()).append(" ban card");
             }
             case 3 -> {
-                CookSerializable x = (CookSerializable) c;
-                int color = x.getColorId();
+                int color = c.getColorId();
                 if (color != -1){
                     s.append(" with active color ").append(Color.getColorById(color).name());
                 }
             }
-            case 2 -> {
-                ClericSerializable x = (ClericSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
-            }
-            case 6 -> {
-                JesterSerializable x = (JesterSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
-            }
-            case 10 -> {
-                PrincessSerializable x = (PrincessSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
+            case 2, 6, 10 -> {
+                s.append(" with this students -> ").append(Arrays.toString(c.getStudents()));
             }
             default -> {}
         }

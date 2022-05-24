@@ -242,7 +242,7 @@ public class Client{
 
             NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
 
-            this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client");
+            this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client"); //todo
 
             //ask for information about game only if needed and send this information to server waiting for answer that are correct
             answer = sendInfo(npM.isYouAreFirst(), temp);

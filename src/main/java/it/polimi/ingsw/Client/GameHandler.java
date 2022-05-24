@@ -122,7 +122,7 @@ public class GameHandler implements Runnable{
             cM =  this.g.askAssistant(this.model, this.myId);
         }
         else {
-            if (this.model.getGameMode() == 1){
+            if (this.model.getGameMode() == 1 && this.model.getActiveCharacterId() == -1){
                 cM = this.g.askCharacter(this.model, this.myId);
             }
             if (cM == null){
