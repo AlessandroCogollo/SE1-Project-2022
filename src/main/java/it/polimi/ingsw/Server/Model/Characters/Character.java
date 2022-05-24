@@ -7,14 +7,16 @@ abstract public class Character {
 
     protected final int id;
     protected final GameInitializer gameInitializer;
+    protected final String name;
     protected int cost;
     protected boolean used;
 
-    public Character(int id, int cost, GameInitializer gameInitializer) {
+    public Character(int id, int cost, GameInitializer gameInitializer, String name) {
         this.id = id;
         this.cost = cost;
         this.gameInitializer = gameInitializer;
         this.used = false;
+        this.name = name;
     }
 
     public int getId() { return this.id; }
@@ -23,6 +25,10 @@ abstract public class Character {
         if (this.used)
             return this.cost + 1;
         return this.cost;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean getUsed() {

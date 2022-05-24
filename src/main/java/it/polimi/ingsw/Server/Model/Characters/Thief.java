@@ -8,7 +8,7 @@ import it.polimi.ingsw.Server.Model.Player;
 final public class Thief extends Character {
 
     Thief(GameInitializer gameInitializer) {
-        super (11, 3, gameInitializer);
+        super (11, 3, gameInitializer, "Thief");
     }
 
     @Override

@@ -6,7 +6,7 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 final public class Postman extends Character {
 
     Postman(GameInitializer gameInitializer) {
-        super (9, 1, gameInitializer);
+        super (9, 1, gameInitializer, "Postman");
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.Game;
 import java.util.concurrent.TimeUnit;
 

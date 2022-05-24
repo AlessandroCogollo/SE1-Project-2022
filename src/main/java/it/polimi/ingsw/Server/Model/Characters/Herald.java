@@ -6,7 +6,7 @@ import it.polimi.ingsw.Server.Model.*;
 final public class Herald extends Character {
 
     Herald(GameInitializer gameInitializer) {
-        super (5, 3, gameInitializer);
+        super (5, 3, gameInitializer, "Herald");
     }
 
     @Override

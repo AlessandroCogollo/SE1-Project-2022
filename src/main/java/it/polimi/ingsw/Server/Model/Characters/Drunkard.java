@@ -7,7 +7,7 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 final public class Drunkard extends Character  {
 
     Drunkard(GameInitializer gameInitializer) {
-        super (4, 2, gameInitializer);
+        super (4, 2, gameInitializer, "Drunkard");
     }
 
     @Override

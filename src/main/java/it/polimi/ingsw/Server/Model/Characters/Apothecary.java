@@ -9,7 +9,7 @@ final public class Apothecary extends Character {
 
     //not public only created in factory in Character class
     Apothecary(GameInitializer gameInitializer) {
-        super (0, 2, gameInitializer);
+        super (0, 2, gameInitializer, "Apothecary");
         this.banCard = 4;
     }
 

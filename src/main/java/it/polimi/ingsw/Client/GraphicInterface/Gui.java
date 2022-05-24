@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
