@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NewGui extends Application implements Graphic {
 
@@ -91,13 +93,13 @@ public class NewGui extends Application implements Graphic {
 
     public NewGui(){
         roots = new ArrayList<>();
-        currentRoot = -1;
+        currentRoot = 0;
         try {
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/username.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/wizard.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/gamemode.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/maingame.fxml")));
+            roots.add(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/launch.fxml"))));
+            roots.add(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/username.fxml"))));
+            roots.add(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/wizard.fxml"))));
+            roots.add(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/gamemode.fxml"))));
+            roots.add(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/maingame.fxml"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -125,6 +127,11 @@ public class NewGui extends Application implements Graphic {
             Scene scene = new Scene(parent);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(scene);
+            if(currentRoot == 4){
+                stage.setFullScreen(true);
+                stage.setResizable(false);
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            }
             stage.show();
 
         } catch(Exception e) {
