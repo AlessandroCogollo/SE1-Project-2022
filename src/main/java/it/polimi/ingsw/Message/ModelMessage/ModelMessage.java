@@ -73,15 +73,7 @@ public class ModelMessage extends Message {
             for (int i = 0; i < 12; i++)
                 if (b.existsCharacter(i)) {
                     Character temp = b.getCharacterById(i);
-                    int tempId = temp.getId();
-                    switch (tempId){
-                        case 0 -> this.characterList.add(new ApothecarySerializable((Apothecary) temp));
-                        case 3 -> this.characterList.add(new CookSerializable((Cook) temp));
-                        case 2 -> this.characterList.add(new ClericSerializable((Cleric) temp));
-                        case 6 -> this.characterList.add(new JesterSerializable((Jester) temp));
-                        case 10 -> this.characterList.add(new PrincessSerializable((Princess) temp));
-                        default -> this.characterList.add(new CharacterSerializable(temp));
-                    }
+                    this.characterList.add (new CharacterSerializable(temp));
                 }
             Character t = b.getActiveCharacter();
 

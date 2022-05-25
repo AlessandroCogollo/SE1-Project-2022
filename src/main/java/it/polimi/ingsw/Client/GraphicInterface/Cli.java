@@ -242,7 +242,7 @@ public class Cli implements Graphic{
         }
 
         int movement = -1;
-        int max = Assistant.getAssistantByValue(model.getPlayerById(playerId).getActiveAssistant()).getMaxMovement();
+        int max = Objects.requireNonNull(Assistant.getAssistantByValue(model.getPlayerById(playerId).getActiveAssistant())).getMaxMovement();
         if (model.getGameMode() == 1 && model.getActiveCharacterId() == 9) //is postman
             max += 2;
 
@@ -336,7 +336,7 @@ public class Cli implements Graphic{
         CharacterSerializable character = model.getCharacterById(characterId);
         displayCharacter(character);
 
-        Object obj = null;
+        int[] obj = null;
         switch (characterId){
             case 0 -> {
                 //apothecary - ban card
@@ -347,7 +347,8 @@ public class Cli implements Graphic{
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askApothecary interrupted");
 
-                obj = destination;
+                obj = new int[1];
+                obj[0] = destination;
             }
             case 1 -> {
                 //bard - swap between entrance and room
@@ -405,9 +406,7 @@ public class Cli implements Graphic{
 
                 int[] x = new int[2];
 
-                ClericSerializable cleric = (ClericSerializable) character;
-
-                int[] students = cleric.getStudents();
+                int[] students = character.getStudents();
 
                 int color = askColor("Chose the students from the cleric to move to an island", "Insert a valid students that is on the card", students);
 
@@ -438,10 +437,14 @@ public class Cli implements Graphic{
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askCook interrupted");
 
-                obj = color;
+                obj = new int[1];
+                obj[0] = color;
             }
             //herald - calc influence on a island
-            case 5 -> obj = askIsland("Choose the island where calc the influence", "Insert a valid island", model);
+            case 5 -> {
+                obj = new int[1];
+                obj[0] = askIsland("Choose the island where calc the influence", "Insert a valid island", model);
+            }
             case 6 -> {
                 //jester - swap between jester and entrance
 
@@ -463,7 +466,7 @@ public class Cli implements Graphic{
                 int[] x = new int[number << 1];
 
                 int[] en = displayEntrance(model, playerId);
-                int[] st = ((JesterSerializable) character).getStudents();
+                int[] st = character.getStudents();
 
 
                 System.out.println("Choose the students to swap");
@@ -494,8 +497,9 @@ public class Cli implements Graphic{
                 obj = x;
             }
             case 10 -> {
-                int[] stu = ((PrincessSerializable) character).getStudents();
-                obj = askColor("Choose the students to add to your room", "Insert a valid students present in this card", stu);
+                int[] stu = character.getStudents();
+                obj = new int[1];
+                obj[0] = askColor("Choose the students to add to your room", "Insert a valid students present in this card", stu);
             }
             case 11 -> {
                 int color = -1;
@@ -507,7 +511,8 @@ public class Cli implements Graphic{
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askThief interrupted");
 
-                obj = color;
+                obj = new int[1];
+                obj[0] = color;
             }
             default -> {}
         }
@@ -591,29 +596,14 @@ public class Cli implements Graphic{
         int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
         StringBuilder s = new StringBuilder(c.getName() + " id " + id + " cost " + cost);
         switch (id){
-            case 0 -> {
-                ApothecarySerializable x = (ApothecarySerializable) c;
-                s.append(" with ").append(x.getBanCard()).append(" ban card");
-            }
+            case 0 -> s.append(" with ").append(c.getBanCard()).append(" ban card");
             case 3 -> {
-                CookSerializable x = (CookSerializable) c;
-                int color = x.getColorId();
+                int color = c.getColorId();
                 if (color != -1){
-                    s.append(" with active color ").append(Color.getColorById(color).name());
+                    s.append(" with active color ").append(Objects.requireNonNull(Color.getColorById(color)).name());
                 }
             }
-            case 2 -> {
-                ClericSerializable x = (ClericSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
-            }
-            case 6 -> {
-                JesterSerializable x = (JesterSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
-            }
-            case 10 -> {
-                PrincessSerializable x = (PrincessSerializable) c;
-                s.append(" with this students -> ").append(Arrays.toString(x.getStudents()));
-            }
+            case 2, 6, 10 -> s.append(" with this students -> ").append(Arrays.toString(c.getStudents()));
             default -> {}
         }
         System.out.println(s);
@@ -672,7 +662,7 @@ public class Cli implements Graphic{
         int[] room = actual.getSchool().getCopyOfRoom();
 
         for (int i = 0; i < room.length; i++){
-            System.out.println(i + ". " + Color.getColorById(i).name() + " " + room[i]);
+            System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + room[i]);
         }
         System.out.println();
         return room;
@@ -687,7 +677,7 @@ public class Cli implements Graphic{
         int[] entrance = actual.getSchool().getCopyOfEntrance();
 
         for (int i = 0; i < entrance.length; i++){
-            System.out.println(i + ". " + Color.getColorById(i).name() + " " + entrance[i]);
+            System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + entrance[i]);
         }
         System.out.println();
 
@@ -705,7 +695,7 @@ public class Cli implements Graphic{
 
         for (int a : ass){
             Assistant x = Assistant.getAssistantByValue(a);
-            System.out.println("# "  + x.name() + ": Value " + x.getValue() + " Max Movement " + x.getMaxMovement());
+            System.out.println("# "  + Objects.requireNonNull(x).name() + ": Value " + x.getValue() + " Max Movement " + x.getMaxMovement());
         }
         System.out.println();
         return ass;

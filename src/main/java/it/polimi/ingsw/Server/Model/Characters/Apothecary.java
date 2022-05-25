@@ -23,9 +23,9 @@ final public class Apothecary extends Character {
     public int getBanCard() { return this.banCard; }
 
     @Override
-    public void activateEffect(Object obj) {
+    public void activateEffect(int[] obj) {
 
-        int islandId = (Integer)obj;
+        int islandId = obj[0];
 
         Island i = gameInitializer.getIslands().getIslandFromId(islandId);
 
@@ -38,11 +38,11 @@ final public class Apothecary extends Character {
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
-        if (!(obj instanceof Integer))
+    public Errors canActivateEffect(int[] obj) {
+        if (obj.length != 1)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        int islandId = (Integer)obj;
+        int islandId = obj[0];
 
         if (!gameInitializer.getIslands().existsIsland(islandId))
             return Errors.NOT_VALID_DESTINATION;

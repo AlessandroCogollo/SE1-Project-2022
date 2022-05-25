@@ -117,13 +117,9 @@ public enum Errors {
      */
     MOVEMENT_NOT_VALID (220, "The number of position moved by mother nature must be over or equal to 1 and less or equal than the value on the assistant card"),
     /**
-     * Error description: Expected an array with certain length, received an odd lenght/empty array/array with more than 4 elements
-     */
-    ILLEGAL_INPUT(221, "Expected an array with certain length, received an odd lenght/empty array/array with more than 4 elements"),
-    /**
      * Error description: Cannot play a character in a normal game
      */
-    INVALID_MOVE (222, "Cannot play a character in a normal game"),
+    INVALID_MOVE (221, "Cannot play a character in a normal game"),
 
 
 
@@ -158,6 +154,10 @@ public enum Errors {
      * Error description: There isn't any move in the model queue
      */
     MOVE_NOT_FIND (307, "There isn't any move in the model queue"),
+    /**
+     * Error description: The lobby cannot accept more player
+     */
+    CANNOT_ACCEPT (308, "The lobby cannot accept more player"),
 
 
 

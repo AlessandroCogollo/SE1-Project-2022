@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class CharacterTest {
 
@@ -53,10 +54,12 @@ public class CharacterTest {
                 Assertions.assertEquals(((Apothecary) Apothecary).getBanCard(), 4);
 
                 for (int j = 0; j < testCases[i].length; j++) {
-                    Errors er = Apothecary.canActivateEffect(testCases[i][j]);
+                    int[] te = new int[1];
+                    te[0] = testCases[i][j];
+                    Errors er = Apothecary.canActivateEffect(te);
                     if (er==Errors.NO_ERROR) {
                         int temp = ((Apothecary) Apothecary).getBanCard();
-                        Apothecary.activateEffect(testCases[i][j]);
+                        Apothecary.activateEffect(te);
                         // check if a banCard has been removed
                         Assertions.assertEquals(temp-1, ((Apothecary) Apothecary).getBanCard());
                     } else {
@@ -98,7 +101,7 @@ public class CharacterTest {
             if (er == Errors.NO_ERROR) {
                 Bard.activateEffect(testCase);
             } else {
-                Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
+                Assertions.assertEquals(Errors.NOT_RIGHT_PARAMETER, er);
             }
         }
     }
@@ -139,21 +142,17 @@ public class CharacterTest {
         // check correct number of students on this
         Assertions.assertEquals(4, countStudents);
 
-        //wrong object
-        int x = 0;
-        Errors er = Cleric.canActivateEffect(x);
-        Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
-
+        Errors er;
 
         for (int[] testCase : testCases) {
             er = Cleric.canActivateEffect(testCase);
             if (testCase.length != 2)
                 //wrong length
-                Assertions.assertEquals(Errors.ILLEGAL_INPUT, er);
+                Assertions.assertEquals(Errors.NOT_RIGHT_PARAMETER, er);
             else if (testCase[0] < 0 || testCase[0] > 4)
                 //invalid colorId
                 Assertions.assertEquals(Errors.NOT_VALID_COLOR, er);
-            else if (!g.getIslands().existsIsland(testCase[1]))
+            else if (!Objects.requireNonNull(g).getIslands().existsIsland(testCase[1]))
                 //invalid islandId
                 Assertions.assertEquals(Errors.NOT_VALID_DESTINATION, er);
             else if (tempStudents[testCase[0]] <= 0)
@@ -202,10 +201,12 @@ public class CharacterTest {
         Assertions.assertTrue(((Cook) Cook).getProfessor().isEmpty());
 
         for (int i = 0; i < testCases.length; i++) {
-            Errors er = Cook.canActivateEffect(testCases[i]);
-            Cook.canActivateEffect(testCases[i]);
+            int[] x = new int[1];
+            x[0] = testCases[i];
+            Errors er = Cook.canActivateEffect(x);
+            Cook.canActivateEffect(x);
             if (er == Errors.NO_ERROR) {
-                Cook.activateEffect(testCases[i]);
+                Cook.activateEffect(x);
             }
             else {
                 if (i > 4) {
@@ -241,8 +242,10 @@ public class CharacterTest {
         };
 
         for (int i: testCases) {
-            Herald.canActivateEffect(i);
-            Herald.activateEffect(i);
+            int[] x = new int[1];
+            x[0] = i;
+            Herald.canActivateEffect(x);
+            Herald.activateEffect(x);
         }
     }
 
@@ -262,8 +265,6 @@ public class CharacterTest {
             if (studentsTemp[color.getIndex()] != 0) studentsCount += studentsTemp[color.getIndex()];
         }
         Assertions.assertEquals(6, studentsCount);
-
-        // TODO: check activateEffects() && canActivateEffects()
     }
 
     @Test

@@ -34,12 +34,13 @@ abstract public class Character {
     public boolean getUsed() {
         return this.used;
     }
-    public void use (Object obj){
+
+    public void use (int[] obj){
         activateEffect(obj);
         this.used = true;
     }
 
-    abstract protected void activateEffect(Object obj);
+    abstract protected void activateEffect(int[] obj);
 
-    abstract public Errors canActivateEffect (Object obj);
+    abstract public Errors canActivateEffect (int[] obj);
 }

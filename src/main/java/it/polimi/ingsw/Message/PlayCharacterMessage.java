@@ -7,9 +7,9 @@ public final class PlayCharacterMessage extends ClientMessage{
 
     private final int characterId;
     //todo
-    private final Object attributes;
+    private final int[] attributes;
 
-    public PlayCharacterMessage(Errors er, String message, int characterId, Object attributes) {
+    public PlayCharacterMessage(Errors er, String message, int characterId, int[] attributes) {
         super(er, message, 5);
         this.characterId = characterId;
         this.attributes = attributes;

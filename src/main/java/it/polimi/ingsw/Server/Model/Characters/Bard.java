@@ -6,6 +6,7 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 final public class Bard extends Character {
@@ -16,13 +17,12 @@ final public class Bard extends Character {
     }
 
     @Override
-    protected void activateEffect(Object obj) {
+    protected void activateEffect(int[] chosenColors) {
         Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
         School currSchool = currPlayer.getSchool();
 
         // ie: chosenColors = { removeFromEntrance1, removeFromRoom1, removeFromEntrance2, removeFromRoom2 }
 
-        int[] chosenColors = (int[])obj;
         for (int i = 0; i < chosenColors.length; i++) {
             if (i%2 == 0) {
                 // even indexes: used to remove a student from entrance & move it to room
@@ -35,14 +35,19 @@ final public class Bard extends Character {
     }
 
     @Override
-    public Errors canActivateEffect(Object obj) {
+    public Errors canActivateEffect(int[] chosenColors) {
 
-        if (!(obj instanceof int[] chosenColors))
+        if (chosenColors.length == 0 || chosenColors.length > 4 || chosenColors.length%2 == 1)
             return Errors.NOT_RIGHT_PARAMETER;
 
-        if (chosenColors.length == 0 || chosenColors.length >= 4 || chosenColors.length%2 == 1) {
-            return Errors.ILLEGAL_INPUT;
-        }
+        Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
+        School currSchool = currPlayer.getSchool();
+
+        int[] room = currSchool.getCopyOfRoom();
+
+        if (Arrays.stream(room).sum() < 2)
+            return Errors.NOT_ENOUGH_TOKEN;
+
 
         return Errors.NO_ERROR;
     }

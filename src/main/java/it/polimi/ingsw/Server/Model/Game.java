@@ -146,7 +146,7 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
-    public int playCharacter(int playerId, int characterId, Object obj) {
+    public int playCharacter(int playerId, int characterId, int[] obj) {
 
         int gameMode = gameInit.getGameMode();
 
