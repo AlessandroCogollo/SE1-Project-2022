@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable{
     public ClientHandler(Socket client, int id, Lobby lobby){
         this.id = id;
         this.l = lobby;
-        this.net = new ConnectionHandler(client, Duration.ofSeconds(15), this::clientDown); //todo
+        this.net = new ConnectionHandler(client, Duration.ofSeconds(15), this::clientDown);
     }
 
     /**

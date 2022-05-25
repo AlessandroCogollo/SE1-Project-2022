@@ -15,9 +15,9 @@ import java.util.Collection;
  */
 /* todo
 *   - arguments sanitize StarterHelper
-*   - finish server Server, Lobby, ClientHandler, GameHandler
 *   - set all test
 *   - add resume game to model GameInitializer
+*   - check if the bag does not have enough students at the end of the game
 */
 public class StarterHelper{
 
