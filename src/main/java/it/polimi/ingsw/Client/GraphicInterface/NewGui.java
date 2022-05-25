@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +16,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.awt.*;
+import javafx.scene.control.TextField;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NewGui extends Application implements Graphic {
 
@@ -25,7 +29,7 @@ public class NewGui extends Application implements Graphic {
     private Scene scene;
     private Parent parent;
     private Gui graphic;
-    private ArrayList<Parent> roots;
+    private ArrayList<URL> roots = new ArrayList<>();
     private int currentRoot;
 
     @FXML
@@ -89,22 +93,19 @@ public class NewGui extends Application implements Graphic {
 
     }
 
-    public NewGui(){
-        roots = new ArrayList<>();
-        currentRoot = -1;
-        try {
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/username.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/wizard.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/gamemode.fxml")));
-            roots.add(FXMLLoader.load(getClass().getClassLoader().getResource("scenes/maingame.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    /*
+
+    public ArrayList<URL> getRoots() {
+        return roots;
     }
 
     public void Next(ActionEvent event){
-        this.parent = roots.get(currentRoot + 1);
+        try {
+            System.out.println("Loading " + this.getRoots().get(currentRoot + 1));
+            this.parent = FXMLLoader.load(roots.get(currentRoot + 1));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         currentRoot++;
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(parent);
@@ -112,6 +113,7 @@ public class NewGui extends Application implements Graphic {
         stage.show();
 
     }
+     */
 
     public static void main(String[] args) {
         launch(args);
@@ -120,11 +122,26 @@ public class NewGui extends Application implements Graphic {
     @Override
     public void start(Stage stage) throws Exception {
 
+        roots = new ArrayList<>();
+        currentRoot = 0;
+        roots.add(getClass().getClassLoader().getResource("scenes/launch.fxml"));
+        roots.add(getClass().getClassLoader().getResource("scenes/username.fxml"));
+        roots.add(getClass().getClassLoader().getResource("scenes/wizard.fxml"));
+        roots.add(getClass().getClassLoader().getResource("scenes/gamemode.fxml"));
+        roots.add(getClass().getClassLoader().getResource("scenes/maingame.fxml"));
+
+        System.out.println("Setup completed!");
+
         try {
-            this.parent = FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml"));
+            this.parent = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/launch.fxml")));
             Scene scene = new Scene(parent);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(scene);
+            if(currentRoot == 4){
+                stage.setFullScreen(true);
+                stage.setResizable(false);
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            }
             stage.show();
 
         } catch(Exception e) {
