@@ -5,10 +5,16 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
+import it.polimi.ingsw.Client.GraphicInterface.NewGui;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Network.ConnectionHandler;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -17,6 +23,7 @@ import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -246,6 +253,8 @@ public class Client{
 
             this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client"); //todo
 
+            new Thread(this.graphic.getUsername()).start();
+
             //ask for information about game only if needed and send this information to server waiting for answer that are correct
             answer = sendInfo(npM.isYouAreFirst(), temp);
 
@@ -309,6 +318,7 @@ public class Client{
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
         String username = this.graphic.getUsername();
+        System.out.println("Your username is: " + username);
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
         Wizard w = this.graphic.getWizard();
@@ -355,7 +365,10 @@ public class Client{
     //test method
 
     public static void main(String[] args){
-        Client client = new Client (new Cli(), "127.0.0.1", 5088);
+        Client client = new Client (new NewGui(), "127.0.0.1", 5088);
+        if(client.graphic instanceof NewGui){
+            new Thread(() -> Application.launch(NewGui.class, args)).start();
+        }
         client.start();
     }
 

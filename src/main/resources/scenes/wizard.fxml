@@ -10,7 +10,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.NewGui">
+<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.NewGui">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -36,70 +36,65 @@
          </image>
       </ImageView>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="119.0" prefHeight="16.0" prefWidth="155.0" text="Choose a wizard" textAlignment="CENTER" textFill="WHITE" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="36.0" layoutY="158.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="36.0" layoutY="158.0" nodeOrientation="INHERIT" onMouseClicked="#SelectSorcerer" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assistenti/retro/CarteTOT_back_1@3x.png" />
          </image>
          <effect>
             <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" spread="0.15" width="40.0">
                <color>
-                  <Color red="0.8799999952316284" green="0.8799999952316284" blue="0.8799999952316284" opacity="0.30000001192092896" />
+                  <Color blue="0.8799999952316284" green="0.8799999952316284" opacity="0.30000001192092896" red="0.8799999952316284" />
                </color>
             </DropShadow>
          </effect>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="149.0" layoutY="158.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="149.0" layoutY="158.0" nodeOrientation="INHERIT" onMouseClicked="#SelectKing" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assistenti/retro/CarteTOT_back_11@3x.png" />
          </image>
          <effect>
             <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" spread="0.15" width="40.0">
                <color>
-                  <Color red="0.8799999952316284" green="0.8799999952316284" blue="0.8799999952316284" opacity="0.30000001192092896" />
+                  <Color blue="0.8799999952316284" green="0.8799999952316284" opacity="0.30000001192092896" red="0.8799999952316284" />
                </color>
             </DropShadow>
          </effect>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="261.0" layoutY="158.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="261.0" layoutY="158.0" nodeOrientation="INHERIT" onMouseClicked="#SelectWitch" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assistenti/retro/CarteTOT_back_21@3x.png" />
          </image>
          <effect>
             <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" spread="0.15" width="40.0">
                <color>
-                  <Color red="0.8799999952316284" green="0.8799999952316284" blue="0.8799999952316284" opacity="0.30000001192092896" />
+                  <Color blue="0.8799999952316284" green="0.8799999952316284" opacity="0.30000001192092896" red="0.8799999952316284" />
                </color>
             </DropShadow>
          </effect>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="373.0" layoutY="158.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="373.0" layoutY="158.0" nodeOrientation="INHERIT" onMouseClicked="#SelectWise" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assistenti/retro/CarteTOT_back_31@3x.png" />
          </image>
          <effect>
             <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" spread="0.15" width="40.0">
                <color>
-                  <Color red="0.8799999952316284" green="0.8799999952316284" blue="0.8799999952316284" opacity="0.30000001192092896" />
+                  <Color blue="0.8799999952316284" green="0.8799999952316284" opacity="0.30000001192092896" red="0.8799999952316284" />
                </color>
             </DropShadow>
          </effect>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="485.0" layoutY="158.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="485.0" layoutY="158.0" nodeOrientation="INHERIT" onMouseClicked="#SelectFlowersQueen" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assistenti/retro/CarteTOT_back_41@3x.png" />
          </image>
          <effect>
             <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" spread="0.15" width="40.0">
                <color>
-                  <Color red="0.8799999952316284" green="0.8799999952316284" blue="0.8799999952316284" opacity="0.30000001192092896" />
+                  <Color blue="0.8799999952316284" green="0.8799999952316284" opacity="0.30000001192092896" red="0.8799999952316284" />
                </color>
             </DropShadow>
          </effect>
       </ImageView>
-      <Button layoutX="36.0" layoutY="158.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" visible="false" />
-      <Button layoutX="148.0" layoutY="158.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" visible="false" />
-      <Button layoutX="260.0" layoutY="158.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" visible="false" />
-      <Button layoutX="372.0" layoutY="158.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" visible="false" />
-      <Button layoutX="484.0" layoutY="158.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" visible="false" />
    </children>
 </Pane>
