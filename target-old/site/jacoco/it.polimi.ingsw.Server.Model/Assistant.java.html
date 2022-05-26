@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Assistant.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AM56</a> &gt; <a href="index.source.html" class="el_package">it.polimi.ingsw.Server.Model</a> &gt; <span class="el_source">Assistant.java</span></div><h1>Assistant.java</h1><pre class="source lang-java linenums">package it.polimi.ingsw.Server.Model;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+<span class="fc" id="L7">public enum Assistant {</span>
+<span class="fc" id="L8">    Lion (1, 1),</span>
+<span class="fc" id="L9">    Goose (2,1),</span>
+<span class="fc" id="L10">    Cat (3, 2),</span>
+<span class="fc" id="L11">    Eagle (4, 2),</span>
+<span class="fc" id="L12">    Fox (5, 3),</span>
+<span class="fc" id="L13">    Snake (6, 3),</span>
+<span class="fc" id="L14">    Octopus (7, 4),</span>
+<span class="fc" id="L15">    Dog (8, 4),</span>
+<span class="fc" id="L16">    Elephant (9, 5),</span>
+<span class="fc" id="L17">    Turtle (10, 5);</span>
+
+    private final int value;
+    private final int maxMovement;
+
+<span class="fc" id="L22">    Assistant (int value, int maxMovement){</span>
+<span class="fc" id="L23">        this.value = value;</span>
+<span class="fc" id="L24">        this.maxMovement = maxMovement;</span>
+<span class="fc" id="L25">    }</span>
+
+    public int getValue() {
+<span class="fc" id="L28">        return value;</span>
+    }
+
+    public int getMaxMovement() {
+<span class="fc" id="L32">        return maxMovement;</span>
+    }
+
+    public static int getNumberOfAssistants (){
+<span class="fc" id="L36">        return Assistant.values().length;</span>
+    }
+
+    public static Assistant getAssistantByValue (int value){
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for (Assistant a: Assistant.values()){</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (a.getValue() == value)</span>
+<span class="fc" id="L42">                return a;</span>
+        }
+<span class="fc" id="L44">        return null;</span>
+    }
+
+    public static Collection&lt;Assistant&gt; getNewAssistantDeck (){
+<span class="fc" id="L48">        Collection&lt;Assistant&gt; c = new ArrayList&lt;&gt;(getNumberOfAssistants());</span>
+<span class="fc" id="L49">        Collections.addAll(c, Assistant.values());</span>
+<span class="fc" id="L50">        return c;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

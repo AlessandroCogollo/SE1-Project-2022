@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Professors.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AM56</a> &gt; <a href="index.source.html" class="el_package">it.polimi.ingsw.Server.Model</a> &gt; <span class="el_source">Professors.java</span></div><h1>Professors.java</h1><pre class="source lang-java linenums">package it.polimi.ingsw.Server.Model;
+
+class Professors {
+
+    private final int[] professors;
+    private final GameInitializer gInit;
+
+<span class="fc" id="L8">    Professors(GameInitializer gInit){</span>
+<span class="fc" id="L9">        this.professors = new int[Color.getNumberOfColors()];</span>
+<span class="fc bfc" id="L10" title="All 2 branches covered.">        for(int i=0; i&lt;Color.getNumberOfColors(); i++){</span>
+<span class="fc" id="L11">            professors[i] = -1;</span>
+        }
+<span class="fc" id="L13">        this.gInit = gInit;</span>
+<span class="fc" id="L14">    }</span>
+
+    void updateProfessors(){
+        //check all professor color
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (Color c: Color.values()){</span>
+
+            //initialise temp variables
+<span class="fc" id="L21">            Player maxP = null;</span>
+<span class="fc" id="L22">            int max = -1;</span>
+<span class="fc" id="L23">            boolean equal = false;</span>
+
+            //check the number of students for all the player
+<span class="fc bfc" id="L26" title="All 2 branches covered.">            for (Player p: gInit){</span>
+<span class="fc" id="L27">                int studentCount = p.getNumberOfStudentInRoomByColor(c);</span>
+
+                //if is the first
+<span class="fc bfc" id="L30" title="All 2 branches covered.">                if (maxP == null) {</span>
+<span class="fc" id="L31">                    maxP = p;</span>
+<span class="fc" id="L32">                    max = studentCount;</span>
+                }
+                else{
+<span class="fc bfc" id="L35" title="All 2 branches covered.">                    if (max &lt; studentCount){</span>
+<span class="fc" id="L36">                        max = studentCount;</span>
+<span class="fc" id="L37">                        maxP = p;</span>
+<span class="fc" id="L38">                        equal = false;</span>
+                    }
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                    if (max == studentCount)</span>
+<span class="fc" id="L41">                        equal = true;</span>
+                }
+<span class="fc" id="L43">            }</span>
+            //update the professor if only if there aren't equals
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (!equal)</span>
+<span class="fc" id="L46">                professors[c.getIndex()] = maxP.getId();</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+    Player getPlayerWithProfessor (Color color){
+<span class="fc" id="L51">        int pId = professors[color.getIndex()];</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (pId != -1)</span>
+<span class="fc" id="L53">            return gInit.getPlayerById(pId);</span>
+<span class="fc" id="L54">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
