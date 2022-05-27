@@ -40,6 +40,11 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
+    public void SetFirst(boolean first) {
+
+    }
+
+    @Override
     public void displayMessage(String message) {
         Platform.runLater(() -> {
             Dialog d = new Dialog();

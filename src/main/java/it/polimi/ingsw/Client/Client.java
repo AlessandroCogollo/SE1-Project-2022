@@ -85,7 +85,6 @@ public class Client{
         this.connection = temp;
     }
 
-
     /**
      * Ask the player what type of interface he prefers, CLi or Gui
      * @return the chosen interface
@@ -107,6 +106,16 @@ public class Client{
     public void start() {
 
         Thread.currentThread().setName("Main thread Client");
+
+        new Thread(() -> {
+            try {
+                System.out.println("From Client: " + this.graphic.getUsername());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
 
 

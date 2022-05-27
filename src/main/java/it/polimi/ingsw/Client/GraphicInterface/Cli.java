@@ -98,9 +98,10 @@ public class Cli implements Graphic{
     }
 
 
+    @Override
+    public void SetFirst(boolean first) {
 
-
-
+    }
 
     //override
     @Override
