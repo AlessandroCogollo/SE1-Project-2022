@@ -12,6 +12,11 @@ public class TestingCli implements Graphic {
     static int uI = 0;
 
     @Override
+    public void SetFirst(boolean first) {
+
+    }
+
+    @Override
     public void displayMessage(String message) {
         System.out.println(message);
     }

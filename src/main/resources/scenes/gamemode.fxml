@@ -19,7 +19,7 @@
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <Button contentDisplay="CENTER" layoutX="226.0" layoutY="342.0" mnemonicParsing="false" onAction="#moveToMainGame" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: lightblue;" text="CONTINUE" textFill="#001eff">
+      <Button contentDisplay="CENTER" layoutX="226.0" layoutY="342.0" mnemonicParsing="false" onAction="#saveNumOfPlayers" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: lightblue;" text="CONTINUE" textFill="#001eff">
          <font>
             <Font name="Cabin Sketch Regular" size="13.0" />
          </font>
