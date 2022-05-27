@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.NewGui">
+<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.NewGui">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <Button contentDisplay="CENTER" layoutX="229.0" layoutY="344.0" mnemonicParsing="false" onAction="#moveToMainGame" prefHeight="25.0" prefWidth="169.0" text="Continue">
+      <Button contentDisplay="CENTER" layoutX="226.0" layoutY="342.0" mnemonicParsing="false" onAction="#moveToMainGame" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: lightblue;" text="CONTINUE" textFill="#001eff">
          <font>
-            <Font name="GFSBaskerville-Regular" size="13.0" />
+            <Font name="Cabin Sketch Regular" size="13.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Label contentDisplay="CENTER" layoutX="241.0" layoutY="392.0" text="2022 - Powered by AM56" textAlignment="CENTER" textFill="#5b5b5b">
          <font>
@@ -37,9 +43,31 @@
             <Image url="@../logoeryantis.png" />
          </image>
       </ImageView>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="149.0" prefHeight="16.0" prefWidth="155.0" text="Number of players" textAlignment="CENTER" textFill="WHITE" />
-      <Spinner layoutX="229.0" layoutY="184.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="236.0" prefHeight="16.0" prefWidth="155.0" text="GameMode" textAlignment="CENTER" textFill="WHITE" />
-      <ToggleButton layoutX="229.0" layoutY="269.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: fcba03;" text="Expert Mode" textFill="#815f01" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="212.0" layoutY="152.0" prefHeight="22.0" prefWidth="196.0" text="NUMBER OF PLAYERS" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Cabin Sketch Regular" size="15.0" />
+         </font></Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="232.0" layoutY="232.0" prefHeight="16.0" prefWidth="155.0" text="MODE" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Cabin Sketch Regular" size="18.0" />
+         </font></Label>
+      <Slider fx:id="SliderNOP" blockIncrement="1.0" layoutX="240.0" layoutY="181.0" majorTickUnit="1.0" max="4.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Slider>
+      <ToggleButton fx:id="ExpertModeButton" contentDisplay="CENTER" depthTest="DISABLE" layoutX="225.0" layoutY="261.0" maxWidth="170.0" minWidth="170.0" mnemonicParsing="false" onAction="#ExpertMode" prefWidth="170.0" style="-fx-background-color: fcba03;" text="DREAM" textAlignment="JUSTIFY" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font name="Bowlby One SC Regular" size="15.0" />
+         </font>
+         <rotationAxis>
+            <Point3D />
+         </rotationAxis>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <DropShadow color="#00d0ff" height="85.0" radius="42.0" width="85.0" />
+         </effect>
+      </ToggleButton>
    </children>
 </Pane>

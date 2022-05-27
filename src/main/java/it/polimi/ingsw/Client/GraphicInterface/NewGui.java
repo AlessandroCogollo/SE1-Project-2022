@@ -14,19 +14,23 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.awt.*;
-import javafx.scene.control.TextField;
+
 import javafx.stage.WindowEvent;
 
+import javax.swing.text.html.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ public class NewGui extends Application implements Graphic {
     private int currentRoot;
     private String username;
     private Wizard wizard;
-    private int gameMode = -1;
+    private int gameMode = 0;
     private int numOfPlayers = -1;
 
     @FXML
@@ -53,9 +57,11 @@ public class NewGui extends Application implements Graphic {
     @FXML
     private TextField usernameInput;
 
-    public Button getStartGameButton() {
-        return StartGameButton;
-    }
+    @FXML
+    private Slider SliderNOP;
+
+    @FXML
+    private ToggleButton ExpertModeButton;
 
     @Override
     public void displayMessage(String message) {
@@ -116,33 +122,108 @@ public class NewGui extends Application implements Graphic {
     }
 
     @FXML
+    private javafx.scene.image.ImageView sorcerer;
+
+    @FXML
+    private javafx.scene.image.ImageView king;
+
+    @FXML
+    private javafx.scene.image.ImageView witch;
+
+    @FXML
+    private javafx.scene.image.ImageView wise;
+
+    @FXML
+    private javafx.scene.image.ImageView flowersQueen;
+
+
+    @FXML
     void SelectFlowersQueen(MouseEvent event) {
+        flowersEntered(event);
         this.wizard = Wizard.Flowers_Queen;
         System.out.println("Flowers Queen selected");
     }
 
     @FXML
     void SelectKing(MouseEvent event) {
+        kingEntered(event);
         this.wizard = Wizard.King;
         System.out.println("King selected");
     }
 
     @FXML
     void SelectSorcerer(MouseEvent event) {
+        sorcererEntered(event);
         this.wizard = Wizard.Sorcerer;
         System.out.println("Sorcerer selected");
     }
 
     @FXML
     void SelectWise(MouseEvent event) {
+        wiseEntered(event);
         this.wizard = Wizard.Wise;
         System.out.println("Wise selected");
     }
 
     @FXML
     void SelectWitch(MouseEvent event) {
+        witchEntered(event);
         this.wizard = Wizard.Witch;
         System.out.println("Witch selected");
+    }
+
+    @FXML
+    void flowersEntered(MouseEvent event) {
+        if(this.wizard == null || !this.wizard.equals(Wizard.Sorcerer)) this.sorcerer.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.King))this.king.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Wise))this.wise.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Witch))this.witch.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        this.flowersQueen.setEffect(new DropShadow(50, Color.FORESTGREEN));
+    }
+
+    @FXML
+    void kingEntered(MouseEvent event) {
+        if(this.wizard == null || !this.wizard.equals(Wizard.Sorcerer)) this.sorcerer.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        this.king.setEffect(new DropShadow(50, Color.GOLD));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Wise))this.wise.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Witch))this.witch.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Flowers_Queen))this.flowersQueen.setEffect(new DropShadow(10, Color.FLORALWHITE));
+    }
+
+    @FXML
+    void sorcererEntered(MouseEvent event) {
+        this.sorcerer.setEffect(new DropShadow(50, Color.GREENYELLOW));
+        if(this.wizard == null || !this.wizard.equals(Wizard.King)) this.king.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Wise))this.wise.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Witch))this.witch.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Flowers_Queen))this.flowersQueen.setEffect(new DropShadow(10, Color.FLORALWHITE));
+    }
+
+    @FXML
+    void wiseEntered(MouseEvent event) {
+        if(this.wizard == null || !this.wizard.equals(Wizard.Sorcerer)) this.sorcerer.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.King)) this.king.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        this.wise.setEffect(new DropShadow(50, Color.DEEPSKYBLUE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Witch))this.witch.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Flowers_Queen))this.flowersQueen.setEffect(new DropShadow(10, Color.FLORALWHITE));
+    }
+
+    @FXML
+    void witchEntered(MouseEvent event) {
+        if(this.wizard == null || !this.wizard.equals(Wizard.Sorcerer)) this.sorcerer.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.King)) this.king.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Wise))this.wise.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        this.witch.setEffect(new DropShadow(50, Color.VIOLET));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Flowers_Queen))this.flowersQueen.setEffect(new DropShadow(10, Color.FLORALWHITE));
+    }
+
+    @FXML
+    void wizardExited(MouseEvent event) {
+        if(this.wizard == null || !this.wizard.equals(Wizard.Sorcerer)) this.sorcerer.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.King)) this.king.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Wise)) this.wise.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Witch)) this.witch.setEffect(new DropShadow(10, Color.FLORALWHITE));
+        if(this.wizard == null || !this.wizard.equals(Wizard.Flowers_Queen)) this.flowersQueen.setEffect(new DropShadow(10, Color.FLORALWHITE));
     }
 
     @Override
@@ -181,6 +262,7 @@ public class NewGui extends Application implements Graphic {
     }
 
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -199,10 +281,6 @@ public class NewGui extends Application implements Graphic {
         } catch(Exception e) {
             e.printStackTrace();
         }
-
-
-
-
 
     }
 
@@ -245,15 +323,9 @@ public class NewGui extends Application implements Graphic {
         stage.setScene(scene);
         stage.show();
 
-        System.out.println("Chosen username: " + this.username);
-
     }
 
     public void chooseWizard (ActionEvent event) {
-
-            System.out.println("Choose Wizard");
-
-
 
             // TODO: actual wizard choose
             // move to username page
@@ -269,10 +341,13 @@ public class NewGui extends Application implements Graphic {
             stage.setScene(scene);
             stage.show();
 
-
     }
 
     public void moveToMainGame (ActionEvent event) throws IOException {
+
+        this.numOfPlayers = (int) SliderNOP.getValue();
+
+        System.out.println("Num Of Players: " + this.numOfPlayers + "\nGamemode selected: " + this.gameMode);
 
         // move to maingame
 
@@ -285,4 +360,29 @@ public class NewGui extends Application implements Graphic {
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.show();
     }
+
+    @FXML
+    void ExpertMode(ActionEvent event) {
+        this.ExpertModeButton.setEffect(null);
+        this.gameMode = this.ExpertModeButton.isSelected() ? 1 : 0;
+        Glow glow = new Glow();
+        glow.setLevel(0.5);
+        InnerShadow is = new InnerShadow();
+        MotionBlur mb = new MotionBlur(7, 7);
+        if(this.ExpertModeButton.isSelected()){
+            System.out.println("Nightmare mode");
+            this.ExpertModeButton.setEffect(mb);
+            this.ExpertModeButton.setText("Nightmare");
+        }
+        else{
+            DropShadow ds = new DropShadow(30, Color.LIGHTBLUE);
+            System.out.println("Dream mode");
+            //this.ExpertModeButton.setEffect(glow);
+            this.ExpertModeButton.setEffect(ds);
+            //this.ExpertModeButton.setEffect(new Reflection());
+            this.ExpertModeButton.setText("Dream");
+        }
+
+    }
+
 }
