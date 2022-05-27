@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Princess.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AM56</a> &gt; <a href="index.source.html" class="el_package">it.polimi.ingsw.Server.Model</a> &gt; <span class="el_source">Princess.java</span></div><h1>Princess.java</h1><pre class="source lang-java linenums">package it.polimi.ingsw.Server.Model;
+
+import it.polimi.ingsw.Server.Errors;
+
+import java.util.Objects;
+
+final class Princess extends Character {
+    private final int[] students;
+
+    Princess(GameInitializer gameInitializer) {
+<span class="fc" id="L11">        super (10, 2, gameInitializer);</span>
+<span class="fc" id="L12">        students = gameInitializer.getBag().drawStudents(4);</span>
+<span class="fc" id="L13">    }</span>
+
+    void activateEffect(Object obj) {
+
+<span class="nc" id="L17">        int colorId = (int) obj;</span>
+
+<span class="nc" id="L19">        Color c = Color.getColorById(colorId);</span>
+<span class="nc" id="L20">        Player p = super.gameInitializer.getRoundHandler().getCurrent();</span>
+
+<span class="nc" id="L22">        this.students[colorId]--;</span>
+
+<span class="nc" id="L24">        p.getSchool().moveStudentToRoom(Objects.requireNonNull(c));</span>
+
+<span class="nc" id="L26">        int[] newStudent = super.gameInitializer.getBag().drawStudents(1);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        for (Color color: Color.values())</span>
+<span class="nc" id="L28">            this.students[color.getIndex()] += newStudent[color.getIndex()];</span>
+<span class="nc" id="L29">    }</span>
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+        // todo implement actual color and player choosing
+
+<span class="nc" id="L35">        int colorId = (int) obj;</span>
+<span class="nc" id="L36">        Player p = super.gameInitializer.getRoundHandler().getCurrent();</span>
+
+<span class="nc bnc" id="L38" title="All 4 branches missed.">        if (colorId &lt; 0 || colorId &gt; 4)</span>
+<span class="nc" id="L39">            return Errors.NOT_VALID_COLOR;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (!super.gameInitializer.existsPlayer(p.getId()))</span>
+<span class="nc" id="L41">            return Errors.PLAYER_NOT_EXIST;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (this.students[colorId] &lt;= 0)</span>
+<span class="nc" id="L43">            return Errors.NO_STUDENT;</span>
+
+<span class="nc" id="L45">        Color c = Color.getColorById(colorId);</span>
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (p.getNumberOfStudentInRoomByColor(c) == 10)</span>
+<span class="nc" id="L48">            return Errors.NO_MORE_MOVEMENT;</span>
+
+<span class="nc" id="L50">        return Errors.NO_ERROR;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

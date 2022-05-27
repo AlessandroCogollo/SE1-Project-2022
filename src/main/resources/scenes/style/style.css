@@ -1,6 +1,6 @@
 .split-pane *.split-pane-divider {
     -fx-padding: 0 2 0 2;
-    -fx-background-color: #292a2d;
+    -fx-background-color: #2c2b3d;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
@@ -17,13 +17,13 @@
 }
 .tab-pane .tab
 {
-    -fx-background-color: #1E1F23;
+    -fx-background-color: #2c2b3d;
 
 }
 
 .tab-pane .tab:selected
 {
-    -fx-background-color: #373741;
+    -fx-background-color: #424157;
 }
 
 .tab .tab-label {

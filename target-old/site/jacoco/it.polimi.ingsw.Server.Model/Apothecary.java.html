@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Apothecary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AM56</a> &gt; <a href="index.source.html" class="el_package">it.polimi.ingsw.Server.Model</a> &gt; <span class="el_source">Apothecary.java</span></div><h1>Apothecary.java</h1><pre class="source lang-java linenums">package it.polimi.ingsw.Server.Model;
+
+import it.polimi.ingsw.Server.Errors;
+
+import java.util.Optional;
+
+final class Apothecary extends Character {
+
+    private int banCard;
+
+    Apothecary(GameInitializer gameInitializer) {
+<span class="fc" id="L12">        super (0, 2, gameInitializer);</span>
+<span class="fc" id="L13">        this.banCard = 4;</span>
+<span class="fc" id="L14">    }</span>
+
+    // used to add a BanCard &quot;token&quot; to this card (after being removed from an island)
+<span class="fc" id="L17">    void addBanCard() { this.banCard += 1; }</span>
+
+    // used to remove a BanCard &quot;token&quot; from this card (and to add it to an island)
+<span class="fc" id="L20">    void removeBanCard() { this.banCard -= 1; }</span>
+
+    // return number of banCard &quot;token&quot; on this card
+<span class="fc" id="L23">    int getBanCard() { return this.banCard; }</span>
+
+    @Override
+    void activateEffect(Object obj) {
+
+<span class="fc" id="L28">        int islandId = (Integer)obj;</span>
+
+<span class="fc" id="L30">        Island i = gameInitializer.getIslands().getIslandFromId(islandId);</span>
+
+        // remove banCard from this
+<span class="fc" id="L33">        removeBanCard();</span>
+
+        // add banCard to island
+<span class="fc" id="L36">        i.setBanCard();</span>
+
+<span class="fc" id="L38">    }</span>
+
+    @Override
+    Errors canActivateEffect(Object obj) {
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (!(obj instanceof Integer))</span>
+<span class="nc" id="L43">            return Errors.NOT_RIGHT_PARAMETER;</span>
+
+<span class="fc" id="L45">        int islandId = (Integer)obj;</span>
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (!gameInitializer.getIslands().existsIsland(islandId))</span>
+<span class="fc" id="L48">            return Errors.NOT_VALID_DESTINATION;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (this.banCard &lt;= 0)</span>
+<span class="fc" id="L50">            return Errors.NOT_ENOUGH_TOKEN;</span>
+<span class="fc" id="L51">        return Errors.NO_ERROR;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: it.polimi.ingsw.Server.Model.RoundHandlerTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s - in it.polimi.ingsw.Server.Model.RoundHandlerTest
