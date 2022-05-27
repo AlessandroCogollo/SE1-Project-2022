@@ -66,7 +66,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <effect>
-            <DropShadow color="#00d0ff" height="85.0" radius="42.0" width="85.0" />
+            <DropShadow color="#c3ecf5" height="85.0" radius="42.0" width="85.0" />
          </effect>
       </ToggleButton>
    </children>
