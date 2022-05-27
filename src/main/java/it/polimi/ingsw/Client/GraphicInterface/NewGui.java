@@ -40,7 +40,7 @@ public class NewGui extends Application implements Graphic {
 
 
     private Client client;
-    private Stage stage;
+    private static Stage stage;
     private Scene scene;
     private Parent parent;
     private Gui graphic;
@@ -50,6 +50,10 @@ public class NewGui extends Application implements Graphic {
     private Wizard wizard;
     private int gameMode = 0;
     private int numOfPlayers = -1;
+
+    public static Stage getStage(){
+        return stage;
+    }
 
     @FXML
     private Button StartGameButton;
@@ -65,11 +69,21 @@ public class NewGui extends Application implements Graphic {
 
     @Override
     public void displayMessage(String message) {
+        while(NewGui.getStage() == null){
+            System.out.println("Waiting for the stage");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText(message);
+            alert.initOwner(stage.getOwner());
             alert.showAndWait();
         });
+
 
     }
 
@@ -268,7 +282,7 @@ public class NewGui extends Application implements Graphic {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public synchronized void start(Stage stage) throws Exception {
 
         try {
             this.stage = stage;
