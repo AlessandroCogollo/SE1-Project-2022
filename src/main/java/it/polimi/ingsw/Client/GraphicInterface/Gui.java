@@ -7,23 +7,16 @@ import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class Gui extends Application implements Graphic {
     private Client client;
@@ -36,14 +29,6 @@ public class Gui extends Application implements Graphic {
     private Parent parent;
     private Scene scene;
 
-    public Gui() {
-    }
-
-    @Override
-    public void SetFirst(boolean first) {
-
-    }
-
     @Override
     public void displayMessage(String message) {
         Platform.runLater(() -> {
@@ -52,6 +37,11 @@ public class Gui extends Application implements Graphic {
             d.setContentText(message);
             d.show();
         });
+    }
+
+    @Override
+    public void setFirst(boolean first) {
+
     }
 
     @Override
@@ -102,6 +92,10 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
+    public int getNumOfPlayers() throws IOException, InterruptedException {
+        return 0;
+    }
+
     public int getNumOfPLayer() {
         ArrayList<Integer> choices = new ArrayList<>();
         choices.add(2);
@@ -134,6 +128,16 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
+    public String askString(String askMessage) {
+        return null;
+    }
+
+    @Override
+    public String displayError(String errorMessage) {
+        return null;
+    }
+
+    @Override
     public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
@@ -144,12 +148,17 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
+    public void setDone(boolean done) {
+
+    }
+
+    @Override
     public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
 
     @Override
-    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
 

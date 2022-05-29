@@ -14,7 +14,7 @@
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <Button contentDisplay="CENTER" layoutX="236.0" layoutY="275.0" mnemonicParsing="false" onAction="#chooseUsername" prefHeight="25.0" prefWidth="155.0" text="Start Game">
+      <Button contentDisplay="CENTER" layoutX="236.0" layoutY="275.0" mnemonicParsing="false" onAction="#selectedUsername" prefHeight="25.0" prefWidth="155.0" text="Start Game">
          <font>
             <Font name="GFSBaskerville-Regular" size="13.0" />
          </font>

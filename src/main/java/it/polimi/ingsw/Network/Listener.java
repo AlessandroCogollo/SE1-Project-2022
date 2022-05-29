@@ -3,6 +3,7 @@ package it.polimi.ingsw.Network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
 
@@ -45,6 +46,10 @@ public class Listener implements Runnable{
                 System.out.println("Listener: socket close");
                 return;
             }
+
+            if (message == null || message.isBlank() || message.isEmpty())
+                continue;
+
             //reset the ping timer of receiver
             this.ping.resetReceiveTimer();
 
@@ -52,7 +57,14 @@ public class Listener implements Runnable{
             JsonElement messageJ = this.gson.fromJson(message, JsonElement.class);
 
             //check if the message is not only a ping message
-            Message m = this.gson.fromJson(messageJ, Message.class);
+            Message m;
+            try {
+                m = this.gson.fromJson(messageJ, Message.class);
+            } catch (JsonSyntaxException e){
+                System.out.println("Listener: received a non json message, discarded");
+                continue;
+            }
+
             if (m.getError() != Errors.PING) {
 
                 //if is not a ping message put it in the out queue

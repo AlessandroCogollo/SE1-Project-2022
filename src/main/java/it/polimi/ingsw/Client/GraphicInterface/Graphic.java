@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GraphicInterface;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -11,11 +12,9 @@ import java.io.IOException;
  */
 public interface Graphic {
 
-    /**
-     * Display a generic message
-     * @param message message to display
-     */
-    void displayMessage (String message);
+    void setFirst (boolean first);
+
+
 
     /**
      * Ask the player to choose a valid wizard
@@ -33,7 +32,7 @@ public interface Graphic {
      * Ask the player to choose the player number of the game, 2, 3 or 4
      * @return the number chosen
      */
-    int getNumOfPLayer() throws IOException, InterruptedException;
+    int getNumOfPlayers() throws IOException, InterruptedException;
 
     /**
      * Ask the player to choose the gamemode of the game: 0 normal, 1 advanced
@@ -57,29 +56,17 @@ public interface Graphic {
      */
     MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
-    /**
-     * Display some information for help the player to choose, and ask him the movement of mother nature
-     * @param model model to take the information
-     * @param playerId id of the current player
-     * @return the movement of mother nature
-     */
+    void setDone(boolean done);
+
+    String askString (String askMessage);
+
+    String displayError (String errorMessage);
+
     MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
-    /**
-     * Display some information for help the player to choose, and ask him the cloud to take
-     * @param model model to take the information
-     * @param playerId id of the current player
-     * @return the move with the cloud choosen
-     */
-    ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException;
+    ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
-    /**
-     * Method usable only during the player's action phase fro ask if he want to play a character and if positive the information to play it
-     * @param model model to take the information
-     * @param playerId id of the current player
-     * @return the move to play the character chosen or null if the player don't want to play a character
-     */
-    PlayCharacterMessage askCharacter (ModelMessage model, int playerId) throws IOException, InterruptedException;
+    PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
     /**
      * Stop any io method that is running throwing some exception
@@ -87,8 +74,10 @@ public interface Graphic {
     void stopInput();
 
     /**
-     * Display the model or update it on the screen
+     * Send the information about the model
      * @param model model to display or the update of it
      */
     void displayModel(ModelMessage model);
+
+    void displayMessage(String s);
 }
