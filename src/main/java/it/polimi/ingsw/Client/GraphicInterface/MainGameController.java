@@ -33,6 +33,7 @@ public class MainGameController {
     @FXML
     private Label myUsername;
 
+    /*
     public MainGameController(NewGui gui, ActionEvent event){
         stage = NewGui.getStage();
         username = gui.getUsername();
@@ -57,5 +58,7 @@ public class MainGameController {
         this.myUsername.setEffect(new DropShadow(30, Color.DEEPSKYBLUE));
 
     }
+    
+     */
 
 }

@@ -14,8 +14,6 @@ public interface Graphic {
 
     void setFirst (boolean first);
 
-
-
     /**
      * Ask the player to choose a valid wizard
      * @return the wizard chosen to the caller
