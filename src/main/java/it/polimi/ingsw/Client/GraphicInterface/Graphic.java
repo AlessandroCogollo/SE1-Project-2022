@@ -11,6 +11,8 @@ import java.io.IOException;
  */
 public interface Graphic {
 
+    void SetFirst(boolean first);
+
     /**
      * Display a generic message
      * @param message message to display

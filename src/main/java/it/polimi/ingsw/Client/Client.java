@@ -309,6 +309,7 @@ public class Client{
     }
 
     private JsonElement getInfo (@Nullable String message, boolean first) throws IOException, InterruptedException {
+        this.graphic.SetFirst(first);
         if (message != null)
             this.graphic.displayMessage(message);
 
