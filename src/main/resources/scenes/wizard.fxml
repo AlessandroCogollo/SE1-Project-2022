@@ -16,7 +16,7 @@
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <Button contentDisplay="CENTER" layoutX="233.0" layoutY="338.0" mnemonicParsing="false" onAction="#selectedWizard" prefHeight="25.0" prefWidth="155.0" text="Continue">
+      <Button fx:id="continueWizard" contentDisplay="CENTER" layoutX="233.0" layoutY="338.0" mnemonicParsing="false" onAction="#wizardSelected" prefHeight="25.0" prefWidth="155.0" text="Continue">
          <font>
             <Font name="GFSBaskerville-Regular" size="13.0" />
          </font>

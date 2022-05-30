@@ -4,6 +4,7 @@ import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -12,9 +13,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.effect.MotionBlur;
@@ -226,6 +225,9 @@ public class NewGui extends Application implements Graphic {
         }
     }
 
+    @FXML
+    private Label myUsername;
+
     public void waitForStartGame(Event event) {
         //todo add new wait page
         Parent root = null;
@@ -243,6 +245,11 @@ public class NewGui extends Application implements Graphic {
         mainStage.setResizable(false);
         mainStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         mainStage.show();
+    }
+
+    public void setUsernameLabel(){
+        myUsername.setText(username);
+        myUsername.setEffect(new DropShadow(30, Color.DEEPSKYBLUE));
     }
 
 
@@ -291,6 +298,9 @@ public class NewGui extends Application implements Graphic {
     @FXML
     private TextField usernameInput;
 
+    @FXML
+    private Button continueWizard;
+
     public void selectedUsername (ActionEvent event) {
 
         String username = usernameInput.getText();
@@ -300,6 +310,8 @@ public class NewGui extends Application implements Graphic {
         NewGui.setUsername(username);
         System.out.println("username set");
         sceneController.activate("wizard");
+
+        //this.continueWizard.setDisable(true);
     }
 
 
@@ -462,14 +474,16 @@ public class NewGui extends Application implements Graphic {
         tempWizard = Wizard.Witch;
     }
 
-    public void selectedWizard (ActionEvent event) {
+    public void wizardSelected (ActionEvent event) {
         if (tempWizard != null) {
 
             System.out.println("Gui Selected wizard: " + tempWizard);
             NewGui.setWizard(tempWizard);
 
-            if (first == 1)
+            if (first == 1){
                 sceneController.activate("gamemode");
+                NewGui.setGameMode(0);
+            }
             else
                 waitForDone(event);
         }
