@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.MainGameController">
    <center>
       <SplitPane dividerPositions="0.25" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
         <items>
@@ -23,7 +23,7 @@
                <children>
                   <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="43.0" layoutX="31.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
-                  <Label layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
+                  <Label fx:id="myUsername" layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -59,12 +59,12 @@
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
+                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
+                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
                                  </color>
                               </Stop>
                            </stops>
@@ -88,12 +88,12 @@
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
+                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
+                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
                                  </color>
                               </Stop>
                            </stops>
@@ -136,7 +136,7 @@
                                  <effect>
                                     <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                        <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
+                                          <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
                                        </color>
                                     </DropShadow>
                                  </effect>
@@ -163,7 +163,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -175,7 +175,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -187,7 +187,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -199,7 +199,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -211,7 +211,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -223,7 +223,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -235,7 +235,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -247,7 +247,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
                                              </color>
                                           </DropShadow>
                                        </effect>

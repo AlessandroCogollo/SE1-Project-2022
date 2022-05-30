@@ -107,18 +107,6 @@ public class Client{
 
         Thread.currentThread().setName("Main thread Client");
 
-        new Thread(() -> {
-            try {
-                System.out.println("From Client: " + this.graphic.getUsername());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-
-
         new Thread(this.connection, "Connection Handler").start();
 
         new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();

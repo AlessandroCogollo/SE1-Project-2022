@@ -1,16 +1,13 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,28 +15,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.*;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.awt.*;
-
-import javafx.stage.WindowEvent;
-
-import javax.swing.text.html.ImageView;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class NewGui extends Application implements Graphic {
 
 
-    private Client client;
     private static Stage stage;
     private Scene scene;
     private Parent parent;
@@ -54,6 +39,19 @@ public class NewGui extends Application implements Graphic {
     public static Stage getStage(){
         return stage;
     }
+
+    public TextField getUsernameInput() {
+        return usernameInput;
+    }
+
+    public static Wizard getTempWizard() {
+        return tempWizard;
+    }
+
+    public static int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
 
     @FXML
     private Button StartGameButton;
@@ -82,6 +80,11 @@ public class NewGui extends Application implements Graphic {
             alert.setContentText(message);
             alert.initOwner(stage.getOwner());
             alert.showAndWait();
+            if (message.contains("another") && message.contains("username")){
+                username = null;
+                usernamePage();
+            }
+
         });
     }
 
@@ -296,31 +299,29 @@ public class NewGui extends Application implements Graphic {
 
     }
 
-    public void connectClient (ActionEvent event) {
+    public void usernamePage () {
 
-        // TODO: add connect to client
-        // move to username page
-
-            System.out.println("Connect Client");
-
-            Parent root = null;
-            try {
-                root = FXMLLoader.load(getClass().getClassLoader().getResource("scenes/username.fxml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/username.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
     }
 
-    public void chooseUsername (ActionEvent event) {
+    public void setUsername(){
+        username = usernameInput.getText();
+        if(wizard == null){
+            wizardPage();
+        }
+        else goToLobby();
+    }
 
-        System.out.println("Your username is " + usernameInput.getText());
-
+    public void wizardPage () {
 
         username = usernameInput.getText();
 
@@ -330,14 +331,13 @@ public class NewGui extends Application implements Graphic {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
 
     }
 
-    public void gameModePage(ActionEvent event) {
+    public void gameModePage() {
 
             // TODO: actual wizard choose
             // move to username page
@@ -348,14 +348,13 @@ public class NewGui extends Application implements Graphic {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
 
     }
 
-    public void goToLobby(ActionEvent event){
+    public void goToLobby(){
         wizard = tempWizard;
         synchronized (lock){
             while(first == -1){
@@ -369,11 +368,11 @@ public class NewGui extends Application implements Graphic {
         }
         if(first == 1) {
             System.out.println("You are the first player, going to game mode page");
-            gameModePage(event);
+            gameModePage();
         }
         else if(first == 0) {
             System.out.println("You aren't the first player, going to main game page");
-            moveToMainGame(event);
+            moveToMainGame();
         }
     }
 
@@ -385,36 +384,26 @@ public class NewGui extends Application implements Graphic {
         }
     }
 
-    public void saveNumOfPlayers(ActionEvent event){
+    public void saveNumOfPlayers(){
         numOfPlayers = (int) SliderNOP.getValue();
         System.out.println("Num Of Players: " + numOfPlayers + "\nGamemode selected: " + gameMode);
-        moveToMainGame(event);
+        moveToMainGame();
     }
 
-    public void moveToMainGame (ActionEvent event){
+    public void moveToMainGame (){
+
+        Platform.runLater(() -> {
+            MainGameController mg = new MainGameController(this, null);
+        });
 
 
-        // move to maingame
 
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("scenes/maingame.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setFullScreen(true);
-        stage.setResizable(false);
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        stage.show();
     }
 
 
 
     @FXML
-    void ExpertMode(ActionEvent event) {
+    void ExpertMode() {
         this.ExpertModeButton.setEffect(null);
         gameMode = this.ExpertModeButton.isSelected() ? 1 : 0;
         Glow glow = new Glow();
