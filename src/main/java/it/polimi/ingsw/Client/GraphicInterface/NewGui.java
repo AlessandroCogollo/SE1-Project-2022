@@ -136,7 +136,7 @@ public class NewGui extends Application implements Graphic {
 
 
 
-    public void connectClient (ActionEvent event) {
+    public void usernamePage (ActionEvent event) {
 
         //todo add a tep page for waiting info from server
 
@@ -298,7 +298,7 @@ public class NewGui extends Application implements Graphic {
             return; //todo display error
         System.out.println("Your username is " + username);
         NewGui.setUsername(username);
-        System.out.println("setted userrname");
+        System.out.println("username set");
         sceneController.activate("wizard");
     }
 
