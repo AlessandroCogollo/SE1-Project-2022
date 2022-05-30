@@ -97,7 +97,7 @@ public class Client{
                 s = input.readLine();
             } catch (IOException ignored) {}
         }
-        return "Cli".equals(s) ? new Cli() : new Gui();
+        return "Cli".equals(s) ? new Cli() : new NewGui();
     }
 
     /**
@@ -248,9 +248,12 @@ public class Client{
 
             NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
 
-            System.out.println("Displaying first client message");
-            this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client"); //todo
-            System.out.println("Displayed!");
+
+            this.graphic.setFirst(npM.isYouAreFirst()); //give the information to the graphic
+            System.out.println(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client");
+
+            /*this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client"); //todo
+            System.out.println("Displayed!");*/
 
             //ask for information about game only if needed and send this information to server waiting for answer that are correct
             answer = sendInfo(npM.isYouAreFirst(), temp);
@@ -301,7 +304,9 @@ public class Client{
             Message temp = this.gson.fromJson(answer, Message.class);
             if (Errors.INFO_RECEIVED.equals(temp.getError())) {
                 ok = true;
+                this.graphic.setDone(true);
             } else {
+                this.graphic.setDone(false);
                 error = temp.getMessage();
             }
         }
@@ -325,7 +330,7 @@ public class Client{
 
 
         if (first){
-            int numOfPlayer = this.graphic.getNumOfPLayer();
+            int numOfPlayer = this.graphic.getNumOfPlayers();
             if (this.setup.isInterrupted())
                 throw new InterruptedException("Client Setup: interrupted");
             int gameMode = this.graphic.getGameMode();
@@ -364,9 +369,7 @@ public class Client{
 
     public static void main(String[] args){
         Client client = new Client (new NewGui(), "127.0.0.1", 5088);
-        if(client.graphic instanceof NewGui){
-            new Thread(() -> Application.launch(NewGui.class, args)).start();
-        }
+        new Thread(() -> Application.launch(NewGui.class, args)).start();
         client.start();
     }
 

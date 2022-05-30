@@ -11,14 +11,15 @@ public class TestingCli implements Graphic {
     static int wI = 0;
     static int uI = 0;
 
-    @Override
-    public void SetFirst(boolean first) {
-
-    }
 
     @Override
     public void displayMessage(String message) {
         System.out.println(message);
+    }
+
+    @Override
+    public void setFirst(boolean first) {
+
     }
 
     @Override
@@ -72,6 +73,10 @@ public class TestingCli implements Graphic {
     }
 
     @Override
+    public int getNumOfPlayers() throws IOException, InterruptedException {
+        return 0;
+    }
+
     public int getNumOfPLayer() {
         return 4;
     }
@@ -92,12 +97,27 @@ public class TestingCli implements Graphic {
     }
 
     @Override
+    public void setDone(boolean done) {
+
+    }
+
+    @Override
+    public String askString(String askMessage) {
+        return null;
+    }
+
+    @Override
+    public String displayError(String errorMessage) {
+        return null;
+    }
+
+    @Override
     public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
 
     @Override
-    public ClientMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
+    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
         return null;
     }
 

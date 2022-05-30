@@ -23,6 +23,47 @@ public class Cli implements Graphic{
 
     //ask primary method
 
+
+    @Override
+    public String askString(String askMessage) {
+        return null;
+    }
+
+    @Override
+    public String displayError(String errorMessage) {
+        return null;
+    }
+
+    @Override
+    public void setFirst(boolean first) {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private String askString (@Nullable String askMessage, @Nullable String errorMessage) throws IOException, InterruptedException {
         if (askMessage != null){
             displayMessage(askMessage);
@@ -97,17 +138,13 @@ public class Cli implements Graphic{
         return destination;
     }
 
-
-    @Override
-    public void SetFirst(boolean first) {
-
-    }
-
     //override
     @Override
     public void displayMessage(String message) {
         System.out.println("Cli: " + message);
     }
+
+
 
     @Override
     public Wizard getWizard() throws IOException, InterruptedException {
@@ -142,7 +179,7 @@ public class Cli implements Graphic{
     }
 
     @Override
-    public int getNumOfPLayer() throws IOException, InterruptedException {
+    public int getNumOfPlayers() throws IOException, InterruptedException {
         int numOfPlayer = -1;
 
         while (numOfPlayer == -1 && !Thread.currentThread().isInterrupted()){
@@ -183,6 +220,8 @@ public class Cli implements Graphic{
 
         return gameMode;
     }
+
+
 
     @Override
     public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
@@ -227,6 +266,11 @@ public class Cli implements Graphic{
             throw new InterruptedException("Cli: askMovement interrupted");
 
         return new MoveStudentMessage(Errors.NO_ERROR, "Moved a students", chooseColor, destination);
+    }
+
+    @Override
+    public void setDone(boolean done) {
+
     }
 
     @Override

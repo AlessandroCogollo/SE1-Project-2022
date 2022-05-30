@@ -212,6 +212,7 @@ public class Lobby implements Runnable {
                     this.lock.wait();
                 } catch (InterruptedException e) {
                     System.out.println("Lobby: interrupted while waiting data from first client line due to shutdown of the server");
+                    this.main.interrupt();
                     return;
                 }
             }

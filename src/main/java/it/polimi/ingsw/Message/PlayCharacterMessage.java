@@ -6,7 +6,6 @@ import it.polimi.ingsw.Server.Model.Game;
 public final class PlayCharacterMessage extends ClientMessage{
 
     private final int characterId;
-    //todo
     private final int[] attributes;
 
     public PlayCharacterMessage(Errors er, String message, int characterId, int[] attributes) {
