@@ -1,8 +1,11 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
+import com.sun.javafx.iio.ImageFrame;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -24,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -45,6 +49,14 @@ public class NewGui extends Application implements Graphic {
     private static SceneController sceneController = null;
 
     public void initialize(){
+
+        RotateTransition rotate = new RotateTransition();
+        rotate.setNode(waitingimg);
+        rotate.setDuration(Duration.millis(5000));
+        rotate.setCycleCount(TranslateTransition.INDEFINITE);
+        rotate.setByAngle(360);
+        rotate.play();
+
         if(this.usernameInput != null){
             this.usernameContinue.setDisable(true);
             this.usernameContinue.setDefaultButton(true);
@@ -256,9 +268,9 @@ public class NewGui extends Application implements Graphic {
         //todo add new wait page
         Parent root = null;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/maingame.fxml")));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/wait.fxml")));
         } catch (IOException e) {
-            System.err.println("Error while loading " + "scenes/maingame.fxml" + " resource, exit");
+            System.err.println("Error while loading " + "scenes/wait.fxml" + " resource, exit");
             e.printStackTrace();
             System.exit(-1);
         }
@@ -536,6 +548,9 @@ public class NewGui extends Application implements Graphic {
     private Slider SliderNOP;
 
     @FXML
+    public javafx.scene.image.ImageView waitingimg;
+
+    @FXML
     private ToggleButton ExpertModeButton;
 
     @FXML
@@ -573,8 +588,6 @@ public class NewGui extends Application implements Graphic {
 
         //todo display error
     }
-
-
 
     /*
     @Override
