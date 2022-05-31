@@ -31,28 +31,28 @@
                   <Label layoutX="88.0" layoutY="87.0" text="Mago Thelma" textFill="#beb2b2" />
                   <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="127.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#cbaa45" height="43.0" layoutX="31.0" layoutY="134.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
-                  <Label layoutX="88.0" layoutY="138.0" text="sexycolbe" textFill="WHITE">
+                  <Label fx:id="username2" layoutX="88.0" layoutY="138.0" text="sexycolbe" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
                   <Label layoutX="88.0" layoutY="156.0" text="Mago Forest" textFill="#beb2b2" />
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="195.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                  <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="43.0" layoutX="31.0" layoutY="202.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
-                  <Label layoutX="88.0" layoutY="206.0" text="lucabotti88" textFill="WHITE">
+                  <Rectangle fx:id="rectangle3" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="195.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle fx:id="color3" arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="43.0" layoutX="31.0" layoutY="202.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
+                  <Label fx:id="username3" layoutX="88.0" layoutY="206.0" text="lucabotti88" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="88.0" layoutY="224.0" text="Piton" textFill="#beb2b2" />
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="263.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                  <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#1fffc2" height="43.0" layoutX="31.0" layoutY="270.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
-                  <Label layoutX="88.0" layoutY="274.0" text="margaragorn" textFill="WHITE">
+                  <Label fx:id="description3" layoutX="88.0" layoutY="224.0" text="Piton" textFill="#beb2b2" />
+                  <Rectangle fx:id="rectangle4" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="263.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle fx:id="color4" arcHeight="25.0" arcWidth="25.0" fill="#1fffc2" height="43.0" layoutX="31.0" layoutY="270.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
+                  <Label fx:id="username4" layoutX="88.0" layoutY="274.0" text="margaragorn" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="88.0" layoutY="292.0" text="Gandalf" textFill="#beb2b2" />
+                  <Label fx:id="description4" layoutX="88.0" layoutY="292.0" text="Gandalf" textFill="#beb2b2" />
                   <Rectangle arcHeight="35.0" arcWidth="35.0" height="110.0" layoutX="27.0" layoutY="666.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0">
                      <fill>
                         <LinearGradient endX="1.0" endY="1.0">

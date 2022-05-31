@@ -18,6 +18,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.effect.MotionBlur;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -42,6 +43,22 @@ public class NewGui extends Application implements Graphic {
     private static int numOfPlayers = -1;
 
     private static SceneController sceneController = null;
+
+    public void initialize(){
+        if(this.usernameInput != null){
+            this.usernameContinue.setDisable(true);
+            this.usernameContinue.setDefaultButton(true);
+        }
+
+        if(this.continueWizard != null){
+            this.continueWizard.setDisable(true);
+            this.continueWizard.setDefaultButton(true);
+        }
+    }
+
+    public void checkUsernameLength(){
+        this.usernameContinue.setDisable(usernameInput.getText().length() < 4);
+    }
 
     public static void setUsername(String username) {
         synchronized (lock){
@@ -69,6 +86,10 @@ public class NewGui extends Application implements Graphic {
             NewGui.numOfPlayers = numOfPlayers;
             lock.notifyAll();
         }
+    }
+
+    public static Stage getStage() {
+        return mainStage;
     }
 
     @Override
@@ -228,6 +249,9 @@ public class NewGui extends Application implements Graphic {
     @FXML
     private Label myUsername;
 
+    @FXML
+    private Button usernameContinue;
+
     public void waitForStartGame(Event event) {
         //todo add new wait page
         Parent root = null;
@@ -245,6 +269,8 @@ public class NewGui extends Application implements Graphic {
         mainStage.setResizable(false);
         mainStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         mainStage.show();
+
+        //setUsernameLabel();
     }
 
     public void setUsernameLabel(){
@@ -311,7 +337,14 @@ public class NewGui extends Application implements Graphic {
         System.out.println("username set");
         sceneController.activate("wizard");
 
+
+
         //this.continueWizard.setDisable(true);
+    }
+
+    @FXML
+    void mouseEnteredMaingame(MouseDragEvent event) {
+        System.out.println("Detected!");
     }
 
 
@@ -448,30 +481,35 @@ public class NewGui extends Application implements Graphic {
     void SelectFlowersQueen(MouseEvent event) {
         flowersEntered(event);
         tempWizard = Wizard.Flowers_Queen;
+        this.continueWizard.setDisable(false);
     }
 
     @FXML
     void SelectKing(MouseEvent event) {
         kingEntered(event);
         tempWizard = Wizard.King;
+        this.continueWizard.setDisable(false);
     }
 
     @FXML
     void SelectSorcerer(MouseEvent event) {
         sorcererEntered(event);
         tempWizard = Wizard.Sorcerer;
+        this.continueWizard.setDisable(false);
     }
 
     @FXML
     void SelectWise(MouseEvent event) {
         wiseEntered(event);
         tempWizard = Wizard.Wise;
+        this.continueWizard.setDisable(false);
     }
 
     @FXML
     void SelectWitch(MouseEvent event) {
         witchEntered(event);
         tempWizard = Wizard.Witch;
+        this.continueWizard.setDisable(false);
     }
 
     public void wizardSelected (ActionEvent event) {

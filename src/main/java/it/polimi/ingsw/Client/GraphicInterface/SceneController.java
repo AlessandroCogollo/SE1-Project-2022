@@ -24,4 +24,8 @@ public class SceneController {
     public void activate(String name){
         main.setRoot( screenMap.get(name) );
     }
+
+    public Scene getMain() {
+        return main;
+    }
 }
