@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -129,18 +131,90 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #2c2b3d; -fx-border-width: 0;">
                            <children>
-                              <ImageView fitHeight="249.0" fitWidth="561.0" layoutX="345.0" layoutY="155.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
-                                 <image>
-                                    <Image url="@../Plancia/Plancia_DEF2.png" />
-                                 </image>
-                                 <effect>
-                                    <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
-                                       <color>
-                                          <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
-                                       </color>
-                                    </DropShadow>
-                                 </effect>
-                              </ImageView>
+                              <TabPane layoutX="521.0" layoutY="-6.0" prefHeight="561.0" prefWidth="224.0" tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                  <Tab fx:id="tab1" text="Player 1">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                                                   <image>
+                                                      <Image url="@../Plancia/Plancia_DEF2.png" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
+                                                         <color>
+                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                  <Tab fx:id="tab2" text="Player 2">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                                                   <image>
+                                                      <Image url="@../Plancia/Plancia_DEF2.png" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
+                                                         <color>
+                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                    <Tab fx:id="tab3" text="Player 3">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                                                   <image>
+                                                      <Image url="@../Plancia/Plancia_DEF2.png" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
+                                                         <color>
+                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                    <Tab fx:id="tab4" text="Player 4">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                                                   <image>
+                                                      <Image url="@../Plancia/Plancia_DEF2.png" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
+                                                         <color>
+                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                </tabs>
+                              </TabPane>
                               <Label layoutX="26.0" layoutY="24.0" text="Board" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
