@@ -14,6 +14,16 @@ public interface Graphic {
 
     void setFirst (boolean first);
 
+    void setDone(boolean done);
+
+    String askString (String askMessage) throws InterruptedException, IOException;
+
+    void displayError (String errorMessage);
+
+    void displayMessage (String message);
+
+
+
     /**
      * Ask the player to choose a valid wizard
      * @return the wizard chosen to the caller
@@ -38,44 +48,16 @@ public interface Graphic {
      */
     int getGameMode() throws IOException, InterruptedException;
 
-    /**
-     * Display some information for help the player to choose, and ask him what types of Assistant he want to play
-     * @param model model to take the information
-     * @param playerId id of the current player
-     * @return the move with the assistant chosen
-     */
-    PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException;
-
-    /**
-     * Display some information for help the player to choose, and ask him the movement of a student
-     * @param model model to take the information
-     * @param playerId id of the current player
-     * @return the move with the student movement chosen
-     */
-    MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException;
-
-    void setDone(boolean done);
-
-    String askString (String askMessage);
-
-    String displayError (String errorMessage);
-
-    MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException;
-
-    ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException;
-
-    PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException;
 
     /**
      * Stop any io method that is running throwing some exception
      */
     void stopInput();
 
+
     /**
      * Send the information about the model
      * @param model model to display or the update of it
      */
-    void displayModel(ModelMessage model);
-
-    void displayMessage(String s);
+    void updateModel(ModelMessage model);
 }

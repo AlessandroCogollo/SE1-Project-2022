@@ -2,10 +2,7 @@ package it.polimi.ingsw.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
-import it.polimi.ingsw.Client.GraphicInterface.Graphic;
-import it.polimi.ingsw.Client.GraphicInterface.Gui;
-import it.polimi.ingsw.Client.GraphicInterface.NewGui;
+import it.polimi.ingsw.Client.GraphicInterface.*;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
@@ -32,7 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class Client{
 
-    private final Graphic graphic;
+    private final GraphicV2 graphic;
     private final ConnectionHandler connection;
     private final Gson gson = new GsonBuilder().create();
     private final BlockingQueue<JsonElement> filteredIn = new LinkedBlockingQueue<>();
@@ -60,7 +57,7 @@ public class Client{
      * @param serverIp ip of server
      * @param serverPort port of server
      */
-    public Client (Graphic graphic, String serverIp, int serverPort){
+    public Client (GraphicV2 graphic, String serverIp, int serverPort){
         this( graphic, serverIp, serverPort, Duration.ofSeconds(15)); //todo
     }
 
@@ -71,7 +68,7 @@ public class Client{
      * @param serverPort port of server
      * @param defaultTimeout timeout for ping
      */
-    public Client(Graphic graphic, String serverHost, int serverPort, Duration defaultTimeout) {
+    public Client(GraphicV2 graphic, String serverHost, int serverPort, Duration defaultTimeout) {
         this.graphic = graphic;
         ConnectionHandler temp = null;
         try {
@@ -89,7 +86,7 @@ public class Client{
      * Ask the player what type of interface he prefers, CLi or Gui
      * @return the chosen interface
      */
-    public static Graphic askGraphic() {
+    public static GraphicV2 askGraphic() {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         String s = null;
         while ((!"Cli".equals(s) && !"Gui".equals(s))){
@@ -97,7 +94,7 @@ public class Client{
                 s = input.readLine();
             } catch (IOException ignored) {}
         }
-        return "Cli".equals(s) ? new Cli() : new NewGui();
+        return "Cli".equals(s) ? new Cli() : new Gui();
     }
 
     /**
@@ -368,8 +365,9 @@ public class Client{
     //test method
 
     public static void main(String[] args){
-        Client client = new Client (new NewGui(), "127.0.0.1", 5088);
-        new Thread(() -> Application.launch(NewGui.class, args)).start();
+        GraphicV2 gui = new Gui();
+        gui.startGraphic();
+        Client client = new Client (gui, "127.0.0.1", 5088);
         client.start();
     }
 

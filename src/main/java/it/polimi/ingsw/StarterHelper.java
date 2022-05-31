@@ -3,6 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
+import it.polimi.ingsw.Client.GraphicInterface.GraphicV2;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
@@ -307,9 +308,11 @@ public class StarterHelper{
             new Server(port).start();
     }
 
-    private static void startClient(String ip, int port, Graphic graphic){
-        if (run)
+    private static void startClient(String ip, int port, GraphicV2 graphic){
+        if (run) {
+            graphic.startGraphic();
             new Client(graphic, ip, port).start();
+        }
     }
 
     /*

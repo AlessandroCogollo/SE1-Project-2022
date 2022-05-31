@@ -18,7 +18,76 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class Gui extends Application implements Graphic {
+public class Gui extends GraphicV2 {
+
+    private final NewGui newGui = new NewGui();
+
+    @Override
+    public void startGraphic() {
+        System.out.println("Gui Started");
+        new Thread(() -> Application.launch(NewGui.class, (String[]) null)).start();
+    }
+
+    @Override
+    public void setFirst(boolean first) {
+        this.newGui.setFirst(first);
+    }
+
+    @Override
+    public void setDone(boolean done) {
+        this.newGui.setDone(done);
+    }
+
+    @Override
+    public String askString(String askMessage) throws InterruptedException, IOException {
+        return this.newGui.askString(askMessage);
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+        this.newGui.displayError(errorMessage);
+    }
+
+    @Override
+    public void displayMessage(String message) {
+        this.newGui.displayMessage(message);
+    }
+
+    @Override
+    public Wizard getWizard() throws IOException, InterruptedException {
+        return this.newGui.getWizard();
+    }
+
+    @Override
+    public String getUsername() throws IOException, InterruptedException {
+        return this.newGui.getUsername();
+    }
+
+    @Override
+    public int getNumOfPlayers() throws IOException, InterruptedException {
+        return this.newGui.getNumOfPlayers();
+    }
+
+    @Override
+    public int getGameMode() throws IOException, InterruptedException {
+        return this.newGui.getGameMode();
+    }
+
+    @Override
+    public void stopInput() {
+        this.newGui.stopInput();
+    }
+
+    @Override
+    public void updateModel(ModelMessage model) {
+        this.newGui.updateModel(model);
+    }
+
+
+
+
+
+    /*
     private Client client;
     private TextInputDialog dialog = new TextInputDialog("the nightmare");
     private Optional<Wizard> w = Optional.empty();
@@ -205,5 +274,5 @@ public class Gui extends Application implements Graphic {
             e.printStackTrace();
         }
 
-    }
+    }*/
 }

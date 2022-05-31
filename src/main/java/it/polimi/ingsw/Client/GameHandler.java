@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.GraphicInterface.Graphic;
+import it.polimi.ingsw.Client.GraphicInterface.GraphicV2;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
@@ -19,7 +20,7 @@ public class GameHandler implements Runnable{
     private final int myId;
     private final BlockingQueue<JsonElement> in;
     private final BlockingQueue<JsonElement> out;
-    private final Graphic g;
+    private final GraphicV2 g;
     private final Client client;
     private final Gson gson = new Gson();
 
@@ -28,7 +29,7 @@ public class GameHandler implements Runnable{
     private ModelMessage model;
     private boolean firstModel = false;
 
-    public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, Graphic g, Client client) {
+    public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, GraphicV2 g, Client client) {
         this.myId = myId;
         this.in = in;
         this.out = out;
@@ -99,7 +100,7 @@ public class GameHandler implements Runnable{
 
         if (this.model.getCurrentPlayerId() != this.myId){
             this.g.displayMessage("Model Received");
-            this.g.displayModel(this.model);
+            this.g.updateModel(this.model);
             return null;
         }
 

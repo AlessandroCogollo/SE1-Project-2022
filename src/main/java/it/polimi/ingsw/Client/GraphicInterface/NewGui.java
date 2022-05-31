@@ -171,7 +171,6 @@ public class NewGui extends Application implements Graphic {
 
     public void connectClient (ActionEvent event) {
 
-        //todo add a tep page for waiting info from server
         System.out.println("first = " + first);
         if (first != 0 && first != 1){
             sceneController.activate("wait");
@@ -586,33 +585,13 @@ public class NewGui extends Application implements Graphic {
     }
 
     @Override
-    public String displayError(String errorMessage) {
-        return null;
+    public void displayError(String errorMessage) {
+
     }
 
     @Override
-    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
+    public void displayMessage(String message) {
 
-    @Override
-    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
     }
 
     @Override
@@ -621,13 +600,24 @@ public class NewGui extends Application implements Graphic {
     }
 
     @Override
-    public void displayModel(ModelMessage model) {
-
-    }
-
-    @Override
-    public void displayMessage(String s) {
-
+    public void updateModel(ModelMessage model) {
+        System.out.println("Display model called");
+        Platform.runLater(() -> {
+            Parent root = null;
+            try {
+                root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/maingame.fxml")));
+            } catch (IOException e){
+                System.err.println("Error while loading scenes/maingame.fxml resource, exit");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+            Scene scene = new Scene(root);
+            mainStage.setScene(scene);
+            mainStage.setFullScreen(true);
+            mainStage.setResizable(false);
+            mainStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            mainStage.show();
+        });
     }
 
 

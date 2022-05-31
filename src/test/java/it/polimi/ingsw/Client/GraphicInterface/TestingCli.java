@@ -1,25 +1,42 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
-import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
-import java.io.IOException;
-
-public class TestingCli implements Graphic {
+public class TestingCli extends GraphicV2 {
 
     static int wI = 0;
     static int uI = 0;
 
 
     @Override
-    public void displayMessage(String message) {
-        System.out.println(message);
+    public void startGraphic() {
+
     }
 
     @Override
     public void setFirst(boolean first) {
 
+    }
+
+    @Override
+    public void setDone(boolean done) {
+
+    }
+
+    @Override
+    public String askString(String askMessage) {
+        return null;
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+
+    }
+
+    @Override
+    public void displayMessage(String message) {
+        System.out.println(message);
     }
 
     @Override
@@ -73,11 +90,7 @@ public class TestingCli implements Graphic {
     }
 
     @Override
-    public int getNumOfPlayers() throws IOException, InterruptedException {
-        return 0;
-    }
-
-    public int getNumOfPLayer() {
+    public int getNumOfPlayers(){
         return 4;
     }
 
@@ -87,52 +100,12 @@ public class TestingCli implements Graphic {
     }
 
     @Override
-    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public void setDone(boolean done) {
-
-    }
-
-    @Override
-    public String askString(String askMessage) {
-        return null;
-    }
-
-    @Override
-    public String displayError(String errorMessage) {
-        return null;
-    }
-
-    @Override
-    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
     public void stopInput() {
 
     }
 
     @Override
-    public void displayModel(ModelMessage model) {
-        new Cli().displayModel(model);
+    public void updateModel(ModelMessage model) {
+        new Cli().updateModel(model);
     }
 }

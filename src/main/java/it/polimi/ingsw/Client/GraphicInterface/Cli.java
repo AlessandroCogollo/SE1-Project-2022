@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.*;
 
 //todo stop scanner after shutdown
-public class Cli implements Graphic{
+public class Cli extends GraphicV2{
 
     private final BufferedReader input = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
     private String userName = null;
@@ -25,46 +25,7 @@ public class Cli implements Graphic{
 
 
     @Override
-    public String askString(String askMessage) {
-        return null;
-    }
-
-    @Override
-    public String displayError(String errorMessage) {
-        return null;
-    }
-
-    @Override
-    public void setFirst(boolean first) {
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private String askString (@Nullable String askMessage, @Nullable String errorMessage) throws IOException, InterruptedException {
+    public String askString(String askMessage) throws InterruptedException, IOException {
         if (askMessage != null){
             displayMessage(askMessage);
         }
@@ -74,7 +35,7 @@ public class Cli implements Graphic{
             s = this.input.readLine();
             if (s == null || s.isEmpty() || s.isBlank()){
                 if (askMessage != null){
-                    displayMessage(errorMessage);
+                    displayError("The value can't be blank");
                 }
                 continue;
             }
@@ -87,61 +48,32 @@ public class Cli implements Graphic{
         return s;
     }
 
-    private int askInteger (@Nullable String askMessage, @Nullable String errorMessage) throws IOException, InterruptedException {
-        int temp = 0;
-        boolean done = false;
-
-        while (!done  && !Thread.currentThread().isInterrupted()){
-            String s = askString(askMessage, errorMessage);
-            try {
-                temp = Integer.parseInt(s);
-            }catch (NumberFormatException e){
-                if (askMessage != null){
-                    displayMessage(errorMessage);
-                }
-                continue;
-            }
-            done = true;
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: Thread Interrupted");
-
-        return temp;
+    @Override
+    public void displayError(String errorMessage) {
+        System.out.println("Cli error during input: " + errorMessage);
     }
 
-    private int askColor (@Nullable String askMessage, @Nullable String errorMessage, int[] container) throws IOException, InterruptedException {
-        int color = -1;
-        while ((color < 0 || color > 4 || container[color] == 0) && !Thread.currentThread().isInterrupted()){
-            color = askInteger(askMessage, errorMessage);
-            if (color < 0 || color > 4 || container[color] == 0)
-                System.out.println(errorMessage);
-        }
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: askColor interrupted");
-
-        return color;
-    }
-
-    private int askIsland (@Nullable String askMessage, @Nullable String errorMessage, ModelMessage model) throws IOException, InterruptedException {
-        int destination = -1;
-
-        while (!model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
-            destination = askInteger(askMessage, errorMessage);
-            if (!model.isIslandIdValid(destination))
-                System.out.println(errorMessage);
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: askIsland interrupted");
-
-        return destination;
-    }
-
-    //override
     @Override
     public void displayMessage(String message) {
-        System.out.println("Cli: " + message);
+
+    }
+
+    @Override
+    public void startGraphic() {
+        System.out.println("Cli Started");
+    }
+
+    @Override
+    public void setFirst(boolean first) {
+        if (first)
+            System.out.println("CLI: you are the first");
+        else
+            System.out.println("CLI: you are not the first");
+    }
+
+    @Override
+    public void setDone(boolean done) {
+        System.out.println("CLI: info sent successfully");
     }
 
 
@@ -151,12 +83,12 @@ public class Cli implements Graphic{
         Wizard w = null;
         while (w == null && !Thread.currentThread().isInterrupted()){
 
-            String s = askString("Insert your Wizard", "Please insert a valid name of wizard");
+            String s = askString("Insert your Wizard");
 
             try {
                 w = Wizard.valueOf(s);
             } catch (IllegalArgumentException e) {
-                displayMessage("Please insert a valid name of wizard");
+                displayError("Please insert a valid name of wizard");
             }
         }
 
@@ -168,7 +100,7 @@ public class Cli implements Graphic{
 
     @Override
     public String getUsername() throws IOException, InterruptedException {
-        String user = askString("Insert your Username", "Insert a valid username");
+        String user = askString("Insert your Username");
 
         this.userName = user;
 
@@ -187,7 +119,7 @@ public class Cli implements Graphic{
             int temp = askInteger("Insert the number of player for this game", "Insert a valid number between 2 and 4");
 
             if (temp < 2 || temp > 4){
-                displayMessage("Insert a valid number between 2 and 4");
+                displayError("Insert a valid number between 2 and 4");
                 continue;
             }
 
@@ -208,7 +140,7 @@ public class Cli implements Graphic{
             int temp = askInteger("Insert the game mode for this game, 0 normal 1, advanced", "Insert a valid number between 0 and 1");
 
             if (temp < 0 || temp > 1){
-                displayMessage("Insert a valid number between 0 and 1");
+                displayError("Insert a valid number between 0 and 1");
                 continue;
             }
 
@@ -222,7 +154,7 @@ public class Cli implements Graphic{
     }
 
 
-
+    /*
     @Override
     public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
         displayModel(model);
@@ -268,10 +200,7 @@ public class Cli implements Graphic{
         return new MoveStudentMessage(Errors.NO_ERROR, "Moved a students", chooseColor, destination);
     }
 
-    @Override
-    public void setDone(boolean done) {
 
-    }
 
     @Override
     public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
@@ -565,6 +494,8 @@ public class Cli implements Graphic{
         return new PlayCharacterMessage(Errors.NO_ERROR, "Played character", characterId, obj);
     }
 
+    */
+
     @Override
     public void stopInput() {
         try {
@@ -576,8 +507,31 @@ public class Cli implements Graphic{
         }
     }
 
+    private int askInteger (@Nullable String askMessage, @Nullable String errorMessage) throws InterruptedException, IOException {
+        int temp = 0;
+        boolean done = false;
+
+        while (!done  && !Thread.currentThread().isInterrupted()){
+            String s = askString(askMessage);
+            try {
+                temp = Integer.parseInt(s);
+            }catch (NumberFormatException e){
+                if (askMessage != null){
+                    displayError(errorMessage);
+                }
+                continue;
+            }
+            done = true;
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: Thread Interrupted");
+
+        return temp;
+    }
+
     @Override
-    public void displayModel(ModelMessage model) {
+    public void updateModel(ModelMessage model) {
         System.out.println();
         System.out.println();
         System.out.println("############################## Model ##############################");
@@ -613,13 +567,7 @@ public class Cli implements Graphic{
             System.out.println("# ROOM -> " + Arrays.toString(pl.getSchool().getCopyOfRoom()));
         }
         System.out.println("###########################################################################");
-
-
-        System.out.println();
-        System.out.println();
     }
-
-
 
 
     //other display
@@ -699,7 +647,7 @@ public class Cli implements Graphic{
         System.out.println();
     }
 
-    private int[] displayRoom(ModelMessage model, int playerId) {
+    private void displayRoom(ModelMessage model, int playerId) {
         displayMessage(this.userName + ", this is your room");
         System.out.println();
 
@@ -710,10 +658,9 @@ public class Cli implements Graphic{
             System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + room[i]);
         }
         System.out.println();
-        return room;
     }
 
-    private int[] displayEntrance (ModelMessage model, int playerId){
+    private void displayEntrance (ModelMessage model, int playerId){
         displayMessage(this.userName + ", this is your entrance");
         System.out.println();
 
@@ -725,11 +672,9 @@ public class Cli implements Graphic{
             System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + entrance[i]);
         }
         System.out.println();
-
-        return entrance;
     }
 
-    private int[] displayAssistant (ModelMessage model, int playerId) {
+    private void displayAssistant (ModelMessage model, int playerId) {
         displayMessage(this.userName + ", this are your assistant");
         System.out.println();
 
@@ -743,7 +688,5 @@ public class Cli implements Graphic{
             System.out.println("# "  + Objects.requireNonNull(x).name() + ": Value " + x.getValue() + " Max Movement " + x.getMaxMovement());
         }
         System.out.println();
-        return ass;
     }
-
 }
