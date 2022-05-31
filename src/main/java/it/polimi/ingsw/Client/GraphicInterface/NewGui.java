@@ -265,7 +265,6 @@ public class NewGui extends Application implements Graphic {
     private Button usernameContinue;
 
     public void waitForStartGame(Event event) {
-        //todo add new wait page
         Parent root = null;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/wait.fxml")));
@@ -281,13 +280,6 @@ public class NewGui extends Application implements Graphic {
         mainStage.setResizable(false);
         mainStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         mainStage.show();
-
-        //setUsernameLabel();
-    }
-
-    public void setUsernameLabel(){
-        myUsername.setText(username);
-        myUsername.setEffect(new DropShadow(30, Color.DEEPSKYBLUE));
     }
 
 
