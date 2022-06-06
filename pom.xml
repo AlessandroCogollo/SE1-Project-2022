@@ -16,7 +16,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <!-- example <sonar.coverage.exclusions>**/client/**/*,**/constants/**/*, **/server/**/*,**/Santorini.java</sonar.coverage.exclusions> -->
-    <sonar.exclusions></sonar.exclusions>
+    <!-- <sonar.exclusions></sonar.exclusions> -->
   </properties>
 
   <dependencies>
@@ -57,6 +57,19 @@
       <artifactId>javafx-fxml</artifactId>
       <version>18.0.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.2.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <version>3.3.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -144,10 +157,39 @@
             <configuration>
               <!-- <mainClass>it.polimi.ingsw.Client.GraphicInterface.Gui</mainClass> -->
               <mainClass>it.polimi.ingsw.Client.Client</mainClass>
-              <options>
-                <option></option>
-                <option></option>
-              </options>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>it.polimi.ingsw.StarterHelper</mainClass>
+              <classpathPrefix>dependency-jars/</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.5.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>
+                ${project.build.directory}/dependency-jars/
+              </outputDirectory>
             </configuration>
           </execution>
         </executions>

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
+import it.polimi.ingsw.Server.PortGetter;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ class ClientTest {
     @Test
     void start() throws IOException {
         //test that the client will stop after timeout x 2 sec
-        ServerSocket s = new ServerSocket(5088);
+        ServerSocket s = new ServerSocket(PortGetter.getPort());
         Thread serv = new Thread(() -> startServer(s));
         Client c = new Client(new Cli(), s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(2));
 
