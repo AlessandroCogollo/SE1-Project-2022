@@ -34,7 +34,7 @@ public class Talker implements Runnable{
             try {
                 messageJ = messageSource.take();
             } catch (InterruptedException e) {
-                System.out.println("Talker: Error while waiting for data to be send");
+                System.out.println("Talker: Error while waiting for data to be sent");
                 return;
             }
 

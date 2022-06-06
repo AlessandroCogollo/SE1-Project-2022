@@ -65,9 +65,7 @@ public class Listener implements Runnable{
                 continue;
             }
 
-            if (m == null){
-                continue;
-            }
+            if (m == null) continue;
 
             if (m.getError() != Errors.PING) {
 
