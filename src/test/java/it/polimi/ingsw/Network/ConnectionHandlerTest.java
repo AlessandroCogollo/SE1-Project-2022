@@ -222,7 +222,7 @@ class ConnectionHandlerTest {
 
         timer.cancel();
 
-        Thread.sleep(4000); //the timeout for the server is double the timeout to send the ping
+        Thread.sleep(5000); //the timeout for the server is double the timeout to send the ping
 
         assertFalse(serverIsUp.isBool());
 
