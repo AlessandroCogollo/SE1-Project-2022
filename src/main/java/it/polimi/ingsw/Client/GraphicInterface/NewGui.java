@@ -282,9 +282,6 @@ public class NewGui extends Application implements Graphic {
         mainStage.show();
     }
 
-
-
-
     //used only for test
     public static void main() {
         launch();
@@ -323,8 +320,6 @@ public class NewGui extends Application implements Graphic {
     }
 
 
-
-
     @FXML
     private TextField usernameInput;
 
@@ -350,8 +345,6 @@ public class NewGui extends Application implements Graphic {
     void mouseEnteredMaingame(MouseDragEvent event) {
         System.out.println("Detected!");
     }
-
-
 
     @FXML
     private javafx.scene.image.ImageView sorcerer;
