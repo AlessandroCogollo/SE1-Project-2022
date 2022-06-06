@@ -404,6 +404,7 @@ public class Lobby implements Runnable {
         } catch (InterruptedException e) {
             //when the server need to shutdown
             System.out.println("Lobby: ServerSocket closed while connecting to the " + ((id == 0) ? "first" : ((Integer)(id + 1)).toString()) + " client due to the shutdown of the server");
+            this.main.interrupt();
             return;
         }
 

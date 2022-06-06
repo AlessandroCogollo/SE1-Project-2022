@@ -160,6 +160,7 @@ public class NewGui extends Application implements Graphic {
 
         mainStage = primaryStage;
         sceneController = new SceneController(primaryStage.getScene());
+        sceneController.addScreen("wait", getResource(getClass().getClassLoader(), "scenes/wait.fxml"));
 
         //show the scene
         primaryStage.show();
@@ -168,21 +169,14 @@ public class NewGui extends Application implements Graphic {
 
 
 
-    public void usernamePage (ActionEvent event) {
+    public void connectClient (ActionEvent event) {
 
         //todo add a tep page for waiting info from server
-
-        /*if (first != 0 && first != 1){
-            Text text = new Text();
-            text.setText("Waiting for info from server");
-            //Creating a Group object
-            Group root = new Group(text);
-            Scene tempScene = new Scene(root);
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            stage.setTitle("##Sample##, Waiting for info from server");
-            stage.setScene(tempScene);
-            stage.show();
-        }*/
+        System.out.println("first = " + first);
+        if (first != 0 && first != 1){
+            sceneController.activate("wait");
+            mainStage.show();
+        }
 
         synchronized (lock) {
             while (first != 0 && first != 1){
@@ -209,17 +203,9 @@ public class NewGui extends Application implements Graphic {
     }
 
     public void waitForDone(Event event) {
-        /*if (infoCorrected != 0 && infoCorrected != 1){
-            Text text = new Text();
-            text.setText("Waiting for response from server if data is correct");
-            //Creating a Group object
-            Group root = new Group(text);
-            Scene tempScene = new Scene(root);
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            stage.setTitle("##Sample##, Waiting for response from server if data is correct");
-            stage.setScene(tempScene);
-            stage.show();
-        }*/
+        if (infoCorrected != 0 && infoCorrected != 1){
+            sceneController.activate("wait");
+        }
 
         synchronized (lock) {
             while (infoCorrected != 0 && infoCorrected != 1){
@@ -236,6 +222,8 @@ public class NewGui extends Application implements Graphic {
             infoCorrected = -1;
             username = null;
             wizard = null;
+            gameMode = -1;
+            numOfPlayers = -1;
             System.out.println("Gui Info not corrected, retry");
             startSetup();
         }
@@ -265,21 +253,12 @@ public class NewGui extends Application implements Graphic {
     private Button usernameContinue;
 
     public void waitForStartGame(Event event) {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("scenes/wait.fxml")));
-        } catch (IOException e) {
-            System.err.println("Error while loading " + "scenes/wait.fxml" + " resource, exit");
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        //Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        mainStage.setScene(scene);
-        mainStage.setFullScreen(true);
-        mainStage.setResizable(false);
-        mainStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        mainStage.show();
+        sceneController.activate("wait");
+    }
+
+    public void setUsernameLabel(){
+        myUsername.setText(username);
+        myUsername.setEffect(new DropShadow(30, Color.DEEPSKYBLUE));
     }
 
     //used only for test
