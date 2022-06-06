@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import com.sun.javafx.iio.ImageFrame;
 import it.polimi.ingsw.Enum.Wizard;
-import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -12,8 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,7 +20,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
