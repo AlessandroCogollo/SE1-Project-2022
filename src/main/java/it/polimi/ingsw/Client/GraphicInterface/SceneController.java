@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class SceneController {
     private HashMap<String, Parent> screenMap = new HashMap<>();
     private final Scene main;
+    private String currentScene;
 
     public SceneController(Scene main) {
         this.main = main;
@@ -23,6 +24,11 @@ public class SceneController {
 
     public void activate(String name){
         main.setRoot( screenMap.get(name) );
+        currentScene = name;
+    }
+
+    public String getActiveScene(){
+        return currentScene;
     }
 
     public Scene getMain() {

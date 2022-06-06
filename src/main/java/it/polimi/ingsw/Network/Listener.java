@@ -65,6 +65,8 @@ public class Listener implements Runnable{
                 continue;
             }
 
+            if (m == null) continue;
+
             if (m.getError() != Errors.PING) {
 
                 //if is not a ping message put it in the out queue

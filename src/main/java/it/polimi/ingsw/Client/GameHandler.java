@@ -99,6 +99,7 @@ public class GameHandler implements Runnable{
 
         if (this.model.getCurrentPlayerId() != this.myId){
             this.g.displayMessage("Model Received");
+            System.out.println("Displaying model");
             this.g.displayModel(this.model);
             return null;
         }
