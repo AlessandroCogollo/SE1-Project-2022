@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
+import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.ClientMessageDecorator;
 import it.polimi.ingsw.Message.Message;
@@ -33,7 +34,9 @@ class ClientHandlerTest {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
 
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -59,7 +62,9 @@ class ClientHandlerTest {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
 
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -85,7 +90,10 @@ class ClientHandlerTest {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
 
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -108,7 +116,10 @@ class ClientHandlerTest {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
 
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         client.execute(c::start);
         ClientHandler cH = new ClientHandler(skt, 0, l);
@@ -126,7 +137,10 @@ class ClientHandlerTest {
     void allMessageSent() throws IOException, InterruptedException {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         new Thread(c::start).start();
         ClientHandler cH = new ClientHandler(skt, 0, null);
@@ -139,7 +153,10 @@ class ClientHandlerTest {
     void sendMessage() throws IOException, InterruptedException {
         int port = PortGetter.getPort();
         ServerSocket s = new ServerSocket(port);
-        Client c = new Client(new TestingCli(), "127.0.0.1", port);
+
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+        Client c = new Client(t, "127.0.0.1", port);
         Socket skt = s.accept();
         new Thread(c::start).start();
         ClientHandler cH = new ClientHandler(skt, 0, null);

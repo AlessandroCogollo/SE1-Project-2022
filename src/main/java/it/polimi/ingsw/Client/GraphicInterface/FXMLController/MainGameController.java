@@ -1,20 +1,18 @@
-package it.polimi.ingsw.Client.GraphicInterface;
+package it.polimi.ingsw.Client.GraphicInterface.FXMLController;
 
-import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Client.DataCollector;
+import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
-public class MainGameController {
+public class MainGameController extends Controller{
 
-    private static Stage stage;
-    private static Scene scene;
-    private static String username;
-    private static Wizard wizard;
-    private static NewGui gui;
-    private static int numOfPlayers;
+    private final DataCollector dataCollector;
+    public MainGameController(Gui main, String resource) {
+        super(main, resource);
+        this.dataCollector = Gui.getDataCollector();
+    }
 
     @FXML
     private Label myUsername;
@@ -59,25 +57,26 @@ public class MainGameController {
     private Tab tab4;
 
 
+
     public void initialize(){
-        gui = new NewGui();
         try {
             setUsername();
             disableUnused();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt(); //reset flag
         }
     }
 
     public void setUsername() throws InterruptedException {
-        username = gui.getUsername();
+        String username = this.dataCollector.getUsername();
         myUsername.setText(username);
 
         tab1.setText(username);
     }
 
     public void disableUnused() throws InterruptedException {
-        numOfPlayers = gui.getNumOfPlayers();
+        int numOfPlayers = this.dataCollector.getNumOfPlayers();
         if(numOfPlayers < 4){
             this.color4.setVisible(false);
             this.color4.setDisable(true);

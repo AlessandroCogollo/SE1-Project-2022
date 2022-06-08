@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
+import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Wizard;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,9 @@ public class LobbyTest {
         //setParameters done by the first client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -65,7 +68,9 @@ public class LobbyTest {
         //setParameters done by the first client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -89,16 +94,19 @@ public class LobbyTest {
         //setOk done by all the client thread
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
         Thread.sleep(5000);
+
         for (int i = 0; i < 4; i++){
             String user = l.getUsernames().get(i);
             Wizard w = l.getWizards().get(i);
-            //assertNotNull(user);
-            //assertNotNull(w);
+            assertNotNull(user);
+            assertNotNull(w);
             assertTrue(l.getUsernames().remove(i, user));
             assertTrue(l.getWizards().remove(i, w));
             assertFalse(l.getUsernames().containsValue(user));
@@ -126,7 +134,9 @@ public class LobbyTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -148,7 +158,9 @@ public class LobbyTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
+import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Errors;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -86,7 +87,9 @@ class ServerTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler tgh = new TestingGraphicHandler("Cli");
+            tgh.startGraphic();
+            Client c = new Client(tgh, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 
@@ -132,7 +135,9 @@ class ServerTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         for (int i = 0; i < 4; i++) {
-            Client c = new Client(new TestingCli(), "127.0.0.1", port);
+            TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+            t.startGraphic();
+            Client c = new Client(t, "127.0.0.1", port);
             executorService.execute(c::start);
         }
 

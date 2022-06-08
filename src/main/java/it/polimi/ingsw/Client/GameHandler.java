@@ -2,11 +2,8 @@ package it.polimi.ingsw.Client;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import it.polimi.ingsw.Client.GraphicInterface.Graphic;
-import it.polimi.ingsw.Client.GraphicInterface.GraphicV2;
+import it.polimi.ingsw.Client.GraphicInterface.GraphicHandler;
 import it.polimi.ingsw.Enum.Errors;
-import it.polimi.ingsw.Enum.Phases.ActionPhase;
-import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
@@ -20,16 +17,15 @@ public class GameHandler implements Runnable{
     private final int myId;
     private final BlockingQueue<JsonElement> in;
     private final BlockingQueue<JsonElement> out;
-    private final GraphicV2 g;
+    private final GraphicHandler g;
     private final Client client;
     private final Gson gson = new Gson();
 
     private Thread thread = null;
 
-    private ModelMessage model;
-    private boolean firstModel = false;
+    private int currentPlayerId = -1;
 
-    public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, GraphicV2 g, Client client) {
+    public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, GraphicHandler g, Client client) {
         this.myId = myId;
         this.in = in;
         this.out = out;
@@ -52,8 +48,9 @@ public class GameHandler implements Runnable{
 
         //the setup of the connection is done, now the client wait for the start of the game
         while (!this.thread.isInterrupted()){
+            ModelMessage model = null;
             try {
-                waitForModel();
+                model = waitForModel();
             } catch (InterruptedException e) {
                 System.out.println("GameHandler: Interrupted while waiting for some message from server");
                 return;
@@ -61,7 +58,7 @@ public class GameHandler implements Runnable{
 
             JsonElement move;
             try {
-                move = elaborateModel();
+                move = elaborateModel(model);
             } catch (IOException | InterruptedException e) {
                 System.out.println("GameHandler: Interrupted while waiting for move from player");
                 return;
@@ -83,30 +80,24 @@ public class GameHandler implements Runnable{
         this.out.put(move);
     }
 
-    private JsonElement elaborateModel() throws IOException, InterruptedException {
-        if (this.model == null)
-            return null;
+    private JsonElement elaborateModel(ModelMessage model) throws IOException, InterruptedException {
 
-        if (!firstModel){
-            this.g.displayMessage("Game started");
-            this.g.displayMessage("First Model received");
-            firstModel = true;
+        this.g.updateModel(model);
+
+        if (model != null){
+
+            if (model.gameIsOver()){
+                gameOver();
+                return null;
+            }
+
+            this.currentPlayerId = model.getCurrentPlayerId();
+            if (model.getCurrentPlayerId() != this.myId){
+                return null;
+            }
         }
 
-        if (this.model.gameIsOver()){
-            gameOver();
-            return null;
-        }
-
-        if (this.model.getCurrentPlayerId() != this.myId){
-            this.g.displayMessage("Model Received");
-            System.out.println("Displaying model");
-            this.g.updateModel(this.model);
-            return null;
-        }
-
-
-        this.g.displayMessage("It's your turn");
+        System.out.println("Client waiting for a move");
         return askMove();
     }
 
@@ -115,7 +106,12 @@ public class GameHandler implements Runnable{
         this.client.setCode(Errors.GAME_OVER);
     }
 
-    private JsonElement askMove() throws IOException, InterruptedException {
+    private JsonElement askMove() throws InterruptedException {
+        ClientMessage mV = this.g.getDataCollector().askMove();
+        return this.gson.toJsonTree(mV);
+    }
+
+    /*private JsonElement askMove() throws IOException, InterruptedException {
         Phase p = Phase.valueOf(this.model.getActualPhase());
         ActionPhase aP = ActionPhase.valueOf(this.model.getActualActionPhase());
 
@@ -139,9 +135,9 @@ public class GameHandler implements Runnable{
             }
         }
         return this.gson.toJsonTree(cM);
-    }
+    }*/
 
-    private void waitForModel() throws InterruptedException {
+    private ModelMessage waitForModel() throws InterruptedException {
         Message temp = null;
         JsonElement mJ = null;
 
@@ -154,11 +150,12 @@ public class GameHandler implements Runnable{
 
                 this.g.displayMessage(temp.getMessage());
 
-                if (this.model != null && this.model.getCurrentPlayerId() == this.myId)
-                    return;
+                if (this.currentPlayerId != -1 && this.currentPlayerId == this.myId)
+                    return null;
             }
         }
+
         //todo idea say that the precedent player has done his move
-        this.model = this.gson.fromJson(mJ, ModelMessage.class);
+        return this.gson.fromJson(mJ, ModelMessage.class);
     }
 }

@@ -14,12 +14,12 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GraphicInterface.NewGui">
+<Pane id="usernameStage" fx:id="usernameStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="620.0" style="-fx-background-color: #1E1F23;" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <Button contentDisplay="CENTER" layoutX="226.0" layoutY="342.0" mnemonicParsing="false" onAction="#selectNumOfPlayer" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: lightblue;" text="CONTINUE" textFill="#001eff">
+      <Button contentDisplay="CENTER" layoutX="226.0" layoutY="342.0" mnemonicParsing="false" onAction="#selectedAdditionalData" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: lightblue;" text="CONTINUE" textFill="#001eff">
          <font>
             <Font name="Cabin Sketch Regular" size="13.0" />
          </font>
@@ -55,7 +55,7 @@
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Slider>
-      <ToggleButton fx:id="ExpertModeButton" contentDisplay="CENTER" depthTest="DISABLE" layoutX="225.0" layoutY="261.0" maxWidth="170.0" minWidth="170.0" mnemonicParsing="false" onAction="#selectExpertMode" prefWidth="170.0" style="-fx-background-color: fcba03;" text="DREAM" textAlignment="JUSTIFY" textOverrun="CLIP" wrapText="true">
+      <ToggleButton fx:id="ExpertModeButton" contentDisplay="CENTER" depthTest="DISABLE" layoutX="225.0" layoutY="261.0" maxWidth="170.0" minWidth="170.0" mnemonicParsing="false" onAction="#changedButton" prefWidth="170.0" style="-fx-background-color: fcba03;" text="DREAM" textAlignment="JUSTIFY" textOverrun="CLIP" wrapText="true">
          <font>
             <Font name="Bowlby One SC Regular" size="15.0" />
          </font>

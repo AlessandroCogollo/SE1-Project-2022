@@ -1,63 +1,35 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import it.polimi.ingsw.Enum.Wizard;
-import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
 /**
- * Interface of the client used for display everything needed for the game (error and other debug are write in the std output)
+ * Interface of the client Graphic
  */
 public interface Graphic {
+    /*
+    A real Graphic class need to call all this method in the dataCollector class that he has created:
+     - setUsername()
+     - setWizard()
+     (if is it first)
+         - setGameMode()
+         - setNumOfPlayers()
 
-    void setFirst (boolean first);
+     and after the start of the game
+      - setNextMove()
 
-    void setDone(boolean done);
-
-    String askString (String askMessage) throws InterruptedException, IOException;
-
-    void displayError (String errorMessage);
-
+     All that in order to let the game go.
+    */
+    /**
+     * Display a message from the main thread of Client asynchronously
+     * @param message message to be displayed
+     */
     void displayMessage (String message);
 
-
-
     /**
-     * Ask the player to choose a valid wizard
-     * @return the wizard chosen to the caller
+     * Stop any io method and the Graphic thread if is running
      */
-    Wizard getWizard() throws IOException, InterruptedException;
-
-    /**
-     * Ask the player to choose a username
-     * @return the username chosen to the caller
-     */
-    String getUsername() throws IOException, InterruptedException;
-
-    /**
-     * Ask the player to choose the player number of the game, 2, 3 or 4
-     * @return the number chosen
-     */
-    int getNumOfPlayers() throws IOException, InterruptedException;
-
-    /**
-     * Ask the player to choose the gamemode of the game: 0 normal, 1 advanced
-     * @return the number chosen
-     */
-    int getGameMode() throws IOException, InterruptedException;
-
-
-    /**
-     * Stop any io method that is running throwing some exception
-     */
-    void stopInput();
-
-
-    /**
-     * Send the information about the model
-     * @param model model to display or the update of it
-     */
-    void updateModel(ModelMessage model);
+    void stopGraphic();
 }

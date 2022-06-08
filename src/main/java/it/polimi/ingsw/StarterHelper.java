@@ -1,10 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
-import it.polimi.ingsw.Client.GraphicInterface.Graphic;
-import it.polimi.ingsw.Client.GraphicInterface.GraphicV2;
-import it.polimi.ingsw.Client.GraphicInterface.Gui;
+import it.polimi.ingsw.Client.GraphicInterface.*;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 
@@ -162,12 +159,12 @@ public class StarterHelper{
                             String graphicString = cmd.getOptionValue("g");
                             if (cli.equals(graphicString)){
                                 System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with Cli.");
-                                startClient(serverIp, portNumber, new Cli());
+                                startClient(serverIp, portNumber, "Cli");
                                 return 101;
                             }
                             if (gui.equals(graphicString)){
                                 System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with Gui.");
-                                startClient(serverIp, portNumber, new Gui());
+                                startClient(serverIp, portNumber, "Gui");
                                 return 101;
                             }
                             System.out.println("Error illegal argument for client -c option. Type -help or -h.");
@@ -175,7 +172,7 @@ public class StarterHelper{
                         }
                         //no graphic passed
                         System.out.println("Starting client with server ip: " + serverIp + " and port: " + portNumber + " with default Cli.");
-                        startClient(serverIp, portNumber, new Cli());
+                        startClient(serverIp, portNumber, "Cli");
                         return 101;
                     }
 
@@ -308,10 +305,11 @@ public class StarterHelper{
             new Server(port).start();
     }
 
-    private static void startClient(String ip, int port, GraphicV2 graphic){
+    private static void startClient(String ip, int port, String gType){
         if (run) {
-            graphic.startGraphic();
-            new Client(graphic, ip, port).start();
+            GraphicHandler gH = new GraphicHandler(gType);
+            gH.startGraphic();
+            new Client(gH, ip, port).start();
         }
     }
 

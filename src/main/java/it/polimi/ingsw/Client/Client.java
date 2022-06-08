@@ -29,7 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class Client{
 
-    private final GraphicV2 graphic;
+    private final GraphicHandler graphic;
     private final ConnectionHandler connection;
     private final Gson gson = new GsonBuilder().create();
     private final BlockingQueue<JsonElement> filteredIn = new LinkedBlockingQueue<>();
@@ -57,8 +57,8 @@ public class Client{
      * @param serverIp ip of server
      * @param serverPort port of server
      */
-    public Client (GraphicV2 graphic, String serverIp, int serverPort){
-        this( graphic, serverIp, serverPort, Duration.ofSeconds(15)); //todo
+    public Client (GraphicHandler graphic, String serverIp, int serverPort){
+        this( graphic, serverIp, serverPort, Duration.ofSeconds(15));
     }
 
     /**
@@ -68,13 +68,12 @@ public class Client{
      * @param serverPort port of server
      * @param defaultTimeout timeout for ping
      */
-    public Client(GraphicV2 graphic, String serverHost, int serverPort, Duration defaultTimeout) {
+    public Client(GraphicHandler graphic, String serverHost, int serverPort, Duration defaultTimeout) {
         this.graphic = graphic;
         ConnectionHandler temp = null;
         try {
             temp = new ConnectionHandler(serverHost, serverPort, defaultTimeout, this::serverDown);
         } catch (IOException e) {
-            this.graphic.displayMessage("Error connecting to " + serverHost + " at " + serverPort);
             System.err.println("Error connecting to " + serverHost + " at " + serverPort);
             e.printStackTrace();
             System.exit(-1);
@@ -86,15 +85,15 @@ public class Client{
      * Ask the player what type of interface he prefers, CLi or Gui
      * @return the chosen interface
      */
-    public static GraphicV2 askGraphic() {
+    public static GraphicHandler askGraphic() {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         String s = null;
-        while ((!"Cli".equals(s) && !"Gui".equals(s))){
+        while (!GraphicHandler.isValidString(s)){
             try {
                 s = input.readLine();
             } catch (IOException ignored) {}
         }
-        return "Cli".equals(s) ? new Cli() : new Gui();
+        return new GraphicHandler(s);
     }
 
     /**
@@ -106,9 +105,9 @@ public class Client{
 
         new Thread(this.connection, "Connection Handler").start();
 
-        new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();
-
         new Thread(this::messageFilter, "Client Filter").start();
+
+        new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();
 
 
         //do nothing until some other thread tells him what to do with a code
@@ -123,7 +122,7 @@ public class Client{
                 }
             }
         }
-        this.graphic.displayMessage("Client is shutting down");
+        System.out.println("Client is shutting down");
         //came here only when the client has to shutdown
         shutdownAll();
     }
@@ -163,15 +162,15 @@ public class Client{
         //return false only when the Server need to shutdown otherwise return always true
         switch (this.code) {
             case SETUP_FINISHED -> {
-                this.graphic.displayMessage("Ready to play, waiting for the start of the game");
+                System.out.println("Ready to play, waiting for the start of the game");
                 new Thread(this.game).start();
             }
             case SERVER_DOWN -> {
-                this.graphic.displayMessage("The server go down, shutting down");
+                System.out.println("The server go down, shutting down");
                 go = false;
             }
             case GAME_OVER -> {
-                this.graphic.displayMessage("The game is finished, shutting down");
+                System.out.println("The game is finished, shutting down");
                 go = false;
             }
             case PLAYER_DISCONNECTED, CANNOT_ACCEPT -> go = false;
@@ -198,13 +197,13 @@ public class Client{
             Message temp = this.gson.fromJson(jM, Message.class);
 
             if (Errors.PLAYER_DISCONNECTED.equals(temp.getError())) {
-                this.graphic.displayMessage(temp.getMessage());
+                System.out.println(temp.getMessage());
                 setCode(Errors.PLAYER_DISCONNECTED);
                 return;
             }
 
             if (Errors.CANNOT_ACCEPT.equals(temp.getError())){
-                this.graphic.displayMessage(temp.getMessage());
+                System.out.println(temp.getMessage());
                 setCode(Errors.CANNOT_ACCEPT);
                 return;
             }
@@ -245,9 +244,9 @@ public class Client{
 
             NewPlayerMessage npM = gson.fromJson(answer, NewPlayerMessage.class);
 
+            System.out.println(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client");
 
             this.graphic.setFirst(npM.isYouAreFirst()); //give the information to the graphic
-            System.out.println(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client");
 
             /*this.graphic.displayMessage(npM.isYouAreFirst() ? "You are the first client" : "You are not the first client"); //todo
             System.out.println("Displayed!");*/
@@ -266,7 +265,22 @@ public class Client{
 
             //get the player id
             id = idM.getPlayerId();
-        } catch (IOException | InterruptedException e) {
+
+            temp.clear();
+            temp.add(Errors.LOBBY_DATA);
+
+
+            System.out.println("Waiting for gameData");
+
+            JsonElement gameData = waitForResponse(temp);
+
+            LobbyInfoMessage data = gson.fromJson(gameData, LobbyInfoMessage.class);
+
+            this.graphic.setGameData(data, id);
+
+            System.out.println("GameData received and set");
+
+        } catch (InterruptedException e) {
             System.out.println("Interrupted during setup of the connection at line: " + e.getStackTrace()[0].getLineNumber());
             return;
         }
@@ -279,7 +293,7 @@ public class Client{
         this.setup = null;
     }
 
-    private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws IOException, InterruptedException {
+    private JsonElement sendInfo (boolean first, Collection<Errors> coll) throws InterruptedException {
         JsonElement answer = null;
         coll.add(Errors.INFO_RECEIVED); // all info are right
         coll.add(Errors.WIZARD_NOT_AVAILABLE);
@@ -290,47 +304,56 @@ public class Client{
         }
         boolean ok = false;
         String error = null;
+
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
+
         while (!ok) {
-            JsonElement m = getInfo(error, first);
+
+            JsonElement m = getInfo(first);
+
             if (this.setup.isInterrupted())
                 throw new InterruptedException("Client Setup: interrupted");
+
             sendMessage(m);
             answer = waitForResponse(coll);
             Message temp = this.gson.fromJson(answer, Message.class);
+
             if (Errors.INFO_RECEIVED.equals(temp.getError())) {
                 ok = true;
-                this.graphic.setDone(true);
+                this.graphic.setDone(true, null);
             } else {
-                this.graphic.setDone(false);
                 error = temp.getMessage();
+                this.graphic.setDone(false, error);
             }
         }
         return answer;
     }
 
-    private JsonElement getInfo (@Nullable String message, boolean first) throws IOException, InterruptedException {
-        this.graphic.setFirst(first);
-        if (message != null)
-            this.graphic.displayMessage(message);
+    private JsonElement getInfo (boolean first) throws InterruptedException {
+
+        DataCollector dC = this.graphic.getDataCollector();
+
 
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
-        String username = this.graphic.getUsername();
+        String username = dC.getUsername();
         System.out.println("Your username is: " + username);
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
-        Wizard w = this.graphic.getWizard();
+        Wizard w = dC.getWizard();
+        System.out.println("Your wizard is: " + w);
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");
 
 
         if (first){
-            int numOfPlayer = this.graphic.getNumOfPlayers();
+            int numOfPlayer = dC.getNumOfPlayers();
+            System.out.println("num of player is: " + numOfPlayer);
             if (this.setup.isInterrupted())
                 throw new InterruptedException("Client Setup: interrupted");
-            int gameMode = this.graphic.getGameMode();
+            int gameMode = dC.getGameMode();
+            System.out.println("gamemode is: " + gameMode);
             FirstPlayerMessage m = new FirstPlayerMessage(Errors.FIRST_CLIENT.getDescription(), username, w, numOfPlayer, gameMode);
             return gson.toJsonTree(m);
         }
@@ -365,9 +388,9 @@ public class Client{
     //test method
 
     public static void main(String[] args){
-        GraphicV2 gui = new Gui();
-        gui.startGraphic();
-        Client client = new Client (gui, "127.0.0.1", 5088);
+        GraphicHandler gH = new GraphicHandler("Cli");
+        gH.startGraphic();
+        Client client = new Client (gH, "127.0.0.1", 5088);
         client.start();
     }
 

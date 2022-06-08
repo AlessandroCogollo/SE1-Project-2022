@@ -2,110 +2,69 @@ package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import org.jetbrains.annotations.Nullable;
 
-public class TestingCli extends GraphicV2 {
+public class TestingCli extends Cli {
 
-    static int wI = 0;
-    static int uI = 0;
+    static Integer wI = 0;
+    static Integer uI = 0;
 
-
-    @Override
-    public void startGraphic() {
-
-    }
-
-    @Override
-    public void setFirst(boolean first) {
-
-    }
-
-    @Override
-    public void setDone(boolean done) {
-
-    }
-
-    @Override
-    public String askString(String askMessage) {
-        return null;
-    }
-
-    @Override
-    public void displayError(String errorMessage) {
-
-    }
-
-    @Override
-    public void displayMessage(String message) {
-        System.out.println(message);
-    }
-
-    @Override
-    public Wizard getWizard() {
-        int value = wI;
-        wI++;
-        switch (value){
-            case 0 -> {
-                return Wizard.Sorcerer;
-            }
-            case 1 -> {
-                return Wizard.King;
-            }
-            case 2 -> {
-                return Wizard.Witch;
-            }
-            case 3 -> {
-                return Wizard.Wise;
-            }
-            case 4 -> {
-                wI = 0;
-                return getWizard();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        int value = uI;
-        uI++;
-        switch (value){
-            case 0 -> {
-                return "Test1";
-            }
-            case 1 -> {
-                return "Test2";
-            }
-            case 2 -> {
-                return "Test3";
-            }
-            case 3 -> {
-                return "Test4";
-            }
-            case 4 -> {
+    static String getUsername() {
+        synchronized (uI) {
+            if (uI > 3)
                 uI = 0;
-                return getUsername();
-            }
+            return "user" + uI++;
         }
-        return null;
+    }
+
+    static Wizard getWizard() {
+        synchronized (wI) {
+            if (wI > 4)
+                wI = 0;
+
+            int id = (wI * 10) + 1;
+
+            for (Wizard w : Wizard.values()) {
+                if (w.getId() == id) {
+                    wI++;
+                    return w;
+                }
+            }
+            return Wizard.Flowers_Queen;
+        }
     }
 
     @Override
-    public int getNumOfPlayers(){
-        return 4;
+    public void setInfo() {
+        int first = this.dC.getFirst(null); //the value is not -1
+
+        this.dC.setUsername(getUsername());
+
+        this.dC.setWizard(getWizard());
+
+        if (first == 0){
+            this.dC.setGameMode(1);
+            this.dC.setNumOfPlayers(4);
+        }
     }
 
     @Override
-    public int getGameMode() {
-        return 1;
+    public void doneCallback() {
+        int done = this.dC.getDone(null); //the value is not -1
+
+        if (done == 0){
+            displayError(this.dC.getErrorData());
+            setInfo();
+            return;
+        }
+
+        //info sent correctly
+
+        this.dC.setCallbackForModel(this::modelCallback);
     }
 
     @Override
-    public void stopInput() {
-
-    }
-
-    @Override
-    public void updateModel(ModelMessage model) {
-        new Cli().updateModel(model);
+    public void modelCallback() {
+        System.out.println("Testing CLi model Callback");
     }
 }

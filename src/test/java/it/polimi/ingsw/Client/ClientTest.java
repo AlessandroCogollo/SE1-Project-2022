@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.GraphicInterface.Cli;
+import it.polimi.ingsw.Client.GraphicInterface.GraphicHandler;
+import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Server.PortGetter;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +22,9 @@ class ClientTest {
         //test that the client will stop after timeout x 2 sec
         ServerSocket s = new ServerSocket(PortGetter.getPort());
         Thread serv = new Thread(() -> startServer(s));
-        Client c = new Client(new Cli(), s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(2));
+        TestingGraphicHandler t = new TestingGraphicHandler("Cli");
+        t.startGraphic();
+        Client c = new Client(t, s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(2));
 
         c.start();
 

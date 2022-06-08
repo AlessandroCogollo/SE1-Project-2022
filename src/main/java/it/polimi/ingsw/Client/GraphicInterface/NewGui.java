@@ -23,13 +23,49 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class NewGui extends Application implements Graphic {
+    @Override
+    public void displayMessage(String message) {
 
-    private static Stage mainStage;
+    }
+
+    @Override
+    public void stopGraphic() {
+
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*private static Stage mainStage;
 
     private final static Object lock = new Object(); //only one lock because any sync block is only some statement without while or a while with a wait on this lock
 
@@ -322,7 +358,7 @@ public class NewGui extends Application implements Graphic {
     @FXML
     private javafx.scene.image.ImageView flowersQueen;
 
-    /*
+    *//*
     void applyEffect (){
         String sorcererId = this.Sorcerer.getId();
         String kingId = this.Sorcerer.getId();
@@ -375,7 +411,7 @@ public class NewGui extends Application implements Graphic {
     void wizardNotHover (MouseEvent ignoredEvent) {
         this.hoverId = null;
         applyEffect();
-    }}*/
+    }}*//*
 
 
     private Wizard tempWizard = null;
@@ -558,7 +594,7 @@ public class NewGui extends Application implements Graphic {
         //todo display error
     }
 
-    /*
+    *//*
     @Override
     public void displayMessage(String message) {
         while(NewGui.getStage() == null){
@@ -575,7 +611,7 @@ public class NewGui extends Application implements Graphic {
             alert.initOwner(stage.getOwner());
             alert.showAndWait();
         });
-    }*/
+    }*//*
 
 
     @Override
@@ -620,5 +656,5 @@ public class NewGui extends Application implements Graphic {
                 mainStage.show();
             }
         });
-    }
+    }*/
 }

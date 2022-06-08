@@ -1,278 +1,202 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.DataCollector;
+import it.polimi.ingsw.Client.GraphicInterface.FXMLController.*;
 import it.polimi.ingsw.Enum.Wizard;
 
-import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Objects;
 
-public class Gui extends GraphicV2 {
+public class Gui extends Application implements Graphic {
 
-    private final NewGui newGui = new NewGui();
+    private static DataCollector dC = null;
+    private final static Object lock = new Object();
+
+    private static Stage mainStage = null;
+    private SceneController sceneController = null;
+
 
     @Override
-    public void startGraphic() {
-        System.out.println("Gui Started");
-        new Thread(() -> Application.launch(NewGui.class, (String[]) null)).start();
-    }
+    public void start(Stage stage) {
+        Gui.mainStage = stage;
+        //mainStage.initStyle(StageStyle.UNDECORATED);
 
-    @Override
-    public void setFirst(boolean first) {
-        this.newGui.setFirst(first);
-    }
-
-    @Override
-    public void setDone(boolean done) {
-        this.newGui.setDone(done);
-    }
-
-    @Override
-    public String askString(String askMessage) throws InterruptedException, IOException {
-        return this.newGui.askString(askMessage);
-    }
-
-    @Override
-    public void displayError(String errorMessage) {
-        this.newGui.displayError(errorMessage);
-    }
-
-    @Override
-    public void displayMessage(String message) {
-        this.newGui.displayMessage(message);
-    }
-
-    @Override
-    public Wizard getWizard() throws IOException, InterruptedException {
-        return this.newGui.getWizard();
-    }
-
-    @Override
-    public String getUsername() throws IOException, InterruptedException {
-        return this.newGui.getUsername();
-    }
-
-    @Override
-    public int getNumOfPlayers() throws IOException, InterruptedException {
-        return this.newGui.getNumOfPlayers();
-    }
-
-    @Override
-    public int getGameMode() throws IOException, InterruptedException {
-        return this.newGui.getGameMode();
-    }
-
-    @Override
-    public void stopInput() {
-        this.newGui.stopInput();
-    }
-
-    @Override
-    public void updateModel(ModelMessage model) {
-        this.newGui.updateModel(model);
-    }
-
-
-
-
-
-    /*
-    private Client client;
-    private TextInputDialog dialog = new TextInputDialog("the nightmare");
-    private Optional<Wizard> w = Optional.empty();
-    private Optional<String> username = Optional.empty();
-    private Optional<Integer> numOfPlayers = Optional.empty();
-    private Optional<Integer> gameMode = Optional.empty();
-    private Stage stage;
-    private Parent parent;
-    private Scene scene;
-
-    @Override
-    public void displayMessage(String message) {
-        Platform.runLater(() -> {
-            Dialog d = new Dialog();
-            d.setTitle("Message");
-            d.setContentText(message);
-            d.show();
-        });
-    }
-
-    @Override
-    public void setFirst(boolean first) {
-
-    }
-
-    @Override
-    public Wizard getWizard() {
-
-        ArrayList<Wizard> choices = new ArrayList<>(Wizard.values().length);
-        choices.add(Wizard.Wise);
-        choices.add(Wizard.King);
-        choices.add(Wizard.Witch);
-        choices.add(Wizard.Sorcerer);
-        choices.add(Wizard.Flowers_Queen);
-
-        ArrayList<Wizard> queue = new ArrayList<>();
-        Platform.runLater(() -> {
-
-            ChoiceDialog<Wizard> dialog = new ChoiceDialog<>(Wizard.King, choices);
-            dialog.setTitle("Wizard");
-            dialog.setContentText("Choose your wizard: ");
-            Optional<Wizard> result = Optional.empty();
-            while(result.isEmpty()) result = dialog.showAndWait();
-            result.ifPresent(t -> System.out.println("Your choice: " + t));
-            this.w = result;
-            queue.add(result.get());
-        });
-        while (this.w.isEmpty()){}
-        System.out.println("OK");
-        return this.w.get();
-
-    }
-
-    @Override
-    public String getUsername() {
-
-        ArrayList<String> queue = new ArrayList<>();
-        Platform.runLater(() -> {
-
-            dialog.setTitle("Username");
-            dialog.setContentText("Please enter your username:");
-            Optional<String> result = dialog.showAndWait();
-            while (result.isEmpty()){
-                dialog.setContentText("Please enter a valid username:");
-            }
-            queue.add(String.valueOf(result));
-            this.username = result;
-        });
-        while(this.username.isEmpty()){}
-        return this.username.get();
-    }
-
-    @Override
-    public int getNumOfPlayers() throws IOException, InterruptedException {
-        return 0;
-    }
-
-    public int getNumOfPLayer() {
-        ArrayList<Integer> choices = new ArrayList<>();
-        choices.add(2);
-        choices.add(3);
-        choices.add(4);
-
-        ArrayList<Integer> queue = new ArrayList<>();
-
-        Platform.runLater(() -> {
-            Optional<Integer> result = Choice("Number of players", "Choose the number of participants", choices);
-            queue.add(result.get());
-        });
-        while(queue.size()==0){}
-        return queue.get(0);
-    }
-
-    @Override
-    public int getGameMode() {
-        ArrayList choices = new ArrayList<>();
-        choices.add(0);
-        choices.add(1);
-
-        ArrayList<Integer> queue = new ArrayList<>();
-        Platform.runLater(() -> {
-            Optional<Integer> result = Choice("Game Mode", "Choose a game mode (0 normal, 1 advanced): ", choices);
-            queue.add(result.get());
-        });
-        while(queue.size()==0){}
-        return queue.get(0);
-    }
-
-    @Override
-    public String askString(String askMessage) {
-        return null;
-    }
-
-    @Override
-    public String displayError(String errorMessage) {
-        return null;
-    }
-
-    @Override
-    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public void setDone(boolean done) {
-
-    }
-
-    @Override
-    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public void stopInput() {
-
-    }
-
-    @Override
-    public void displayModel(ModelMessage model) {
-
-    }
-
-    public <T> Optional<T> Choice(String title, String contentText, ArrayList<T> choices){
-        ChoiceDialog<T> dialog = new ChoiceDialog<>(choices.get(0), choices);
-        dialog.setTitle(title);
-        dialog.setContentText(contentText);
-        Optional<T> result = dialog.showAndWait();
-        result.ifPresent(t -> System.out.println("Your choice: " + t));
-        return result;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-
+        StartController c = new StartController(this, "scenes/launch.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(c.getResource()));
+        fxmlLoader.setController(c);
+        Parent root = null;
         try {
-            this.parent = FXMLLoader.load(getClass().getClassLoader().getResource("scenes/launch.fxml"));
-            Scene scene = new Scene(parent);
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-
-        } catch(Exception e) {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            System.err.println("Error while loading " + c.getResource() + " resource, exit");
             e.printStackTrace();
+            System.exit(-1);
         }
 
-    }*/
+        Scene scene = new Scene(root);
+
+        scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+        mainStage.setScene(scene);
+
+        this.sceneController = new SceneController(scene);
+        this.sceneController.addScreen("wait", new WaitController(this, "scenes/wait.fxml"));
+
+
+        mainStage.show();
+    }
+
+
+    @Override
+    public void init(){
+        synchronized (Gui.lock) {
+            Gui.dC = new DataCollector(this);
+            Gui.lock.notifyAll();
+        }
+    }
+
+    public static void startGraphic() {
+        System.out.println("Gui Started");
+        new Thread(() -> Application.launch(Gui.class, (String[]) null), "Gui Thread").start();
+    }
+
+    public static DataCollector getDataCollector() {
+        synchronized (Gui.lock) {
+            while (Gui.dC == null) {
+                try {
+                    Gui.lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return dC;
+    }
+
+    @Override
+    public void displayMessage(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(message);
+            alert.initOwner(Gui.mainStage.getOwner());
+            alert.showAndWait();
+        });
+    }
+
+    @Override
+    public void stopGraphic() {
+        Platform.exit();
+    }
+
+
+
+
+    private void askData (){
+        int first = Gui.dC.getFirst(null); //in this case the value is always corrected
+
+        //setting all the scene possible
+        this.sceneController.addScreen("wait", new WaitController(this, "scenes/wait.fxml"));
+
+        this.sceneController.addScreen("username", new UsernameController(this, "scenes/username.fxml"));
+        this.sceneController.addScreen("wizard", new WizardController(this, "scenes/wizard.fxml"));
+
+        if (first == 0) //first
+            this.sceneController.addScreen("addData", new AddDataController(this, "scenes/gamemode.fxml"));
+
+        this.sceneController.activate("username");
+    }
+
+    private void waitForDone() {
+
+        int done = Gui.dC.getDone(() -> Platform.runLater(this::waitForDone));
+
+        switch (done) {
+            case -1 -> { //not yet set
+
+                //technically only one time can entered in this case because the second time that this method is called the done value must be 0 or 1
+
+                if (!"wait".equals(this.sceneController.getCurrentScene()))
+                    this.sceneController.activate("wait");
+            }
+            case 0 -> { //incorrect
+                String error = Gui.dC.getErrorData();
+                if (error != null)
+                    displayMessage(error);
+
+                askData();
+            }
+            case 1 ->  waitForStartGame(); //correct
+        }
+    }
+
+    private void waitForStartGame() {
+
+        this.sceneController.addScreen("mainGame", new MainGameController(this, "scenes/maingame.fxml"));
+        Gui.dC.setCallbackForModel(() -> Platform.runLater(this::displayMainGame));
+
+        if (Gui.dC.getModel() != null)
+            displayMainGame();
+        else
+            this.sceneController.activate("wait");
+
+    }
+
+    private void displayMainGame (){
+        mainStage.setFullScreen(true);
+        mainStage.setResizable(true);
+        mainStage.setTitle("Main Game");
+        this.sceneController.activate("mainGame");
+    }
+
+
+
+
+    public void startButtonPressed(ActionEvent actionEvent) {
+
+        int first = Gui.dC.getFirst(() -> Platform.runLater(this::askData));
+
+        if (first == -1)
+            this.sceneController.activate("wait");
+        else
+            askData();
+    }
+
+    public void selectedUsername(ActionEvent actionEvent, String username) {
+
+        Gui.dC.setUsername(username);
+
+        this.sceneController.activate("wizard");
+    }
+
+    public void selectedWizard(ActionEvent actionEvent, Wizard tempWizard) {
+
+        Gui.dC.setWizard(tempWizard);
+
+        int first = Gui.dC.getFirst(null); //in this case the value is always corrected
+
+        if (first == 0) //first
+            this.sceneController.activate("addData");
+        else
+            this.waitForDone();
+    }
+
+    public void additionalDataSelected(ActionEvent actionEvent, int gameMode, int numOfPlayers) {
+
+        Gui.dC.setGameMode(gameMode);
+        Gui.dC.setNumOfPlayers(numOfPlayers);
+
+        this.waitForDone();
+    }
 }

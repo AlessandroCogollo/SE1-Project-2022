@@ -1,262 +1,295 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
+import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.*;
 import it.polimi.ingsw.Server.Model.Island;
+import it.polimi.ingsw.Server.Model.School;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.*;
 
-//todo stop scanner after shutdown
-public class Cli extends GraphicV2{
+public class Cli implements Graphic {
 
     private final BufferedReader input = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
-    private String userName = null;
 
-    //private Wizard wizard = null;
+    protected DataCollector dC = null;
 
+    private static Map<Integer, String> colorTowerMap = null;
 
-    //ask primary method
-
-
-    @Override
-    public String askString(String askMessage) throws InterruptedException, IOException {
-        if (askMessage != null){
-            displayMessage(askMessage);
+    public Cli() {
+        if (colorTowerMap == null){
+            colorTowerMap = new HashMap<>(4);
+            colorTowerMap.put(-1, "");
+            colorTowerMap.put(1, "Black");
+            colorTowerMap.put(2, "White");
+            colorTowerMap.put(3, "Grey");
         }
-        String s = null;
-        boolean done = false;
-        while (!done && !Thread.currentThread().isInterrupted()){
-            s = this.input.readLine();
-            if (s == null || s.isEmpty() || s.isBlank()){
-                if (askMessage != null){
-                    displayError("The value can't be blank");
-                }
-                continue;
-            }
-            done = true;
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: Thread Interrupted");
-
-        return s;
     }
 
-    @Override
-    public void displayError(String errorMessage) {
-        System.out.println("Cli error during input: " + errorMessage);
+    public DataCollector getDataCollector() {
+        return dC;
     }
 
-    @Override
-    public void displayMessage(String message) {
-
-    }
-
-    @Override
     public void startGraphic() {
-        System.out.println("Cli Started");
+        this.dC = new DataCollector(this);
+
+        //set now the callback for setting all the username info
+        this.dC.getFirst(this::setInfo);
     }
 
-    @Override
-    public void setFirst(boolean first) {
-        if (first)
-            System.out.println("CLI: you are the first");
-        else
-            System.out.println("CLI: you are not the first");
+    public void setInfo() {
+
+        int first = this.dC.getFirst(null); //the value is not -1
+
+        //todo min lenght
+        String username;
+        try {
+            username = askString("Insert your username:");
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Cli interrupted");
+            return;
+        }
+
+        this.dC.setUsername(username);
+
+        Wizard wizard;
+
+        try {
+            wizard = askWizard("Insert Your wizard");
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Cli interrupted");
+            return;
+        }
+
+        this.dC.setWizard(wizard);
+
+        if (first == 0) {
+
+            int gamemode = -1, numofplayer = -1;
+
+            while ((gamemode < 0 || gamemode > 1 || numofplayer < 2 || numofplayer > 4) && !Thread.currentThread().isInterrupted()) {
+                try {
+                    gamemode = askInteger("Insert the gamemode 0 normal 1 advanced");
+                    numofplayer = askInteger("Insert the number of player: 2, 3 or 4");
+
+                    if (gamemode < 0 || gamemode > 1)
+                        displayError("Gamemode must be 0 or 1");
+                    if (numofplayer < 2 || numofplayer > 4)
+                        displayError("Number of PLayer must be 2 or 3 or 4");
+
+                } catch (IOException | InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.out.println("Cli interrupted");
+                    return;
+                }
+            }
+
+            this.dC.setNumOfPlayers(numofplayer);
+            this.dC.setGameMode(gamemode);
+        }
+
+        //setting the next callback
+        this.dC.getDone(this::doneCallback);
     }
 
-    @Override
-    public void setDone(boolean done) {
-        System.out.println("CLI: info sent successfully");
+
+    public void doneCallback() {
+        int done = this.dC.getDone(null); //the value is not -1
+
+        if (done == 0) {
+            displayError(this.dC.getErrorData());
+            setInfo();
+            return;
+        }
+
+        //info sent correctly
+
+        this.dC.setCallbackForModel(this::modelCallback);
     }
 
+    public void modelCallback() {
 
+        ModelMessage model = this.dC.getModel();
 
-    @Override
-    public Wizard getWizard() throws IOException, InterruptedException {
-        Wizard w = null;
-        while (w == null && !Thread.currentThread().isInterrupted()){
+        displayAllModel(model, this.dC);
 
-            String s = askString("Insert your Wizard");
+        System.out.println();
 
+        if (this.dC.isThisMyTurn()) {
             try {
-                w = Wizard.valueOf(s);
-            } catch (IllegalArgumentException e) {
-                displayError("Please insert a valid name of wizard");
+                this.dC.setNextMove(askMove());
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Interrupted when asking the move CLI");
+                if (e instanceof InterruptedException)
+                    Thread.currentThread().interrupt();
+                return;
+            }
+            System.out.println("Move Set");
+        }
+        else {
+            System.out.println("Is the turn of " + this.dC.getUsernameOfCurrentPlayer() + " with id " + model.getCurrentPlayerId());
+            System.out.println("You have to wait");
+        }
+    }
+
+    private ClientMessage askMove() throws IOException, InterruptedException {
+        ModelMessage model = this.dC.getModel();
+        int myId = this.dC.getId();
+
+        Phase p = Phase.valueOf(model.getActualPhase());
+        ActionPhase aP = ActionPhase.valueOf(model.getActualActionPhase());
+
+        ClientMessage cM = null;
+        if (Phase.Planning.equals(p)){
+            cM =  askAssistant(model, myId);
+        }
+        else {
+            if (model.getGameMode() == 1 && model.getActiveCharacterId() == -1){
+                if (wantToPlayCharacter(model, myId))
+                    cM = askCharacter(model, myId);
+            }
+            if (cM == null){
+                switch (aP) {
+                    case MoveStudent -> {
+                        displayMessage("You have to move other " + model.getStudentsToMove());
+                        cM = askStudentMovement(model, myId);
+                    }
+                    case MoveMotherNature -> cM = askMNMovement(model, myId);
+                    case ChooseCloud -> cM = askCloud(model, myId);
+                }
             }
         }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: getWizard interrupted");
-
-        return w;
+        System.out.println("Sending " + cM.getClass() + " " + cM);
+        return cM;
     }
 
-    @Override
-    public String getUsername() throws IOException, InterruptedException {
-        String user = askString("Insert your Username");
+    private ClientMessage askCloud(ModelMessage model, int myId) throws IOException, InterruptedException {
 
-        this.userName = user;
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: getUsername interrupted");
-
-        return user;
-    }
-
-    @Override
-    public int getNumOfPlayers() throws IOException, InterruptedException {
-        int numOfPlayer = -1;
-
-        while (numOfPlayer == -1 && !Thread.currentThread().isInterrupted()){
-
-            int temp = askInteger("Insert the number of player for this game", "Insert a valid number between 2 and 4");
-
-            if (temp < 2 || temp > 4){
-                displayError("Insert a valid number between 2 and 4");
-                continue;
-            }
-
-            numOfPlayer = temp;
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: getPlayerNumber interrupted");
-
-        return numOfPlayer;
-    }
-
-    @Override
-    public int getGameMode() throws IOException, InterruptedException {
-        int gameMode = -1;
-        while (gameMode == -1 && !Thread.currentThread().isInterrupted()){
-
-            int temp = askInteger("Insert the game mode for this game, 0 normal 1, advanced", "Insert a valid number between 0 and 1");
-
-            if (temp < 0 || temp > 1){
-                displayError("Insert a valid number between 0 and 1");
-                continue;
-            }
-
-            gameMode = temp;
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: getGameMode interrupted");
-
-        return gameMode;
-    }
-
-
-    /*
-    @Override
-    public PlayAssistantMessage askAssistant(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        displayModel(model);
-        //cannot play character in planning phase
-
-        List<Integer> right = Arrays.stream(displayAssistant(model, playerId)).boxed().toList();
-
-
-        int choose = -1;
-        while (!right.contains(choose) && !Thread.currentThread().isInterrupted()){
-            choose = askInteger("Select your Assistant from the list above", "Please select a valid assistant");
-            if (!right.contains(choose))
-                System.out.println("Please select a valid assistant");
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: askAssistant interrupted");
-
-        return new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", choose);
-    }
-
-    @Override
-    public MoveStudentMessage askStudentMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        displayModel(model);
-
-        int[] entrance = displayEntrance(model, playerId);
-
-        int chooseColor = askColor("Choose the color of the student to move, using the number of the left of the color", "please insert a valid students that you have", entrance);
-
-        displayRoom(model, playerId);
-
-        displayIslands (model);
-
-        int destination = -2;
-
-        while (destination != -1 && !model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
-            destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)", "Insert -1 or a valid island id");
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: askMovement interrupted");
-
-        return new MoveStudentMessage(Errors.NO_ERROR, "Moved a students", chooseColor, destination);
-    }
-
-
-
-    @Override
-    public MoveMotherNatureMessage askMNMovement(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        displayModel(model);
-
-        displayIslands(model);
-
-        //show if there is a character active
-        int aC = model.getActiveCharacterId();
-        if (model.getGameMode() == 1 && aC != -1) {
-            System.out.println("There is an active character");
-            displayCharacter(model.getCharacterById(aC));
-        }
-
-        int movement = -1;
-        int max = Objects.requireNonNull(Assistant.getAssistantByValue(model.getPlayerById(playerId).getActiveAssistant())).getMaxMovement();
-        if (model.getGameMode() == 1 && model.getActiveCharacterId() == 9) //is postman
-            max += 2;
-
-        System.out.println("You can move for max " + max + " position");
-
-        while (!Thread.currentThread().isInterrupted() && (movement < 1 || movement > max)){
-            movement = askInteger("Insert the number of movement for mother nature", "insert a number between 1 and " + max);
-        }
-
-        if (Thread.currentThread().isInterrupted())
-            throw new InterruptedException("Cli: askMNMovement interrupted");
-
-        return new MoveMotherNatureMessage(Errors.NO_ERROR, "Moved Mother Nature", movement);
-    }
-
-    @Override
-    public ChooseCloudMessage askCloud(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        displayModel(model);
-
-        displayCloud (model);
+        displayClouds(model.getCloudList(), this.dC);
+        displayEntrance(model.getPlayerById(myId).getSchool().getCopyOfEntrance(), this.dC);
 
         int cloud = -1;
-
-        while (!Thread.currentThread().isInterrupted() && (!model.isCloudValid(cloud))){
-            cloud = askInteger("Insert the id of cloud to take the students", "insert a valid cloud id");
+        while (!Thread.currentThread().isInterrupted() && !model.isCloudValid(cloud)){
+            cloud = askInteger("Insert the id of cloud to take the students");
+            if (!model.isCloudValid(cloud)) {
+                displayError("insert a valid cloud id");
+            }
         }
-
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException("Cli: askCloud interrupted");
 
         return new ChooseCloudMessage(Errors.NO_ERROR, "Chose cloud", cloud);
     }
 
-    @Override
-    public PlayCharacterMessage askCharacter(ModelMessage model, int playerId) throws IOException, InterruptedException {
-        displayModel(model);
-        displayCharacters(model);
-        System.out.println("You have " + model.getPlayerById(playerId).getCoins() + " coins");
+    private ClientMessage askMNMovement(ModelMessage model, int myId) throws InterruptedException, IOException {
 
-        boolean use = false;
+        displayIslands(model.getIslandList(), model.getMotherNatureIslandId(), this.dC);
+        displayProfessors(model.getProfessorsList(), this.dC);
+        displaySchool(model.getPlayerById(myId).getSchool(), model.getPlayerById(myId).getTowerColor(), this.dC);
+
+        //show if there is a character active
+        int aC = model.getActiveCharacterId();
+        if (model.getGameMode() == 1 && aC != -1) {
+            System.out.println("## There is an active character ##");
+            displayCharacter(model.getCharacterById(aC), this.dC);
+        }
+
+        int movement = -1;
+        int max = Objects.requireNonNull(Assistant.getAssistantByValue(model.getPlayerById(myId).getActiveAssistant())).getMaxMovement();
+
+        if (model.getGameMode() == 1 && model.getActiveCharacterId() == 9) //is postman
+            max += 2;
+
+        System.out.println("You can move for max " + max + " position");
+        while (!Thread.currentThread().isInterrupted() && (movement < 1 || movement > max)){
+            movement = askInteger("Insert the number of movement for mother nature");
+            if (movement < 1 || movement > max) {
+                displayError("insert a number between 1 and " + max);
+            }
+        }
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askMNMovement interrupted");
+        return new MoveMotherNatureMessage(Errors.NO_ERROR, "Moved Mother Nature", movement);
+    }
+
+    private ClientMessage askStudentMovement(ModelMessage model, int myId) throws InterruptedException, IOException {
+
+        int[] entrance = model.getPlayerById(myId).getSchool().getCopyOfEntrance();
+
+        displayEntrance(entrance, this.dC);
+
+        int chooseColor = askExistingColor("Choose the color of the student to move from the entrance, using the number near the color", entrance);
+
+
+        displayRoom(model.getPlayerById(myId).getSchool().getCopyOfRoom(), this.dC);
+        displayIslands(model.getIslandList(), model.getMotherNatureIslandId(), this.dC);
+
+        int destination = -2;
+        while (destination != -1 && !model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
+            destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)");
+            if (destination != -1 && !model.isIslandIdValid(destination)){
+                displayError("Insert -1 or a valid island id");
+            }
+        }
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askMovement interrupted");
+
+        return new MoveStudentMessage(Errors.NO_ERROR, "Moved a students", chooseColor, destination);
+    }
+
+    private ClientMessage askAssistant(ModelMessage model, int myId) throws InterruptedException, IOException {
+
+        int[] deck = model.getPlayerById(myId).getAssistantDeck();
+
+        displayAssistants(deck, this.dC);
+
+        List<Integer> right = Arrays.stream(deck).boxed().toList();
+
+        int choose = -1;
+        while (!right.contains(choose) && !Thread.currentThread().isInterrupted()){
+            choose = askInteger("Select your Assistant from the list above");
+            if (!right.contains(choose))
+                displayError("Please select a valid assistant");
+        }
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askAssistant interrupted");
+
+        return new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", choose);
+    }
+
+    public boolean wantToPlayCharacter(ModelMessage model, int myId) throws IOException, InterruptedException {
+
+        List<CharacterSerializable> list = model.getCharacterList();
+
+        int playerCoins = model.getPlayerById(myId).getCoins();
+
+        if (playerCoins < 1)
+            return false;
+
+        boolean canPlayCharacter = false;
+
+        for (CharacterSerializable c: list){
+            int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
+            if (playerCoins >= cost){
+                canPlayCharacter = true;
+                break;
+            }
+        }
+
+        if (!canPlayCharacter)
+            return false;
+
+        boolean choise = false;
 
         Collection<String> correctYes = new ArrayList<>(3);
         correctYes.add("Yes");
@@ -268,38 +301,47 @@ public class Cli extends GraphicV2{
         correctNo.add("no");
         correctNo.add("n");
 
+
+        System.out.println("## You have " + model.getPlayerById(myId).getCoins() + " coins ##");
+        displayCharacters(model.getCharacterList(), model.getActiveCharacterId(), this.dC);
+
         String answer = null;
         while (answer == null && !Thread.currentThread().isInterrupted()){
-            answer = askString("Do you want to play a character? (Yes/No)", "Insert a valid response (Yes, yes, y, No, no, n)");
+            answer = askString("Do you want to play a character? (Yes/No)");
             if (correctYes.contains(answer))
-                use = true;
+                choise = true;
             else if (correctNo.contains(answer))
-                use = false;
+                choise = false;
             else{
-                System.out.println("Insert a valid response (Yes, yes, y, No, no, n)");
+                displayError("Insert a valid response (Yes, yes, y, No, no, n)");
                 answer = null;
             }
         }
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException("Cli: askCharacter interrupted");
 
-        if (!use)
-            return null;
+        return choise;
+    }
+
+    private ClientMessage askCharacter(ModelMessage model, int myId) throws InterruptedException, IOException {
 
         int characterId = -1;
 
+        System.out.println("## You have " + model.getPlayerById(myId).getCoins() + " coins ##");
+        displayCharacters(model.getCharacterList(), model.getActiveCharacterId(), this.dC);
+
         while (characterId == -1 && !Thread.currentThread().isInterrupted()){
-            characterId = askInteger("Choose the id of character that you want to play", "Choose a valid character");
+            characterId = askInteger("Choose the id of character that you want to play");
             CharacterSerializable c = model.getCharacterById(characterId);
             if (c == null){
-                System.out.println("Choose a valid character");
+                displayError("Choose a valid character");
                 characterId = -1;
                 continue;
             }
             int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
-            PlayerSerializable p = model.getPlayerById(playerId);
+            PlayerSerializable p = model.getPlayerById(myId);
             if (p.getCoins() < cost){
-                System.out.println("You don't have enough coins for play this character, you have: " + p.getCoins() + " coins and this character costs " + cost + " coins");
+                displayError("You don't have enough coins for play this character, you have: " + p.getCoins() + " coins and this character costs " + cost + " coins");
                 characterId = -1;
             }
         }
@@ -308,15 +350,13 @@ public class Cli extends GraphicV2{
             throw new InterruptedException("Cli: askCharacter interrupted");
 
         CharacterSerializable character = model.getCharacterById(characterId);
-        displayCharacter(character);
 
         int[] obj = null;
         switch (characterId){
             case 0 -> {
                 //apothecary - ban card
-                displayIslands(model);
 
-                int destination = askIsland("Choose the island where put the ban card", "Insert a valid island id", model);
+                int destination = askIsland("Choose the island where put the ban card", model);
 
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askApothecary interrupted");
@@ -329,9 +369,9 @@ public class Cli extends GraphicV2{
                 int number = -1;
 
                 while (number == -1 && !Thread.currentThread().isInterrupted()){
-                    number = askInteger("How many students you want to swap, 1, or 2?", "Insert a valid number, 1 or 2");
+                    number = askInteger("How many students you want to swap, 1, or 2?");
                     if (number != 1 && number != 2){
-                        System.out.println("Insert a valid number, 1 or 2");
+                        displayError("Insert a valid number, 1 or 2");
                         number = -1;
                     }
                 }
@@ -343,29 +383,29 @@ public class Cli extends GraphicV2{
 
                 int[] x = new int[number << 1];
 
-                int[] en = displayEntrance(model, playerId);
-                int[] ro = displayRoom(model, playerId);
+                int[] t = model.getPlayerById(myId).getSchool().getCopyOfEntrance();
+                int[] en = Arrays.copyOf(t, t.length);
 
-
-                System.out.println("Choose the students to swap");
+                t = model.getPlayerById(myId).getSchool().getCopyOfRoom();
+                int[] ro = Arrays.copyOf(t, t.length);
 
                 while (i < number && !Thread.currentThread().isInterrupted()){
 
-                    int temp = askColor("Choose the " + (i + 1) + "students to remove from the entrance and add to the room", "Insert a valid students that you have in the entrance", en);
+                    int temp = askExistingColor("Choose the " + (i + 1) + "students to remove from the entrance and add to the room", en);
 
                     if (Thread.currentThread().isInterrupted())
                         throw new InterruptedException("Cli: askBard interrupted");
 
                     x[i << 1] = temp;
-                    en[temp]--; //todo verify don't break anything
+                    en[temp]--;
 
-                    temp = askColor("Choose the " + (i + 1) + "students to remove from the room and add to the entrance", "Insert a valid students that you have in the room", ro);
+                    temp = askExistingColor("Choose the " + (i + 1) + "students to remove from the room and add to the entrance", ro);
 
                     if (Thread.currentThread().isInterrupted())
                         throw new InterruptedException("Cli: askBard interrupted");
 
                     x[(i << 1) + 1] = temp;
-                    ro[temp]--; //todo verify don't break anything
+                    ro[temp]--;
 
                     i++;
                 }
@@ -382,14 +422,14 @@ public class Cli extends GraphicV2{
 
                 int[] students = character.getStudents();
 
-                int color = askColor("Chose the students from the cleric to move to an island", "Insert a valid students that is on the card", students);
+                int color = askExistingColor("Chose the students from the cleric to move to an island", students);
 
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askCleric interrupted");
 
                 x[0] = color;
 
-                int island = askIsland("Choose where to move the students selected", "Insert a valid island id", model);
+                int island = askIsland("Choose where to move the students selected", model);
 
                 if (Thread.currentThread().isInterrupted())
                     throw new InterruptedException("Cli: askCleric interrupted");
@@ -401,23 +441,13 @@ public class Cli extends GraphicV2{
             }
             case 3 -> {
                 //cook - color that not count as influence
-
-                int color = -1;
-                while ((color < 0 || color > 4) && !Thread.currentThread().isInterrupted()){
-                    color = askInteger("Choose a color that will be ignored during the calc of influence", "Insert a valid color between 0 and 4");
-                    if (color < 0 || color > 4 )
-                        System.out.println("Insert a valid color between 0 and 4");
-                }
-                if (Thread.currentThread().isInterrupted())
-                    throw new InterruptedException("Cli: askCook interrupted");
-
                 obj = new int[1];
-                obj[0] = color;
+                obj[0] = askColor("Choose a color that will be ignored during the calc of influence");
             }
-            //herald - calc influence on a island
             case 5 -> {
+                //herald calc influence of an island
                 obj = new int[1];
-                obj[0] = askIsland("Choose the island where calc the influence", "Insert a valid island", model);
+                obj[0] = askIsland("Choose the island where calc the influence", model);
             }
             case 6 -> {
                 //jester - swap between jester and entrance
@@ -425,9 +455,9 @@ public class Cli extends GraphicV2{
                 int number = -1;
 
                 while (number == -1 && !Thread.currentThread().isInterrupted()){
-                    number = askInteger("How many students you want to swap, 1, 2 or 3?", "Insert a valid number, 1, 2 or 3");
+                    number = askInteger("How many students you want to swap, 1, 2 or 3?");
                     if (number < 1 || number > 3){
-                        System.out.println("Insert a valid number, 1, 2 or 3");
+                        displayError("Insert a valid number, 1, 2 or 3");
                         number = -1;
                     }
                 }
@@ -439,29 +469,28 @@ public class Cli extends GraphicV2{
 
                 int[] x = new int[number << 1];
 
-                int[] en = displayEntrance(model, playerId);
+                int[] t = model.getPlayerById(myId).getSchool().getCopyOfEntrance();
+                int[] en = Arrays.copyOf(t, t.length);
+
                 int[] st = character.getStudents();
-
-
-                System.out.println("Choose the students to swap");
 
                 while (i < number && !Thread.currentThread().isInterrupted()){
 
-                    int temp = askColor("Choose the " + (i + 1) + "students to remove from the the jester and add to the entrance", "Insert a valid students that is on jester", st);
+                    int temp = askExistingColor("Choose the " + (i + 1) + "students to remove from the the jester and add to the entrance", st);
 
                     if (Thread.currentThread().isInterrupted())
                         throw new InterruptedException("Cli: askJester interrupted");
 
                     x[i << 1] = temp;
-                    st[temp]--; //todo verify don't break anything
+                    st[temp]--;
 
-                    temp = askColor("Choose the " + (i + 1) + "students to remove from the entrance and add to the jester", "Insert a valid students that you have in your entrance", en);
+                    temp = askExistingColor("Choose the " + (i + 1) + "students to remove from the entrance and add to the jester", en);
 
                     if (Thread.currentThread().isInterrupted())
                         throw new InterruptedException("Cli: askJester interrupted");
 
                     x[(i << 1) + 1] = temp;
-                    en[temp]--; //todo verify don't break anything
+                    en[temp]--;
 
                     i++;
                 }
@@ -473,20 +502,11 @@ public class Cli extends GraphicV2{
             case 10 -> {
                 int[] stu = character.getStudents();
                 obj = new int[1];
-                obj[0] = askColor("Choose the students to add to your room", "Insert a valid students present in this card", stu);
+                obj[0] = askExistingColor("Choose the students to add to your room", stu);
             }
             case 11 -> {
-                int color = -1;
-                while ((color < 0 || color > 4) && !Thread.currentThread().isInterrupted()){
-                    color = askInteger("Choose the color for thief effects", "Insert a valid color between 0 and 4");
-                    if (color < 0 || color > 4 )
-                        System.out.println("Insert a valid color between 0 and 4");
-                }
-                if (Thread.currentThread().isInterrupted())
-                    throw new InterruptedException("Cli: askThief interrupted");
-
                 obj = new int[1];
-                obj[0] = color;
+                obj[0] = askColor("Choose the color for thief effects");
             }
             default -> {}
         }
@@ -494,10 +514,22 @@ public class Cli extends GraphicV2{
         return new PlayCharacterMessage(Errors.NO_ERROR, "Played character", characterId, obj);
     }
 
-    */
+    @Override
+    public void displayMessage(String message) {
+        if (message == null)
+            return;
+        System.out.println("Cli: " + message);
+    }
+
+    public void displayError(String errorMessage) {
+        if (errorMessage == null)
+            return;
+        System.out.println("Cli ERROR during input: " + errorMessage);
+    }
 
     @Override
-    public void stopInput() {
+    public void stopGraphic() {
+
         try {
             this.input.close();
         } catch (IOException e) {
@@ -507,18 +539,40 @@ public class Cli extends GraphicV2{
         }
     }
 
-    private int askInteger (@Nullable String askMessage, @Nullable String errorMessage) throws InterruptedException, IOException {
+
+    public String askString(@Nullable String askMessage) throws InterruptedException, IOException {
+        if (askMessage != null) {
+            displayMessage(askMessage);
+        }
+        String s = null;
+        boolean done = false;
+        while (!done && !Thread.currentThread().isInterrupted()) {
+            s = this.input.readLine();
+            if (s == null || s.isEmpty() || s.isBlank()) {
+                if (askMessage != null) {
+                    displayError("The value can't be blank");
+                }
+                continue;
+            }
+            done = true;
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: Thread Interrupted");
+
+        return s;
+    }
+
+    public int askInteger(@Nullable String askMessage) throws InterruptedException, IOException {
         int temp = 0;
         boolean done = false;
 
-        while (!done  && !Thread.currentThread().isInterrupted()){
+        while (!done && !Thread.currentThread().isInterrupted()) {
             String s = askString(askMessage);
             try {
                 temp = Integer.parseInt(s);
-            }catch (NumberFormatException e){
-                if (askMessage != null){
-                    displayError(errorMessage);
-                }
+            } catch (NumberFormatException e) {
+                displayError("Insert a valid Number");
                 continue;
             }
             done = true;
@@ -530,163 +584,404 @@ public class Cli extends GraphicV2{
         return temp;
     }
 
-    @Override
-    public void updateModel(ModelMessage model) {
-        System.out.println();
-        System.out.println();
-        System.out.println("############################## Model ##############################");
-        System.out.println();
-        //print game information
-        displayIslands(model);
-        System.out.println("###### PROFESSORS ######");
-        System.out.println(Arrays.toString(model.getProfessorsList()));
-        System.out.println("########################");
-        System.out.println("###### BAG ######");
-        System.out.println("Students in bag: " + Arrays.stream(model.getBag()).sum()  + " -> " + Arrays.toString(model.getBag()));
-        System.out.println("########################");
+    public Wizard askWizard(@Nullable String askMessage) throws IOException, InterruptedException {
+        Wizard w = null;
 
-        System.out.println("###### SCHOOL ######");
-        for (PlayerSerializable pl : model.getPlayerList()){
-            String towerColor = null;
-            int tColor = pl.getTowerColor();
-            if (tColor == -1) {
-                towerColor = " ";
+        while (w == null && !Thread.currentThread().isInterrupted()) {
+            String s = askString(askMessage);
+            try {
+                w = Wizard.valueOf(s);
+            } catch (IllegalArgumentException e) {
+                displayError("Insert a valid wizard");
             }
-            else if (tColor == 1){
-                towerColor = " Black";
-            }
-            else if (tColor == 2){
-                towerColor = " White";
-            }
-            else if (tColor == 3){
-                towerColor = " Grey";
-            }
-            System.out.println("#" + pl.getId() + " with " + pl.getSchool().getTowers() + towerColor + " towers");
-
-            System.out.println("# ENTRANCE -> " + Arrays.toString(pl.getSchool().getCopyOfEntrance()));
-            System.out.println("# ROOM -> " + Arrays.toString(pl.getSchool().getCopyOfRoom()));
         }
-        System.out.println("###########################################################################");
+
+        return w;
+    }
+
+    public int askColor (@Nullable String askMessage) throws IOException, InterruptedException {
+
+        int color = -1;
+
+        while ((color < 0 || color > 4) && !Thread.currentThread().isInterrupted()){
+            color = askInteger(askMessage);
+            if (color < 0 || color > 4){
+                displayError("Insert a valid color number: 0, 1, 2, 3, 4");
+            }
+        }
+
+        return color;
+    }
+
+    public int askExistingColor (@Nullable String askMessage, int[] container) throws IOException, InterruptedException {
+
+        boolean done = false;
+        int existingColor = -1;
+
+        while (!done && !Thread.currentThread().isInterrupted()){
+            existingColor = askColor(askMessage);
+            if (container[existingColor] > 0){
+                done = true;
+            }
+            else {
+                displayError("Insert a color that is in this container (container[colorChoose] > 0): " + Arrays.toString(container));
+            }
+        }
+
+        return existingColor;
+    }
+
+    public int askIsland (@Nullable String askMessage, ModelMessage model) throws IOException, InterruptedException {
+        int destination = -1;
+
+        displayIslands(model.getIslandList(), model.getMotherNatureIslandId(), this.dC);
+
+        while (!model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
+            destination = askInteger(askMessage);
+            if (!model.isIslandIdValid(destination))
+                displayError("Insert a valid Island id");
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: askIsland interrupted");
+
+        return destination;
     }
 
 
-    //other display
-    private void displayCharacters(ModelMessage model) {
+    private static void printTotHash(int number) {
+        for (int i = 0; i < number; i++)
+            System.out.print('#');
+    }
+
+
+
+    public static void displayAllModel(ModelMessage model, DataCollector data) {
+
         System.out.println();
-        displayMessage(this.userName + ", these are the playable characters");
         System.out.println();
 
-        for (CharacterSerializable c : model.getCharacterList()){
-            displayCharacter(c);
+        printTotHash(25);
+        System.out.print(" MODEL ");
+        printTotHash(25);
+        System.out.println();
+
+        displayIslands(model.getIslandList(), model.getMotherNatureIslandId(), data);
+
+        displayProfessors(model.getProfessorsList(), data);
+
+        displayBag(model.getBag(), data);
+
+        displayClouds(model.getCloudList(), data);
+
+        displayPlayers(model.getPlayerList(), data);
+
+        try {
+            if (data.getGameMode() == 1)
+                displayCharacters(model.getCharacterList(), model.getActiveCharacterId(), data);
+        } catch (InterruptedException ignored) {}
+    }
+
+    private static void displayIslands(List<Island> islands, int motherNatureId, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(15);
+        System.out.print(" ISLANDS ");
+        printTotHash(15);
+        System.out.println();
+
+        for (Island is : islands) {
+            displayIsland(is, motherNatureId, data);
         }
+    }
 
+    private static void displayStudents (int[] students, DataCollector data){
+        System.out.println();
+
+        printTotHash(1);
+        System.out.print(" STUDENTS ");
+        printTotHash(1);
+        System.out.println();
+
+        for (Color c: Color.values()){
+            System.out.println(c + " (" + c.getIndex() + ")" + "       " + students[c.getIndex()] + "   students");
+        }
+    }
+
+    private static void displayIsland (Island is, int motherNatureId, DataCollector data) {
+
+        System.out.println();
+
+        printTotHash(5);
+        System.out.print(" ISLAND " + is.getId() + " ");
+        printTotHash(5);
+        if (is.getId() == motherNatureId)
+            System.out.print("  <-- MOTHER NATURE");
+        System.out.println();
+
+        displayStudents(is.getStudents(), data);
+
+        String towerColor = colorTowerMap.get(is.getTowerColor());
+
+        System.out.println("TOWERS: " + is.getTowerCount() + " " + towerColor);
+        System.out.println("BAN CARD: " + is.getBanCard());
 
         System.out.println();
     }
 
-    private void displayCharacter (CharacterSerializable c){
+    private static void displayProfessors(int[] professorList, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(15);
+        System.out.print(" PROFESSORS ");
+        printTotHash(15);
+        System.out.println();
+
+        for (Color c: Color.values()) {
+
+            int id = professorList[c.getIndex()];
+            String username = data.getUsernames().get(id);
+
+            System.out.println(c + " Professor " +
+                    ( (id == -1)
+                            ? "is not property of anyone"
+                            : ("is property of " + username + "with id " + id)));
+        }
+    }
+
+    private static void displayBag(int[] bag, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(15);
+        System.out.print(" BAG with " + Arrays.stream(bag).sum() + " students");
+        printTotHash(15);
+        System.out.println();
+
+        displayStudents(bag, data);
+    }
+
+    private static void displayPlayers(List<PlayerSerializable> playerList, DataCollector data) {
+
+        printTotHash(15);
+        System.out.print(" PLAYERS ");
+        printTotHash(15);
+        System.out.println();
+
+        int id = data.getId();
+        PlayerSerializable thisPlayer = null;
+        for (PlayerSerializable p : playerList){
+            if (id == p.getId()){
+                thisPlayer = p;
+                break;
+            }
+        }
+
+        if (thisPlayer != null)
+            displayPlayer(thisPlayer, true, data);
+
+        for (PlayerSerializable p : playerList){
+            if (!p.equals(thisPlayer)){
+                displayPlayer(p, false, data);
+            }
+        }
+    }
+
+    private static void displayPlayer(PlayerSerializable player, boolean isThisPlayer, DataCollector data) {
+
+        int id = player.getId();
+        String user = data.getUsernames().get(id);
+
+        printTotHash(5);
+        if (isThisPlayer)
+            System.out.print(" YOU (" + user + " with id " + id + ") ");
+        else
+            System.out.print(" PLAYER " + user + " with id " + id + " ");
+        printTotHash(5);
+        System.out.println();
+
+        System.out.println();
+
+        try {
+            if (data.getGameMode() == 1)
+                System.out.println("Coins: " + player.getCoins());
+        } catch (InterruptedException ignored) {}
+
+        System.out.println();
+
+        Assistant active = Assistant.getAssistantByValue(player.getActiveAssistant());
+        if (active != null){
+            System.out.println("Active Assistant: " + active + " value " + active.getValue() + " max distance " + active.getMaxMovement());
+        }
+
+        displayAssistants(player.getAssistantDeck(), data);
+
+        displaySchool(player.getSchool(), player.getTowerColor(), data);
+    }
+
+    private static void displayAssistants(int[] assistantDeck, DataCollector data) {
+
+        System.out.println();
+
+        printTotHash(5);
+        System.out.print(" ASSISTANT ");
+        printTotHash(5);
+        System.out.println();
+
+        System.out.println();
+
+        for (int a: assistantDeck){
+            Assistant assistant  = Assistant.getAssistantByValue(a);
+            if (assistant != null)
+                displayAssistant(assistant, data);
+        }
+    }
+
+    private static void displayAssistant (Assistant assistant, DataCollector data){
+        System.out.println("## "  + assistant + ": Value " + assistant.getValue() + " Max Movement " + assistant.getMaxMovement() + "##");
+    }
+
+    private static void displaySchool(School school, int towerColor, DataCollector data) {
+
+        System.out.println();
+
+        printTotHash(5);
+        System.out.print(" SCHOOL ");
+        printTotHash(5);
+        System.out.println();
+
+        System.out.println();
+
+        System.out.println("TOWERS: " + school.getTowers() + " " + colorTowerMap.get(towerColor));
+
+        displayEntrance(school.getCopyOfEntrance(), data);
+
+        displayRoom(school.getCopyOfRoom(), data);
+
+        System.out.println();
+    }
+
+    private static void displayEntrance(int[] entrance, DataCollector data) {
+
+        System.out.println();
+
+        printTotHash(2);
+        System.out.print(" ENTRANCE ");
+        printTotHash(2);
+        System.out.println();
+
+        displayStudents(entrance, data);
+    }
+
+    private static void displayRoom(int[] room, DataCollector data) {
+        System.out.println();
+
+        printTotHash(2);
+        System.out.print(" ROOM ");
+        printTotHash(2);
+        System.out.println();
+
+        displayStudents(room, data);
+    }
+
+    private static void displayClouds(List<CloudSerializable> cloudList, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(15);
+        System.out.print(" CLOUDS ");
+        printTotHash(15);
+        System.out.println();
+
+        for (CloudSerializable c : cloudList) {
+            displayCloud(c, data);
+        }
+    }
+
+    private static void displayCloud(CloudSerializable c, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(5);
+        System.out.print(" CLOUD " + c.getId() + " ");
+        printTotHash(5);
+        System.out.println();
+
+        displayStudents(c.getDrawnStudents(), data);
+    }
+
+    private static void displayCharacters(List<CharacterSerializable> characterList, int activeCharacterId, DataCollector data) {
+
+        System.out.println();
+        System.out.println();
+
+        printTotHash(15);
+        System.out.print(" CHARACTERS ");
+        printTotHash(15);
+        System.out.println();
+
+        CharacterSerializable active = null;
+        for (CharacterSerializable c: characterList){
+            if (c.getId() == activeCharacterId){
+                active = c;
+                break;
+            }
+        }
+
+        if (active != null){
+            System.out.println("## There is an Active Character ##");
+            System.out.println();
+            displayCharacter(active, data);
+        }
+
+        System.out.println("## Other Playable Characters ##");
+        System.out.println();
+
+        for (CharacterSerializable c: characterList){
+            if (!c.equals(active)){
+                displayCharacter(c, data);
+            }
+        }
+    }
+
+    private static void displayCharacter (CharacterSerializable c, DataCollector data){
+
+        System.out.println();
+
         int id = c.getId();
+
+        printTotHash(5);
+        System.out.print(" " + c.getName() + " with id " + id + " ");
+        printTotHash(5);
+        System.out.println();
+
+
         int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
-        StringBuilder s = new StringBuilder(c.getName() + " id " + id + " cost " + cost);
+
+        System.out.println("COST: " + cost + " coins");
+        System.out.println();
+
         switch (id){
-            case 0 -> s.append(" with ").append(c.getBanCard()).append(" ban card");
+            case 0 -> {
+                System.out.println("BANCARD: " + c.getBanCard() + " ban card");
+                System.out.println();
+            }
             case 3 -> {
-                int color = c.getColorId();
-                if (color != -1){
-                    s.append(" with active color ").append(Objects.requireNonNull(Color.getColorById(color)).name());
+                Color color = Color.getColorById(c.getColorId());
+                if (color != null){
+                    System.out.println("ACTIVE COLOR: " + color);
+                    System.out.println();
                 }
             }
-            case 2, 6, 10 -> s.append(" with this students -> ").append(Arrays.toString(c.getStudents()));
+            case 2, 6, 10 -> displayStudents(c.getStudents(), data);
             default -> {}
         }
-        System.out.println(s);
-    }
-
-    private void displayCloud(ModelMessage model) {
-        List <CloudSerializable> clouds = model.getCloudList();
-        System.out.println();
-        displayMessage(this.userName + ", these are the clouds");
-        for (CloudSerializable c : clouds){
-            System.out.println("Cloud " + c.getId() + " -> " + Arrays.toString(c.getDrawnStudents()));
-        }
-
-
-        System.out.println();
-    }
-
-    private void displayIslands(ModelMessage model) {
-        System.out.println();
-
-        System.out.println("#################### ISLANDS ###################");
-        //printing islands
-        List<Island> x = model.getIslandList();
-        for(Island is : x){
-            String towerColor = null;
-            if (is.getTowerColor() == -1) {
-                towerColor = " ";
-            }
-            else if (is.getTowerColor() == 1){
-                towerColor = " Black";
-            }
-            else if (is.getTowerColor() == 2){
-                towerColor = " White";
-            }
-            else if (is.getTowerColor() == 3){
-                towerColor = " Grey";
-            }
-            System.out.println(
-                    "{ID: " + is.getId() +
-                            " , STUDENTS: " + Arrays.toString(is.getStudents()) +
-                            " , TOWERS: " + is.getTowerCount()  + towerColor +
-                            " , BAN CARD: " + is.getBanCard() +
-                            "}" +
-                            (model.getMotherNatureIslandId() == is.getId() ? "  <-- MOTHER NATURE" : ""));
-
-        }
-        System.out.println("#####################################################################");
-        System.out.println();
-    }
-
-    private void displayRoom(ModelMessage model, int playerId) {
-        displayMessage(this.userName + ", this is your room");
-        System.out.println();
-
-        PlayerSerializable actual = model.getPlayerById(playerId);
-        int[] room = actual.getSchool().getCopyOfRoom();
-
-        for (int i = 0; i < room.length; i++){
-            System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + room[i]);
-        }
-        System.out.println();
-    }
-
-    private void displayEntrance (ModelMessage model, int playerId){
-        displayMessage(this.userName + ", this is your entrance");
-        System.out.println();
-
-        PlayerSerializable actual = model.getPlayerById(playerId);
-
-        int[] entrance = actual.getSchool().getCopyOfEntrance();
-
-        for (int i = 0; i < entrance.length; i++){
-            System.out.println(i + ". " + Objects.requireNonNull(Color.getColorById(i)).name() + " " + entrance[i]);
-        }
-        System.out.println();
-    }
-
-    private void displayAssistant (ModelMessage model, int playerId) {
-        displayMessage(this.userName + ", this are your assistant");
-        System.out.println();
-
-        PlayerSerializable actual = model.getPlayerById(playerId);
-
-        //null pointer if no player in the game
-        int[] ass = actual.getAssistantDeck();
-
-        for (int a : ass){
-            Assistant x = Assistant.getAssistantByValue(a);
-            System.out.println("# "  + Objects.requireNonNull(x).name() + ": Value " + x.getValue() + " Max Movement " + x.getMaxMovement());
-        }
-        System.out.println();
     }
 }

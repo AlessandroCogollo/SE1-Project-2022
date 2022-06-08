@@ -188,8 +188,10 @@ public enum Errors {
      * Error description: Wizard not available
      */
     WIZARD_NOT_AVAILABLE(406, "Wizard not available"),
-
-
+    /**
+     * Error description: Message with lobby data (Username and wizard of players)
+     */
+    LOBBY_DATA(407, "Message with lobby data (Username and wizard of players)"),
 
     /*
         List of Code for Communications  - Client Side (code from 451 to 500)

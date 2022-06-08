@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 
+import it.polimi.ingsw.Message.LobbyInfoMessage;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;
 
@@ -270,6 +271,13 @@ public class Lobby implements Runnable {
 
         System.out.println("Lobby: All players finished setup");
 
+        try {
+            this.sendLobbyInfoMessage();
+        } catch (InterruptedException e) {
+            System.out.println("Lobby: interrupted while sending to all the player the game data");
+            return;
+        }
+
         int[] ids = this.ids.stream().mapToInt(l -> l).toArray();
         this.server.setGameProperties(ids, this.gameMode);
 
@@ -325,7 +333,7 @@ public class Lobby implements Runnable {
 
         System.out.println("Lobby-acceptor, accepted first 2 client");
 
-        while (!this.acceptor.isInterrupted() && accepted < 4){ // the last two can play or not, for now we will send only ping for not interrupt the connection
+        while (!this.acceptor.isInterrupted() && ((this.numOfPlayers == -1 && accepted < 4) || (this.numOfPlayers != -1 && accepted < this.numOfPlayers))){ // the last two can play or not, for now we will send only ping for not interrupt the connection
             Socket socket;
             try {
                 socket = this.serverSocket.accept();
@@ -358,7 +366,11 @@ public class Lobby implements Runnable {
                 continue;
             }
 
-            this.tempPingSender.scheduleAtFixedRate(pingSender, 0, Duration.ofSeconds(15).toMillis());
+            try {
+                this.tempPingSender.scheduleAtFixedRate(pingSender, 0, Duration.ofSeconds(15).toMillis());
+            }catch (IllegalStateException e){
+                System.out.println("Lobby-acceptor, temp ping sender canceled, the client " + accepted + " don't have a ping");
+            }
 
             accepted++;
 
@@ -429,6 +441,17 @@ public class Lobby implements Runnable {
                     done = true;
                 } catch (InterruptedException ignored) {}
             }
+        }
+    }
+
+    private void sendLobbyInfoMessage () throws InterruptedException {
+        LobbyInfoMessage lMessage = new LobbyInfoMessage("Sent Game info", this.usernames, this.wizards, this.gameMode, this.numOfPlayers);
+        JsonElement mJ = new Gson().toJsonTree(lMessage);
+
+        System.out.println("Lobby: sending player game info");
+
+        for (Integer id: this.ids){
+            this.abstractClients.get(id).sendMessage(mJ);
         }
     }
 }
