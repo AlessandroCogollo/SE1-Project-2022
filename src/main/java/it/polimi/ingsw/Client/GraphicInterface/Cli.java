@@ -132,9 +132,7 @@ public class Cli implements Graphic {
                 System.out.println("Interrupted when asking the move CLI");
                 if (e instanceof InterruptedException)
                     Thread.currentThread().interrupt();
-                return;
             }
-            System.out.println("Move Set");
         }
         else {
             System.out.println("Is the turn of " + this.dC.getUsernameOfCurrentPlayer() + " with id " + model.getCurrentPlayerId());
@@ -169,7 +167,7 @@ public class Cli implements Graphic {
                 }
             }
         }
-        System.out.println("Sending " + cM.getClass() + " " + cM);
+        System.out.println("Sending " + cM);
         return cM;
     }
 
@@ -541,12 +539,11 @@ public class Cli implements Graphic {
 
 
     public String askString(@Nullable String askMessage) throws InterruptedException, IOException {
-        if (askMessage != null) {
-            displayMessage(askMessage);
-        }
         String s = null;
         boolean done = false;
         while (!done && !Thread.currentThread().isInterrupted()) {
+            if (askMessage != null)
+                displayMessage(askMessage);
             s = this.input.readLine();
             if (s == null || s.isEmpty() || s.isBlank()) {
                 if (askMessage != null) {

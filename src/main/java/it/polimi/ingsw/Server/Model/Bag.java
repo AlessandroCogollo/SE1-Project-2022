@@ -8,7 +8,7 @@ import java.util.Random;
 public class Bag {
 
     private final int[] students;
-    private final Random rand;
+    private final Random rand = new Random(System.currentTimeMillis());
     private final GameInitializer gameInitializer;
 
     public Bag(GameInitializer gameInitializer){
@@ -16,7 +16,11 @@ public class Bag {
         for (int i=0; i<Color.getNumberOfColors(); i++){
             students[i] = (24); //from the rules
         }
-        this.rand = new Random(System.currentTimeMillis());
+        this.gameInitializer = gameInitializer;
+    }
+
+    public Bag(GameInitializer gameInitializer, int[] bag) {
+        this.students = Arrays.copyOf(bag, bag.length);
         this.gameInitializer = gameInitializer;
     }
 

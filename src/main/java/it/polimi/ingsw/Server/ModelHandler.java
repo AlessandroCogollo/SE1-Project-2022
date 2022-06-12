@@ -1,13 +1,14 @@
 package it.polimi.ingsw.Server;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.Game;
+
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,25 +19,34 @@ public class ModelHandler implements Runnable{
     private final Server server;
     private final Game model;
     private final QueueOrganizer queues;
+    private final PersistenceAssistant persistenceAssistant;
     private final int[] ids;
-    private final Gson gson;
+    private final Gson gson = new Gson();
 
     private Thread thread = null;
 
     /**
      * Constructor of the class
-     * @param ids Ids of the players
-     * @param gameMode game mode to that the right type of game
-     * @param server Server main Thread
-     * @param q the Queue Organizer
+     *
+     * @param ids       Ids of the players
+     * @param gameMode  game mode to that the right type of game
+     * @param server    Server main Thread
+     * @param q         the Queue Organizer
+     * @param usernames usernames used for create the sign of this game and could save it on the disk
      */
-    public ModelHandler(int[] ids, int gameMode, Server server, QueueOrganizer q) {
+    public ModelHandler(int[] ids, int gameMode, Server server, QueueOrganizer q, Map<Integer, String> usernames) {
         this.server = server;
-        this.model = Game.getGameModel(ids, gameMode);
         this.queues = q;
         this.ids = ids;
-        //this.gson = new GsonBuilder().setPrettyPrinting().create();
-        this.gson = new GsonBuilder().create();
+
+        this.persistenceAssistant = new PersistenceAssistant(usernames);
+
+        if(this.persistenceAssistant.modelAvailable()){
+            this.model = this.persistenceAssistant.getResumedModel();
+        }
+        else {
+            this.model = Game.getGameModel(ids, gameMode);
+        }
     }
 
     /**
@@ -101,9 +111,20 @@ public class ModelHandler implements Runnable{
             ModelMessage m = ModelMessageBuilder.getModelMessageBuilder().buildModelMessage(er);
 
             //if the game is over communicates it to the main server thread
+            if (!this.thread.isInterrupted()) {
+                if (m.gameIsOver()){
+                    this.persistenceAssistant.gameOver();
+                    server.setCode(Errors.GAME_OVER);
+                }
+                else{
+                    this.persistenceAssistant.updateModelFile(m);
+                }
+            }
             if (m.gameIsOver() && !this.thread.isInterrupted()){
                 server.setCode(Errors.GAME_OVER);
             }
+
+
 
             message = gson.toJsonTree(m);
         }

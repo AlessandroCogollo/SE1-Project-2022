@@ -3,6 +3,7 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.util.*;
 
@@ -25,11 +26,10 @@ public class RoundHandler {
     private boolean isFinalRound;
 
     // random for the initial player
-    private final Random rand;
+    private final Random rand = new Random(System.currentTimeMillis());
 
     public RoundHandler(GameInitializer gameInitializer) {
         this.current = null;
-        this.rand = new Random(System.currentTimeMillis());
 
         this.actionOrder = new LinkedList<>();
         this.planningOrder = new LinkedList<>();
@@ -59,14 +59,20 @@ public class RoundHandler {
         return isFinalRound;
     }
 
-    void setFinalRound() {
-        isFinalRound = true;
+    public Queue<Player> getActionOrder() {
+        return actionOrder;
     }
 
-    // getter used for testing purposes        // TODO: check correct order of players based on assistant values
-
-    Queue<Player> getPlanningOrder() {
+    public Queue<Player> getPlanningOrder() {
         return planningOrder;
+    }
+
+    public Queue<Player> getSpecialOrder() {
+        return specialOrder;
+    }
+
+    void setFinalRound() {
+        isFinalRound = true;
     }
 
     //return true if the player can play the assistant considering all the exception
@@ -119,8 +125,8 @@ public class RoundHandler {
     //set the initial state
     void start (){
         //initial phase
-        phase = Phase.Planning;
-        actionPhase = ActionPhase.NotActionPhase;
+        this.phase = Phase.Planning;
+        this.actionPhase = ActionPhase.NotActionPhase;
 
         //set the initial order
 
@@ -153,6 +159,36 @@ public class RoundHandler {
 
         //we set the current player with the one extracted
         current = planningOrder.poll();
+    }
+
+    public void reset(ModelMessage resumedModel) {
+        this.phase = Phase.valueOf(resumedModel.getActualPhase());
+        this.actionPhase = ActionPhase.valueOf(resumedModel.getActualActionPhase());
+
+        List<Integer> temp = resumedModel.getSpecialOrder();
+        if (temp != null){
+            for (Integer i : temp){
+                this.specialOrder.offer(gInit.getPlayerById(i));
+            }
+        }
+
+        temp = resumedModel.getActionOrder();
+        if (temp != null){
+            for (Integer i : temp){
+                this.actionOrder.offer(gInit.getPlayerById(i));
+            }
+        }
+
+        temp = resumedModel.getPlanningOrder();
+        if (temp != null){
+            for (Integer i : temp){
+                this.planningOrder.offer(gInit.getPlayerById(i));
+            }
+        }
+
+        this.current = gInit.getPlayerById(resumedModel.getCurrentPlayerId());
+        this.studentMovedInThisTurn = resumedModel.getStudentsMoved();
+        this.isFinalRound = resumedModel.isFinalRound();
     }
 
     //cycle between the phase

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
+
 import java.util.Arrays;
 
 public class Cloud {
@@ -12,6 +14,13 @@ public class Cloud {
         this.bag = gameInitializer.getBag();
         this.numOfPlayer = gameInitializer.getPlayersNumber();
         setStudents();
+    }
+
+    public Cloud(GameInitializer gameInitializer, CloudSerializable cloud){
+        this.id = cloud.getId();
+        this.bag = gameInitializer.getBag();
+        this.numOfPlayer = gameInitializer.getPlayersNumber();
+        this.drawnStudents = cloud.getDrawnStudents();
     }
 
     //return only a copy of drawnStudents, used only in message creations

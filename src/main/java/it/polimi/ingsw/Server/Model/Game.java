@@ -3,6 +3,7 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
@@ -184,47 +185,8 @@ public class Game{
     //return the correct interface for the parameter passed, in case of four player the teammates need to have the same final bit (in decimal same team all odds or all even, and the other team the opposite)
     static public Game getGameModel (int[] ids, int gameMode){
 
-        //check game mode and number of player
-        if (gameMode < 0 || gameMode > 1 || ids.length < 2 || ids.length > 4)
+        if (!checkProperties(ids, gameMode))
             return null;
-
-        //check id > 0
-        boolean allPositive = true;
-        for (int id : ids)
-            if (id < 0) {
-                allPositive = false;
-                break;
-            }
-        if (!allPositive)
-            return null;
-
-        //check same id
-        boolean sameId = false;
-        for (int i = 0; i < ids.length && !sameId; i++) {
-            for (int j = i + 1; j < ids.length; j++){
-                if (ids[i] == ids[j]) {
-                    sameId = true;
-                    break;
-                }
-            }
-        }
-        if (sameId){
-            return null;
-        }
-
-        //check odd and even for 4 player game
-        if (ids.length == 4){
-            int teamA = 0, teamB = 0;
-            for (int i = 0; i < 4; i++){
-                if (ids[i] % 2 == 0){
-                    teamA++;
-                }
-                else
-                    teamB++;
-            }
-            if (teamA != 2 || teamB != 2)
-                return null;
-        }
 
 
         GameInitializer gInit = new GameInitializer(gameMode, ids.length);
@@ -242,5 +204,70 @@ public class Game{
 
 
         return new Game(gInit, roundHandler);
+    }
+
+    public static Game setGame (int[] ids, ModelMessage resumedModel){
+
+        if (!checkProperties(ids, resumedModel.getGameMode()))
+            return null;
+
+        GameInitializer gInit = new GameInitializer(resumedModel.getGameMode(), ids.length);
+
+        RoundHandler roundHandler = new RoundHandler(gInit);
+
+        gInit.createAllGame(roundHandler, resumedModel);
+
+        roundHandler.reset(resumedModel);
+
+        //starting model message builder
+        ModelMessageBuilder.getModelMessageBuilder().setGameInitializer(gInit);
+
+        return new Game(gInit, roundHandler);
+    }
+
+    private static boolean checkProperties (int[] ids, int gameMode){
+        //check game mode and number of player
+        if (gameMode < 0 || gameMode > 1 || ids.length < 2 || ids.length > 4)
+            return false;
+
+        //check id > 0
+        boolean allPositive = true;
+        for (int id : ids)
+            if (id < 0) {
+                allPositive = false;
+                break;
+            }
+        if (!allPositive)
+            return false;
+
+        //check same id
+        boolean sameId = false;
+        for (int i = 0; i < ids.length && !sameId; i++) {
+            for (int j = i + 1; j < ids.length; j++){
+                if (ids[i] == ids[j]) {
+                    sameId = true;
+                    break;
+                }
+            }
+        }
+        if (sameId){
+            return false;
+        }
+
+        //check odd and even for 4 player game
+        if (ids.length == 4){
+            int teamA = 0, teamB = 0;
+            for (int i = 0; i < 4; i++){
+                if (ids[i] % 2 == 0){
+                    teamA++;
+                }
+                else
+                    teamB++;
+            }
+            if (teamA != 2 || teamB != 2)
+                return false;
+        }
+
+        return true;
     }
 }

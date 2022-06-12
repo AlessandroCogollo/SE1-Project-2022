@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
 import java.util.Optional;
@@ -13,6 +14,11 @@ final public class Cook extends Character {
     Cook(GameInitializer gameInitializer) {
         super (3, 3, gameInitializer, "Cook");
         this.color = Optional.empty();
+    }
+
+    Cook(GameInitializer gameInitializer, CharacterSerializable character) {
+        super (3, 3, gameInitializer, "Cook");
+        this.color = Optional.ofNullable(Color.getColorById(character.getColorId()));
     }
 
     public Color getColor (){

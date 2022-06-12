@@ -108,11 +108,13 @@ public class DataCollector {
     }
 
     public void setNextMove(ClientMessage nextMove) {
+        if (nextMove == null)
+            return;
         synchronized (this.lock){
             this.nextMove = nextMove;
             this.lock.notifyAll();
         }
-
+        System.out.println("Move Set");
     }
 
     public Integer getId() {
@@ -180,7 +182,7 @@ public class DataCollector {
     }
 
     public ClientMessage askMove() throws InterruptedException {
-        ClientMessage mess = null;
+        ClientMessage mess;
         synchronized (this.lock) {
             while (this.nextMove == null) {
                 this.lock.wait();

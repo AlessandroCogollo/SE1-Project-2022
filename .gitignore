@@ -30,6 +30,7 @@ hs_err_pid*
 .idea/
 .run/
 out/
+persistence/
 
 #am56 file
 /AM56.iml

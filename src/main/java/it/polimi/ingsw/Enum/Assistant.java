@@ -78,4 +78,12 @@ public enum Assistant {
         Collections.addAll(c, Assistant.values());
         return c;
     }
+
+    public static Collection<Assistant> getResumedAssistantDeck(int[] assistantDeck) {
+        Collection<Assistant> c = new ArrayList<>(assistantDeck.length);
+        for (int j : assistantDeck) {
+            c.add(Assistant.getAssistantByValue(j));
+        }
+        return c;
+    }
 }

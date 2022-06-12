@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
 import java.util.*;
@@ -24,6 +25,24 @@ public class CharacterFactory {
         };
     }
 
+    protected static Character produceCharacterBySerializable(GameInitializer gameInitializer, CharacterSerializable character){
+        return switch (character.getId()) {
+            case 0 -> new Apothecary(gameInitializer, character);
+            case 1 -> new Bard(gameInitializer);
+            case 2 -> new Cleric(gameInitializer, character);
+            case 3 -> new Cook(gameInitializer, character);
+            case 4 -> new Drunkard(gameInitializer);
+            case 5 -> new Herald(gameInitializer);
+            case 6 -> new Jester(gameInitializer, character);
+            case 7 -> new Knight(gameInitializer);
+            case 8 -> new Minotaur(gameInitializer);
+            case 9 -> new Postman(gameInitializer);
+            case 10 -> new Princess(gameInitializer, character);
+            case 11 -> new Thief(gameInitializer);
+            default -> null;
+        };
+    }
+
     // return a collection of 3 characters associated to the game
     public static Collection<Character> getNewGameDeck(GameInitializer gameInitializer) {
         Random rand = new Random(System.currentTimeMillis()); //instance of random class
@@ -40,6 +59,16 @@ public class CharacterFactory {
             pickedNumbers.add(pickedCard);
             c.add(produceCharacterById(pickedCard, gameInitializer));
         }
+        return c;
+    }
+
+    public static Collection<Character> getResumedDeck(GameInitializer gInit, List<CharacterSerializable> characters) {
+        Collection<Character> c = new ArrayList<>(3);
+
+        for (CharacterSerializable cS: characters){
+            c.add(produceCharacterBySerializable(gInit, cS));
+        }
+
         return c;
     }
 }

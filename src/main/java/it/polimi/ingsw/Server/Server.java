@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Enum.Errors;
 
+
 /**
  * Main class of the Server
  */
@@ -12,7 +13,6 @@ public class Server {
 
     private int[] ids = null;
     private int gameMode = -1;
-    private QueueOrganizer queueOrganizer = null;
     private ModelHandler model = null;
     private Errors code = Errors.NOTHING_TODO;
 
@@ -40,8 +40,9 @@ public class Server {
 
     /**
      * Used to set the game properties from the lobby after all the players have connected
-     * @param ids ids of players
-     * @param gameMode game mode of the game
+     *
+     * @param ids       ids of players
+     * @param gameMode  game mode of the game
      */
     //meant to be used only outside the server class
     public void setGameProperties (int[] ids, int gameMode){
@@ -119,12 +120,12 @@ public class Server {
     }
 
     private void startGame() {
-        this.queueOrganizer = new QueueOrganizer(this.ids);
+        QueueOrganizer queueOrganizer = new QueueOrganizer(this.ids);
 
-        this.model = new ModelHandler(this.ids, this.gameMode, this, this.queueOrganizer);
+        this.model = new ModelHandler(this.ids, this.gameMode, this, queueOrganizer, this.lobby.getUsernames());
         new Thread(this.model, "Model").start();
 
-        this.lobby.setQueues(this.queueOrganizer);
+        this.lobby.setQueues(queueOrganizer);
     }
 
     /**

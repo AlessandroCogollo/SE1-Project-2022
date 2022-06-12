@@ -11,8 +11,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -73,7 +71,7 @@ class ModelHandlerTest {
         QueueOrganizer q = new QueueOrganizer(ids);
 
         //set to null server so the game can't finish or it will trigger an error
-        ModelHandler x = new ModelHandler(ids, 1, null, q);
+        ModelHandler x = new ModelHandler(ids, 1, null, q, null);
 
         new Thread(() -> {
             try {
@@ -157,12 +155,12 @@ class ModelHandlerTest {
 
     @ParameterizedTest
     @MethodSource("argsMethod")
-    void run(ClientMessageDecorator move) throws InterruptedException {
+    void run(ClientMessageDecorator move){
         int[] ids = getIds(3);
         QueueOrganizer q = new QueueOrganizer(ids);
 
         //set to null server so the game can't finish or it will trigger an error
-        ModelHandler x = new ModelHandler(ids, 1, null, q);
+        ModelHandler x = new ModelHandler(ids, 1, null, q,null);
 
         Producer p = new Producer(q.getModelQueue(), move);
 

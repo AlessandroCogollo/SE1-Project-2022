@@ -2,11 +2,9 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 //player class that implements the real methods that changes the model
 public class Player implements Iterable<Assistant>{
@@ -20,17 +18,28 @@ public class Player implements Iterable<Assistant>{
 
     protected final GameInitializer gameInitializer;
 
-    private Assistant activeAssistant;
+    private Assistant activeAssistant = null;
 
     //not public used only by factory
     Player (int id, int towerColor, Player mate, GameInitializer gameInitializer, School school) {
+        this.gameInitializer = gameInitializer;
+        this.mate = Optional.ofNullable(mate);
+
         this.id = id;
         this.towerColor = towerColor;
-        this.mate = Optional.ofNullable(mate);
-        this.gameInitializer = gameInitializer;
         this.school = school;
         this.deck = Assistant.getNewAssistantDeck();
-        this.activeAssistant = null;
+    }
+
+    public Player(GameInitializer gameInitializer, PlayerSerializable p, Player mate) {
+        this.gameInitializer = gameInitializer;
+        this.mate = Optional.ofNullable(mate);
+
+        this.id = p.getId();
+        this.towerColor = p.getTowerColor();
+        this.school = p.getSchool();
+        this.activeAssistant = Assistant.getAssistantByValue(p.getActiveAssistant());
+        this.deck = Assistant.getResumedAssistantDeck(p.getAssistantDeck());
     }
 
     public int getId() {
@@ -220,5 +229,81 @@ public class Player implements Iterable<Assistant>{
             }
         }
         return p;
+    }
+
+    public static Collection<Player> factoryPlayers (GameInitializer gI, List<PlayerSerializable> playerList) {
+
+        int gameMode = gI.getGameMode();
+
+        //generate the collection with the length needed
+        Collection<Player> players = new ArrayList<>(playerList.size());
+
+        if (gameMode == 0){
+            if (playerList.size() != 4) {
+                for (PlayerSerializable p: playerList){
+                    players.add(new Player(gI, p, null));
+                }
+            }
+            else {
+                Player p0 = null, p1 = null;
+                List<PlayerSerializable> remaining = new ArrayList<>(2);
+                for (PlayerSerializable p: playerList){
+                    if (p.getSchool().getTowers() != 0) {
+                        Player temp = new Player(gI, p, null);
+                        players.add(temp);
+                        if (temp.getId() % 2 == 0)
+                            p0 = temp;
+                        else
+                            p1 = temp;
+                    }
+                    else {
+                        remaining.add(p);
+                    }
+                }
+
+                for (PlayerSerializable p: remaining){
+                    if (p.getId() % 2 == 0){
+                        players.add(new Player(gI, p, p0));
+                    }
+                    else {
+                        players.add(new Player(gI, p, p1));
+                    }
+                }
+            }
+        }
+        else {
+            if (playerList.size() != 4) {
+                for (PlayerSerializable p: playerList){
+                    players.add(new AdvancedPlayer(gI, p, null));
+                }
+            }
+            else {
+                Player p0 = null, p1 = null;
+                List<PlayerSerializable> remaining = new ArrayList<>(2);
+                for (PlayerSerializable p: playerList){
+                    if (p.getSchool().getTowers() != 0) {
+                        Player temp = new AdvancedPlayer(gI, p, null);
+                        players.add(temp);
+                        if (temp.getId() % 2 == 0)
+                            p0 = temp;
+                        else
+                            p1 = temp;
+                    }
+                    else {
+                        remaining.add(p);
+                    }
+                }
+
+                for (PlayerSerializable p: remaining){
+                    if (p.getId() % 2 == 0){
+                        players.add(new AdvancedPlayer(gI, p, p0));
+                    }
+                    else {
+                        players.add(new AdvancedPlayer(gI, p, p1));
+                    }
+                }
+            }
+        }
+        return players;
     }
 }

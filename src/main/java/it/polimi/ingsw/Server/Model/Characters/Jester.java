@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
@@ -16,6 +17,11 @@ final public class Jester extends Character {
     Jester(GameInitializer gameInitializer) {
         super (6, 1, gameInitializer, "Jester");
         this.students = super.gameInitializer.getBag().drawStudents(6);
+    }
+
+    Jester(GameInitializer gameInitializer, CharacterSerializable character) {
+        super (6, 1, gameInitializer, "Jester");
+        this.students = character.getStudents();
     }
 
     @Override

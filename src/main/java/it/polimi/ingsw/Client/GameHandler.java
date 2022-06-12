@@ -48,13 +48,16 @@ public class GameHandler implements Runnable{
 
         //the setup of the connection is done, now the client wait for the start of the game
         while (!this.thread.isInterrupted()){
-            ModelMessage model = null;
+            ModelMessage model;
             try {
                 model = waitForModel();
             } catch (InterruptedException e) {
                 System.out.println("GameHandler: Interrupted while waiting for some message from server");
                 return;
             }
+
+            if (this.thread.isInterrupted())
+                return;
 
             JsonElement move;
             try {
@@ -63,6 +66,9 @@ public class GameHandler implements Runnable{
                 System.out.println("GameHandler: Interrupted while waiting for move from player");
                 return;
             }
+
+            if (this.thread.isInterrupted())
+                return;
 
             try {
                 sendMove(move);
@@ -78,6 +84,7 @@ public class GameHandler implements Runnable{
             return;
 
         this.out.put(move);
+        System.out.println("Move Sent");
     }
 
     private JsonElement elaborateModel(ModelMessage model) throws IOException, InterruptedException {

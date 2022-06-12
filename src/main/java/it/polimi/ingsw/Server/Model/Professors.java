@@ -9,9 +9,6 @@ public class Professors {
     private final int[] professors;
     private final GameInitializer gInit;
 
-    public int[] getProfessorsCopy(){
-        return Arrays.copyOf(professors, professors.length);
-    }
 
     public Professors(GameInitializer gInit){
         this.professors = new int[Color.getNumberOfColors()];
@@ -19,6 +16,15 @@ public class Professors {
             professors[i] = -1;
         }
         this.gInit = gInit;
+    }
+
+    public Professors(GameInitializer gInit, int[] professorsList) {
+        this.gInit = gInit;
+        this.professors = Arrays.copyOf(professorsList, professorsList.length);
+    }
+
+    public int[] getProfessorsCopy(){
+        return Arrays.copyOf(professors, professors.length);
     }
 
     void updateProfessors(){

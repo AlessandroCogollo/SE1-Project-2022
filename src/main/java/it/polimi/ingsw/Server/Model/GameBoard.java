@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
+import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
@@ -14,23 +17,46 @@ public class GameBoard implements Iterable<Cloud>{
     private final Islands islands;
     private final Professors professors;
 
-    private Character activeCharacter;
+    private Character activeCharacter = null;
 
 
     public GameBoard (GameInitializer gInit){
 
         this.gInit = gInit;
 
+        this.islands = gInit.getIslands();
+        this.professors = gInit.getProfessors();
+
         int numOfPlayer = gInit.getPlayersNumber();
         this.clouds = new ArrayList<>(numOfPlayer);
         for(int i = 0; i < numOfPlayer; i++){
             clouds.add(new Cloud(i, gInit));
         }
-        this.charactersDeck = CharacterFactory.getNewGameDeck(gInit);
+
+        if (gInit.getGameMode() == 1)
+            this.charactersDeck = CharacterFactory.getNewGameDeck(gInit);
+        else
+            this.charactersDeck = null;
+    }
+
+    public GameBoard(GameInitializer gInit, ModelMessage resumedModel) {
+        this.gInit = gInit;
 
         this.islands = gInit.getIslands();
         this.professors = gInit.getProfessors();
-        this.activeCharacter = null;
+
+        List<CloudSerializable> clouds = resumedModel.getCloudList();
+        this.clouds = new ArrayList<>(clouds.size());
+        for (CloudSerializable c : clouds){
+            this.clouds.add(new Cloud(this.gInit, c));
+        }
+
+        if (gInit.getGameMode() == 1) {
+            List<CharacterSerializable> characters = resumedModel.getCharacterList();
+            this.charactersDeck = CharacterFactory.getResumedDeck(gInit, characters);
+        }
+        else
+            this.charactersDeck = null;
     }
 
 

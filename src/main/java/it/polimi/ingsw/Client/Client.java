@@ -163,7 +163,7 @@ public class Client{
         switch (this.code) {
             case SETUP_FINISHED -> {
                 System.out.println("Ready to play, waiting for the start of the game");
-                new Thread(this.game).start();
+                new Thread(this.game, "GameHandler").start();
             }
             case SERVER_DOWN -> {
                 System.out.println("The server go down, shutting down");
@@ -303,7 +303,7 @@ public class Client{
             coll.add(Errors.WRONG_GAME_MODE);
         }
         boolean ok = false;
-        String error = null;
+        String error;
 
         if (this.setup.isInterrupted())
             throw new InterruptedException("Client Setup: interrupted");

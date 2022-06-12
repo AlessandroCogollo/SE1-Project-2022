@@ -7,7 +7,9 @@ import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 
 public class ModelMessage extends Message {
 
@@ -19,7 +21,11 @@ public class ModelMessage extends Message {
 
     private final String actualPhase;
     private final String actualActionPhase;
+    private final List<Integer> actionOrder;
+    private final List<Integer> planningOrder;
+    private final List<Integer> specialOrder;
     private final int studentsMoved;
+    private final boolean finalRound;
 
     private final int motherNatureIslandId;
 
@@ -51,9 +57,40 @@ public class ModelMessage extends Message {
         this.actualPhase = r.getPhase().toString();
         this.actualActionPhase = r.getActionPhase().toString();
         this.studentsMoved = r.getStudentMovedInThisTurn();
+        this.finalRound = r.getIsFinalRound();
         this.motherNatureIslandId = s.getMotherNature().getId();
         this.professorsList = g.getProfessors().getProfessorsCopy();
         this.bag = g.getBag().getStudentsCopy();
+
+        Queue<Player> tempQ = r.getSpecialOrder();
+        if (tempQ == null || tempQ.isEmpty())
+            this.specialOrder = null;
+        else {
+            this.specialOrder = new ArrayList<>(tempQ.size());
+            for (Player p: tempQ){
+                this.specialOrder.add(p.getId());
+            }
+        }
+
+        tempQ = r.getPlanningOrder();
+        if (tempQ == null || tempQ.isEmpty())
+            this.planningOrder = null;
+        else {
+            this.planningOrder = new ArrayList<>(tempQ.size());
+            for (Player p: tempQ){
+                this.planningOrder.add(p.getId());
+            }
+        }
+
+        tempQ = r.getActionOrder();
+        if (tempQ == null || tempQ.isEmpty())
+            this.actionOrder = null;
+        else {
+            this.actionOrder = new ArrayList<>(tempQ.size());
+            for (Player p: tempQ){
+                this.actionOrder.add(p.getId());
+            }
+        }
 
 
         this.islandList = new ArrayList<>(s.getIslandsNumber());
@@ -89,6 +126,23 @@ public class ModelMessage extends Message {
 
     //all getter
 
+
+    public List<Integer> getActionOrder() {
+        return actionOrder;
+    }
+
+    public List<Integer> getPlanningOrder() {
+        return planningOrder;
+    }
+
+    public List<Integer> getSpecialOrder() {
+        return specialOrder;
+    }
+
+    public boolean isFinalRound() {
+        return finalRound;
+    }
+
     public boolean gameIsOver() {
         return this.winnerId != -1;
     }
@@ -103,6 +157,10 @@ public class ModelMessage extends Message {
 
     public String getActualActionPhase() {
         return actualActionPhase;
+    }
+
+    public int getStudentsMoved() {
+        return studentsMoved;
     }
 
     public int getStudentsToMove() {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Characters.*;
 
 import java.util.Collection;
@@ -34,6 +35,15 @@ public class GameInitializer implements Iterable<Player>{
         this.islands = new Islands();
         this.board = new GameBoard(this);
         this.players = Player.factoryPlayers(ids, this);
+        this.roundHandler = roundHandler;
+    }
+
+    void createAllGame (RoundHandler roundHandler, ModelMessage resumedModel){
+        this.bag = new Bag(this, resumedModel.getBag());
+        this.professors = new Professors(this, resumedModel.getProfessorsList());
+        this.islands = new Islands(resumedModel.getIslandList(), resumedModel.getMotherNatureIslandId());
+        this.board = new GameBoard(this, resumedModel);
+        this.players = Player.factoryPlayers(this, resumedModel.getPlayerList());
         this.roundHandler = roundHandler;
     }
 

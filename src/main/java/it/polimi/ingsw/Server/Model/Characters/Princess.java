@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.*;
 
 import java.util.Arrays;
@@ -12,7 +13,12 @@ final public class Princess extends Character {
 
     Princess(GameInitializer gameInitializer) {
         super (10, 2, gameInitializer, "Princess");
-        students = gameInitializer.getBag().drawStudents(4);
+        this.students = gameInitializer.getBag().drawStudents(4);
+    }
+
+    Princess(GameInitializer gameInitializer, CharacterSerializable character) {
+        super (10, 2, gameInitializer, "Princess");
+        this.students = character.getStudents();
     }
 
     public int[] getStudents() {

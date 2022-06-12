@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.*;
 
 final public class Herald extends Character {
