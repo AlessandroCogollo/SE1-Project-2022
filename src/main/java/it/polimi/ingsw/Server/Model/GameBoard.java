@@ -76,6 +76,8 @@ public class GameBoard implements Iterable<Cloud>{
 
     public boolean existsCharacter (int characterId){
         boolean exists = false;
+        if (this.charactersDeck == null)
+            return false;
         for (Character c : charactersDeck)
             if (c.getId() == characterId){
                 exists = true;
@@ -92,6 +94,8 @@ public class GameBoard implements Iterable<Cloud>{
     }
 
     public Character getCharacterById(int characterId) {
+        if (this.charactersDeck == null)
+            return null;
         for (Character x: charactersDeck)
             if (x.getId() == characterId)
                 return x;

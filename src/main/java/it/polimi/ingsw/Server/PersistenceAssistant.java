@@ -48,6 +48,9 @@ public class PersistenceAssistant {
 
     public boolean modelAvailable(){
 
+        if (this.name == null)
+            return false;
+
         if (!Files.exists(this.persistenceFolder)){
             try {
                 Files.createDirectory(this.persistenceFolder);
