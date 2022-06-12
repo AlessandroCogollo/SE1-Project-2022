@@ -22,7 +22,7 @@ public class PersistenceAssistant {
     private Path modelFile = null;
     private Gson gson = null;
 
-    public PersistenceAssistant(Map<Integer, String> usernames) {
+    public PersistenceAssistant(Map<Integer, String> usernames, int gameMode) {
 
         //test only
         if (usernames == null) {
@@ -31,13 +31,16 @@ public class PersistenceAssistant {
             return;
         }
 
+
         StringBuilder sb = new StringBuilder();
         List<Integer> x = new ArrayList<>(usernames.size());
         for (Integer id: usernames.keySet()){
             sb.append(id).append(usernames.get(id));
             x.add(id);
         }
+        sb.append(gameMode);
         sb.append(".json");
+
         this.ids = x.stream().mapToInt(l -> l).toArray();
 
         this.name = sb.toString();
@@ -58,7 +61,7 @@ public class PersistenceAssistant {
         }
 
         List<Path> fileList;
-        try (Stream<Path> s = Files.list(persistenceFolder)){
+        try (Stream<Path> s = Files.list(this.persistenceFolder)){
             fileList = s.collect(Collectors.toList());
         } catch (IOException | SecurityException e) {
             e.printStackTrace();
@@ -66,36 +69,50 @@ public class PersistenceAssistant {
             return false;
         }
 
-        boolean find = false;
+        Path model = null;
 
         for (Path p: fileList){
             Path fileName = p.getFileName();
             if (this.name.equals(fileName.toString())){
-                find = true;
-                this.modelFile = p;
+                model = p;
                 break;
             }
         }
 
-        System.out.println("PersistenceAssistant: game file required [" + this.name + "] " + (find ? "" : "not ") + "available");
-        return find;
+        if (model == null){
+            System.out.println("PersistenceAssistant: game file required [" + this.name + "] not available");
+            return false;
+        }
+
+        this.modelFile = model;
+
+        System.out.println("PersistenceAssistant: game file required [" + this.name + "] available");
+        return true;
     }
 
+
+    private static String getFile (Path path){
+        if (path == null)
+            return null;
+
+        String string;
+        try (Stream<String> s = Files.lines(path)){
+            string = s.collect(Collectors.joining(System.lineSeparator()));
+        } catch (IOException | SecurityException e) {
+            e.printStackTrace();
+            System.out.println("PersistenceAssistant: cannot read lines from " + path);
+            return null;
+        }
+        return string;
+    }
     public Game getResumedModel() {
 
-        if (!modelAvailable()){
+        if (this.modelFile == null){
             System.out.println("PersistenceAssistant: can't find model file");
             return null;
         }
 
-        String json;
-        try (Stream<String> s = Files.lines(this.modelFile)){
-            json = s.collect(Collectors.joining(""));
-        } catch (IOException | SecurityException e) {
-            e.printStackTrace();
-            System.out.println("PersistenceAssistant: cannot read lines from " + this.modelFile);
-            return null;
-        }
+        String json = getFile(this.modelFile);
 
         if (this.gson == null)
             this.gson = new Gson();

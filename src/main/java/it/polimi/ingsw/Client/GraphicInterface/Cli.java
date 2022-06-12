@@ -130,8 +130,9 @@ public class Cli implements Graphic {
                 this.dC.setNextMove(askMove());
             } catch (IOException | InterruptedException e) {
                 System.out.println("Interrupted when asking the move CLI");
-                if (e instanceof InterruptedException)
-                    Thread.currentThread().interrupt();
+                Thread t = Thread.currentThread();
+                while (!t.isInterrupted())
+                    t.interrupt();
             }
         }
         else {
@@ -722,6 +723,7 @@ public class Cli implements Graphic {
 
         String towerColor = colorTowerMap.get(is.getTowerColor());
 
+        System.out.println();
         System.out.println("TOWERS: " + is.getTowerCount() + " " + towerColor);
         System.out.println("BAN CARD: " + is.getBanCard());
 
@@ -756,7 +758,7 @@ public class Cli implements Graphic {
         System.out.println();
 
         printTotHash(15);
-        System.out.print(" BAG with " + Arrays.stream(bag).sum() + " students");
+        System.out.print(" BAG with " + Arrays.stream(bag).sum() + " students ");
         printTotHash(15);
         System.out.println();
 
@@ -764,6 +766,8 @@ public class Cli implements Graphic {
     }
 
     private static void displayPlayers(List<PlayerSerializable> playerList, DataCollector data) {
+
+        System.out.println();
 
         printTotHash(15);
         System.out.print(" PLAYERS ");

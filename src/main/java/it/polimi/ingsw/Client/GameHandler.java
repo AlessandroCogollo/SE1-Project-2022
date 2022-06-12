@@ -9,6 +9,7 @@ import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.concurrent.BlockingQueue;
 
 
@@ -38,7 +39,9 @@ public class GameHandler implements Runnable{
             System.out.println("Cannot stop GameHandler if is it not running");
             return;
         }
+
         this.thread.interrupt();
+
     }
 
     @Override
@@ -90,6 +93,9 @@ public class GameHandler implements Runnable{
     private JsonElement elaborateModel(ModelMessage model) throws IOException, InterruptedException {
 
         this.g.updateModel(model);
+
+        if (this.thread.isInterrupted())
+            throw new InterruptedException();
 
         if (model != null){
 

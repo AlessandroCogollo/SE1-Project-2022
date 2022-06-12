@@ -39,7 +39,7 @@ public class ModelHandler implements Runnable{
         this.queues = q;
         this.ids = ids;
 
-        this.persistenceAssistant = new PersistenceAssistant(usernames);
+        this.persistenceAssistant = new PersistenceAssistant(usernames, gameMode);
 
         if(this.persistenceAssistant.modelAvailable()){
             this.model = this.persistenceAssistant.getResumedModel();

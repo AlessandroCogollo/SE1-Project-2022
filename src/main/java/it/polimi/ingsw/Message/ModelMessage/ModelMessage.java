@@ -127,6 +127,10 @@ public class ModelMessage extends Message {
     //all getter
 
 
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
     public List<Integer> getActionOrder() {
         return actionOrder;
     }

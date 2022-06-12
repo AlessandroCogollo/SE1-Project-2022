@@ -170,7 +170,6 @@ public class DataCollector {
         }
 
         this.callbackForModel.run();
-
     }
 
     public void setUsernames(Map<Integer, String> usernames) {
