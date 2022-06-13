@@ -63,6 +63,7 @@ public class Gui extends Application implements Graphic {
     public void init(){
         synchronized (Gui.lock) {
             Gui.dC = new DataCollector(this);
+            Gui.dC.setCallbackForModel(() -> Platform.runLater(this::displayMainGame));
             Gui.lock.notifyAll();
         }
     }
@@ -144,7 +145,6 @@ public class Gui extends Application implements Graphic {
     private void waitForStartGame() {
         System.out.println("WaitForStartGame");
         this.sceneController.addScreen("mainGame", new MainGameController(this, "scenes/maingame.fxml"));
-        Gui.dC.setCallbackForModel(() -> Platform.runLater(this::displayMainGame));
 
         if (Gui.dC.getModel() != null)
             displayMainGame();
