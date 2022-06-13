@@ -388,7 +388,7 @@ public class Client{
     //test method
 
     public static void main(String[] args){
-        GraphicHandler gH = new GraphicHandler("Cli");
+        GraphicHandler gH = new GraphicHandler("Gui");
         gH.startGraphic();
         Client client = new Client (gH, "127.0.0.1", 5088);
         client.start();

@@ -14,10 +14,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="832.0" prefWidth="1286.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <SplitPane dividerPositions="0.25" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
         <items>
@@ -25,7 +26,7 @@
                <children>
                   <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="43.0" layoutX="31.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
-                  <Label fx:id="myUsername" layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
+                  <Label fx:id="username1" layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -133,7 +134,10 @@
                            <children>
                               <SplitPane dividerPositions="0.6958277254374159" prefHeight="555.0" prefWidth="745.0" style="-fx-background-color: #2c2b3d;">
                                 <items>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="636.0" style="-fx-background-color: #2c2b3d; -fx-border-color: #2c2b3d; -fx-border-width: 2;" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="636.0" style="-fx-background-color: #2c2b3d; -fx-border-color: #2c2b3d; -fx-border-width: 2;">
+                                       <children>
+                                          <Circle fx:id="dot0" fill="DODGERBLUE" layoutX="166.0" layoutY="152.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+                                       </children></AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="285.0" style="-fx-background-color: #2c2b3d;" />
                                 </items>
                               </SplitPane>
@@ -142,7 +146,7 @@
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <TabPane layoutX="708.0" layoutY="-14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="561.0" prefWidth="224.0" snapToPixel="false" style="-fx-background-color: #2c2b3d;" tabClosingPolicy="UNAVAILABLE">
+                              <TabPane layoutX="1181.0" layoutY="35.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="561.0" prefWidth="224.0" snapToPixel="false" style="-fx-background-color: #2c2b3d;" tabClosingPolicy="UNAVAILABLE">
                                 <tabs>
                                   <Tab fx:id="tab1" text="Player 1">
                                     <content>
@@ -229,7 +233,7 @@
                            </children></AnchorPane>
                         <ScrollPane hbarPolicy="NEVER" pannable="true" prefHeight="267.0" prefWidth="744.0" style="-fx-background-color: #2C2B3DFF;" vbarPolicy="NEVER">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="238.0" prefWidth="797.0" style="-fx-background-color: #36354b;">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="1434.0" style="-fx-background-color: #36354b;">
                                  <children>
                                     <Label layoutX="25.0" layoutY="16.0" text="Characters" textFill="WHITE">
                                        <font>

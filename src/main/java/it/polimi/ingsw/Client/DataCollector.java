@@ -93,6 +93,7 @@ public class DataCollector {
 
     public void setCallbackForModel (Runnable callbackForModel) {
         this.callbackForModel = callbackForModel;
+        System.out.println("CallbackForModel set");
     }
 
     public ModelMessage getModel() {
@@ -272,6 +273,10 @@ public class DataCollector {
 
     public boolean isThisMyTurn() {
         return this.id == this.model.getCurrentPlayerId();
+    }
+
+    public Integer getIdOfCurrentPlayer () {
+        return this.model.getCurrentPlayerId();
     }
 
     public String getUsernameOfCurrentPlayer () {
