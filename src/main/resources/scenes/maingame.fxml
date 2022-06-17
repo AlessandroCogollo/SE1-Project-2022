@@ -20,13 +20,13 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <SplitPane dividerPositions="0.25" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="43.0" layoutX="31.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username1" layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
                      <font>
@@ -34,7 +34,7 @@
                      </font>
                   </Label>
                   <Label layoutX="88.0" layoutY="87.0" text="Mago Thelma" textFill="#beb2b2" />
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="127.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="127.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#cbaa45" height="43.0" layoutX="31.0" layoutY="134.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username2" layoutX="88.0" layoutY="138.0" text="sexycolbe" textFill="WHITE">
                      <font>
@@ -42,7 +42,7 @@
                      </font>
                   </Label>
                   <Label layoutX="88.0" layoutY="156.0" text="Mago Forest" textFill="#beb2b2" />
-                  <Rectangle fx:id="rectangle3" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="195.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle fx:id="rectangle3" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="195.0" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle fx:id="color3" arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="43.0" layoutX="31.0" layoutY="202.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username3" layoutX="88.0" layoutY="206.0" text="lucabotti88" textFill="WHITE">
                      <font>
@@ -50,7 +50,7 @@
                      </font>
                   </Label>
                   <Label fx:id="description3" layoutX="88.0" layoutY="224.0" text="Piton" textFill="#beb2b2" />
-                  <Rectangle fx:id="rectangle4" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="263.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Rectangle fx:id="rectangle4" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="263.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle fx:id="color4" arcHeight="25.0" arcWidth="25.0" fill="#1fffc2" height="43.0" layoutX="31.0" layoutY="270.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username4" layoutX="88.0" layoutY="274.0" text="margaragorn" textFill="WHITE">
                      <font>
@@ -58,75 +58,129 @@
                      </font>
                   </Label>
                   <Label fx:id="description4" layoutX="88.0" layoutY="292.0" text="Gandalf" textFill="#beb2b2" />
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" height="110.0" layoutX="27.0" layoutY="666.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0">
+                  <Rectangle arcHeight="35.0" arcWidth="35.0" height="110.0" layoutX="27.0" layoutY="916.0" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0">
                      <fill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
                                  </color>
                               </Stop>
                            </stops>
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <Label layoutX="47.0" layoutY="704.0" text="Coins" textFill="WHITE">
+                  <Label layoutX="47.0" layoutY="954.0" text="Coins" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="47.0" layoutY="722.0" text="7 Coins" textFill="#beb2b2" />
-                  <ImageView fitHeight="90.0" fitWidth="78.0" layoutX="129.0" layoutY="676.0" pickOnBounds="true" preserveRatio="true">
+                  <Label layoutX="47.0" layoutY="972.0" text="7 Coins" textFill="#beb2b2" />
+                  <ImageView fitHeight="90.0" fitWidth="78.0" layoutX="354.0" layoutY="926.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Moneta_base.png" />
                      </image>
                   </ImageView>
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" height="198.0" layoutX="27.0" layoutY="448.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0">
+                  <Rectangle arcHeight="35.0" arcWidth="35.0" height="198.0" layoutX="27.0" layoutY="698.0" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0">
                      <fill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
                                  </color>
                               </Stop>
                            </stops>
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <Label layoutX="48.0" layoutY="557.0" text="Mother Nature" textFill="WHITE">
+                  <Label layoutX="48.0" layoutY="807.0" text="Mother Nature" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="48.0" layoutY="575.0" text="Max 3 Steps" textFill="#beb2b2" />
-                  <Label layoutX="48.0" layoutY="593.0" text="Played Character" textFill="WHITE">
+                  <Label layoutX="48.0" layoutY="825.0" text="Max 3 Steps" textFill="#beb2b2" />
+                  <Label layoutX="48.0" layoutY="843.0" text="Played Character" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="48.0" layoutY="611.0" text="Apothecary" textFill="#f7bd0e" />
+                  <Label layoutX="48.0" layoutY="861.0" text="Apothecary" textFill="#f7bd0e" />
                   <Label layoutX="27.0" layoutY="26.0" text="Players" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="51.0" layoutY="468.0" text="Game Status" textFill="WHITE">
+                  <Label layoutX="51.0" layoutY="718.0" text="Game Status" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
+                  <Rectangle arcHeight="35.0" arcWidth="35.0" height="144.0" layoutX="27.0" layoutY="536.0" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Rectangle>
+                  <Label layoutX="76.0" layoutY="648.0" text="7" textFill="#beb2b2" />
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="57.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../token/Asset%205.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="138.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../token/Asset%209.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="218.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../token/Asset%2013.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="295.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../token/Asset%2017.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="376.0" layoutY="587.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../token/Asset%2021.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="156.0" layoutY="648.0" text="7" textFill="#beb2b2" />
+                  <Label layoutX="237.0" layoutY="648.0" text="7" textFill="#beb2b2" />
+                  <Label layoutX="314.0" layoutY="648.0" text="7" textFill="#beb2b2" />
+                  <Label layoutX="395.0" layoutY="648.0" text="7" textFill="#beb2b2" />
+                  <Label layoutX="52.0" layoutY="551.0" text="Bag" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="95.0" layoutY="553.0" text="Students remaining" textFill="#beb2b2" />
                </children></AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: black;">
                <children>
@@ -240,7 +294,7 @@
                                                    <effect>
                                                       <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                          <color>
-                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                          </color>
                                                       </DropShadow>
                                                    </effect>
@@ -260,7 +314,7 @@
                                                    <effect>
                                                       <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                          <color>
-                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                          </color>
                                                       </DropShadow>
                                                    </effect>
@@ -280,7 +334,7 @@
                                                    <effect>
                                                       <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                          <color>
-                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                          </color>
                                                       </DropShadow>
                                                    </effect>
@@ -300,7 +354,7 @@
                                                    <effect>
                                                       <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                          <color>
-                                                            <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                          </color>
                                                       </DropShadow>
                                                    </effect>
@@ -328,7 +382,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -340,7 +394,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -352,7 +406,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -364,7 +418,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -376,7 +430,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -388,7 +442,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -400,7 +454,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
@@ -412,7 +466,7 @@
                                        <effect>
                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
                                              <color>
-                                                <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
                                              </color>
                                           </DropShadow>
                                        </effect>
