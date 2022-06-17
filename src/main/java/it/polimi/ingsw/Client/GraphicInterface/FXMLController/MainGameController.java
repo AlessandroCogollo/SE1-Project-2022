@@ -158,6 +158,7 @@ public class MainGameController extends Controller{
             default -> text = "No active character";
         }
         playedCharacterLabel.setText(text);
+
     }
 
 
