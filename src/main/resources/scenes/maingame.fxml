@@ -23,8 +23,8 @@
 <BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <SplitPane dividerPositions="0.25" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="43.0" layoutX="31.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
@@ -128,33 +128,33 @@
                      </font>
                   </Label>
                </children></AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: black;">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: black;">
                <children>
                   <SplitPane dividerPositions="0.7" layoutX="-2.0" layoutY="1.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="1195.0" style="-fx-background-color: #2c2b3d; -fx-border-width: 0px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #2c2b3d; -fx-border-width: 0;">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #2c2b3d; -fx-border-width: 0;">
                            <children>
                               <SplitPane dividerPositions="0.6958277254374159" prefHeight="728.0" prefWidth="1180.0" style="-fx-background-color: #2c2b3d;">
-                                <items>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="636.0" style="-fx-background-color: #2c2b3d; -fx-border-color: #2c2b3d; -fx-border-width: 2;">
+                                 <items>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="636.0" style="-fx-background-color: #2c2b3d; -fx-border-color: #2c2b3d; -fx-border-width: 2;">
                                        <children>
                                           <AnchorPane fx:id="cloudAnchor1" layoutX="279.0" layoutY="222.0" prefHeight="80.0" prefWidth="93.0" style="-fx-background-color: pink;">
                                              <children>
                                                 <GridPane fx:id="cloudGrid1" prefHeight="86.0" prefWidth="91.0">
-                                                  <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                   </rowConstraints>
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
@@ -162,18 +162,18 @@
                                              <children>
                                                 <GridPane fx:id="cloudGrid3" prefHeight="86.0" prefWidth="91.0">
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </children>
@@ -182,18 +182,18 @@
                                              <children>
                                                 <GridPane fx:id="cloudGrid4" prefHeight="86.0" prefWidth="91.0">
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </children>
@@ -202,25 +202,25 @@
                                              <children>
                                                 <GridPane fx:id="cloudGrid2" prefHeight="86.0" prefWidth="91.0">
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
                                        </children></AnchorPane>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="285.0" style="-fx-background-color: #2c2b3d;" />
-                                </items>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="285.0" style="-fx-background-color: #2c2b3d;" />
+                                 </items>
                               </SplitPane>
                               <Label layoutX="26.0" layoutY="24.0" text="Board" textFill="WHITE">
                                  <font>
@@ -228,10 +228,10 @@
                                  </font>
                               </Label>
                               <TabPane layoutX="1181.0" layoutY="35.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="561.0" prefWidth="224.0" snapToPixel="false" style="-fx-background-color: #2c2b3d;" tabClosingPolicy="UNAVAILABLE">
-                                <tabs>
-                                  <Tab fx:id="tab1" text="Player 1">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2c2b3d;">
+                                 <tabs>
+                                    <Tab fx:id="tab1" text="Player 1">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2c2b3d;">
                                              <children>
                                                 <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                                    <image>
@@ -247,11 +247,11 @@
                                                 </ImageView>
                                              </children>
                                           </AnchorPane>
-                                    </content>
-                                  </Tab>
-                                  <Tab fx:id="tab2" text="Player 2">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       </content>
+                                    </Tab>
+                                    <Tab fx:id="tab2" text="Player 2">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
                                                 <ImageView fitHeight="302.0" fitWidth="520.0" layoutX="-148.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                                    <image>
@@ -267,8 +267,8 @@
                                                 </ImageView>
                                              </children>
                                           </AnchorPane>
-                                    </content>
-                                  </Tab>
+                                       </content>
+                                    </Tab>
                                     <Tab fx:id="tab3" text="Player 3">
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -309,12 +309,12 @@
                                           </AnchorPane>
                                        </content>
                                     </Tab>
-                                </tabs>
+                                 </tabs>
                               </TabPane>
                            </children></AnchorPane>
                         <ScrollPane hbarPolicy="NEVER" pannable="true" prefHeight="267.0" prefWidth="744.0" style="-fx-background-color: #2C2B3DFF;" vbarPolicy="NEVER">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="1434.0" style="-fx-background-color: #36354b;">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="1434.0" style="-fx-background-color: #36354b;">
                                  <children>
                                     <Label layoutX="25.0" layoutY="16.0" text="Characters" textFill="WHITE">
                                        <font>
@@ -419,13 +419,13 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                          </content>
+                           </content>
                         </ScrollPane>
-                    </items>
+                     </items>
                   </SplitPane>
                </children>
             </AnchorPane>
-        </items>
+         </items>
          <cursor>
             <Cursor fx:constant="CROSSHAIR" />
          </cursor>

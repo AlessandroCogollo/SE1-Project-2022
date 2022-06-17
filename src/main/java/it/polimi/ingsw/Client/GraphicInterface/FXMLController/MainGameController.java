@@ -186,7 +186,7 @@ public class MainGameController extends Controller{
                     ImageView img = new ImageView(colorImages.get(color));
                     img.setFitHeight(height);
                     img.setFitWidth(height);
-                    grid.getChildren().add(rand.nextInt(grid.getColumnCount()*grid.getRowCount()), img);
+                    grid.add(img, rand.nextInt(grid.getColumnCount()), rand.nextInt(grid.getRowCount()));
                     }
                 }
             }
