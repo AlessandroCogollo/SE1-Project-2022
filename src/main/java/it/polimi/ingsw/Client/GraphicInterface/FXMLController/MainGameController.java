@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GraphicInterface.FXMLController;
 
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
+import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Server.Model.Characters.*;
@@ -162,21 +163,27 @@ public class MainGameController extends Controller{
 
 
     public void setUsernames() throws InterruptedException {
+        int gamemode = dataCollector.getGameMode();
         this.usernames = dataCollector.getUsernames();
         username1.setText(usernames.get(0));
         tab1.setText(usernames.get(0));
-        label1.setText(dataCollector.getWizards().get(0).name());
+        dataCollector.getModel().getPlayerById(0);
+        label1.setText("Max moves: " + Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(0).getActiveAssistant()).getMaxMovement() +
+                ", Coins: " + (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(0).getCoins()));
         username2.setText(usernames.get(1));
         tab2.setText(usernames.get(1));
-        label2.setText(dataCollector.getWizards().get(1).name());
+        label2.setText("Max moves: " + Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(1).getActiveAssistant()).getMaxMovement() +
+                ", Coins: " +  (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(1).getCoins()));
         if(this.dataCollector.getNumOfPlayers()>2){
             username3.setText(usernames.get(2));
             tab3.setText(usernames.get(2));
-            label3.setText(dataCollector.getWizards().get(2).name());
+            label2.setText("Max moves: " + Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(2).getActiveAssistant()).getMaxMovement() +
+                    ", Coins: " +  (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(2).getCoins()));
             if(this.dataCollector.getNumOfPlayers()>3){
                 username4.setText(usernames.get(3));
                 tab4.setText(usernames.get(3));
-                label4.setText(dataCollector.getWizards().get(3).name());
+                label2.setText("Max moves: " + Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(3).getActiveAssistant()).getMaxMovement() +
+                        ", Coins: " +  (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(3).getCoins()));
             }
         }
     }
