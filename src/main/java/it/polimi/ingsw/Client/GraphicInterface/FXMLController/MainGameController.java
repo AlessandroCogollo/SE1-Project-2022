@@ -8,7 +8,10 @@ import it.polimi.ingsw.Server.Model.Island;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -17,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 public class MainGameController extends Controller{
@@ -58,35 +62,22 @@ public class MainGameController extends Controller{
     private Tab tab4;
 
     @FXML
-    private Circle dot0;
+    private AnchorPane cloudAnchor1;
     @FXML
-    private Circle dot1;
+    private GridPane cloudGrid1;
     @FXML
-    private Circle dot2;
+    private AnchorPane cloudAnchor3;
     @FXML
-    private Circle dot3;
+    private GridPane cloudGrid3;
     @FXML
-    private Circle dot4;
+    private AnchorPane cloudAnchor4;
     @FXML
-    private Circle dot5;
+    private GridPane cloudGrid4;
     @FXML
-    private Circle dot6;
+    private AnchorPane cloudAnchor2;
     @FXML
-    private Circle dot7;
-    @FXML
-    private Circle dot8;
-    @FXML
-    private Circle dot9;
-    @FXML
-    private Circle dot10;
-    @FXML
-    private Circle dot11;
-    @FXML
-    private Circle dot12;
-    @FXML
-    private Circle dot13;
-    @FXML
-    private Circle dot14;
+    private GridPane cloudGrid2;
+
 
     private int numOfPlayers;
 
@@ -150,16 +141,20 @@ public class MainGameController extends Controller{
     }
 
     public void glowCurrent(){
-        username1.setEffect(null);
-        username2.setEffect(null);
-        username3.setEffect(null);
-        username4.setEffect(null);
 
-        switch (this.dataCollector.getIdOfCurrentPlayer()){
-            case 0: username1.setEffect(new DropShadow(10, Color.GOLD));
-            case 1: username2.setEffect(new DropShadow(10, Color.GOLD));
-            case 2: username3.setEffect(new DropShadow(10, Color.GOLD));
-            case 3: username4.setEffect(new DropShadow(10, Color.GOLD));
+        int curr = this.dataCollector.getIdOfCurrentPlayer();
+        System.out.println("Current is " + curr);
+
+        ArrayList<Label> usernameLabels = new ArrayList<>();
+        usernameLabels.add(username1);
+        usernameLabels.add(username2);
+        usernameLabels.add(username3);
+        usernameLabels.add(username4);
+        for(Label label : usernameLabels){
+            if (label.getText().equals(dataCollector.getUsernameOfCurrentPlayer())){
+                label.setEffect(new DropShadow(10, Color.GOLD));
+            }
+            else label.setEffect(null);
         }
     }
 
@@ -170,44 +165,33 @@ public class MainGameController extends Controller{
     public void setClouds(){
         this.clouds = (ArrayList<CloudSerializable>) this.dataCollector.getModel().getCloudList();
         Integer i = 0;
-        int[] colors = clouds.get(0).getDrawnStudents();
-        this.dot0.setFill(convertColor(colors[0]));
-        //todo create circles in scenebuilder
-        /*
-        this.dot1.setFill(convertColor(colors[1]));
-        this.dot2.setFill(convertColor(colors[2]));
-        if(this.numOfPlayers == 3){
-            this.dot3.setFill(convertColor(colors[3]));
+        ArrayList<GridPane> grids = new ArrayList<>();
+        grids.add(this.cloudGrid1);
+        grids.add(this.cloudGrid2);
+        grids.add(this.cloudGrid3);
+        grids.add(this.cloudGrid4);
+        int[] colors;
+        Random rand = new Random(372);
+        ArrayList<Image> colorImages = new ArrayList<>();
+        colorImages.add(new Image("Raw/Animali/Struzzo.jpg"));
+        colorImages.add(new Image("Raw/Animali/Volpe.jpg"));
+        colorImages.add(new Image("Raw/Animali/Lucertola.jpg"));
+        colorImages.add(new Image("Raw/Animali/Tartaruga.jpg"));
+        colorImages.add(new Image("Raw/Animali/Ghepardo.jpg"));
+        double height = this.cloudAnchor1.getHeight()/this.cloudGrid1.getRowCount();
+        for(GridPane grid : grids){
+            for(CloudSerializable cloud : clouds){
+                colors = cloud.getDrawnStudents();
+                for(int color : colors){
+                    ImageView img = new ImageView(colorImages.get(color));
+                    img.setFitHeight(height);
+                    img.setFitWidth(height);
+                    grid.getChildren().add(rand.nextInt(grid.getColumnCount()*grid.getRowCount()), img);
+                    }
+                }
+            }
+
         }
-
-        colors = clouds.get(1).getDrawnStudents();
-        this.dot4.setFill(convertColor(colors[0]));
-        this.dot5.setFill(convertColor(colors[1]));
-        this.dot6.setFill(convertColor(colors[2]));
-        if(this.numOfPlayers == 3){
-            this.dot7.setFill(convertColor(colors[3]));
-        }
-
-        colors = clouds.get(2).getDrawnStudents();
-        this.dot8.setFill(convertColor(colors[0]));
-        this.dot9.setFill(convertColor(colors[1]));
-        this.dot10.setFill(convertColor(colors[2]));
-        if(this.numOfPlayers == 3){
-            this.dot11.setFill(convertColor(colors[3]));
-        }
-
-        if(this.numOfPlayers == 4){
-            colors = clouds.get(2).getDrawnStudents();
-            this.dot12.setFill(convertColor(colors[0]));
-            this.dot13.setFill(convertColor(colors[1]));
-            this.dot14.setFill(convertColor(colors[2]));
-        }
-
-         */
-
-
-
-    }
 
     public Color convertColor(int id){
         switch (id){
