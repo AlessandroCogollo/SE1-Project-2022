@@ -262,12 +262,23 @@ public class MainGameController extends Controller{
     }
 
     public void disableIfDreamMode(){
-        this.coinsRectangle.setVisible(false);
-        this.coinsImage.setVisible(false);
-        this.coinsImage.setDisable(true);
-        this.coinsLabel.setVisible(false);
-        this.coinsNumberLabel.setVisible(false);
-        this.charactersTab.setDisable(true);
+        try {
+            int gameMode = dataCollector.getGameMode();
+            if(gameMode == 0){
+                this.coinsRectangle.setVisible(false);
+                this.coinsImage.setVisible(false);
+                this.coinsImage.setDisable(true);
+                this.coinsLabel.setVisible(false);
+                this.coinsNumberLabel.setVisible(false);
+                this.charactersTab.setDisable(true);
+            }
+            else{
+                this.coinsNumberLabel.setText(String.valueOf(dataCollector.getModel().getPlayerById(dataCollector.getId()).getCoins()));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setGameStatus(){
