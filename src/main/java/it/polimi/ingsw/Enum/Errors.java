@@ -158,7 +158,10 @@ public enum Errors {
      * Error description: The lobby cannot accept more player
      */
     CANNOT_ACCEPT (308, "The lobby cannot accept more player"),
-
+    /**
+     * Error description: The graphic interface stopped for some error
+     */
+    GRAPHIC_STOPPED (309, "The graphic interface stopped for some error"),
 
 
     /*

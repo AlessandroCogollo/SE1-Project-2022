@@ -3,13 +3,18 @@ package it.polimi.ingsw.Client.GraphicInterface.FXMLController;
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
+import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Bag;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 import it.polimi.ingsw.Server.Model.Cloud;
 import it.polimi.ingsw.Server.Model.Island;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -23,6 +28,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -259,6 +265,8 @@ public class MainGameController extends Controller{
             e.printStackTrace();
             Thread.currentThread().interrupt(); //reset flag
         }
+
+        elaborateModel();
     }
 
     public void disableIfDreamMode(){
@@ -548,5 +556,89 @@ public class MainGameController extends Controller{
 
     public void setIslands(){
         this.islands = this.dataCollector.getModel().getIslandList();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    private void elaborateModel() {
+
+        ModelMessage model = this.dataCollector.getModel();
+
+        if(model.gameIsOver()){
+            gameOver();
+            return;
+        }
+
+        if (!this.dataCollector.isThisMyTurn()) {
+            notYourTurn();
+            return;
+        }
+
+        moveAsker(model);
+    }
+
+    private void moveAsker(ModelMessage model) {
+
+        Phase p = Phase.valueOf(model.getActualPhase());
+        ActionPhase aP = ActionPhase.valueOf(model.getActualActionPhase());
+
+        if (Phase.Planning.equals(p)){
+            activateAssistant();
+        }
+        else {
+            if (model.getGameMode() == 1 && this.dataCollector.canPlayCharacter())
+                activateCharacter();
+            switch (aP) {
+                case MoveStudent -> activateStudentsMove();
+                case MoveMotherNature -> activateMotherNatureMove();
+                case ChooseCloud -> activateCloud();
+            }
+        }
+    }
+
+    private void activateCloud() {
+        //todo enable cloud click
+        super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
+    }
+
+    private void activateMotherNatureMove() {
+        //todo enable island click
+        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
+    }
+
+    private void activateStudentsMove() {
+        //todo enable only the entrance, then the other message will popup after the player has choose the students
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
+    }
+
+    private void activateCharacter() {
+        //todo enable character click
+    }
+
+    private void activateAssistant() {
+        //todo enable character click
+        super.main.displayMessage("It is your turn, please select an assistant. Just click on It");
+    }
+
+    private void notYourTurn() {
+
+        //todo do it better
+
+        super.main.displayMessage("It is not your turn, please wait");
+    }
+
+    private void gameOver() {
+        String message = this.dataCollector.getStandardWinMessage(); //todo use a better one
+
+        super.main.gameOver(message);
     }
 }

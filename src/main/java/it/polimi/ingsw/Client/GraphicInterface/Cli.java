@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.util.*;
 
+
+
 public class Cli implements Graphic {
 
     private final BufferedReader input = new BufferedReader(new InputStreamReader(new InterruptibleInputStream(System.in)));
@@ -124,6 +126,11 @@ public class Cli implements Graphic {
         displayAllModel(model, this.dC);
 
         System.out.println();
+
+        if(model.gameIsOver()){
+            displayMessage(this.dC.getStandardWinMessage());
+            return;
+        }
 
         if (this.dC.isThisMyTurn()) {
             try {
@@ -268,27 +275,10 @@ public class Cli implements Graphic {
 
     public boolean wantToPlayCharacter(ModelMessage model, int myId) throws IOException, InterruptedException {
 
-        List<CharacterSerializable> list = model.getCharacterList();
-
-        int playerCoins = model.getPlayerById(myId).getCoins();
-
-        if (playerCoins < 1)
+        if (!this.dC.canPlayCharacter())
             return false;
 
-        boolean canPlayCharacter = false;
-
-        for (CharacterSerializable c: list){
-            int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
-            if (playerCoins >= cost){
-                canPlayCharacter = true;
-                break;
-            }
-        }
-
-        if (!canPlayCharacter)
-            return false;
-
-        boolean choise = false;
+        boolean choice = false;
 
         Collection<String> correctYes = new ArrayList<>(3);
         correctYes.add("Yes");
@@ -308,9 +298,9 @@ public class Cli implements Graphic {
         while (answer == null && !Thread.currentThread().isInterrupted()){
             answer = askString("Do you want to play a character? (Yes/No)");
             if (correctYes.contains(answer))
-                choise = true;
+                choice = true;
             else if (correctNo.contains(answer))
-                choise = false;
+                choice = false;
             else{
                 displayError("Insert a valid response (Yes, yes, y, No, no, n)");
                 answer = null;
@@ -319,7 +309,7 @@ public class Cli implements Graphic {
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException("Cli: askCharacter interrupted");
 
-        return choise;
+        return choice;
     }
 
     private ClientMessage askCharacter(ModelMessage model, int myId) throws InterruptedException, IOException {

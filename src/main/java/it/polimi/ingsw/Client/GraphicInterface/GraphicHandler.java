@@ -76,4 +76,8 @@ public class GraphicHandler {
     public static boolean isValidString (String s){
         return Arrays.stream(GraphicHandler.rightTypes).toList().contains(s);
     }
+
+    public void setGraphicStopCallback (Runnable callback){
+        this.dataCollector.setGraphicStopped(callback);
+    }
 }

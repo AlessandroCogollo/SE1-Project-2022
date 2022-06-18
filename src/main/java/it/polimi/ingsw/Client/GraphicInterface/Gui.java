@@ -58,7 +58,6 @@ public class Gui extends Application implements Graphic {
         mainStage.show();
     }
 
-
     @Override
     public void init(){
         synchronized (Gui.lock) {
@@ -96,13 +95,26 @@ public class Gui extends Application implements Graphic {
         });
     }
 
+    public void gameOver(String winMessage) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(winMessage);
+            alert.initOwner(Gui.mainStage.getOwner());
+            alert.showAndWait();
+            stopGraphic();
+        });
+    }
+
     @Override
     public void stopGraphic() {
         Platform.exit();
     }
 
-
-
+    @Override
+    public void stop() throws Exception {
+        dC.graphicIsTerminated();
+        super.stop();
+    }
 
     private void askData (){
         int first = Gui.dC.getFirst(null); //in this case the value is always corrected
@@ -159,9 +171,6 @@ public class Gui extends Application implements Graphic {
         mainStage.setTitle("Main Game");
         this.sceneController.activate("mainGame");
     }
-
-
-
 
     public void startButtonPressed(ActionEvent actionEvent) {
 

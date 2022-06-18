@@ -4,9 +4,11 @@ import it.polimi.ingsw.Client.GraphicInterface.Graphic;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.LobbyInfoMessage;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 public class DataCollector {
@@ -37,6 +39,8 @@ public class DataCollector {
     private Runnable callbackForModel = null;
 
     private ClientMessage nextMove = null;
+
+    private Runnable graphicStopped = null;
 
     //all this method will be called by the Graphic class
 
@@ -122,6 +126,11 @@ public class DataCollector {
         return id;
     }
 
+    public void graphicIsTerminated(){
+        if (this.graphicStopped != null)
+            new Thread(this.graphicStopped, "Graphic Stopper Callback Thread").start();
+    }
+
     //all this method will be called by the Client main thread itself
 
 
@@ -192,6 +201,10 @@ public class DataCollector {
         }
 
         return mess;
+    }
+
+    public void setGraphicStopped(Runnable graphicStopped) {
+        this.graphicStopped = graphicStopped;
     }
 
     //this method can be called both from the Graphic class and the main client thread
@@ -296,5 +309,30 @@ public class DataCollector {
             //todo 4 player win message
             return null;
         }
+    }
+
+    public boolean canPlayCharacter() {
+
+        if (this.model == null || this.model.getGameMode() == 0)
+            return false;
+
+        List<CharacterSerializable> list = model.getCharacterList();
+
+        int playerCoins = model.getPlayerById(this.id).getCoins();
+
+        if (playerCoins < 1)
+            return false;
+
+        boolean canPlayCharacter = false;
+
+        for (CharacterSerializable c: list){
+            int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
+            if (playerCoins >= cost){
+                canPlayCharacter = true;
+                break;
+            }
+        }
+
+        return canPlayCharacter;
     }
 }

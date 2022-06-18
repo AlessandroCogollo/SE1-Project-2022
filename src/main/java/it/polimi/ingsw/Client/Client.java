@@ -7,12 +7,6 @@ import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Network.ConnectionHandler;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +14,6 @@ import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -103,6 +96,8 @@ public class Client{
 
         Thread.currentThread().setName("Main thread Client");
 
+        this.graphic.setGraphicStopCallback(this::graphicStopped);
+
         new Thread(this.connection, "Connection Handler").start();
 
         new Thread(this::messageFilter, "Client Filter").start();
@@ -138,9 +133,9 @@ public class Client{
         }
     }
 
-
-
-
+    private void graphicStopped() {
+        this.setCode(Errors.GRAPHIC_STOPPED);
+    }
     private void shutdownAll() {
         if (this.setup != null)
             this.setup.interrupt();
@@ -171,6 +166,10 @@ public class Client{
             }
             case GAME_OVER -> {
                 System.out.println("The game is finished, shutting down");
+                go = false;
+            }
+            case GRAPHIC_STOPPED -> {
+                System.out.println("Graphic has stopped, shutting down");
                 go = false;
             }
             case PLAYER_DISCONNECTED, CANNOT_ACCEPT -> go = false;
