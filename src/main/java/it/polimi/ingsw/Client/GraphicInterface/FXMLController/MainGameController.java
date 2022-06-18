@@ -66,6 +66,9 @@ public class MainGameController extends Controller{
     private GridPane gridProfessors1;
 
     @FXML
+    private GridPane gridEntrance1;
+
+    @FXML
     private Tab tab2;
 
     @FXML
@@ -76,6 +79,9 @@ public class MainGameController extends Controller{
 
     @FXML
     private GridPane gridTowers2;
+
+    @FXML
+    private GridPane gridEntrance2;
 
     @FXML
     private Tab tab3;
@@ -90,6 +96,9 @@ public class MainGameController extends Controller{
     private GridPane gridTowers3;
 
     @FXML
+    private GridPane gridEntrance3;
+
+    @FXML
     private Tab tab4;
 
     @FXML
@@ -100,6 +109,9 @@ public class MainGameController extends Controller{
 
     @FXML
     private GridPane gridTowers4;
+
+    @FXML
+    private GridPane gridEntrance4;
 
     @FXML
     private ImageView lion;
@@ -351,7 +363,50 @@ public class MainGameController extends Controller{
     }
 
     public void setSchools(){
+        setProfessors();
+        setRooms();
+    }
 
+    //todo test when playing will be possible
+    public void setProfessors(){
+        int[] professors = dataCollector.getModel().getProfessorsList();
+        ArrayList<GridPane> professorsGrids = new ArrayList<>();
+        professorsGrids.add(gridProfessors1);
+        professorsGrids.add(gridProfessors2);
+        professorsGrids.add(gridProfessors3);
+        professorsGrids.add(gridProfessors4);
+        double height = this.gridProfessors1.getPrefHeight()/4;
+        for(int i=0; i< professors.length; i++){
+            Circle c = new Circle(height);
+            c.setFill(convertColor(i));
+            professorsGrids.get(professors[i]).add(c, i, 0);
+        }
+    }
+
+    public void setRooms(){
+        int num = -1;
+        try {
+            num = dataCollector.getNumOfPlayers();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        int[] entrance = null;
+        ArrayList<GridPane> entranceGrids = new ArrayList<>();
+        entranceGrids.add(gridEntrance1);
+        entranceGrids.add(gridEntrance2);
+        entranceGrids.add(gridEntrance3);
+        entranceGrids.add(gridEntrance4);
+        double height = this.gridProfessors1.getPrefHeight()/8;
+        for(int id=0; id<num; id++){
+            entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
+            for(int color=0; color< entrance.length; color++){
+                for(int students = 0; students < color; students++){
+                    Circle c = new Circle(height);
+                    c.setFill(convertColor(color));
+                    entranceGrids.get(id).add(c, color, students);
+                }
+            }
+        }
     }
 
     public void setClouds(){

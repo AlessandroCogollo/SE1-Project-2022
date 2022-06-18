@@ -31,7 +31,7 @@ public class Professors {
         //check all professor color
         for (Color c: Color.values()){
 
-            //initialise temp variables
+            //initialize temp variables
             Player maxP = null;
             int max = -1;
             boolean equal = false;
