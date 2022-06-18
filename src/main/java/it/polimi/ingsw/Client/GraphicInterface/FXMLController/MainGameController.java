@@ -390,20 +390,20 @@ public class MainGameController extends Controller{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        int[] entrance = null;
-        ArrayList<GridPane> entranceGrids = new ArrayList<>();
-        entranceGrids.add(gridEntrance1);
-        entranceGrids.add(gridEntrance2);
-        entranceGrids.add(gridEntrance3);
-        entranceGrids.add(gridEntrance4);
-        double height = this.gridProfessors1.getPrefHeight()/8;
+        int[] room = null;
+        ArrayList<GridPane> roomGrids = new ArrayList<>();
+        roomGrids.add(gridRoom1);
+        roomGrids.add(gridRoom2);
+        roomGrids.add(gridRoom3);
+        roomGrids.add(gridRoom4);
+        double height = this.gridRoom1.getPrefHeight()/40;
         for(int id=0; id<num; id++){
-            entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
-            for(int color=0; color< entrance.length; color++){
+            room = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfRoom();
+            for(int color=0; color < room.length; color++){
                 for(int students = 0; students < color; students++){
                     Circle c = new Circle(height);
                     c.setFill(convertColor(color));
-                    entranceGrids.get(id).add(c, color, students);
+                    roomGrids.get(id).add(c, color, students);
                 }
             }
         }
