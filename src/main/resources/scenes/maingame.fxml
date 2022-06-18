@@ -99,7 +99,7 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <ImageView fx:id="coinsImage" fitHeight="90.0" fitWidth="78.0" layoutX="131.0" layoutY="473.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="coinsImage" fitHeight="90.0" fitWidth="78.0" layoutX="133.0" layoutY="478.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Moneta_base.png" />
                      </image>
@@ -139,7 +139,7 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <Label layoutX="76.0" layoutY="704.0" text="7" textFill="#beb2b2" />
+                  <Label fx:id="leftYellow" layoutX="76.0" layoutY="704.0" text="7" textFill="#beb2b2" />
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="57.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/Asset%205.png" />
@@ -165,10 +165,10 @@
                         <Image url="@../token/Asset%2021.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="156.0" layoutY="704.0" text="7" textFill="#beb2b2" />
-                  <Label layoutX="237.0" layoutY="704.0" text="7" textFill="#beb2b2" />
-                  <Label layoutX="314.0" layoutY="704.0" text="7" textFill="#beb2b2" />
-                  <Label layoutX="395.0" layoutY="704.0" text="7" textFill="#beb2b2" />
+                  <Label fx:id="leftGreen" layoutX="156.0" layoutY="704.0" text="7" textFill="#beb2b2" />
+                  <Label fx:id="leftPink" layoutX="237.0" layoutY="704.0" text="7" textFill="#beb2b2" />
+                  <Label fx:id="leftBlue" layoutX="314.0" layoutY="704.0" text="7" textFill="#beb2b2" />
+                  <Label fx:id="leftRed" layoutX="395.0" layoutY="704.0" text="7" textFill="#beb2b2" />
                   <Label layoutX="52.0" layoutY="607.0" text="Bag" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -273,7 +273,7 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
-                                                <GridPane layoutX="12.0" layoutY="85.0" prefHeight="266.0" prefWidth="200.0">
+                                                <GridPane fx:id="gridRoom1" layoutX="27.0" layoutY="95.0" prefHeight="250.0" prefWidth="170.0">
                                                   <columnConstraints>
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -293,6 +293,30 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridTowers1" layoutX="38.0" layoutY="418.0" prefHeight="75.0" prefWidth="150.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridProfessors1" layoutX="21.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
@@ -314,6 +338,51 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
+                                                <GridPane fx:id="gridRoom2" layoutX="27.0" layoutY="96.0" prefHeight="250.0" prefWidth="170.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridProfessors2" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridTowers2" layoutX="37.0" layoutY="420.0" prefHeight="75.0" prefWidth="150.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -334,6 +403,51 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
+                                                <GridPane fx:id="gridRoom3" layoutX="27.0" layoutY="95.0" prefHeight="250.0" prefWidth="170.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridProfessors3" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridTowers3" layoutX="37.0" layoutY="419.0" prefHeight="75.0" prefWidth="150.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -354,6 +468,51 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
+                                                <GridPane fx:id="gridRoom4" layoutX="27.0" layoutY="94.0" prefHeight="250.0" prefWidth="170.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridProfessors4" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="gridTowers4" layoutX="37.0" layoutY="419.0" prefHeight="75.0" prefWidth="150.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -365,16 +524,138 @@
                           <tabs>
                             <Tab text="Assistant">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="lion" fitHeight="166.0" fitWidth="109.0" layoutX="14.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(1).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="dog" fitHeight="166.0" fitWidth="109.0" layoutX="777.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(8).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="octopus" fitHeight="166.0" fitWidth="109.0" layoutX="668.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(7).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="snake" fitHeight="166.0" fitWidth="109.0" layoutX="559.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(6).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="fox" fitHeight="166.0" fitWidth="109.0" layoutX="450.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(5).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="eagle" fitHeight="166.0" fitWidth="109.0" layoutX="341.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(4).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="cat" fitHeight="166.0" fitWidth="109.0" layoutX="232.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(3).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="goose" fitHeight="166.0" fitWidth="109.0" layoutX="123.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(2).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="turtle" fitHeight="166.0" fitWidth="109.0" layoutX="995.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(10).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="elephant" fitHeight="166.0" fitWidth="109.0" layoutX="886.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Assistenti/3x/Assistente%20(9).png" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
                             <Tab fx:id="charactersTab" text="Characters">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="890.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="cook" fitHeight="166.0" fitWidth="109.0" layoutX="777.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../Personaggi/CarteTOT_front2.jpg" />
+                                                <Image url="@../Personaggi/CarteTOT_front8.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -384,9 +665,9 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="765.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="knight" fitHeight="166.0" fitWidth="109.0" layoutX="668.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../Personaggi/CarteTOT_front3.jpg" />
+                                                <Image url="@../Personaggi/CarteTOT_front7.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -396,31 +677,7 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="639.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front4.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="512.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front5.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="383.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="jester" fitHeight="166.0" fitWidth="109.0" layoutX="559.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front6.jpg" />
                                              </image>
@@ -432,7 +689,55 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="257.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="minotaur" fitHeight="166.0" fitWidth="109.0" layoutX="450.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front5.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="apothecary" fitHeight="166.0" fitWidth="109.0" layoutX="341.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front4.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="postman" fitHeight="166.0" fitWidth="109.0" layoutX="232.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front3.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="herald" fitHeight="166.0" fitWidth="109.0" layoutX="123.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front2.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="cleric" fitHeight="166.0" fitWidth="109.0" layoutX="14.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front.jpg" />
                                              </image>
@@ -444,9 +749,9 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" layoutX="131.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="drunkard" fitHeight="166.0" fitWidth="109.0" layoutX="1213.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../Personaggi/CarteTOT_front.jpg" />
+                                                <Image url="@../Personaggi/CarteTOT_front12.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -456,9 +761,33 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fitHeight="166.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="thief" fitHeight="166.0" fitWidth="109.0" layoutX="1104.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../Personaggi/CarteTOT_front.jpg" />
+                                                <Image url="@../Personaggi/CarteTOT_front11.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="princess" fitHeight="166.0" fitWidth="109.0" layoutX="995.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front10.jpg" />
+                                             </image>
+                                             <effect>
+                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                   <color>
+                                                      <Color blue="1.0" green="1.0" opacity="0.290630966424942" red="1.0" />
+                                                   </color>
+                                                </DropShadow>
+                                             </effect>
+                                          </ImageView>
+                                          <ImageView fx:id="bard" fitHeight="166.0" fitWidth="109.0" layoutX="886.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../Personaggi/CarteTOT_front9.jpg" />
                                              </image>
                                              <effect>
                                                 <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">

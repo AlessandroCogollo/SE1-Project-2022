@@ -55,12 +55,120 @@ public class MainGameController extends Controller{
 
     @FXML
     private Tab tab1;
+
+    @FXML
+    private GridPane gridRoom1;
+
+    @FXML
+    private GridPane gridTowers1;
+
+    @FXML
+    private GridPane gridProfessors1;
+
     @FXML
     private Tab tab2;
+
+    @FXML
+    private GridPane gridRoom2;
+
+    @FXML
+    private GridPane gridProfessors2;
+
+    @FXML
+    private GridPane gridTowers2;
+
     @FXML
     private Tab tab3;
+
+    @FXML
+    private GridPane gridRoom3;
+
+    @FXML
+    private GridPane gridProfessors3;
+
+    @FXML
+    private GridPane gridTowers3;
+
     @FXML
     private Tab tab4;
+
+    @FXML
+    private GridPane gridRoom4;
+
+    @FXML
+    private GridPane gridProfessors4;
+
+    @FXML
+    private GridPane gridTowers4;
+
+    @FXML
+    private ImageView lion;
+
+    @FXML
+    private ImageView dog;
+
+    @FXML
+    private ImageView octopus;
+
+    @FXML
+    private ImageView snake;
+
+    @FXML
+    private ImageView fox;
+
+    @FXML
+    private ImageView eagle;
+
+    @FXML
+    private ImageView cat;
+
+    @FXML
+    private ImageView goose;
+
+    @FXML
+    private ImageView turtle;
+
+    @FXML
+    private ImageView elephant;
+
+    @FXML
+    private Tab charactersTab;
+
+    @FXML
+    private ImageView cook;
+
+    @FXML
+    private ImageView knight;
+
+    @FXML
+    private ImageView jester;
+
+    @FXML
+    private ImageView minotaur;
+
+    @FXML
+    private ImageView apothecary;
+
+    @FXML
+    private ImageView postman;
+
+    @FXML
+    private ImageView herald;
+
+    @FXML
+    private ImageView cleric;
+
+    @FXML
+    private ImageView drunkard;
+
+    @FXML
+    private ImageView thief;
+
+    @FXML
+    private ImageView princess;
+
+    @FXML
+    private ImageView bard;
 
     @FXML
     private AnchorPane cloudAnchor1;
@@ -78,9 +186,6 @@ public class MainGameController extends Controller{
     private AnchorPane cloudAnchor2;
     @FXML
     private GridPane cloudGrid2;
-
-    @FXML
-    private Tab charactersTab;
 
     @FXML
     private Label label1;
@@ -104,6 +209,18 @@ public class MainGameController extends Controller{
     private Label stepsLabel;
     @FXML
     private Label playedCharacterLabel;
+
+    @FXML
+    private Label leftYellow;
+    @FXML
+    private Label leftGreen;
+    @FXML
+    private Label leftPink;
+    @FXML
+    private Label leftBlue;
+    @FXML
+    private Label leftRed;
+
 
 
     private int numOfPlayers;
@@ -160,7 +277,6 @@ public class MainGameController extends Controller{
         playedCharacterLabel.setText(text);
 
     }
-
 
 
     public void setUsernames() throws InterruptedException {
