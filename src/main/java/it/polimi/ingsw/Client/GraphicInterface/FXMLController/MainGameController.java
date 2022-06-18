@@ -5,6 +5,7 @@ import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
+import it.polimi.ingsw.Server.Model.Bag;
 import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
 import it.polimi.ingsw.Server.Model.Cloud;
@@ -287,39 +288,45 @@ public class MainGameController extends Controller{
             default -> text = "No active character";
         }
         playedCharacterLabel.setText(text);
+        int[] bag = dataCollector.getModel().getBag();
+        leftBlue.setText(String.valueOf(bag[0]));
+        leftGreen.setText(String.valueOf(bag[1]));
+        leftPink.setText(String.valueOf(bag[2]));
+        leftRed.setText(String.valueOf(bag[3]));
+        leftYellow.setText(String.valueOf(bag[4]));
 
     }
 
 
     public void setUsernames() throws InterruptedException {
-        int gamemode = dataCollector.getGameMode();
+        int gameMode = dataCollector.getGameMode();
         this.usernames = dataCollector.getUsernames();
         String text = "";
         username1.setText(usernames.get(0));
         tab1.setText(usernames.get(0));
         Assistant a = Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(0).getActiveAssistant());
         if (a != null) text = String.valueOf(Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(0).getActiveAssistant()).getMaxMovement());
-        label1.setText("Max moves: " + text + ", Coins: " + (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(0).getCoins()));
+        label1.setText("Max moves: " + text + (gameMode == 0 ? "" : ", Coins: " + dataCollector.getModel().getPlayerById(0).getCoins()));
         text = "";
         username2.setText(usernames.get(1));
         tab2.setText(usernames.get(1));
         a = Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(1).getActiveAssistant());
         if (a != null) text = String.valueOf(Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(1).getActiveAssistant()).getMaxMovement());
-        label2.setText("Max moves: " + text + ", Coins: " + (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(1).getCoins()));
+        label2.setText("Max moves: " + text + (gameMode == 0 ? "" : ", Coins: " + dataCollector.getModel().getPlayerById(1).getCoins()));
         text = "";
         if(this.dataCollector.getNumOfPlayers()>2){
             username3.setText(usernames.get(2));
             tab3.setText(usernames.get(2));
             a = Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(2).getActiveAssistant());
             if (a != null) text = String.valueOf(Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(2).getActiveAssistant()).getMaxMovement());
-            label3.setText("Max moves: " + text + ", Coins: " + (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(2).getCoins()));
+            label3.setText("Max moves: " + text + (gameMode == 0 ? "" : ", Coins: " + dataCollector.getModel().getPlayerById(2).getCoins()));
             text = "";
             if(this.dataCollector.getNumOfPlayers()>3){
                 username4.setText(usernames.get(3));
                 tab4.setText(usernames.get(3));
                 a = Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(3).getActiveAssistant());
                 if (a != null) text = String.valueOf(Assistant.getAssistantByValue(dataCollector.getModel().getPlayerById(3).getActiveAssistant()).getMaxMovement());
-                label4.setText("Max moves: " + text + ", Coins: " + (gamemode == 0 ? "" : dataCollector.getModel().getPlayerById(3).getCoins()));
+                label4.setText("Max moves: " + text + (gameMode == 0 ? "" : ", Coins: " + dataCollector.getModel().getPlayerById(3).getCoins()));
             }
         }
     }
