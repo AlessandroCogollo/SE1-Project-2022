@@ -362,12 +362,13 @@ public class MainGameController extends Controller{
         }
     }
 
+    //todo test when playing will be possible
     public void setSchools(){
         setProfessors();
         setRooms();
+        setEntrance();
     }
 
-    //todo test when playing will be possible
     public void setProfessors(){
         int[] professors = dataCollector.getModel().getProfessorsList();
         ArrayList<GridPane> professorsGrids = new ArrayList<>();
@@ -384,12 +385,6 @@ public class MainGameController extends Controller{
     }
 
     public void setRooms(){
-        int num = -1;
-        try {
-            num = dataCollector.getNumOfPlayers();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int[] room = null;
         ArrayList<GridPane> roomGrids = new ArrayList<>();
         roomGrids.add(gridRoom1);
@@ -397,7 +392,7 @@ public class MainGameController extends Controller{
         roomGrids.add(gridRoom3);
         roomGrids.add(gridRoom4);
         double height = this.gridRoom1.getPrefHeight()/40;
-        for(int id=0; id<num; id++){
+        for(int id=0; id<this.numOfPlayers; id++){
             room = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfRoom();
             for(int color=0; color < room.length; color++){
                 for(int students = 0; students < color; students++){
@@ -406,6 +401,72 @@ public class MainGameController extends Controller{
                     roomGrids.get(id).add(c, color, students);
                 }
             }
+        }
+    }
+
+    public void setEntrance(){
+        int[] entrance = null;
+        ArrayList<GridPane> entranceGrids = new ArrayList<>();
+        entranceGrids.add(gridEntrance1);
+        entranceGrids.add(gridEntrance2);
+        entranceGrids.add(gridEntrance3);
+        entranceGrids.add(gridEntrance4);
+        double height = this.gridEntrance1.getPrefHeight()/8;
+        for(int id = 0; id<this.numOfPlayers; id++){
+            entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
+            int row = 0;
+            int column = 0;
+            for(int color=0; color < entrance.length; color++){
+                Circle c = new Circle(height);
+                c.setFill(convertColor(color));
+                entranceGrids.get(id).add(c, column, row);
+                column++;
+                if(column > 4){
+                    column = 0;
+                    row ++;
+                }
+                if(row > 1){
+                    System.out.println("Entrance space exceeded!");
+                }
+
+            }
+        }
+    }
+
+    public void setTowers(){
+        ArrayList<GridPane> towerGrids = new ArrayList<>();
+        towerGrids.add(gridTowers1);
+        towerGrids.add(gridTowers2);
+        towerGrids.add(gridTowers3);
+        towerGrids.add(gridTowers4);
+        double height = this.gridTowers1.getPrefHeight()/8;
+        for(int id=0; id<this.numOfPlayers; id++){
+            int towers = dataCollector.getModel().getPlayerById(id).getSchool().getTowers();
+            int row = 0;
+            int column = 0;
+            for(int tower = 0; tower<towers; tower++){
+                Circle c = new Circle(height);
+                c.setFill(convertTowerColor(dataCollector.getModel().getPlayerById(0).getSchool().getTowers()));
+                towerGrids.get(id).add(c, column, row);
+                column++;
+                if(column > 3){
+                    column = 0;
+                    row ++;
+                }
+                if(row > 1){
+                    System.out.println("Tower space exceeded!");
+                }
+            }
+        }
+
+    }
+
+    public Color convertTowerColor(int id){
+        switch (id){
+            case 0: return Color.BLACK;
+            case 1: return Color.WHITE;
+            case 2: return Color.GREY;
+            default: return Color.GOLD;
         }
     }
 
@@ -461,8 +522,8 @@ public class MainGameController extends Controller{
             case 2: return Color.PURPLE;
             case 3: return Color.RED;
             case 4: return Color.GOLD;
+            default: return Color.PAPAYAWHIP;
         }
-        return Color.WHITE;
     }
 
     public void setIslands(){
