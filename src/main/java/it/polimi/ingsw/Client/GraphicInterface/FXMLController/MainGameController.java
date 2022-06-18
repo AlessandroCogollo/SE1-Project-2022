@@ -380,7 +380,7 @@ public class MainGameController extends Controller{
         for(int i=0; i< professors.length; i++){
             Circle c = new Circle(height);
             c.setFill(convertColor(i));
-            professorsGrids.get(professors[i]).add(c, i, 0);
+            if(professors[i] != -1) professorsGrids.get(professors[i]).add(c, i, 0);
         }
     }
 
@@ -395,7 +395,7 @@ public class MainGameController extends Controller{
         for(int id=0; id<this.numOfPlayers; id++){
             room = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfRoom();
             for(int color=0; color < room.length; color++){
-                for(int students = 0; students < color; students++){
+                for(int students = 0; students < room[color]; students++){
                     Circle c = new Circle(height);
                     c.setFill(convertColor(color));
                     roomGrids.get(id).add(c, color, students);
@@ -417,16 +417,18 @@ public class MainGameController extends Controller{
             int row = 0;
             int column = 0;
             for(int color=0; color < entrance.length; color++){
-                Circle c = new Circle(height);
-                c.setFill(convertColor(color));
-                entranceGrids.get(id).add(c, column, row);
-                column++;
-                if(column > 4){
-                    column = 0;
-                    row ++;
-                }
-                if(row > 1){
-                    System.out.println("Entrance space exceeded!");
+                for(int student =0; student < entrance[color]; student++){
+                    Circle c = new Circle(height);
+                    c.setFill(convertColor(color));
+                    entranceGrids.get(id).add(c, column, row);
+                    column++;
+                    if(column > 4){
+                        column = 0;
+                        row ++;
+                    }
+                    if(row > 1){
+                        System.out.println("Entrance space exceeded!");
+                    }
                 }
 
             }
