@@ -127,23 +127,19 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     public void setGameStatus(){
-        String text = null;
-        switch(dataCollector.getModel().getActiveCharacterId()){
-            case 0 -> text = "Apothecary";
-            case 1 -> text = "Bard";
-            case 2 -> text = "Cleric";
-            case 3 -> text = "Cook";
-            case 4 -> text = "Drunkard";
-            case 5 -> text = "Herald";
-            case 6 -> text = "Jester";
-            case 7 -> text = "Knight";
-            case 8 -> text = "Minotaur";
-            case 9 -> text = "Postman";
-            case 10 -> text = "Princess";
-            case 11 -> text = "Thief";
-            default -> text = "No active character";
+
+        ModelMessage model = dataCollector.getModel();
+
+        if (model.getGameMode() == 0)
+            playedCharacterLabel.setVisible(false);
+        else {
+            CharacterSerializable c = model.getCharacterById(model.getActiveCharacterId());
+            if (c == null)
+                playedCharacterLabel.setText("No active character");
+            else
+                playedCharacterLabel.setText(c.getName());
         }
-        playedCharacterLabel.setText(text);
+
         int[] bag = dataCollector.getModel().getBag();
         leftBlue.setText(String.valueOf(bag[0]));
         leftGreen.setText(String.valueOf(bag[1]));
@@ -459,12 +455,12 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     public Color convertTowerColor(int id){
-        switch (id){
-            case 0: return Color.BLACK;
-            case 1: return Color.WHITE;
-            case 2: return Color.GREY;
-            default: return Color.GOLD;
-        }
+        return switch (id) {
+            case 0 -> Color.BLACK;
+            case 1 -> Color.WHITE;
+            case 2 -> Color.GREY;
+            default -> Color.GOLD;
+        };
     }
 
     public void setClouds(){
@@ -513,14 +509,14 @@ public class MainGameController extends Controller implements Initializable {
         }
 
     public Color convertColor(int id){
-        switch (id){
-            case 0: return Color.DEEPSKYBLUE;
-            case 1: return Color.GREENYELLOW;
-            case 2: return Color.PURPLE;
-            case 3: return Color.RED;
-            case 4: return Color.GOLD;
-            default: return Color.PAPAYAWHIP;
-        }
+        return switch (id) {
+            case 0 -> Color.DEEPSKYBLUE;
+            case 1 -> Color.GREENYELLOW;
+            case 2 -> Color.PURPLE;
+            case 3 -> Color.RED;
+            case 4 -> Color.GOLD;
+            default -> Color.PAPAYAWHIP;
+        };
     }
 
     public void setIslands(){
@@ -640,22 +636,16 @@ public class MainGameController extends Controller implements Initializable {
         if (this.characterPlayable == null)
             return;
 
-
-        DataCollector dC = this.dataCollector;
-
         for (ImageView c : this.characterPlayable){
 
             c.setDisable(false);
-            c.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
+            c.setOnMouseClicked(mouseEvent -> {
 
-                    String name = c.getId();
-                    System.out.println("Selected character " + name);
+                String name = c.getId();
+                System.out.println("Selected character " + name);
 
-                    askCharacterAttributes(name);
-                    disableCharacters();
-                }
+                askCharacterAttributes(name);
+                disableCharacters();
             });
         }
     }
@@ -815,17 +805,14 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView a : this.ownedAssistant){
 
             a.setDisable(false);
-            a.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    String name = a.getId();
-                    name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    System.out.println("Selected assistant " + name);
-                    Assistant c = Assistant.valueOf(name);
-                    dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", c.getValue()));
+            a.setOnMouseClicked(mouseEvent -> {
+                String name = a.getId();
+                name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                System.out.println("Selected assistant " + name);
+                Assistant c = Assistant.valueOf(name);
+                dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", c.getValue()));
 
-                    disableAssistants();
-                }
+                disableAssistants();
             });
         }
 
