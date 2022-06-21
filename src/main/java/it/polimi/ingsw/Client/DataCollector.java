@@ -313,7 +313,7 @@ public class DataCollector {
 
     public boolean canPlayCharacter() {
 
-        if (this.model == null || this.model.getGameMode() == 0)
+        if (this.model == null || this.model.getGameMode() == 0 || this.model.getActiveCharacterId() != -1)
             return false;
 
         List<CharacterSerializable> list = model.getCharacterList();

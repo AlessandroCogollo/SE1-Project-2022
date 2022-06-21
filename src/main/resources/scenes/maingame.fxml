@@ -574,9 +574,9 @@
                            </children></AnchorPane>
                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
-                            <Tab text="Assistant">
+                            <Tab fx:id="assistantTab" text="Assistant">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane fx:id="assistantPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="lion" fitHeight="166.0" fitWidth="109.0" layoutX="14.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -698,12 +698,13 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                       </children></AnchorPane>
+                                       </children>
+                                </AnchorPane>
                               </content>
                             </Tab>
                             <Tab fx:id="charactersTab" text="Characters">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane fx:id="charactersPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="cook" fitHeight="166.0" fitWidth="109.0" layoutX="777.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
