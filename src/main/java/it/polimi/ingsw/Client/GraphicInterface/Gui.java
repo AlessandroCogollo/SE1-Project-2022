@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.Nullable;
@@ -167,8 +168,10 @@ public class Gui extends Application implements Graphic {
 
     private void displayMainGame (){
         mainStage.setFullScreen(false);
-        mainStage.setResizable(true);
+        mainStage.setResizable(false);
         mainStage.setTitle("Main Game");
+        mainStage.setHeight(1080);
+        mainStage.setWidth(1920);
         this.sceneController.activate("mainGame");
     }
 
