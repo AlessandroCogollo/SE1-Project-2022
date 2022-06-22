@@ -518,7 +518,7 @@ public class MainGameController extends Controller implements Initializable {
         for(Integer id: names.keySet()){
 
             int[] entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
-            System.out.println("Entrance of player: " + names.get(id) + " " + Arrays.toString(entrance));
+            //System.out.println("Entrance of player: " + names.get(id) + " " + Arrays.toString(entrance));
             GridPane entranceGrid = entranceGrids.get(id);
             int added = 0;
             for(it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
@@ -533,7 +533,7 @@ public class MainGameController extends Controller implements Initializable {
                     int column = added % entranceGrid.getColumnCount();
                     int row = added / entranceGrid.getColumnCount();
 
-                    System.out.println("Color " + color.name() + " added " + added + " [ " + column + ", " + row + "]");
+                    //System.out.println("Color " + color.name() + " added " + added + " [ " + column + ", " + row + "]");
                     if(row > 1 || column > 4)
                         System.out.println("Entrance space exceeded!");
 
@@ -727,20 +727,22 @@ public class MainGameController extends Controller implements Initializable {
             grid.setUserData(cloud);
 
             int[] students = cloud.getDrawnStudents();
-
+            double height = 16;
             int added = 0;
             for (int i = 0; i < students.length; i++){
 
                 for (int j = 0; j < students[i]; j++){
-                    double height = (grid.getPrefHeight() + grid.getPrefWidth()) / 16;
+                    int col = (grid.getColumnCount() - 1);
                     //double height = this.cloudGrid1.getPrefHeight()/this.cloudGrid1.getRowCount();
-                    int column = added % grid.getColumnCount();
-                    int row = added / grid.getColumnCount();
+                    int column = added % col;
+                    column++;
+                    int row = added / col;
+                    row++;
                     Circle circle = new Circle(height);
                     circle.setFill(convertColor(i));
                     grid.add(circle, column, row);
                     added++;
-                    //System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
+                    System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
                 }
 
             }
@@ -1129,9 +1131,7 @@ public class MainGameController extends Controller implements Initializable {
             a.setOnMouseClicked(handler);
         }
 
-        System.out.println("Gui Activated assistant");
         super.main.displayMessage("It is your turn, please select an assistant. Just click on It");
-        System.out.println("Gui Activated assistant and printed message");
     }
 
 
