@@ -2,32 +2,35 @@ package it.polimi.ingsw.Client.GraphicInterface.FXMLController;
 
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
-import it.polimi.ingsw.Enum.Assistant;
-import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Enum.*;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
+import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-import it.polimi.ingsw.Message.PlayAssistantMessage;
-import it.polimi.ingsw.Message.PlayCharacterMessage;
+import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
 import it.polimi.ingsw.Server.Model.Island;
-import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.*;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 
 public class MainGameController extends Controller implements Initializable {
@@ -38,22 +41,55 @@ public class MainGameController extends Controller implements Initializable {
         this.dataCollector = Gui.getDataCollector();
     }
 
-    @FXML
-    private AnchorPane cloudAnchor1;
-    @FXML
-    private GridPane cloudGrid1;
-    @FXML
-    private AnchorPane cloudAnchor3;
-    @FXML
-    private GridPane cloudGrid3;
-    @FXML
-    private AnchorPane cloudAnchor4;
-    @FXML
-    private GridPane cloudGrid4;
-    @FXML
-    private AnchorPane cloudAnchor2;
-    @FXML
-    private GridPane cloudGrid2;
+    /**
+     * Used by event Handler for setting the Next move or retrieve some information
+     * @return the data collector of the Gui
+     */
+    public DataCollector getDataCollector() {
+        return dataCollector;
+    }
+
+    public Color convertTowerColor(int id){
+        return switch (id) {
+            case 1 -> Color.BLACK;
+            case 2 -> Color.WHITE;
+            case 3 -> Color.GREY;
+            default -> Color.TRANSPARENT;
+        };
+    }
+
+    public Color convertColor(int id){
+        return switch (id) {
+            case 0 -> Color.DEEPSKYBLUE;
+            case 1 -> Color.PURPLE;
+            case 2 -> Color.GOLD;
+            case 3 -> Color.RED;
+            case 4 -> Color.GREENYELLOW;
+            default -> Color.TRANSPARENT;
+        };
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        System.out.println("Initialize Started");
+
+        setGameStatus();
+        setUsernames();
+        setClouds();
+        setSchools();
+        setIslands();
+        setAssistant();
+        setCharacter();
+
+        System.out.println("Elaborate Model");
+        elaborateModel();
+    }
+
+
+
+
 
 
 
@@ -70,6 +106,8 @@ public class MainGameController extends Controller implements Initializable {
     private Label stepsLabel;
     @FXML
     private Label playedCharacterLabel;
+    @FXML
+    private Label characterPlayedTitle;
 
     @FXML
     private Label leftYellow;
@@ -82,63 +120,38 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private Label leftRed;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        System.out.println("Initialize Started");
-
-        try {
-            setUsernames();
-            disableIfDreamMode();
-            setClouds();
-            setSchools();
-            setIslands();
-            setGameStatus();
-            setAssistant();
-            setCharacter();
-        } catch (InterruptedException e) {
-            System.err.println("Interrupted while loading data - initialize main game controller");
-            e.printStackTrace();
-            Thread.currentThread().interrupt(); //reset flag
-            Platform.exit();
-        }
-
-        System.out.println("Elaborate Model");
-        elaborateModel();
-    }
-
-    public void disableIfDreamMode(){
-        try {
-            int gameMode = dataCollector.getGameMode();
-            if(gameMode == 0){
-                this.coinsRectangle.setVisible(false);
-                this.coinsImage.setVisible(false);
-                this.coinsImage.setDisable(true);
-                this.coinsLabel.setVisible(false);
-                this.coinsNumberLabel.setVisible(false);
-            }
-            else{
-                this.coinsNumberLabel.setText(String.valueOf(dataCollector.getModel().getPlayerById(dataCollector.getId()).getCoins()));
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void setGameStatus(){
 
         ModelMessage model = dataCollector.getModel();
 
-        if (model.getGameMode() == 0)
-            playedCharacterLabel.setVisible(false);
+        if (model.getGameMode() == 0) {
+            this.playedCharacterLabel.setVisible(false);
+            this.characterPlayedTitle.setVisible(false);
+            this.coinsRectangle.setVisible(false);
+            this.coinsImage.setVisible(false);
+            this.coinsImage.setDisable(true);
+            this.coinsLabel.setVisible(false);
+            this.coinsNumberLabel.setVisible(false);
+        }
         else {
             CharacterSerializable c = model.getCharacterById(model.getActiveCharacterId());
             if (c == null)
                 playedCharacterLabel.setText("No active character");
             else
                 playedCharacterLabel.setText(c.getName());
+
+            this.coinsNumberLabel.setText(String.valueOf(model.getPlayerById(dataCollector.getId()).getCoins()));
         }
+
+        Assistant a = Assistant.getAssistantByValue(model.getPlayerById(this.dataCollector.getId()).getActiveAssistant());
+        if (a != null) {
+            int max = a.getMaxMovement();
+            if (model.getActiveCharacterId() == 9)
+                max += 2;
+            this.stepsLabel.setText("Max " + max + " steps");
+        }
+        else
+            this.stepsLabel.setText("No active Assistant at the moment");
 
         int[] bag = dataCollector.getModel().getBag();
         leftBlue.setText(String.valueOf(bag[0]));
@@ -146,7 +159,6 @@ public class MainGameController extends Controller implements Initializable {
         leftPink.setText(String.valueOf(bag[2]));
         leftRed.setText(String.valueOf(bag[3]));
         leftYellow.setText(String.valueOf(bag[4]));
-
     }
 
 
@@ -170,15 +182,20 @@ public class MainGameController extends Controller implements Initializable {
     private Label label4;
 
     @FXML
+    private Rectangle rectangle1;
+    @FXML
+    private Rectangle rectangle2;
+    @FXML
     private Rectangle rectangle3;
+    @FXML
+    private Rectangle rectangle4;
+
     @FXML
     private Rectangle color3;
     @FXML
-    private Rectangle rectangle4;
-    @FXML
     private Rectangle color4;
 
-    public void setUsernames() throws InterruptedException {
+    public void setUsernames() {
 
         ModelMessage model = dataCollector.getModel();
         int playerNumber = model.getPlayerNumber();
@@ -195,12 +212,19 @@ public class MainGameController extends Controller implements Initializable {
         labels.add(label3);
         labels.add(label4);
 
-        switch (playerNumber){
-            case 2 -> {
-                disable3userName();
-                disable4userName();
-            }
-            case 3 -> disable4userName();
+        if (playerNumber < 4){
+            this.color4.setVisible(false);
+            this.color4.setDisable(true);
+            this.rectangle4.setVisible(false);
+            this.username4.setVisible(false);
+            this.label4.setVisible(false);
+        }
+        if (playerNumber < 3){
+            this.color3.setVisible(false);
+            this.color3.setDisable(true);
+            this.rectangle3.setVisible(false);
+            this.username3.setVisible(false);
+            this.label3.setVisible(false);
         }
 
 
@@ -218,39 +242,78 @@ public class MainGameController extends Controller implements Initializable {
             labels.get(i).setText(text);
         }
 
-        glowCurrent(names);
+        Map<Label, Rectangle> temp = new HashMap<>(playerNumber);
+        temp.put(username1, rectangle1);
+        temp.put(username2, rectangle2);
+        temp.put(username3, rectangle3);
+        temp.put(username4, rectangle4);
+
+        glowEffect(temp);
+        mateEffect(names);
     }
 
-    private void disable3userName(){
-        this.color3.setVisible(false);
-        this.color3.setDisable(true);
-        this.rectangle3.setVisible(false);
-        this.username3.setVisible(false);
-        this.label3.setVisible(false);
+    private void mateEffect(List<Label> names) {
+        ModelMessage model = this.dataCollector.getModel();
+
+        if (model.getPlayerNumber() != 4)
+            return;
+
+        Set<Integer> ids = this.dataCollector.getUsernames().keySet();
+
+        List<Integer> teamRed = new ArrayList<>(2);
+        List<Integer> teamBlue = new ArrayList<>(2);
+
+        for (Integer id : ids){
+            if (id % 2 == 0)
+                teamRed.add(id);
+            else
+                teamBlue.add(id);
+        }
+
+        if (teamBlue.size() != 2 || teamRed.size() != 2){
+            System.out.println("Error id not valid");
+            ids.forEach(System.out::println);
+            return;
+        }
+
+        System.out.println("Team Blue");
+        for (Integer id : teamBlue){
+            System.out.print(names.get(id).getText() + " ");
+            names.get(id).setTextFill(Color.BLUE);
+        }
+        System.out.println();
+        System.out.println("Team Red");
+        for (Integer id : teamRed){
+            System.out.print(names.get(id).getText() + " ");
+            names.get(id).setTextFill(Color.RED);
+        }
+        System.out.println();
     }
 
-    private void disable4userName(){
-        this.color4.setVisible(false);
-        this.color4.setDisable(true);
-        this.rectangle4.setVisible(false);
-        this.username4.setVisible(false);
-        this.label4.setVisible(false);
-    }
-
-    public void glowCurrent(List<Label> usernameLabels){
+    public void glowEffect(Map<Label, Rectangle> temp){
 
         int curr = this.dataCollector.getIdOfCurrentPlayer();
         System.out.println("Current is " + curr);
 
-        for(Label label : usernameLabels){
-            if (label.getText().equals(dataCollector.getUsernameOfCurrentPlayer())){
+        for(Label label : temp.keySet()){
+
+            //setting glow for actual player
+            if (label.getText().equals(dataCollector.getUsernames().get(dataCollector.getId()))){
                 label.setEffect(new DropShadow(10, Color.GOLD));
             }
             else label.setEffect(null);
+
+            //setting glow for current player
+            if (label.getText().equals(dataCollector.getUsernameOfCurrentPlayer())){
+                temp.get(label).setEffect(new DropShadow(10, Color.GOLD));
+            }
+            else temp.get(label).setEffect(null);
         }
     }
 
 
+    @FXML
+    private TabPane tabPaneSchools;
 
     @FXML
     private Tab tab1;
@@ -312,6 +375,12 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private GridPane gridEntrance4;
 
+    private Tab actualTab = null;
+    private GridPane actualRoom = null;
+    private List<List<Circle>> room = null;
+    private GridPane actualEntrance = null;
+    private List<Circle> entrance = null;
+
     public void setSchools(){
 
         int playerNumber = dataCollector.getModel().getPlayerNumber();
@@ -325,152 +394,310 @@ public class MainGameController extends Controller implements Initializable {
 
         for (Integer i : usernames.keySet()){
             tabs.get(i).setText(usernames.get(i));
+            if (i.equals(this.dataCollector.getId())) {
+                this.actualTab = tabs.get(i);
+                this.tabPaneSchools.getSelectionModel().select(tabs.get(i));
+            }
         }
 
-        if (playerNumber == 2){
-            disable3School();
-            disable4School();
+        //todo consider remove completely the tab from his ancestor
+        if (playerNumber < 4){
+            this.tab4.setDisable(true);
+            tabs.remove(tab4);
         }
-        if (playerNumber == 3)
-            disable4School();
+        if (playerNumber < 3){
+            this.tab3.setDisable(true);
+            tabs.remove(tab3);
+        }
 
         setProfessors();
         setRooms();
         setEntrance();
+        setTowers();
+
+        System.out.println("Schools Set");
     }
 
-    public void setProfessors(){
+    public void setProfessors() {
         int[] professors = dataCollector.getModel().getProfessorsList();
-        ArrayList<GridPane> professorsGrids = new ArrayList<>();
+
+        ArrayList<GridPane> professorsGrids = new ArrayList<>(4);
         professorsGrids.add(gridProfessors1);
         professorsGrids.add(gridProfessors2);
         professorsGrids.add(gridProfessors3);
         professorsGrids.add(gridProfessors4);
-        double height = this.gridProfessors1.getPrefHeight()/4;
-        for(int i=0; i< professors.length; i++){
+
+        double height = 11;
+
+        //cannot place properly
+        /*Polygon hexagon = new Polygon();
+        hexagon.getPoints().addAll(
+                height / 2, 0.0,
+                height / 2 * (1 + cos(Math.PI / 6)), height / 2 * sin(Math.PI / 6),
+                height / 2 * (1 + cos(Math.PI / 6)), height / 2 * (1 + sin(Math.PI / 6)),
+                height / 2, height,
+                height / 2 * (1 - cos(Math.PI / 6)), height / 2 * (1 + sin(Math.PI / 6)),
+                height / 2 * (1 - cos(Math.PI / 6)), height / 2 * sin(Math.PI / 6)
+        );*/
+
+        for(int i = 0; i < professors.length; i++){
             Circle c = new Circle(height);
             c.setFill(convertColor(i));
-            if(professors[i] != -1) professorsGrids.get(professors[i]).add(c, i, 0);
+            if(professors[i] != -1)
+                professorsGrids.get(professors[i]).add(c, i, 0);
         }
     }
 
     public void setRooms(){
-        int[] room;
-        int numOfPlayers = this.dataCollector.getModel().getPlayerNumber();
+
+        Map<Integer, String> names = this.dataCollector.getUsernames();
+
         ArrayList<GridPane> roomGrids = new ArrayList<>();
         roomGrids.add(gridRoom1);
         roomGrids.add(gridRoom2);
         roomGrids.add(gridRoom3);
         roomGrids.add(gridRoom4);
-        double height = this.gridRoom1.getPrefHeight()/40;
-        for(int id=0; id<numOfPlayers; id++){
-            room = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfRoom();
-            for(int color=0; color < room.length; color++){
-                for(int students = 0; students < room[color]; students++){
+
+        double height = 9;
+
+        for(Integer id: names.keySet()){
+
+            int[] room = this.dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfRoom();
+
+            for(it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
+
+                for(int students = 0; students < room[color.getIndex()]; students++){
                     Circle c = new Circle(height);
-                    c.setFill(convertColor(color));
-                    roomGrids.get(id).add(c, color, students);
+                    c.setFill(convertColor(color.getIndex()));
+
+
+                    //if this in the player room set the color data to each circle and add all of them to a matrix
+                    if (id.equals(this.dataCollector.getId())){
+                        c.setUserData(color);
+                        if (this.room == null) {
+                            this.room = new ArrayList<>(5);
+                            for (int i = 0; i < it.polimi.ingsw.Enum.Color.getNumberOfColors(); i++)
+                                this.room.add(new ArrayList<>(10));
+                        }
+                        this.room.get(color.getIndex()).add(students, c);
+                    }
+                    roomGrids.get(id).add(c, color.getIndex(), students);
                 }
+            }
+
+            if (id.equals(this.dataCollector.getId())) {
+                this.actualRoom = roomGrids.get(id);
+            }
+        }
+        disableRoom();
+    }
+
+    private void disableRoom() {
+        if (this.room == null)
+            return;
+
+        for (List<Circle> list: this.room){
+            for (Circle c : list){
+                c.setDisable(true);
+                c.setOnMouseClicked(null);
             }
         }
     }
 
     public void setEntrance(){
-        int[] entrance;
-        int numOfPlayers = this.dataCollector.getModel().getPlayerNumber();
+
+        Map<Integer, String> names = this.dataCollector.getUsernames();
+
         ArrayList<GridPane> entranceGrids = new ArrayList<>();
         entranceGrids.add(gridEntrance1);
         entranceGrids.add(gridEntrance2);
         entranceGrids.add(gridEntrance3);
         entranceGrids.add(gridEntrance4);
-        double height = this.gridEntrance1.getPrefHeight()/8;
-        for(int id = 0; id<numOfPlayers; id++){
-            entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
-            int row = 0;
-            int column = 0;
-            for(int color=0; color < entrance.length; color++){
-                for(int student =0; student < entrance[color]; student++){
-                    Circle c = new Circle(height);
-                    c.setFill(convertColor(color));
-                    entranceGrids.get(id).add(c, column, row);
-                    column++;
-                    if(column > 4){
-                        column = 0;
-                        row ++;
-                    }
-                    if(row > 1){
-                        System.out.println("Entrance space exceeded!");
-                    }
-                }
 
+        double height = 11;
+        for(Integer id: names.keySet()){
+
+            int[] entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
+            //System.out.println("Entrance of player: " + names.get(id) + " " + Arrays.toString(entrance));
+            GridPane entranceGrid = entranceGrids.get(id);
+            int added = 0;
+            for(it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
+                for(int student = 0; student < entrance[color.getIndex()]; student++){
+
+                    Circle c = new Circle(height);
+                    c.setFill(convertColor(color.getIndex()));
+
+                    if (added == 4) //position (4, 0) not allowed
+                        added++;
+
+                    int column = added % entranceGrid.getColumnCount();
+                    int row = added / entranceGrid.getColumnCount();
+
+                    //System.out.println("Color " + color.name() + " added " + added + " [ " + column + ", " + row + "]");
+                    if(row > 1 || column > 4)
+                        System.out.println("Entrance space exceeded!");
+
+                    entranceGrid.add(c, column, row);
+
+                    if (id.equals(this.dataCollector.getId())){
+                        c.setUserData(color);
+                        if (this.entrance == null) {
+                            this.entrance = new ArrayList<>(9);
+                        }
+                        this.entrance.add(c);
+                    }
+                    added++;
+                }
             }
+
+            if (id.equals(this.dataCollector.getId())) {
+                this.actualEntrance = entranceGrid;
+            }
+        }
+        disableEntrance();
+    }
+
+    private void disableEntrance() {
+        if (this.entrance == null)
+            return;
+
+        for (Circle c : this.entrance){
+            c.setDisable(true);
+            c.setOnMouseClicked(null);
         }
     }
 
-    private void disable3School() {
-        this.tab3.setDisable(true);
-        //todo consider remove completely the tab from his ancestor
-    }
-
-    private void disable4School() {
-        this.tab4.setDisable(true);
-        //todo consider remove completely the tab from his ancestor
-    }
-
-
-
-
-
-
-
-
-
     public void setTowers(){
-        int numOfPlayers = this.dataCollector.getModel().getPlayerNumber();
+
+        Map<Integer, String> names = this.dataCollector.getUsernames();
+        ModelMessage model = this.dataCollector.getModel();
         ArrayList<GridPane> towerGrids = new ArrayList<>();
+
         towerGrids.add(gridTowers1);
         towerGrids.add(gridTowers2);
         towerGrids.add(gridTowers3);
         towerGrids.add(gridTowers4);
-        double height = this.gridTowers1.getPrefHeight()/8;
-        for(int id=0; id<numOfPlayers; id++){
-            int towers = dataCollector.getModel().getPlayerById(id).getSchool().getTowers();
-            int row = 0;
-            int column = 0;
-            for(int tower = 0; tower<towers; tower++){
+
+        double height = 13;
+
+        for(Integer id: names.keySet()){
+
+            PlayerSerializable p = model.getPlayerById(id);
+            Color color = convertTowerColor(p.getTowerColor());
+            int towers = p.getSchool().getTowers();
+            GridPane grid = towerGrids.get(id);
+
+            for(int i = 0; i < towers; i++){
                 Circle c = new Circle(height);
-                c.setFill(convertTowerColor(dataCollector.getModel().getPlayerById(0).getSchool().getTowers()));
-                towerGrids.get(id).add(c, column, row);
-                column++;
-                if(column > 3){
-                    column = 0;
-                    row ++;
-                }
-                if(row > 1){
+                c.setFill(color);
+                int column = i % grid.getColumnCount();
+                int row = i / grid.getColumnCount();
+                grid.add(c, column, row);
+
+                if(column > 3 || row > 1)
                     System.out.println("Tower space exceeded!");
-                }
             }
         }
 
     }
 
-    public Color convertTowerColor(int id){
-        return switch (id) {
-            case 0 -> Color.BLACK;
-            case 1 -> Color.WHITE;
-            case 2 -> Color.GREY;
-            default -> Color.GOLD;
-        };
+
+    private it.polimi.ingsw.Enum.Color colorChoose = null;
+
+    public void setColorChoose(it.polimi.ingsw.Enum.Color colorChoose) {
+        this.colorChoose = colorChoose;
     }
 
-    public void setClouds(){
-        int num = 0;
-        try {
-            num = this.dataCollector.getNumOfPlayers();
-            System.out.println("Num of players: " + num);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public it.polimi.ingsw.Enum.Color getColorChoose() {
+        return colorChoose;
+    }
+
+    private void activateStudentsMove() {
+
+        if (this.entrance == null)
+            return;
+
+        EventHandler<MouseEvent> handler = new EventHandler<MouseEvent>() {
+
+            private MainGameController c = null;
+            public  EventHandler<MouseEvent> init (MainGameController c){
+                this.c = c;
+                return this;
+            }
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                c.setColorChoose((it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData());
+                c.disableEntrance();
+                c.enableStudentsDestination();
+            }
+        }.init(this);
+
+        for (Circle c : this.entrance){
+            c.setDisable(false);
+            c.setOnMouseClicked(handler);
         }
+
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
+    }
+
+    public void enableStudentsDestination() {
+        if (this.colorChoose == null){
+            return;
+        }
+
+        final it.polimi.ingsw.Enum.Color colorChoose = this.colorChoose;
+        DataCollector dC = this.dataCollector;
+
+        EventHandler<MouseEvent> handler = mouseEvent -> {
+            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
+            disableStudentsDestination();
+        };
+
+        this.actualRoom.setOnMouseClicked(handler);
+
+        handler = mouseEvent -> {
+            Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
+            disableStudentsDestination();
+        };
+
+        enableIslands(handler);
+
+        super.main.displayMessage("Please select where to put the students: on an island or on your room.");
+    }
+
+    private void disableStudentsDestination() {
+        if (this.actualRoom != null)
+            this.actualRoom.setOnMouseClicked(null);
+
+        disableIslands();
+    }
+
+
+    List<GridPane> usedClouds = null;
+
+    @FXML
+    private AnchorPane cloudAnchor1;
+    @FXML
+    private GridPane cloudGrid1;
+    @FXML
+    private AnchorPane cloudAnchor2;
+    @FXML
+    private GridPane cloudGrid2;
+    @FXML
+    private AnchorPane cloudAnchor3;
+    @FXML
+    private GridPane cloudGrid3;
+    @FXML
+    private AnchorPane cloudAnchor4;
+    @FXML
+    private GridPane cloudGrid4;
+
+    public void setClouds(){
+
+        ModelMessage model = dataCollector.getModel();
+        int num = model.getCurrentPlayerId();
+
         if(num < 4){
             cloudAnchor4.setDisable(true);
             cloudAnchor4.setVisible(false);
@@ -483,62 +710,123 @@ public class MainGameController extends Controller implements Initializable {
                 cloudGrid3.setVisible(false);
             }
         }
-        ArrayList<CloudSerializable> clouds = (ArrayList<CloudSerializable>) this.dataCollector.getModel().getCloudList();
-        Integer i = 0;
-        ArrayList<GridPane> grids = new ArrayList<>();
+
+        List<CloudSerializable> clouds =  model.getCloudList();
+        List<GridPane> grids = new ArrayList<>(4);
         grids.add(this.cloudGrid1);
         grids.add(this.cloudGrid2);
         grids.add(this.cloudGrid3);
         grids.add(this.cloudGrid4);
-        int[] colors;
-        Random rand = new Random(372);
-        double height = this.cloudGrid1.getPrefHeight()/this.cloudGrid1.getRowCount();
-        height = height/4;
-        System.out.println("Height = " + height);
-        for(int cloud = 0; cloud< clouds.size(); cloud++){
-                colors = clouds.get(cloud).getDrawnStudents();
-                for(int color : colors){
-                    int column = rand.nextInt(grids.get(cloud).getColumnCount());
-                    int row = rand.nextInt(grids.get(cloud).getRowCount());
-                    // ----- Add Image -----
-                    // TODO: resize images
-                    Image image;
-                    if (color == 0) {
-                        image = new Image("/token/circle_blue.png");
-                    } else if (color == 1) {
-                        image = new Image("/token/circle_green.png");
-                    } else if (color == 2) {
-                        image = new Image("/token/circle_pink.png");
-                    } else if (color == 3) {
-                        image = new Image("/token/circle_red.png");
-                    } else {
-                        image = new Image("/token/circle_yellow.png");
-                    }
-                    ImageView c = new ImageView(image);
-                    c.setFitHeight(100);
-                    c.setFitWidth(100);
-                    // --- End Add Image --- //
-                    // Circle c = new Circle(height);
-                    // c.setFill(convertColor(color));
-                    grids.get(cloud).add(c, column, row);
-                    System.out.println("Added color[" + color + "] student in cloud " + cloud + " at column " + column + ", row " + row);
+
+        //System.out.println("Height = " + height);
+
+        int c = 0;
+        for(CloudSerializable cloud : clouds){
+
+            GridPane grid = grids.get(c);
+            grid.setUserData(cloud);
+
+            int[] students = cloud.getDrawnStudents();
+            double height = 16;
+            int added = 0;
+            for (int i = 0; i < students.length; i++){
+
+                for (int j = 0; j < students[i]; j++){
+                    int col = (grid.getColumnCount() - 1);
+                    //double height = this.cloudGrid1.getPrefHeight()/this.cloudGrid1.getRowCount();
+                    int column = added % col;
+                    column++;
+                    int row = added / col;
+                    row++;
+                    Circle circle = new Circle(height);
+                    circle.setFill(convertColor(i));
+                    grid.add(circle, column, row);
+                    added++;
+                    System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
                 }
+
             }
+
+            if (this.usedClouds == null)
+                this.usedClouds = new ArrayList<>(num);
+
+            this.usedClouds.add(grid);
+
+            c++;
         }
 
-    public Color convertColor(int id){
-        return switch (id) {
-            case 0 -> Color.DEEPSKYBLUE;
-            case 1 -> Color.GREENYELLOW;
-            case 2 -> Color.PURPLE;
-            case 3 -> Color.RED;
-            case 4 -> Color.GOLD;
-            default -> Color.PAPAYAWHIP;
-        };
+        disableClouds();
+
+        System.out.println("Clouds Set");
     }
+
+    private void disableClouds() {
+        if (this.usedClouds == null)
+            return;
+
+        for (GridPane g: this.usedClouds) {
+            g.setOnMouseClicked(null);
+            g.setDisable(true);
+        }
+    }
+
+    private void activateCloud() {
+        if (this.usedClouds == null)
+            return;
+
+        DataCollector dC = this.dataCollector;
+
+        for (GridPane g: this.usedClouds) {
+
+            g.setDisable(false);
+            g.setOnMouseClicked(mouseEvent -> {
+                CloudSerializable c = (CloudSerializable) g.getUserData();
+                dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Cloud choosed", c.getId()));
+                disableClouds();
+            });
+        }
+
+        super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
+    }
+
+
+
+
+
+
+
+
+
+
 
     public void setIslands(){
         List<Island> islands = this.dataCollector.getModel().getIslandList();
+        //todo
+        //todo set User Data of each island the real Island
+    }
+
+    public void enableIslands(EventHandler<MouseEvent> handler){
+        //todo
+    }
+
+    public void disableIslands(){
+        //todo
+    }
+
+    private void activateMotherNatureMove() {
+        //todo check
+
+        DataCollector dC = this.dataCollector;
+
+        EventHandler<MouseEvent> handler = mouseEvent -> {
+            Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+            int distance = dC.getModel().calcIslandDistance(i);
+            System.out.println("Moved mother nature for " + distance);
+            dC.setNextMove(new MoveMotherNatureMessage(Errors.NO_ERROR, "Mother Nature Moved", distance));
+            disableStudentsDestination();
+        };
+
+        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
     }
 
 
@@ -598,6 +886,8 @@ public class MainGameController extends Controller implements Initializable {
             this.charactersTab.setDisable(true);
             return;
         }
+
+
 
         List<CharacterSerializable> characters = model.getCharacterList();
 
@@ -727,7 +1017,7 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private AnchorPane assistantPane;
 
-    private List<ImageView> ownedAssistant = null;
+    private List<ImageView> assistantList = null;
 
     @FXML
     private ImageView lion;
@@ -761,19 +1051,30 @@ public class MainGameController extends Controller implements Initializable {
 
     private void setAssistant() {
 
-        int[] assistant = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getAssistantDeck();
+        this.lion.setUserData(Assistant.Lion);
+        this.goose.setUserData(Assistant.Goose);
+        this.cat.setUserData(Assistant.Cat);
+        this.eagle.setUserData(Assistant.Eagle);
+        this.fox.setUserData(Assistant.Fox);
+        this.snake.setUserData(Assistant.Snake);
+        this.octopus.setUserData(Assistant.Octopus);
+        this.dog.setUserData(Assistant.Dog);
+        this.elephant.setUserData(Assistant.Elephant);
+        this.turtle.setUserData(Assistant.Turtle);
 
+
+        int[] assistant = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getAssistantDeck();
         List<ImageView> list = new ArrayList<>(Assistant.getNumberOfAssistants());
-        list.add(0, lion);
-        list.add(1, goose);
-        list.add(2, cat);
-        list.add(3, eagle);
-        list.add(4, fox);
-        list.add(5, snake);
-        list.add(6, octopus);
-        list.add(7, dog);
-        list.add(8, elephant);
-        list.add(9, turtle);
+        list.add(lion);
+        list.add(goose);
+        list.add(cat);
+        list.add(eagle);
+        list.add(fox);
+        list.add(snake);
+        list.add(octopus);
+        list.add(dog);
+        list.add(elephant);
+        list.add(turtle);
 
         for (Assistant a : Assistant.values()){
 
@@ -791,10 +1092,10 @@ public class MainGameController extends Controller implements Initializable {
                 //list.get(a.getValue() -1).setVisible(false);
             }
             else {
-                if (this.ownedAssistant == null)
-                    this.ownedAssistant = new ArrayList<>(assistant.length);
+                if (this.assistantList == null)
+                    this.assistantList = new ArrayList<>(assistant.length);
 
-                this.ownedAssistant.add(list.get(a.getValue() - 1));
+                this.assistantList.add(list.get(a.getValue() - 1));
             }
         }
 
@@ -803,40 +1104,34 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     private void disableAssistants () {
-        if (this.ownedAssistant == null)
+        if (this.assistantList == null)
             return;
 
-        for (ImageView a : this.ownedAssistant){
+        for (ImageView a : this.assistantList){
             a.setOnMouseClicked(null);
             a.setDisable(true);
         }
     }
     private void activateAssistant() {
 
-        if (this.ownedAssistant == null) {
+        if (this.assistantList == null) {
             return;
         }
 
-
         DataCollector dC = this.dataCollector;
+        EventHandler<MouseEvent> handler = mouseEvent -> {
+            Assistant a = (Assistant) ((Node) mouseEvent.getSource()).getUserData();
+            System.out.println("Selected assistant " + a.name());
+            dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", a.getValue()));
+            disableAssistants();
+        };
 
-        for (ImageView a : this.ownedAssistant){
-
+        for (ImageView a : this.assistantList){
             a.setDisable(false);
-            a.setOnMouseClicked(mouseEvent -> {
-                String name = a.getId();
-                name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                System.out.println("Selected assistant " + name);
-                Assistant c = Assistant.valueOf(name);
-                dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", c.getValue()));
-
-                disableAssistants();
-            });
+            a.setOnMouseClicked(handler);
         }
 
-        System.out.println("Gui Activated assistant");
         super.main.displayMessage("It is your turn, please select an assistant. Just click on It");
-        System.out.println("Gui Activated assistant and printed message");
     }
 
 
@@ -879,21 +1174,6 @@ public class MainGameController extends Controller implements Initializable {
                 case ChooseCloud -> activateCloud();
             }
         }
-    }
-
-    private void activateCloud() {
-        //todo enable cloud click
-        super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
-    }
-
-    private void activateMotherNatureMove() {
-        //todo enable island click
-        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
-    }
-
-    private void activateStudentsMove() {
-        //todo enable only the entrance, then the other message will popup after the player has choose the students
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
     }
 
     private void notYourTurn() {

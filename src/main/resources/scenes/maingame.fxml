@@ -26,7 +26,7 @@
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
+                  <Rectangle fx:id="rectangle1" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="58.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="43.0" layoutX="31.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username1" layoutX="88.0" layoutY="69.0" text="frigobar123" textFill="WHITE">
                      <font>
@@ -34,7 +34,7 @@
                      </font>
                   </Label>
                   <Label fx:id="label1" layoutX="88.0" layoutY="87.0" text="Mago Thelma" textFill="#beb2b2" />
-                  <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="127.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
+                  <Rectangle fx:id="rectangle2" arcHeight="35.0" arcWidth="35.0" fill="#4b4965" height="56.0" layoutX="24.0" layoutY="127.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="425.0" />
                   <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#cbaa45" height="43.0" layoutX="31.0" layoutY="134.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="42.0" />
                   <Label fx:id="username2" layoutX="88.0" layoutY="138.0" text="sexycolbe" textFill="WHITE">
                      <font>
@@ -110,7 +110,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="stepsLabel" layoutX="50.0" layoutY="896.0" prefHeight="27.0" prefWidth="109.0" text="Max 3 Steps" textFill="#beb2b2" />
+                  <Label fx:id="stepsLabel" layoutX="50.0" layoutY="896.0" prefHeight="27.0" prefWidth="200.0" text="Max 3 Steps" textFill="#beb2b2" />
                   <Label fx:id="playedCharacterLabel" layoutX="50.0" layoutY="836.0" text="Apothecary" textFill="#f7bd0e" />
                   <Label layoutX="27.0" layoutY="26.0" text="Players" textFill="WHITE">
                      <font>
@@ -176,7 +176,7 @@
                      </font>
                   </Label>
                   <Label layoutX="95.0" layoutY="609.0" text="Students remaining" textFill="#beb2b2" />
-                  <Label layoutX="51.0" layoutY="811.0" text="Played Character" textFill="WHITE">
+                  <Label fx:id="characterPlayedTitle" layoutX="51.0" layoutY="811.0" text="Played Character" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -296,7 +296,7 @@
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <TabPane layoutX="1181.0" layoutY="35.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="561.0" prefWidth="224.0" snapToPixel="false" style="-fx-background-color: #2c2b3d;" tabClosingPolicy="UNAVAILABLE">
+                              <TabPane fx:id="tabPaneSchools" layoutX="1181.0" layoutY="35.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="561.0" prefWidth="224.0" snapToPixel="false" style="-fx-background-color: #2c2b3d;" tabClosingPolicy="UNAVAILABLE">
                                  <tabs>
                                     <Tab fx:id="tab1" text="Player 1">
                                        <content>
@@ -314,7 +314,7 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
-                                                <GridPane fx:id="gridRoom1" alignment="CENTER" layoutX="27.0" layoutY="95.0" prefHeight="250.0" prefWidth="170.0">
+                                                <GridPane fx:id="gridRoom1" alignment="CENTER" hgap="18.0" layoutX="29.0" layoutY="97.0" prefHeight="246.0" prefWidth="166.0" vgap="5.0">
                                                   <columnConstraints>
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -335,7 +335,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridTowers1" alignment="CENTER" layoutX="38.0" layoutY="418.0" prefHeight="75.0" prefWidth="150.0">
+                                                <GridPane fx:id="gridTowers1" alignment="CENTER" hgap="10.0" layoutX="43.0" layoutY="421.0" prefHeight="71.0" prefWidth="141.0" vgap="10.0">
                                                   <columnConstraints>
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -347,7 +347,7 @@
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridProfessors1" alignment="CENTER" layoutX="21.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                <GridPane fx:id="gridProfessors1" alignment="CENTER" hgap="13.0" layoutX="26.0" layoutY="368.0" prefHeight="25.0" prefWidth="172.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -359,7 +359,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridEntrance1" alignment="CENTER" layoutX="19.0" layoutY="13.0" prefHeight="63.0" prefWidth="186.0">
+                                                <GridPane fx:id="gridEntrance1" alignment="CENTER" hgap="13.0" layoutX="27.0" layoutY="16.0" prefHeight="57.0" prefWidth="171.0" vgap="7.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -368,8 +368,8 @@
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="31.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </children>
@@ -392,7 +392,7 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
-                                                <GridPane fx:id="gridRoom2" alignment="CENTER" layoutX="27.0" layoutY="96.0" prefHeight="250.0" prefWidth="170.0">
+                                                <GridPane fx:id="gridRoom2" alignment="CENTER" hgap="18.0" layoutX="29.0" layoutY="97.0" prefHeight="246.0" prefWidth="166.0" vgap="5.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -413,7 +413,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridProfessors2" alignment="CENTER" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                <GridPane fx:id="gridProfessors2" alignment="CENTER" hgap="13.0" layoutX="26.0" layoutY="368.0" prefHeight="25.0" prefWidth="172.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -425,7 +425,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridTowers2" alignment="CENTER" layoutX="37.0" layoutY="420.0" prefHeight="75.0" prefWidth="150.0">
+                                                <GridPane fx:id="gridTowers2" alignment="CENTER" hgap="10.0" layoutX="43.0" layoutY="421.0" prefHeight="71.0" prefWidth="141.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -437,7 +437,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridEntrance2" alignment="CENTER" layoutX="20.0" layoutY="14.0" prefHeight="63.0" prefWidth="186.0">
+                                                <GridPane fx:id="gridEntrance2" alignment="CENTER" hgap="13.0" layoutX="27.0" layoutY="16.0" prefHeight="57.0" prefWidth="171.0" vgap="7.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -470,7 +470,7 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
-                                                <GridPane fx:id="gridRoom3" alignment="CENTER" layoutX="27.0" layoutY="95.0" prefHeight="250.0" prefWidth="170.0">
+                                                <GridPane fx:id="gridRoom3" alignment="CENTER" hgap="18.0" layoutX="29.0" layoutY="97.0" prefHeight="246.0" prefWidth="166.0" vgap="5.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -491,7 +491,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridProfessors3" alignment="CENTER" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                <GridPane fx:id="gridProfessors3" alignment="CENTER" hgap="13.0" layoutX="26.0" layoutY="368.0" prefHeight="25.0" prefWidth="172.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -503,7 +503,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridTowers3" alignment="CENTER" layoutX="37.0" layoutY="419.0" prefHeight="75.0" prefWidth="150.0">
+                                                <GridPane fx:id="gridTowers3" alignment="CENTER" hgap="10.0" layoutX="43.0" layoutY="421.0" prefHeight="71.0" prefWidth="141.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -515,7 +515,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridEntrance3" alignment="CENTER" layoutX="19.0" layoutY="14.0" prefHeight="63.0" prefWidth="186.0">
+                                                <GridPane fx:id="gridEntrance3" alignment="CENTER" hgap="13.0" layoutX="27.0" layoutY="16.0" prefHeight="57.0" prefWidth="171.0" vgap="7.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -548,7 +548,7 @@
                                                       </DropShadow>
                                                    </effect>
                                                 </ImageView>
-                                                <GridPane fx:id="gridRoom4" alignment="CENTER" layoutX="27.0" layoutY="94.0" prefHeight="250.0" prefWidth="170.0">
+                                                <GridPane fx:id="gridRoom4" alignment="CENTER" hgap="18.0" layoutX="29.0" layoutY="97.0" prefHeight="246.0" prefWidth="166.0" vgap="5.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -569,7 +569,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridProfessors4" alignment="CENTER" layoutX="22.0" layoutY="363.0" prefHeight="35.0" prefWidth="181.0">
+                                                <GridPane fx:id="gridProfessors4" alignment="CENTER" hgap="13.0" layoutX="26.0" layoutY="368.0" prefHeight="25.0" prefWidth="172.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -581,7 +581,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridTowers4" alignment="CENTER" layoutX="37.0" layoutY="419.0" prefHeight="75.0" prefWidth="150.0">
+                                                <GridPane fx:id="gridTowers4" alignment="CENTER" hgap="10.0" layoutX="43.0" layoutY="421.0" prefHeight="71.0" prefWidth="141.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -593,7 +593,7 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="gridEntrance4" alignment="CENTER" layoutX="19.0" layoutY="14.0" prefHeight="63.0" prefWidth="186.0">
+                                                <GridPane fx:id="gridEntrance4" alignment="CENTER" hgap="13.0" layoutX="27.0" layoutY="16.0" prefHeight="57.0" prefWidth="171.0" vgap="7.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
