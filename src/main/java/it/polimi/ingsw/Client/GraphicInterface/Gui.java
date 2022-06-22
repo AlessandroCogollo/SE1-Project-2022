@@ -1,10 +1,13 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.FXMLController.*;
 import it.polimi.ingsw.Enum.Wizard;
 
+import it.polimi.ingsw.Message.LobbyInfoMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,20 +15,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Gui extends Application implements Graphic {
 
-    private static DataCollector dC = null;
+    protected static DataCollector dC = null;
     private final static Object lock = new Object();
-
-    private static Stage mainStage = null;
+    protected static Stage mainStage = null;
     private SceneController sceneController = null;
 
 
@@ -60,7 +65,7 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
-    public void init(){
+    public void init() throws Exception {
         synchronized (Gui.lock) {
             Gui.dC = new DataCollector(this);
             Gui.dC.setCallbackForModel(() -> Platform.runLater(this::displayMainGame));
@@ -210,5 +215,114 @@ public class Gui extends Application implements Graphic {
         Gui.dC.setNumOfPlayers(numOfPlayers);
 
         this.waitForDone();
+    }
+
+    public static class ScenesLoader extends Gui {
+
+        private void modelSelector(DataCollector dC){
+
+            final String fileName = "0srt1ath0.json";
+
+            final String name1 = "bit"; // id: 0
+            final String name2 = "tib"; // id: 1
+            final String name3 = "itb"; // id: 2
+            final String name4 = "bti"; // id: 3
+
+            final Wizard w1 = Wizard.Wise;      // id: 0
+            final Wizard w2 = Wizard.King;      // id: 1
+            final Wizard w3 = Wizard.Sorcerer;  // id: 2
+            final Wizard w4 = Wizard.Witch;     // id: 3
+
+
+
+
+
+
+
+
+            Path persistenceFolder = Paths.get("", "persistence");
+            Path file = Paths.get(persistenceFolder.toString(), fileName);
+
+            Map<Integer, String> names = new HashMap<>(4);
+            names.put(0, name1);
+            names.put(1, name2);
+            names.put(2, name3);
+            names.put(3, name4);
+
+            Map<Integer, Wizard> wzs = new HashMap<>(4);
+            wzs.put(0, w1);
+            wzs.put(1, w2);
+            wzs.put(2, w3);
+            wzs.put(3, w4);
+
+            String json;
+            try (Stream<String> s = Files.lines(file)){
+                json = s.collect(Collectors.joining(System.lineSeparator()));
+            } catch (IOException | SecurityException e) {
+                e.printStackTrace();
+                System.out.println("Error: cannot read lines from " + file);
+                return;
+            }
+
+            Gson g = new Gson();
+
+            ModelMessage model = g.fromJson(json, ModelMessage.class);
+
+            //final int id = 0;  //player id, below could use the current player
+            final int id = model.getCurrentPlayerId();
+
+            dC.setModel(model);
+
+            Map<Integer, String> usernames = new HashMap<>(model.getPlayerNumber());
+            for (PlayerSerializable p : model.getPlayerList()){
+                usernames.put(p.getId(), names.get(p.getId()));
+            }
+            Map<Integer, Wizard> wizards = new HashMap<>(model.getPlayerNumber());
+            for (PlayerSerializable p : model.getPlayerList()){
+                wizards.put(p.getId(), wzs.get(p.getId()));
+            }
+
+            LobbyInfoMessage l = new LobbyInfoMessage("TEST", usernames, wizards, model.getGameMode(), model.getPlayerNumber());
+            dC.setGameData(l, id);
+
+            dC.setUsername(names.get(id));
+            dC.setWizard(wzs.get(id));
+        }
+
+        @Override
+        public void init() throws Exception {
+            dC = new DataCollector(this);
+            modelSelector(dC);
+        }
+
+        @Override
+        public void start(Stage stage) {
+
+            mainStage = stage;
+
+            MainGameController c = new MainGameController(this, "scenes/maingame.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(c.getResource()));
+            fxmlLoader.setController(c);
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                System.err.println("Error while loading " + c.getResource() + " resource, exit");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+            stage.setScene(scene);
+
+            stage.show();
+        }
+    }
+
+    public static void main(String[] args){
+        Application.launch(ScenesLoader.class, (String[]) null);
     }
 }

@@ -180,7 +180,10 @@ public class DataCollector {
             this.model = model;
         }
 
-        this.callbackForModel.run();
+        if (this.callbackForModel != null)
+            this.callbackForModel.run();
+        else
+            System.out.println("Callback Model null");
     }
 
     public void setUsernames(Map<Integer, String> usernames) {
