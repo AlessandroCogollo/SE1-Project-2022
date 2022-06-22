@@ -6,10 +6,10 @@ package it.polimi.ingsw.Enum;
 public enum Color {
 
     Blue (0),
-    Green (1),
-    Purple (2),
+    Purple (1),
+    Yellow (2),
     Red (3),
-    Yellow (4);
+    Green (4);
 
 
     private final int index;

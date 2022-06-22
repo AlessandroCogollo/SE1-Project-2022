@@ -221,7 +221,7 @@ public class Gui extends Application implements Graphic {
 
         private void modelSelector(DataCollector dC){
 
-            final String fileName = "0srt1ath0.json";
+            final String fileName = "full_school_2_players_0.json";
 
             final String name1 = "bit"; // id: 0
             final String name2 = "tib"; // id: 1
@@ -290,7 +290,7 @@ public class Gui extends Application implements Graphic {
         }
 
         @Override
-        public void init() throws Exception {
+        public void init() {
             dC = new DataCollector(this);
             modelSelector(dC);
         }
@@ -318,6 +318,7 @@ public class Gui extends Application implements Graphic {
 
             stage.setScene(scene);
 
+            stage.setFullScreen(false);
             stage.show();
         }
     }

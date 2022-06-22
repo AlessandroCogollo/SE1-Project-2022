@@ -23,10 +23,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.*;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 
 public class MainGameController extends Controller implements Initializable {
@@ -57,10 +61,10 @@ public class MainGameController extends Controller implements Initializable {
     public Color convertColor(int id){
         return switch (id) {
             case 0 -> Color.DEEPSKYBLUE;
-            case 1 -> Color.GREENYELLOW;
-            case 2 -> Color.PURPLE;
+            case 1 -> Color.PURPLE;
+            case 2 -> Color.GOLD;
             case 3 -> Color.RED;
-            case 4 -> Color.GOLD;
+            case 4 -> Color.GREENYELLOW;
             default -> Color.TRANSPARENT;
         };
     }
@@ -414,7 +418,7 @@ public class MainGameController extends Controller implements Initializable {
         System.out.println("Schools Set");
     }
 
-    public void setProfessors(){
+    public void setProfessors() {
         int[] professors = dataCollector.getModel().getProfessorsList();
 
         ArrayList<GridPane> professorsGrids = new ArrayList<>(4);
@@ -423,7 +427,18 @@ public class MainGameController extends Controller implements Initializable {
         professorsGrids.add(gridProfessors3);
         professorsGrids.add(gridProfessors4);
 
-        double height = this.gridProfessors1.getPrefHeight()/4;
+        double height = 11;
+
+        //cannot place properly
+        /*Polygon hexagon = new Polygon();
+        hexagon.getPoints().addAll(
+                height / 2, 0.0,
+                height / 2 * (1 + cos(Math.PI / 6)), height / 2 * sin(Math.PI / 6),
+                height / 2 * (1 + cos(Math.PI / 6)), height / 2 * (1 + sin(Math.PI / 6)),
+                height / 2, height,
+                height / 2 * (1 - cos(Math.PI / 6)), height / 2 * (1 + sin(Math.PI / 6)),
+                height / 2 * (1 - cos(Math.PI / 6)), height / 2 * sin(Math.PI / 6)
+        );*/
 
         for(int i = 0; i < professors.length; i++){
             Circle c = new Circle(height);
@@ -443,7 +458,7 @@ public class MainGameController extends Controller implements Initializable {
         roomGrids.add(gridRoom3);
         roomGrids.add(gridRoom4);
 
-        double height = this.gridRoom1.getPrefHeight()/40;
+        double height = 9;
 
         for(Integer id: names.keySet()){
 
@@ -499,7 +514,7 @@ public class MainGameController extends Controller implements Initializable {
         entranceGrids.add(gridEntrance3);
         entranceGrids.add(gridEntrance4);
 
-        double height = this.gridEntrance1.getPrefHeight()/8;
+        double height = 11;
         for(Integer id: names.keySet()){
 
             int[] entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
@@ -563,7 +578,7 @@ public class MainGameController extends Controller implements Initializable {
         towerGrids.add(gridTowers3);
         towerGrids.add(gridTowers4);
 
-        double height = this.gridTowers1.getPrefHeight()/8;
+        double height = 13;
 
         for(Integer id: names.keySet()){
 
