@@ -11,6 +11,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import it.polimi.ingsw.Network.ConnectionHandler;
 
@@ -302,6 +304,8 @@ public class ClientHandler implements Runnable{
             int tempG = data.getGameMode();
             if (l.getUsernames().containsValue(data.getUsername())) {
                 sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            } else if (!validUsername(data.getUsername())){
+                sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Username can't contain special characters"));
             } else if (l.getWizards().containsValue(data.getWizard())) {
                 sendMessage(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
             } else if (tempN < 2 || tempN > 4){
@@ -315,6 +319,16 @@ public class ClientHandler implements Runnable{
         this.l.setParameters(data.getNumOfPlayer(), data.getGameMode());
         this.username = data.getUsername();
         this.wizard = data.getWizard();
+    }
+
+    private boolean validUsername(String username) {
+        if (username == null || username.isBlank() || username.isEmpty())
+            return false;
+
+        Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+        Matcher hasSpecial = special.matcher(username);
+
+        return !hasSpecial.find();
     }
 
     private void ReceiveData() throws InterruptedException {
@@ -332,6 +346,8 @@ public class ClientHandler implements Runnable{
             //check correct value
             if (l.getUsernames().containsValue(data.getUsername())) {
                 sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Please select another username"));
+            } else if (!validUsername(data.getUsername())){
+                sendMessage(new Message(Errors.USERNAME_NOT_AVAILABLE, "Username can't contain special characters"));
             } else if (l.getWizards().containsValue(data.getWizard())) {
                 sendMessage(new Message(Errors.WIZARD_NOT_AVAILABLE, "Please select another wizard"));
             } else {

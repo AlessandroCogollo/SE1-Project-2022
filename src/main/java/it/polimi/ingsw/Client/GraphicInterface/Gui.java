@@ -166,7 +166,7 @@ public class Gui extends Application implements Graphic {
     }
 
     private void displayMainGame (){
-        mainStage.setFullScreen(true);
+        mainStage.setFullScreen(false);
         mainStage.setResizable(true);
         mainStage.setTitle("Main Game");
         this.sceneController.activate("mainGame");

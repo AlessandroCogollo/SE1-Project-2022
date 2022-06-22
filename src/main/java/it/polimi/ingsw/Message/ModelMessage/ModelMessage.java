@@ -251,4 +251,31 @@ public class ModelMessage extends Message {
         return winnerId;
     }
 
+    public int getCharacterIdFromName (String name){
+
+        String characterName = name.toLowerCase();
+
+        int characterId;
+
+        switch (characterName){
+            case "apothecary" -> characterId = 0;
+            case "bard" -> characterId = 1;
+            case "cleric" -> characterId = 2;
+            case "cook" -> characterId = 3;
+            case "drunkard" -> characterId = 4;
+            case "herald" -> characterId = 5;
+            case "jester" -> characterId = 6;
+            case "knight" -> characterId = 7;
+            case "minotaur" -> characterId = 8;
+            case "postman" -> characterId = 9;
+            case "princess" -> characterId = 10;
+            case "thief" -> characterId = 11;
+            default -> {
+                System.out.println("name not valid character activated " + name);
+                return -1;
+            }
+        }
+        return characterId;
+    }
+
 }
