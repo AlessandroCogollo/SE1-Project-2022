@@ -6,6 +6,7 @@ import it.polimi.ingsw.Message.ClientMessage;
 import it.polimi.ingsw.Message.LobbyInfoMessage;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import it.polimi.ingsw.Server.Model.Island;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

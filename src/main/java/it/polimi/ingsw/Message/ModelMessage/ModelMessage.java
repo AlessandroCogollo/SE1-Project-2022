@@ -278,4 +278,28 @@ public class ModelMessage extends Message {
         return characterId;
     }
 
+    public Island getIslandFromId (int id){
+        for (Island i: islandList)
+            if (i.getId() == id)
+                return i;
+
+        return null;
+    }
+
+    public int calcIslandDistance(Island src, Island dest){
+
+        if (!isIslandIdValid(src.getId()) || !isIslandIdValid(dest.getId()))
+            return -1;
+
+        int distance = islandList.indexOf(src) - islandList.indexOf(dest);
+        if (distance < 0)
+            distance = -distance;
+
+        return distance;
+    }
+
+    public int calcIslandDistance(Island dest){
+        return calcIslandDistance(getIslandFromId(motherNatureIslandId), dest);
+    }
+
 }

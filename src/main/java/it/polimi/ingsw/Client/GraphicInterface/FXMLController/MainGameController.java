@@ -5,13 +5,11 @@ import it.polimi.ingsw.Client.GraphicInterface.Gui;
 import it.polimi.ingsw.Enum.*;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
-import it.polimi.ingsw.Message.ChooseCloudMessage;
+import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
-import it.polimi.ingsw.Message.PlayAssistantMessage;
-import it.polimi.ingsw.Message.PlayCharacterMessage;
 import it.polimi.ingsw.Server.Model.Island;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,6 +37,13 @@ public class MainGameController extends Controller implements Initializable {
         this.dataCollector = Gui.getDataCollector();
     }
 
+    /**
+     * Used by event Handler for setting the Next move or retrieve some information
+     * @return the data collector of the Gui
+     */
+    public DataCollector getDataCollector() {
+        return dataCollector;
+    }
 
     public Color convertTowerColor(int id){
         return switch (id) {
@@ -135,8 +140,12 @@ public class MainGameController extends Controller implements Initializable {
         }
 
         Assistant a = Assistant.getAssistantByValue(model.getPlayerById(this.dataCollector.getId()).getActiveAssistant());
-        if (a != null)
-            this.stepsLabel.setText("Max " + a.getMaxMovement() + " steps");
+        if (a != null) {
+            int max = a.getMaxMovement();
+            if (model.getActiveCharacterId() == 9)
+                max += 2;
+            this.stepsLabel.setText("Max " + max + " steps");
+        }
         else
             this.stepsLabel.setText("No active Assistant at the moment");
 
@@ -402,7 +411,7 @@ public class MainGameController extends Controller implements Initializable {
         setEntrance();
         setTowers();
 
-        System.out.println("School Set");
+        System.out.println("Schools Set");
     }
 
     public void setProfessors(){
@@ -578,6 +587,78 @@ public class MainGameController extends Controller implements Initializable {
     }
 
 
+    private it.polimi.ingsw.Enum.Color colorChoose = null;
+
+    public void setColorChoose(it.polimi.ingsw.Enum.Color colorChoose) {
+        this.colorChoose = colorChoose;
+    }
+
+    public it.polimi.ingsw.Enum.Color getColorChoose() {
+        return colorChoose;
+    }
+
+    private void activateStudentsMove() {
+
+        if (this.entrance == null)
+            return;
+
+        EventHandler<MouseEvent> handler = new EventHandler<MouseEvent>() {
+
+            private MainGameController c = null;
+            public  EventHandler<MouseEvent> init (MainGameController c){
+                this.c = c;
+                return this;
+            }
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                c.setColorChoose((it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData());
+                c.disableEntrance();
+                c.enableStudentsDestination();
+            }
+        }.init(this);
+
+        for (Circle c : this.entrance){
+            c.setDisable(false);
+            c.setOnMouseClicked(handler);
+        }
+
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
+    }
+
+    public void enableStudentsDestination() {
+        if (this.colorChoose == null){
+            return;
+        }
+
+        final it.polimi.ingsw.Enum.Color colorChoose = this.colorChoose;
+        DataCollector dC = this.dataCollector;
+
+        EventHandler<MouseEvent> handler = mouseEvent -> {
+            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
+            disableStudentsDestination();
+        };
+
+        this.actualRoom.setOnMouseClicked(handler);
+
+        handler = mouseEvent -> {
+            Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
+            disableStudentsDestination();
+        };
+
+        enableIslands(handler);
+
+        super.main.displayMessage("Please select where to put the students: on an island or on your room.");
+    }
+
+    private void disableStudentsDestination() {
+        if (this.actualRoom != null)
+            this.actualRoom.setOnMouseClicked(null);
+
+        disableIslands();
+    }
+
+
     List<GridPane> usedClouds = null;
 
     @FXML
@@ -698,9 +779,37 @@ public class MainGameController extends Controller implements Initializable {
 
 
 
+
+
+
     public void setIslands(){
         List<Island> islands = this.dataCollector.getModel().getIslandList();
         //todo
+        //todo set User Data of each island the real Island
+    }
+
+    public void enableIslands(EventHandler<MouseEvent> handler){
+        //todo
+    }
+
+    public void disableIslands(){
+        //todo
+    }
+
+    private void activateMotherNatureMove() {
+        //todo check
+
+        DataCollector dC = this.dataCollector;
+
+        EventHandler<MouseEvent> handler = mouseEvent -> {
+            Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+            int distance = dC.getModel().calcIslandDistance(i);
+            System.out.println("Moved mother nature for " + distance);
+            dC.setNextMove(new MoveMotherNatureMessage(Errors.NO_ERROR, "Mother Nature Moved", distance));
+            disableStudentsDestination();
+        };
+
+        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
     }
 
 
@@ -1050,16 +1159,6 @@ public class MainGameController extends Controller implements Initializable {
                 case ChooseCloud -> activateCloud();
             }
         }
-    }
-
-    private void activateMotherNatureMove() {
-        //todo enable island click
-        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
-    }
-
-    private void activateStudentsMove() {
-        //todo enable only the entrance, then the other message will popup after the player has choose the students
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
     }
 
     private void notYourTurn() {
