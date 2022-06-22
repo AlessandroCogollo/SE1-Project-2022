@@ -13,13 +13,13 @@ import it.polimi.ingsw.Message.PlayAssistantMessage;
 import it.polimi.ingsw.Message.PlayCharacterMessage;
 import it.polimi.ingsw.Server.Model.Island;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -500,8 +500,12 @@ public class MainGameController extends Controller implements Initializable {
                 for(int color : colors){
                     int column = rand.nextInt(grids.get(cloud).getColumnCount());
                     int row = rand.nextInt(grids.get(cloud).getRowCount());
-                    Circle c = new Circle(height);
-                    c.setFill(convertColor(color));
+                    // ----- Add Image -----
+                    Image image = new Image("/token/circle_yellow.png");
+                    ImageView c = new ImageView(image);
+                    // --- End Add Image ---
+                    // Circle c = new Circle(height);
+                    // c.setFill(convertColor(color));
                     grids.get(cloud).add(c, column, row);
                     System.out.println("Added color[" + color + "] student in cloud " + cloud + " at column " + column + ", row " + row);
                 }
