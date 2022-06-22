@@ -501,9 +501,23 @@ public class MainGameController extends Controller implements Initializable {
                     int column = rand.nextInt(grids.get(cloud).getColumnCount());
                     int row = rand.nextInt(grids.get(cloud).getRowCount());
                     // ----- Add Image -----
-                    Image image = new Image("/token/circle_yellow.png");
+                    // TODO: resize images
+                    Image image;
+                    if (color == 0) {
+                        image = new Image("/token/circle_blue.png");
+                    } else if (color == 1) {
+                        image = new Image("/token/circle_green.png");
+                    } else if (color == 2) {
+                        image = new Image("/token/circle_pink.png");
+                    } else if (color == 3) {
+                        image = new Image("/token/circle_red.png");
+                    } else {
+                        image = new Image("/token/circle_yellow.png");
+                    }
                     ImageView c = new ImageView(image);
-                    // --- End Add Image ---
+                    c.setFitHeight(100);
+                    c.setFitWidth(100);
+                    // --- End Add Image --- //
                     // Circle c = new Circle(height);
                     // c.setFill(convertColor(color));
                     grids.get(cloud).add(c, column, row);
