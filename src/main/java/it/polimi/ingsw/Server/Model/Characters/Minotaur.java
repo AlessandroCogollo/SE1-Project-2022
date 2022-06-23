@@ -10,6 +10,10 @@ final public class Minotaur extends Character {
         super (8, 3, gameInitializer, "Minotaur");
     }
 
+    public Minotaur(GameInitializer gameInitializer, CharacterSerializable character) {
+        super(gameInitializer, character);
+    }
+
     @Override
     protected void activateEffect(int[] object) {
         // calcInfluence() method already implemented in GameBoard

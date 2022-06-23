@@ -19,7 +19,7 @@ final public class Cleric extends Character{
     }
 
     Cleric(GameInitializer gameInitializer, CharacterSerializable character) {
-        super (2, 1, gameInitializer, "Cleric");
+        super (gameInitializer, character);
         this.students = character.getStudents();
     }
 

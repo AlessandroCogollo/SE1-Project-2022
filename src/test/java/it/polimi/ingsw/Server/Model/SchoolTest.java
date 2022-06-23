@@ -221,7 +221,7 @@ class SchoolTest {
         int i = 0;
         for (Color c: Color.values()){
             while (s.hasStudentInEntrance(c)) {
-                s.moveStudentFromEntrance(c);
+                s.removeStudentFromEntrance(c);
                 i++;
             }
         }

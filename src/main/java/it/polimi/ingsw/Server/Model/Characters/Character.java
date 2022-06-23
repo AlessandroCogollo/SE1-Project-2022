@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
 abstract public class Character {
@@ -17,6 +18,14 @@ abstract public class Character {
         this.gameInitializer = gameInitializer;
         this.used = false;
         this.name = name;
+    }
+
+    public Character (GameInitializer gameInitializer, CharacterSerializable character){
+        this.id = character.getId();
+        this.cost = character.getCost();
+        this.gameInitializer = gameInitializer;
+        this.used = character.isUsed();
+        this.name = character.getName();
     }
 
     public int getId() { return this.id; }

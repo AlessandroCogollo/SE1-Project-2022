@@ -10,6 +10,10 @@ final public class Herald extends Character {
         super (5, 3, gameInitializer, "Herald");
     }
 
+    public Herald(GameInitializer gameInitializer, CharacterSerializable character) {
+        super(gameInitializer, character);
+    }
+
     @Override
     protected void activateEffect(int[] obj) {
 

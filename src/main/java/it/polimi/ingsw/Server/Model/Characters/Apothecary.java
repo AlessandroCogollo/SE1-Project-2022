@@ -15,7 +15,7 @@ final public class Apothecary extends Character {
     }
 
     Apothecary(GameInitializer gameInitializer, CharacterSerializable character) {
-        super (0, 2, gameInitializer, "Apothecary");
+        super (gameInitializer, character);
         this.banCard = character.getBanCard();
     }
 

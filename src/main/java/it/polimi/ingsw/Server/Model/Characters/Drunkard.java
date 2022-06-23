@@ -11,6 +11,10 @@ final public class Drunkard extends Character  {
         super (4, 2, gameInitializer, "Drunkard");
     }
 
+    public Drunkard(GameInitializer gameInitializer, CharacterSerializable character) {
+        super(gameInitializer, character);
+    }
+
     @Override
     protected void activateEffect(int[] object) {
         // calcInfluence() method already implemented in GameBoard

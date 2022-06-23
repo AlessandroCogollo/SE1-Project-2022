@@ -14,6 +14,10 @@ final public class Thief extends Character {
         super (11, 3, gameInitializer, "Thief");
     }
 
+    public Thief(GameInitializer gameInitializer, CharacterSerializable character) {
+        super(gameInitializer, character);
+    }
+
     @Override
     protected void activateEffect(int[] obj) {
 

@@ -65,7 +65,7 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         synchronized (Gui.lock) {
             Gui.dC = new DataCollector(this);
             Gui.dC.setCallbackForModel(() -> Platform.runLater(this::displayMainGame));
@@ -89,6 +89,10 @@ public class Gui extends Application implements Graphic {
             }
         }
         return dC;
+    }
+
+    public Stage getMainStage() {
+        return mainStage;
     }
 
     @Override

@@ -78,7 +78,7 @@ public class Player implements Iterable<Assistant>{
     // check if the movement is towards his room or to an island
     public void moveStudent (Color c, int destinationId){
         if (destinationId != -1){
-            Color student = school.moveStudentFromEntrance(c);
+            Color student = school.removeStudentFromEntrance(c);
             gameInitializer.getIslands().addStudentToIsland(student, destinationId);
         }
         else {

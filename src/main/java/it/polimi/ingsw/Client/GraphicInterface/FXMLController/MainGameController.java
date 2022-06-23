@@ -14,6 +14,7 @@ import it.polimi.ingsw.Server.Model.Island;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -74,6 +75,7 @@ public class MainGameController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         System.out.println("Initialize Started");
+        super.main.getMainStage().getScene().setCursor(Cursor.WAIT);
 
         setGameStatus();
         setUsernames();
@@ -85,6 +87,7 @@ public class MainGameController extends Controller implements Initializable {
 
         System.out.println("Elaborate Model");
         elaborateModel();
+        super.main.getMainStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
@@ -486,18 +489,6 @@ public class MainGameController extends Controller implements Initializable {
         disableRoom();
     }
 
-    private void disableRoom() {
-        if (this.room == null)
-            return;
-
-        for (List<Circle> list: this.room){
-            for (Circle c : list){
-                c.setDisable(true);
-                c.setOnMouseClicked(null);
-            }
-        }
-    }
-
     public void setEntrance(){
 
         Map<Integer, String> names = this.dataCollector.getUsernames();
@@ -551,16 +542,6 @@ public class MainGameController extends Controller implements Initializable {
         disableEntrance();
     }
 
-    private void disableEntrance() {
-        if (this.entrance == null)
-            return;
-
-        for (Circle c : this.entrance){
-            c.setDisable(true);
-            c.setOnMouseClicked(null);
-        }
-    }
-
     public void setTowers(){
 
         Map<Integer, String> names = this.dataCollector.getUsernames();
@@ -604,9 +585,6 @@ public class MainGameController extends Controller implements Initializable {
 
     private void activateStudentsMove() {
 
-        if (this.entrance == null)
-            return;
-
         EventHandler<MouseEvent> handler = new EventHandler<MouseEvent>() {
 
             private MainGameController c = null;
@@ -622,12 +600,30 @@ public class MainGameController extends Controller implements Initializable {
             }
         }.init(this);
 
+        enableEntrance(handler);
+
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining");
+    }
+
+    private void enableEntrance (EventHandler<MouseEvent> handler){
+
+        if (this.entrance == null)
+            return;
+
         for (Circle c : this.entrance){
             c.setDisable(false);
             c.setOnMouseClicked(handler);
         }
+    }
 
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining");
+    private void disableEntrance() {
+        if (this.entrance == null)
+            return;
+
+        for (Circle c : this.entrance){
+            c.setDisable(true);
+            c.setOnMouseClicked(null);
+        }
     }
 
     public void enableStudentsDestination() {
@@ -662,6 +658,32 @@ public class MainGameController extends Controller implements Initializable {
 
         disableIslands();
     }
+
+    private void enableRoom (EventHandler<MouseEvent> handler) {
+        if (this.room == null)
+            return;
+
+        for (List<Circle> l : this.room){
+            for (Circle c : l){
+                c.setDisable(false);
+                c.setOnMouseClicked(handler);
+            }
+        }
+    }
+
+    private void disableRoom() {
+        if (this.room == null)
+            return;
+
+        for (List<Circle> list: this.room){
+            for (Circle c : list){
+                c.setDisable(true);
+                c.setOnMouseClicked(null);
+            }
+        }
+    }
+
+
 
 
 
@@ -1185,12 +1207,14 @@ public class MainGameController extends Controller implements Initializable {
                 System.out.println("Selected character " + character.getName());
 
                 askCharacterAttributes(character);
-                disableCharacters();
             });
         }
     }
 
     private void askCharacterAttributes(CharacterSerializable character) {
+
+        if (checkCoins(character))
+            return;
 
         ModelMessage model = dataCollector.getModel();
 
@@ -1216,6 +1240,7 @@ public class MainGameController extends Controller implements Initializable {
                     obj[0] = i.getId();
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
+                    disableCharacters();
                 };
 
                 enableIslands(handler);
@@ -1226,7 +1251,26 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 1 -> {
                 //bard - swap between entrance and room
-                return; //todo
+
+                int[] e = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfEntrance();
+                int[] r = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfRoom();
+
+                if (Arrays.stream(e).sum() < 1 || Arrays.stream(r).sum() < 1){
+                    super.main.displayMessage("Cannot play Bard because you don't have enough students in your room");
+                    return;
+                }
+
+                handler = mouseEvent -> {
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " from entrance for bard Effect");
+                    bardEffect(color, null);
+                };
+
+                enableEntrance(handler);
+
+                super.main.displayMessage("Click on the students from your entrance (max 2), then click on the students in the room for swap them");
+
+                return;
             }
             case 2 -> {
                 //cleric - move a students from the character to an island
@@ -1246,6 +1290,7 @@ public class MainGameController extends Controller implements Initializable {
                     obj[0] = i.getId();
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
+                    disableCharacters();
                 };
 
                 enableIslands(handler);
@@ -1269,8 +1314,83 @@ public class MainGameController extends Controller implements Initializable {
         }
 
         this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, null));
+        disableCharacters();
     }
 
+    private boolean checkCoins(CharacterSerializable character) {
+
+        int cost = character.getCost();
+        if (character.isUsed())
+            cost++;
+
+        int coins = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getCoins();
+
+        if (coins < cost) {
+            super.main.displayMessage("Sorry you don't have enough coins to play the " + character.getName() + " its cost is " + cost + " and your coins are " + coins);
+            return true;
+        }
+
+        return false;
+    }
+
+    private int[] bardObject = null;
+    private void bardEffect (it.polimi.ingsw.Enum.Color entrance, it.polimi.ingsw.Enum.Color room){
+        ModelMessage model = this.dataCollector.getModel();
+
+        if (bardObject == null && room == null && entrance != null) { //chose first entrance color
+            bardObject = new int[2];
+            bardObject[0] = entrance.getIndex();
+            bardObject[1] = -1;
+
+            EventHandler<MouseEvent> handler = mouseEvent -> {
+                it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                System.out.println("Choose color " + color + " from room for bard Effect");
+                bardEffect(null, color);
+            };
+
+            int[] e = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfEntrance();
+            int[] r = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfRoom();
+
+            if (Arrays.stream(e).sum() < 2 || Arrays.stream(r).sum() < 2){
+                disableEntrance();
+            }
+
+            enableRoom(handler);
+        }
+        else if (bardObject != null && room == null && entrance != null) { //chose second entrance color
+            int first = bardObject[0];
+
+            bardObject = new int[4];
+
+            bardObject[0] = first;
+            bardObject[1] = -1;
+            bardObject[2] = entrance.getIndex();
+            bardObject[3] = -1;
+
+            disableEntrance();
+            //room already activated
+        }
+        else if (bardObject != null && room != null && entrance == null) { //choose color from room
+            if (bardObject.length == 2){ // choose only one color
+                bardObject[1] = room.getIndex();
+                disableRoom();
+                this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
+                disableCharacters();
+            }
+            else { //choose 2 color
+                if (bardObject[1] == -1){ // first setted
+                    bardObject[1] = room.getIndex();
+                }
+                else { //last setted
+                    bardObject[3] = room.getIndex();
+                    disableRoom();
+                    this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
+                    disableCharacters();
+                }
+            }
+        }
+
+    }
 
     @FXML
     private Tab assistantTab;

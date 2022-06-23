@@ -28,17 +28,17 @@ public class CharacterFactory {
     protected static Character produceCharacterBySerializable(GameInitializer gameInitializer, CharacterSerializable character){
         return switch (character.getId()) {
             case 0 -> new Apothecary(gameInitializer, character);
-            case 1 -> new Bard(gameInitializer);
+            case 1 -> new Bard(gameInitializer, character);
             case 2 -> new Cleric(gameInitializer, character);
             case 3 -> new Cook(gameInitializer, character);
-            case 4 -> new Drunkard(gameInitializer);
-            case 5 -> new Herald(gameInitializer);
+            case 4 -> new Drunkard(gameInitializer, character);
+            case 5 -> new Herald(gameInitializer, character);
             case 6 -> new Jester(gameInitializer, character);
-            case 7 -> new Knight(gameInitializer);
-            case 8 -> new Minotaur(gameInitializer);
-            case 9 -> new Postman(gameInitializer);
+            case 7 -> new Knight(gameInitializer, character);
+            case 8 -> new Minotaur(gameInitializer, character);
+            case 9 -> new Postman(gameInitializer, character);
             case 10 -> new Princess(gameInitializer, character);
-            case 11 -> new Thief(gameInitializer);
+            case 11 -> new Thief(gameInitializer, character);
             default -> null;
         };
     }

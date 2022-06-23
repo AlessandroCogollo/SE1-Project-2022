@@ -7,7 +7,6 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -20,7 +19,7 @@ final public class Jester extends Character {
     }
 
     Jester(GameInitializer gameInitializer, CharacterSerializable character) {
-        super (6, 1, gameInitializer, "Jester");
+        super (gameInitializer, character);
         this.students = character.getStudents();
     }
 
@@ -34,11 +33,11 @@ final public class Jester extends Character {
             if (i%2==0) {
                 // even elements are those to be removed from this card
                 this.students[i]--;
-                currSchool.moveStudentToEntrance(Objects.requireNonNull(Color.getColorById(i)));
+                currSchool.addStudentToEntrance(Objects.requireNonNull(Color.getColorById(i)));
             } else {
                 // odd elements are those to be added to this card
                 this.students[i]++;
-                currSchool.moveStudentFromEntrance(Objects.requireNonNull(Color.getColorById(i)));
+                currSchool.removeStudentFromEntrance(Objects.requireNonNull(Color.getColorById(i)));
             }
         }
     }

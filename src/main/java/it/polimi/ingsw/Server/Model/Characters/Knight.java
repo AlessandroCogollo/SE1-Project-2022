@@ -9,6 +9,10 @@ final public class Knight extends Character {
         super (7, 2, gameInitializer, "Knight");
     }
 
+    public Knight(GameInitializer gameInitializer, CharacterSerializable character) {
+        super(gameInitializer, character);
+    }
+
     @Override
     protected void activateEffect(int[] object) {
         // calcInfluence() method already implemented in GameBoard

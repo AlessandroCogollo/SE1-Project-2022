@@ -17,7 +17,7 @@ final public class Cook extends Character {
     }
 
     Cook(GameInitializer gameInitializer, CharacterSerializable character) {
-        super (3, 3, gameInitializer, "Cook");
+        super (gameInitializer, character);
         this.color = Optional.ofNullable(Color.getColorById(character.getColorId()));
     }
 

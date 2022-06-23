@@ -36,18 +36,16 @@ public class School {
         return room[c.getIndex()];
     }
 
-    //return true if the player will get a coin
+    /**
+     * Move a students from the entrance to the room
+     * @param color color that has to be moved from the entrance
+     * @return true if the player will have a bonus coin, false otherwise
+     */
     public boolean moveStudentToRoom (Color color){
         int index = color.getIndex();
         entrance[index]--;
         room[index]++;
         return room[index] % 3 == 0;
-    }
-
-    // used for characters' effects
-    public Color removeStudentFromRoom(Color color) {
-        room[color.getIndex()]--;
-        return color;
     }
 
     void addStudentFromCloud(Cloud c) {
@@ -57,11 +55,9 @@ public class School {
             entrance[index] += students[index];
         }
     }
-
     void addTowers(int number) {
         towers += number;
     }
-
     boolean removeTowers(int number) {
 
         for (int i = 0; i < number && towers > 0; i++)
@@ -71,12 +67,44 @@ public class School {
         return towers == 0;
     }
 
-    public Color moveStudentFromEntrance(Color color) {
+
+    /**
+     * Used only for characters effect
+     * @param color color that will be removed
+     * @return the color removed
+     */
+    public Color removeStudentFromEntrance(Color color) {
         entrance[color.getIndex()]--;
         return color;
     }
 
-    public void moveStudentToEntrance(Color color) {
+    /**
+     * Used only for characters effect
+     * @param color color that will be added
+     * @return the color added
+     */
+    public Color addStudentToEntrance(Color color) {
         entrance[color.getIndex()]++;
+        return color;
+    }
+
+    /**
+     * Used only for characters effect
+     * @param color color that will be removed
+     * @return the color removed
+     */
+    public Color removeStudentFromRoom(Color color) {
+        room[color.getIndex()]--;
+        return color;
+    }
+
+    /**
+     * Used only for characters effect
+     * @param color color that will be added
+     * @return the color added
+     */
+    public Color addStudentToRoom(Color color) {
+        room[color.getIndex()]++;
+        return color;
     }
 }

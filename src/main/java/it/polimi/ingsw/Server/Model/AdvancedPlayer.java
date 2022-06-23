@@ -33,7 +33,7 @@ public class AdvancedPlayer extends Player {
     @Override //override for coins
     public void moveStudent (Color c, int destinationId){
         if (destinationId != -1){
-            Color student = school.moveStudentFromEntrance(c);
+            Color student = school.removeStudentFromEntrance(c);
             gameInitializer.getIslands().addStudentToIsland(student, destinationId);
         }
         else {

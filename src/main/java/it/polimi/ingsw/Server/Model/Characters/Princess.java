@@ -17,7 +17,7 @@ final public class Princess extends Character {
     }
 
     Princess(GameInitializer gameInitializer, CharacterSerializable character) {
-        super (10, 2, gameInitializer, "Princess");
+        super (gameInitializer, character);
         this.students = character.getStudents();
     }
 
