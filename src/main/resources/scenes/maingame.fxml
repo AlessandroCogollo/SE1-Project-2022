@@ -1059,18 +1059,36 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fx:id="jester" fitHeight="166.0" fitWidth="109.0" layoutX="559.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front6.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <AnchorPane fx:id="jesterPane" layoutX="536.0">
+                                             <children>
+                                                <ImageView fx:id="jester" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Personaggi/CarteTOT_front6.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                         <color>
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                                <GridPane fx:id="jesterGrid" hgap="5.0" layoutX="22.0" layoutY="75.0" prefHeight="112.0" prefWidth="110.0" vgap="5.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
                                           <ImageView fx:id="minotaur" fitHeight="166.0" fitWidth="109.0" layoutX="450.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front5.jpg" />
@@ -1083,18 +1101,32 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fx:id="apothecary" fitHeight="166.0" fitWidth="109.0" layoutX="341.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front4.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <AnchorPane fx:id="apothecaryPane" layoutX="318.0">
+                                             <children>
+                                                <ImageView fx:id="apothecary" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Personaggi/CarteTOT_front4.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                         <color>
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                                <Label fx:id="labelApothecary" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="66.0" layoutY="62.0" prefHeight="25.0" prefWidth="51.0" text="x4">
+                                                   <font>
+                                                      <Font name="System Bold" size="33.0" />
+                                                   </font>
+                                                </Label>
+                                                <ImageView fx:id="bancardToken" fitHeight="78.0" fitWidth="32.0" layoutX="34.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../token/token%20apothecary.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
                                           <ImageView fx:id="postman" fitHeight="166.0" fitWidth="109.0" layoutX="232.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front3.jpg" />
@@ -1119,18 +1151,35 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fx:id="cleric" fitHeight="166.0" fitWidth="109.0" layoutX="14.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <AnchorPane fx:id="clericPane" layoutX="-9.0">
+                                             <children>
+                                                <ImageView fx:id="cleric" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Personaggi/CarteTOT_front.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                         <color>
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                                <GridPane fx:id="clericGrid" hgap="10.0" layoutX="23.0" layoutY="75.0" prefHeight="110.0" prefWidth="110.0" vgap="10.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
                                           <ImageView fx:id="drunkard" fitHeight="166.0" fitWidth="109.0" layoutX="1213.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front12.jpg" />
@@ -1155,18 +1204,35 @@
                                                 </DropShadow>
                                              </effect>
                                           </ImageView>
-                                          <ImageView fx:id="princess" fitHeight="166.0" fitWidth="109.0" layoutX="995.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front10.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <AnchorPane fx:id="princessPane" layoutX="972.0">
+                                             <children>
+                                                <ImageView fx:id="princess" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Personaggi/CarteTOT_front10.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                         <color>
+                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                         </color>
+                                                      </DropShadow>
+                                                   </effect>
+                                                </ImageView>
+                                                <GridPane fx:id="princessGrid" hgap="10.0" layoutX="23.0" layoutY="75.0" prefHeight="110.0" prefWidth="110.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
                                           <ImageView fx:id="bard" fitHeight="166.0" fitWidth="109.0" layoutX="886.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../Personaggi/CarteTOT_front9.jpg" />

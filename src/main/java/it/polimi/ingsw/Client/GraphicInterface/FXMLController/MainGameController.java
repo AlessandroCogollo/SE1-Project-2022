@@ -24,14 +24,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.*;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 
 public class MainGameController extends Controller implements Initializable {
@@ -40,14 +36,6 @@ public class MainGameController extends Controller implements Initializable {
     public MainGameController(Gui main, String resource) {
         super(main, resource);
         this.dataCollector = Gui.getDataCollector();
-    }
-
-    /**
-     * Used by event Handler for setting the Next move or retrieve some information
-     * @return the data collector of the Gui
-     */
-    public DataCollector getDataCollector() {
-        return dataCollector;
     }
 
     public Color convertTowerColor(int id){
@@ -93,7 +81,7 @@ public class MainGameController extends Controller implements Initializable {
         setSchools();
         setIslands();
         setAssistant();
-        setCharacter();
+        setCharacters();
 
         System.out.println("Elaborate Model");
         elaborateModel();
@@ -614,10 +602,6 @@ public class MainGameController extends Controller implements Initializable {
         this.colorChoose = colorChoose;
     }
 
-    public it.polimi.ingsw.Enum.Color getColorChoose() {
-        return colorChoose;
-    }
-
     private void activateStudentsMove() {
 
         if (this.entrance == null)
@@ -643,7 +627,7 @@ public class MainGameController extends Controller implements Initializable {
             c.setOnMouseClicked(handler);
         }
 
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It");
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining");
     }
 
     public void enableStudentsDestination() {
@@ -678,6 +662,9 @@ public class MainGameController extends Controller implements Initializable {
 
         disableIslands();
     }
+
+
+
 
 
     List<GridPane> usedClouds = null;
@@ -799,6 +786,10 @@ public class MainGameController extends Controller implements Initializable {
 
         super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
     }
+
+
+
+
 
     @FXML
     private AnchorPane islandAnchor1;
@@ -982,7 +973,7 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private AnchorPane charactersPane;
 
-    private List<ImageView> characterPlayable = null;
+    private List<Node> characterPlayable = null;
 
     @FXML
     private ImageView cook;
@@ -991,13 +982,23 @@ public class MainGameController extends Controller implements Initializable {
     private ImageView knight;
 
     @FXML
+    private AnchorPane jesterPane;
+    @FXML
     private ImageView jester;
+    @FXML
+    private GridPane jesterGrid;
 
     @FXML
     private ImageView minotaur;
 
     @FXML
+    private AnchorPane apothecaryPane;
+    @FXML
     private ImageView apothecary;
+    @FXML
+    private Label labelApothecary;
+    @FXML
+    private ImageView bancardToken;
 
     @FXML
     private ImageView postman;
@@ -1006,7 +1007,11 @@ public class MainGameController extends Controller implements Initializable {
     private ImageView herald;
 
     @FXML
+    private AnchorPane clericPane;
+    @FXML
     private ImageView cleric;
+    @FXML
+    private GridPane clericGrid;
 
     @FXML
     private ImageView drunkard;
@@ -1015,13 +1020,18 @@ public class MainGameController extends Controller implements Initializable {
     private ImageView thief;
 
     @FXML
+    private AnchorPane princessPane;
+    @FXML
     private ImageView princess;
+    @FXML
+    private GridPane princessGrid;
 
     @FXML
     private ImageView bard;
 
 
-    private void setCharacter() {
+    private void setCharacters() {
+
         ModelMessage model = dataCollector.getModel();
         int gM = model.getGameMode();
 
@@ -1030,95 +1040,189 @@ public class MainGameController extends Controller implements Initializable {
             return;
         }
 
-
-
         List<CharacterSerializable> characters = model.getCharacterList();
 
-        List<ImageView> list = new ArrayList<>(12);
-        list.add(0, apothecary);
+        List<Node> list = new ArrayList<>(12);
+        list.add(0, apothecaryPane);
         list.add(1, bard);
-        list.add(2, cleric);
+        list.add(2, clericPane);
         list.add(3, cook);
         list.add(4, drunkard);
         list.add(5, herald);
-        list.add(6, jester);
+        list.add(6, jesterPane);
         list.add(7, knight);
         list.add(8, minotaur);
         list.add(9, postman);
-        list.add(10, princess);
+        list.add(10, princessPane);
         list.add(11, thief);
 
         for (int i = 0; i < 12; i++){
 
-            boolean find = false;
-
-            for (CharacterSerializable character : characters) {
-                if (character.getId() == i) {
-                    find = true;
-                    break;
-                }
-            }
-
-            if (!find || model.getActiveCharacterId() == i){
-                this.charactersPane.getChildren().remove(list.get(i));
-            }
-            else {
+            if (model.isCharacterIdValid(i)){
                 if (this.characterPlayable == null)
                     this.characterPlayable = new ArrayList<>(characters.size());
 
                 this.characterPlayable.add(list.get(i));
+                list.get(i).setUserData(model.getCharacterById(i));
+
+                setCharacter(i);
             }
+            else
+                this.charactersPane.getChildren().remove(list.get(i));
         }
 
         disableCharacters();
         System.out.println("Set Characters");
     }
 
+    private List<ImageView> clericStudents = null;
+    private List<ImageView> jesterStudents = null;
+    private List<ImageView> princessStudents = null;
+
+    private void setCharacter(int id) {
+
+        ModelMessage model = this.dataCollector.getModel();
+        CharacterSerializable c = model.getCharacterById(id);
+
+        if (c == null)
+            return;
+
+        switch (id){
+            case 0 -> {
+                int banCard = c.getBanCard();
+                this.labelApothecary.setText("x" + banCard);
+                this.labelApothecary.setDisable(false);
+            }
+            case 2 -> {
+                // cleric
+                int[] students = c.getStudents();
+                int added = 0;
+                for (it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
+                    for (int i = 0; i < students[color.getIndex()]; i++){
+                        int column = added % this.clericGrid.getColumnCount();
+                        int row = added / this.clericGrid.getColumnCount();
+                        ImageView tokenView = new ImageView();
+                        tokenView.setFitHeight(32);
+                        tokenView.setFitWidth(32);
+                        Image token = convertColor(color.getIndex(), 32);
+                        tokenView.setImage(token);
+                        this.clericGrid.add(tokenView, column, row);
+                        if (this.clericStudents == null)
+                            this.clericStudents = new ArrayList<>(4);
+
+                        this.clericStudents.add(tokenView);
+                        added++;
+                    }
+                }
+            }
+            case 6 -> {
+                // jester
+                int[] students = c.getStudents();
+                int added = 0;
+                for (it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
+                    for (int i = 0; i < students[color.getIndex()]; i++){
+                        int column = added % this.jesterGrid.getColumnCount();
+                        int row = added / this.jesterGrid.getColumnCount();
+                        ImageView tokenView = new ImageView();
+                        tokenView.setFitHeight(32);
+                        tokenView.setFitWidth(32);
+                        Image token = convertColor(color.getIndex(), 32);
+                        tokenView.setImage(token);
+                        this.jesterGrid.add(tokenView, column, row);
+                        if (this.jesterStudents == null)
+                            this.jesterStudents = new ArrayList<>(6);
+
+                        this.jesterStudents.add(tokenView);
+                        added++;
+                    }
+                }
+            }
+            case 10 -> {
+                // princess
+                int[] students = c.getStudents();
+                int added = 0;
+                for (it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
+                    for (int i = 0; i < students[color.getIndex()]; i++){
+                        int column = added % this.princessGrid.getColumnCount();
+                        int row = added / this.princessGrid.getColumnCount();
+                        ImageView tokenView = new ImageView();
+                        tokenView.setFitHeight(32);
+                        tokenView.setFitWidth(32);
+                        Image token = convertColor(color.getIndex(), 32);
+                        tokenView.setImage(token);
+                        this.princessGrid.add(tokenView, column, row);
+                        if (this.princessStudents == null)
+                            this.princessStudents = new ArrayList<>(4);
+
+                        this.princessStudents.add(tokenView);
+                        added++;
+                    }
+                }
+            }
+        }
+    }
+
     private void disableCharacters() {
         if (this.characterPlayable == null)
             return;
 
-        for (ImageView c : this.characterPlayable){
+        for (Node c : this.characterPlayable){
             c.setOnMouseClicked(null);
             c.setDisable(true);
         }
     }
+
     private void activateCharacter() {
         if (this.characterPlayable == null)
             return;
 
-        for (ImageView c : this.characterPlayable){
+        for (Node c : this.characterPlayable){
 
             c.setDisable(false);
             c.setOnMouseClicked(mouseEvent -> {
 
-                String name = c.getId();
-                System.out.println("Selected character " + name);
+                CharacterSerializable character = (CharacterSerializable) ((Node)mouseEvent.getSource()).getUserData();
+                System.out.println("Selected character " + character.getName());
 
-                askCharacterAttributes(name);
+                askCharacterAttributes(character);
                 disableCharacters();
             });
         }
     }
 
-    private void askCharacterAttributes(String name) {
+    private void askCharacterAttributes(CharacterSerializable character) {
 
         ModelMessage model = dataCollector.getModel();
 
-        int characterId = model.getCharacterIdFromName(name);
-        CharacterSerializable character = model.getCharacterById(characterId);
+        int characterId = character.getId();
 
-        if (character == null){
+        if (!model.isCharacterIdValid(characterId)){
             return;
         }
 
+        DataCollector dC = this.dataCollector;
+        EventHandler<MouseEvent> handler;
 
         //todo all character effects
 
         switch (characterId){
             case 0 -> {
                 //apothecary - ban card
-                return; //todo could only enable islands like for move mother nature
+
+                handler = mouseEvent -> {
+                    Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose Island for apothecary  " + i.getId());
+                    int[] obj = new int[1];
+                    obj[0] = i.getId();
+                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
+                    disableIslands();
+                };
+
+                enableIslands(handler);
+
+                super.main.displayMessage("Please click on the island where put the ban card");
+
+                return;
             }
             case 1 -> {
                 //bard - swap between entrance and room
@@ -1134,7 +1238,21 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 5 -> {
                 //herald calc influence of an island
-                return; //todo could only enable islands like for move mother nature
+
+                handler = mouseEvent -> {
+                    Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose Island for herald  " + i.getId());
+                    int[] obj = new int[1];
+                    obj[0] = i.getId();
+                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
+                    disableIslands();
+                };
+
+                enableIslands(handler);
+
+                super.main.displayMessage("Please click on the island where calc the influence");
+
+                return;
             }
             case 6 -> {
                 //jester - swap between jester and entrance
@@ -1150,7 +1268,7 @@ public class MainGameController extends Controller implements Initializable {
             }
         }
 
-        this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played character", characterId, null));
+        this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, null));
     }
 
 
@@ -1255,6 +1373,7 @@ public class MainGameController extends Controller implements Initializable {
             a.setDisable(true);
         }
     }
+
     private void activateAssistant() {
 
         if (this.assistantList == null) {
