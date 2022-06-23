@@ -70,6 +70,17 @@ public class MainGameController extends Controller implements Initializable {
         };
     }
 
+    public Image convertColor(int id, double size) {
+        return switch (id) {
+            case 0 -> new Image("/token/circle_pawn_blue.png", size, size, false, false);
+            case 1 -> new Image("/token/circle_pawn_pink.png", size, size, false, false);
+            case 2 -> new Image("/token/circle_pawn_yellow.png", size, size, false, false);
+            case 3 -> new Image("/token/circle_pawn_red.png", size, size, false, false);
+            case 4 -> new Image("/token/circle_pawn_green.png", size, size, false, false);
+            default -> null;
+        };
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -652,7 +663,7 @@ public class MainGameController extends Controller implements Initializable {
 
         handler = mouseEvent -> {
             Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
-            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
+            dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), i.getId()));
             disableStudentsDestination();
         };
 
@@ -722,7 +733,7 @@ public class MainGameController extends Controller implements Initializable {
             grid.setUserData(cloud);
 
             int[] students = cloud.getDrawnStudents();
-            double height = 16;
+            //double height = 16;
             int added = 0;
             for (int i = 0; i < students.length; i++){
 
@@ -737,23 +748,12 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(32);
                     tokenView.setFitWidth(32);
-                    Image token = null;
-                    if (i == 0) {
-                        token = new Image("/token/circle_pawn_blue.png",32,32,false,false);
-                    } else if (i == 1) {
-                        token = new Image("/token/circle_pawn_pink.png",32,32,false,false);
-                    } else if (i == 2) {
-                        token = new Image("/token/circle_pawn_yellow.png",32,32,false,false);
-                    } else if (i == 3) {
-                        token = new Image("/token/circle_pawn_red.png",32,32,false,false);
-                    } else if (i == 4) {
-                        token = new Image("/token/circle_pawn_green.png",32,32,false,false);
-                    }
+                    Image token = convertColor(i, 32);
                     tokenView.setImage(token);
                     grid.add(tokenView, column, row);
 
                     added++;
-                    System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
+                    //System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
                 }
 
             }
@@ -849,11 +849,13 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private GridPane islandGrid12;
 
+    private List<GridPane> activeIsland = null;
+
     public void setIslands(){
 
         ModelMessage model = dataCollector.getModel();
 
-        List<Island> islands = this.dataCollector.getModel().getIslandList();
+        List<Island> islands = model.getIslandList();
 
         List<GridPane> grids = new ArrayList<>(12);
         grids.add(this.islandGrid1);
@@ -878,11 +880,9 @@ public class MainGameController extends Controller implements Initializable {
 
         System.out.println("MotherNature Set");
 
-        int c = 0;
         for(Island island : islands) {
 
-            GridPane grid = grids.get(c);
-            // --- ?? --- //
+            GridPane grid = grids.get(island.getId());
             grid.setUserData(island);
 
             int[] students = island.getStudents();
@@ -897,18 +897,7 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(32);
                     tokenView.setFitWidth(32);
-                    Image token = null;
-                    if (i == 0) {
-                        token = new Image("/token/circle_pawn_blue.png",32,32,false,false);
-                    } else if (i == 1) {
-                        token = new Image("/token/circle_pawn_pink.png",32,32,false,false);
-                    } else if (i == 2) {
-                        token = new Image("/token/circle_pawn_yellow.png",32,32,false,false);
-                    } else if (i == 3) {
-                        token = new Image("/token/circle_pawn_red.png",32,32,false,false);
-                    } else if (i == 4) {
-                        token = new Image("/token/circle_pawn_green.png",32,32,false,false);
-                    }
+                    Image token = convertColor(i, 32);
                     tokenView.setImage(token);
                     // Circle circle = new Circle(32);
                     // circle.setFill(convertColor(i));
@@ -916,20 +905,36 @@ public class MainGameController extends Controller implements Initializable {
                     added++;
                 }
             }
-            c++;
+
+            if (this.activeIsland == null)
+                this.activeIsland = new ArrayList<>(islands.size());
+
+            this.activeIsland.add(grid);
         }
+        disableIslands();
     }
 
     public void enableIslands(EventHandler<MouseEvent> handler){
-        // TODO
+        if (this.activeIsland == null)
+            return;
+
+        for (GridPane g : this.activeIsland) {
+            g.setOnMouseClicked(handler);
+            g.setDisable(false);
+        }
     }
 
     public void disableIslands(){
-        // TODO
+        if (this.activeIsland == null)
+            return;
+
+        for (GridPane g : this.activeIsland) {
+            g.setOnMouseClicked(null);
+            g.setDisable(true);
+        }
     }
 
     private void activateMotherNatureMove() {
-        //todo check
 
         DataCollector dC = this.dataCollector;
 
@@ -940,6 +945,8 @@ public class MainGameController extends Controller implements Initializable {
             dC.setNextMove(new MoveMotherNatureMessage(Errors.NO_ERROR, "Mother Nature Moved", distance));
             disableStudentsDestination();
         };
+
+        enableIslands(handler);
 
         super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
     }
