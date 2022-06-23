@@ -973,9 +973,6 @@ public class MainGameController extends Controller implements Initializable {
     }
 
 
-
-
-
     @FXML
     private Tab charactersTab;
 
