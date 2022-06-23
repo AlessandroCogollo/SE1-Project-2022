@@ -291,9 +291,14 @@ public class ModelMessage extends Message {
         if (!isIslandIdValid(src.getId()) || !isIslandIdValid(dest.getId()))
             return -1;
 
-        int distance = islandList.indexOf(src) - islandList.indexOf(dest);
-        if (distance < 0)
-            distance = -distance;
+        int indexSrc = islandList.indexOf(src);
+        int indexDest = islandList.indexOf(dest);
+
+        int distance;
+        if (indexDest >= indexSrc)
+            distance = indexDest - indexSrc;
+        else
+            distance = indexDest + islandList.size() - indexSrc;
 
         return distance;
     }

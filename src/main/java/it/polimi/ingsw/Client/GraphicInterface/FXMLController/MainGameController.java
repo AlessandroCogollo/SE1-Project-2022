@@ -871,12 +871,35 @@ public class MainGameController extends Controller implements Initializable {
         grids.add(this.islandGrid11);
         grids.add(this.islandGrid12);
 
+        List<AnchorPane> panes = new ArrayList<>(12);
+        panes.add(this.islandAnchor1);
+        panes.add(this.islandAnchor2);
+        panes.add(this.islandAnchor3);
+        panes.add(this.islandAnchor4);
+        panes.add(this.islandAnchor5);
+        panes.add(this.islandAnchor6);
+        panes.add(this.islandAnchor7);
+        panes.add(this.islandAnchor8);
+        panes.add(this.islandAnchor9);
+        panes.add(this.islandAnchor10);
+        panes.add(this.islandAnchor11);
+        panes.add(this.islandAnchor12);
+
+        for (int i = 0; i < 12; i++){
+            if (!model.isIslandIdValid(i)){
+                grids.get(i).setDisable(true);
+                grids.get(i).setVisible(false);
+                panes.get(i).setDisable(true);
+                panes.get(i).setVisible(false);
+            }
+        }
+
         Image image = new Image("/token/mothernature.png",32,32,false,false);
         ImageView imageView = new ImageView();
         imageView.setFitHeight(32);
         imageView.setFitWidth(32);
         imageView.setImage(image);
-        grids.get(model.getMotherNatureIslandId()).add(imageView, 1, 1);
+        grids.get(model.getMotherNatureIslandId()).add(imageView, 0, 0);
 
         System.out.println("MotherNature Set");
 
@@ -886,14 +909,12 @@ public class MainGameController extends Controller implements Initializable {
             grid.setUserData(island);
 
             int[] students = island.getStudents();
-            int added = 0;
+            int added = 1; // posion 0, 0 is only for mother nature
             for (int i = 0; i < students.length; i++) {
                 for (int j = 0; j < students[i]; j++) {
-                    int col = (grid.getColumnCount() - 1);
-                    int column = added % col;
-                    column++;
-                    int row = added / col;
-                    row++;
+
+                    int column = added % grid.getColumnCount();
+                    int row = added / grid.getColumnCount();
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(32);
                     tokenView.setFitWidth(32);
