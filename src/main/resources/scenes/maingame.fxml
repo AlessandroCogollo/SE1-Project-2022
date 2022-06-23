@@ -100,7 +100,7 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <ImageView fx:id="coinsImage" fitHeight="90.0" fitWidth="78.0" layoutX="134.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="coinsImage" fitHeight="90.0" fitWidth="78.0" layoutX="137.0" layoutY="473.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Moneta_base.png" />
                      </image>
@@ -143,27 +143,27 @@
                   <Label fx:id="leftYellow" layoutX="76.0" layoutY="704.0" text="7" textFill="#beb2b2" />
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="57.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../token/Asset%205.png" />
+                        <Image url="@../token/circle_blue.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="138.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../token/Asset%209.png" />
+                        <Image url="@../token/circle_green.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="218.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../token/Asset%2013.png" />
+                        <Image url="@../token/circle_pink.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="295.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../token/Asset%2017.png" />
+                        <Image url="@../token/circle_yellow.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="376.0" layoutY="643.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../token/Asset%2021.png" />
+                        <Image url="@../token/circle_red.png" />
                      </image>
                   </ImageView>
                   <Label fx:id="leftGreen" layoutX="156.0" layoutY="704.0" text="7" textFill="#beb2b2" />
@@ -192,14 +192,14 @@
                                  <items>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="636.0" style="-fx-background-color: #2c2b3d; -fx-border-color: #2c2b3d; -fx-border-width: 2;">
                                        <children>
-                                          <AnchorPane fx:id="cloudAnchor1" layoutX="377.0" layoutY="156.0" prefHeight="200.0" prefWidth="200.0">
+                                          <AnchorPane fx:id="cloudAnchor1" layoutX="474.0" layoutY="200.0" prefHeight="150.0" prefWidth="150.0">
                                              <children>
-                                                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../cloud.png" />
                                                    </image>
                                                 </ImageView>
-                                                <GridPane fx:id="cloudGrid1" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                                                <GridPane fx:id="cloudGrid1" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
                                                   <columnConstraints>
                                                     <ColumnConstraints />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -216,14 +216,14 @@
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane fx:id="cloudAnchor2" layoutX="604.0" layoutY="156.0" prefHeight="200.0" prefWidth="200.0">
+                                          <AnchorPane fx:id="cloudAnchor2" layoutX="624.0" layoutY="259.0" prefHeight="150.0" prefWidth="150.0">
                                              <children>
-                                                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" rotate="-100.0">
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" rotate="-100.0">
                                                    <image>
                                                       <Image url="@../cloud.png" />
                                                    </image>
                                                 </ImageView>
-                                                <GridPane fx:id="cloudGrid2" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                                                <GridPane fx:id="cloudGrid2" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -240,14 +240,14 @@
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane fx:id="cloudAnchor3" layoutX="377.0" layoutY="378.0" prefHeight="200.0" prefWidth="200.0">
+                                          <AnchorPane fx:id="cloudAnchor3" layoutX="395.0" layoutY="350.0" prefHeight="150.0" prefWidth="150.0">
                                              <children>
-                                                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" rotate="55.0">
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" rotate="55.0">
                                                    <image>
                                                       <Image url="@../cloud.png" />
                                                    </image>
                                                 </ImageView>
-                                                <GridPane fx:id="cloudGrid3" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                                                <GridPane fx:id="cloudGrid3" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -264,14 +264,14 @@
                                                 </GridPane>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane fx:id="cloudAnchor4" layoutX="604.0" layoutY="378.0" prefHeight="200.0" prefWidth="200.0">
+                                          <AnchorPane fx:id="cloudAnchor4" layoutX="555.0" layoutY="407.0" prefHeight="150.0" prefWidth="150.0">
                                              <children>
-                                                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" rotate="30.0">
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" rotate="30.0">
                                                    <image>
                                                       <Image url="@../cloud.png" />
                                                    </image>
                                                 </ImageView>
-                                                <GridPane fx:id="cloudGrid4" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
+                                                <GridPane fx:id="cloudGrid4" alignment="CENTER_RIGHT" hgap="10.0" layoutX="-3.0" layoutY="-5.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints />
                                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -284,6 +284,294 @@
                                                    </rowConstraints>
                                                    <padding>
                                                       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor1" layoutX="261.0" layoutY="75.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl1.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid1" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor12" layoutX="186.0" layoutY="225.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl3.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid12" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor11" layoutX="180.0" layoutY="382.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl3.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid11" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor10" layoutX="261.0" layoutY="528.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl2.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid10" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor8" layoutX="607.0" layoutY="569.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl3.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid8" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor7" layoutX="778.0" layoutY="532.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl2.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid7" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor6" layoutX="896.0" layoutY="378.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl1.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid6" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor5" layoutX="901.0" layoutY="201.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl1.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid5" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor4" layoutX="778.0" layoutY="103.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl3.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid4" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor3" layoutX="607.0" layoutY="43.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl1.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid3" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor2" layoutX="427.0" layoutY="44.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl2.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid2" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane fx:id="islandAnchor9" layoutX="426.0" layoutY="554.0" prefHeight="150.0" prefWidth="150.0">
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../isl1.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <GridPane fx:id="islandGrid9" hgap="10.0" prefHeight="150.0" prefWidth="150.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                                                    </padding>
                                                 </GridPane>
                                              </children>

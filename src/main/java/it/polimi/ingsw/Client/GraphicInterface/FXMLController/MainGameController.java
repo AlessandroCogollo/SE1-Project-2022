@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -86,12 +87,6 @@ public class MainGameController extends Controller implements Initializable {
         System.out.println("Elaborate Model");
         elaborateModel();
     }
-
-
-
-
-
-
 
     @FXML
     private Rectangle coinsRectangle;
@@ -738,9 +733,25 @@ public class MainGameController extends Controller implements Initializable {
                     column++;
                     int row = added / col;
                     row++;
-                    Circle circle = new Circle(height);
-                    circle.setFill(convertColor(i));
-                    grid.add(circle, column, row);
+
+                    ImageView tokenView = new ImageView();
+                    tokenView.setFitHeight(32);
+                    tokenView.setFitWidth(32);
+                    Image token = null;
+                    if (i == 0) {
+                        token = new Image("/token/circle_pawn_blue.png",32,32,false,false);
+                    } else if (i == 1) {
+                        token = new Image("/token/circle_pawn_pink.png",32,32,false,false);
+                    } else if (i == 2) {
+                        token = new Image("/token/circle_pawn_yellow.png",32,32,false,false);
+                    } else if (i == 3) {
+                        token = new Image("/token/circle_pawn_red.png",32,32,false,false);
+                    } else if (i == 4) {
+                        token = new Image("/token/circle_pawn_green.png",32,32,false,false);
+                    }
+                    tokenView.setImage(token);
+                    grid.add(tokenView, column, row);
+
                     added++;
                     System.out.println("Added color[" + it.polimi.ingsw.Enum.Color.getColorById(i).name() + "] student in cloud " + grid.getId() + " at column " + column + ", row " + row);
                 }
@@ -789,28 +800,132 @@ public class MainGameController extends Controller implements Initializable {
         super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
     }
 
-
-
-
-
-
-
-
-
-
+    @FXML
+    private AnchorPane islandAnchor1;
+    @FXML
+    private GridPane islandGrid1;
+    @FXML
+    private AnchorPane islandAnchor2;
+    @FXML
+    private GridPane islandGrid2;
+    @FXML
+    private AnchorPane islandAnchor3;
+    @FXML
+    private GridPane islandGrid3;
+    @FXML
+    private AnchorPane islandAnchor4;
+    @FXML
+    private GridPane islandGrid4;
+    @FXML
+    private AnchorPane islandAnchor5;
+    @FXML
+    private GridPane islandGrid5;
+    @FXML
+    private AnchorPane islandAnchor6;
+    @FXML
+    private GridPane islandGrid6;
+    @FXML
+    private AnchorPane islandAnchor7;
+    @FXML
+    private GridPane islandGrid7;
+    @FXML
+    private AnchorPane islandAnchor8;
+    @FXML
+    private GridPane islandGrid8;
+    @FXML
+    private AnchorPane islandAnchor9;
+    @FXML
+    private GridPane islandGrid9;
+    @FXML
+    private AnchorPane islandAnchor10;
+    @FXML
+    private GridPane islandGrid10;
+    @FXML
+    private AnchorPane islandAnchor11;
+    @FXML
+    private GridPane islandGrid11;
+    @FXML
+    private AnchorPane islandAnchor12;
+    @FXML
+    private GridPane islandGrid12;
 
     public void setIslands(){
+
+        ModelMessage model = dataCollector.getModel();
+
         List<Island> islands = this.dataCollector.getModel().getIslandList();
-        //todo
-        //todo set User Data of each island the real Island
+
+        List<GridPane> grids = new ArrayList<>(12);
+        grids.add(this.islandGrid1);
+        grids.add(this.islandGrid2);
+        grids.add(this.islandGrid3);
+        grids.add(this.islandGrid4);
+        grids.add(this.islandGrid5);
+        grids.add(this.islandGrid6);
+        grids.add(this.islandGrid7);
+        grids.add(this.islandGrid8);
+        grids.add(this.islandGrid9);
+        grids.add(this.islandGrid10);
+        grids.add(this.islandGrid11);
+        grids.add(this.islandGrid12);
+
+        Image image = new Image("/token/mothernature.png",32,32,false,false);
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(32);
+        imageView.setFitWidth(32);
+        imageView.setImage(image);
+        grids.get(model.getMotherNatureIslandId()).add(imageView, 1, 1);
+
+        System.out.println("MotherNature Set");
+
+        int c = 0;
+        for(Island island : islands) {
+
+            GridPane grid = grids.get(c);
+            // --- ?? --- //
+            grid.setUserData(island);
+
+            int[] students = island.getStudents();
+            int added = 0;
+            for (int i = 0; i < students.length; i++) {
+                for (int j = 0; j < students[i]; j++) {
+                    int col = (grid.getColumnCount() - 1);
+                    int column = added % col;
+                    column++;
+                    int row = added / col;
+                    row++;
+                    ImageView tokenView = new ImageView();
+                    tokenView.setFitHeight(32);
+                    tokenView.setFitWidth(32);
+                    Image token = null;
+                    if (i == 0) {
+                        token = new Image("/token/circle_pawn_blue.png",32,32,false,false);
+                    } else if (i == 1) {
+                        token = new Image("/token/circle_pawn_pink.png",32,32,false,false);
+                    } else if (i == 2) {
+                        token = new Image("/token/circle_pawn_yellow.png",32,32,false,false);
+                    } else if (i == 3) {
+                        token = new Image("/token/circle_pawn_red.png",32,32,false,false);
+                    } else if (i == 4) {
+                        token = new Image("/token/circle_pawn_green.png",32,32,false,false);
+                    }
+                    tokenView.setImage(token);
+                    // Circle circle = new Circle(32);
+                    // circle.setFill(convertColor(i));
+                    grid.add(tokenView, column, row);
+                    added++;
+                }
+            }
+            c++;
+        }
     }
 
     public void enableIslands(EventHandler<MouseEvent> handler){
-        //todo
+        // TODO
     }
 
     public void disableIslands(){
-        //todo
+        // TODO
     }
 
     private void activateMotherNatureMove() {
