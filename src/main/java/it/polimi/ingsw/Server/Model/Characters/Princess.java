@@ -34,12 +34,12 @@ final public class Princess extends Character {
 
         int colorId = obj[0];
 
-        Color c = Color.getColorById(colorId);
+        Color c = Objects.requireNonNull(Color.getColorById(colorId));
         Player p = super.gameInitializer.getRoundHandler().getCurrent();
 
         this.students[colorId]--;
 
-        p.getSchool().moveStudentToRoom(Objects.requireNonNull(c));
+        p.getSchool().addStudentToRoom(c);
 
         int[] newStudent = super.gameInitializer.getBag().drawStudents(1);
         for (Color color: Color.values())

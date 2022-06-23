@@ -594,6 +594,7 @@ public class MainGameController extends Controller implements Initializable {
             }
             @Override
             public void handle(MouseEvent mouseEvent) {
+                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 c.setColorChoose((it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData());
                 c.disableEntrance();
                 c.enableStudentsDestination();
@@ -602,7 +603,7 @@ public class MainGameController extends Controller implements Initializable {
 
         enableEntrance(handler);
 
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining");
+        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining)");
     }
 
     private void enableEntrance (EventHandler<MouseEvent> handler){
@@ -635,6 +636,7 @@ public class MainGameController extends Controller implements Initializable {
         DataCollector dC = this.dataCollector;
 
         EventHandler<MouseEvent> handler = mouseEvent -> {
+            ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
             dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), -1));
             disableStudentsDestination();
         };
@@ -642,6 +644,7 @@ public class MainGameController extends Controller implements Initializable {
         this.actualRoom.setOnMouseClicked(handler);
 
         handler = mouseEvent -> {
+            ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
             Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
             dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Moved Student", colorChoose.getIndex(), i.getId()));
             disableStudentsDestination();
@@ -800,6 +803,7 @@ public class MainGameController extends Controller implements Initializable {
 
             g.setDisable(false);
             g.setOnMouseClicked(mouseEvent -> {
+                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 CloudSerializable c = (CloudSerializable) g.getUserData();
                 dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Cloud choosed", c.getId()));
                 disableClouds();
@@ -973,6 +977,7 @@ public class MainGameController extends Controller implements Initializable {
         DataCollector dC = this.dataCollector;
 
         EventHandler<MouseEvent> handler = mouseEvent -> {
+            ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
             Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
             int distance = dC.getModel().calcIslandDistance(i);
             System.out.println("Moved mother nature for " + distance);
@@ -1202,7 +1207,7 @@ public class MainGameController extends Controller implements Initializable {
 
             c.setDisable(false);
             c.setOnMouseClicked(mouseEvent -> {
-
+                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 CharacterSerializable character = (CharacterSerializable) ((Node)mouseEvent.getSource()).getUserData();
                 System.out.println("Selected character " + character.getName());
 
@@ -1227,6 +1232,8 @@ public class MainGameController extends Controller implements Initializable {
         DataCollector dC = this.dataCollector;
         EventHandler<MouseEvent> handler;
 
+        if (characterId != 6 && characterId != 1)
+            disableCharacters();
         //todo all character effects
 
         switch (characterId){
@@ -1234,13 +1241,13 @@ public class MainGameController extends Controller implements Initializable {
                 //apothecary - ban card
 
                 handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                     Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
                     System.out.println("Choose Island for apothecary  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
-                    disableCharacters();
                 };
 
                 enableIslands(handler);
@@ -1260,7 +1267,10 @@ public class MainGameController extends Controller implements Initializable {
                     return;
                 }
 
+                disableCharacters();
+
                 handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                     it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
                     System.out.println("Choose color " + color + " from entrance for bard Effect");
                     bardEffect(color, null);
@@ -1274,7 +1284,22 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 2 -> {
                 //cleric - move a students from the character to an island
-                return; //todo
+
+                if (this.clericStudents == null)
+                    return;
+
+                handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " from cleric for cleric Effect");
+                    clericEffect(color, null);
+                };
+
+                for (ImageView c: this.clericStudents){
+                    c.setOnMouseClicked(handler);
+                }
+
+                return;
             }
             case 3 -> {
                 //cook - color that not count as influence
@@ -1284,13 +1309,13 @@ public class MainGameController extends Controller implements Initializable {
                 //herald calc influence of an island
 
                 handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                     Island i = (Island) ((Node) mouseEvent.getSource()).getUserData();
                     System.out.println("Choose Island for herald  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
-                    disableCharacters();
                 };
 
                 enableIslands(handler);
@@ -1301,11 +1326,54 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 6 -> {
                 //jester - swap between jester and entrance
-                return; //todo
+
+                int[] e = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfEntrance();
+
+                if (Arrays.stream(e).sum() < 1){
+                    super.main.displayMessage("Cannot play Jester because you don't have enough students in your entrance");
+                    return;
+                }
+
+                if (this.jesterStudents == null)
+                    return;
+
+                disableCharacters();
+
+                handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " from jester for jester Effect");
+                    jesterEffect(color, null);
+                };
+
+                for (ImageView c: this.jesterStudents){
+                    c.setOnMouseClicked(handler);
+                }
+
+
+                return;
             }
             case 10 -> {
                 //princess - add a students from this character to your room
-                return; //todo
+
+                if (this.princessStudents == null)
+                    return;
+
+                handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " from princess for princess Effect");
+                    int[] obj = new int[1];
+                    obj[0] = color.getIndex();
+                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
+                    disablePrincessEffect();
+                };
+
+                for (ImageView c: this.princessStudents){
+                    c.setOnMouseClicked(handler);
+                }
+
+                return;
             }
             case 11 -> {
                 //thief - choose a color
@@ -1314,7 +1382,6 @@ public class MainGameController extends Controller implements Initializable {
         }
 
         this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, null));
-        disableCharacters();
     }
 
     private boolean checkCoins(CharacterSerializable character) {
@@ -1333,7 +1400,9 @@ public class MainGameController extends Controller implements Initializable {
         return false;
     }
 
+
     private int[] bardObject = null;
+
     private void bardEffect (it.polimi.ingsw.Enum.Color entrance, it.polimi.ingsw.Enum.Color room){
         ModelMessage model = this.dataCollector.getModel();
 
@@ -1343,6 +1412,7 @@ public class MainGameController extends Controller implements Initializable {
             bardObject[1] = -1;
 
             EventHandler<MouseEvent> handler = mouseEvent -> {
+                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
                 System.out.println("Choose color " + color + " from room for bard Effect");
                 bardEffect(null, color);
@@ -1373,9 +1443,9 @@ public class MainGameController extends Controller implements Initializable {
         else if (bardObject != null && room != null && entrance == null) { //choose color from room
             if (bardObject.length == 2){ // choose only one color
                 bardObject[1] = room.getIndex();
+                disableEntrance();
                 disableRoom();
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
-                disableCharacters();
             }
             else { //choose 2 color
                 if (bardObject[1] == -1){ // first setted
@@ -1385,12 +1455,159 @@ public class MainGameController extends Controller implements Initializable {
                     bardObject[3] = room.getIndex();
                     disableRoom();
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
-                    disableCharacters();
                 }
             }
         }
+        else {
+            System.out.println("Not valid for bard Effect");
+        }
 
     }
+
+
+    private int[] clericObject = null;
+
+    private void clericEffect(it.polimi.ingsw.Enum.Color color, Island i){
+        if (clericObject == null && color != null && i == null){
+            clericObject = new int[2];
+            clericObject[0] = colorChoose.getIndex();
+            disableClericEffect();
+
+            EventHandler<MouseEvent> handler = mouseEvent -> {
+                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                Island is = (Island) ((Node) mouseEvent.getSource()).getUserData();
+                System.out.println("Choose island " + is.getId() + " for cleric Effect");
+                clericEffect(null, i);
+            };
+
+            enableIslands(handler);
+        }
+        else if (clericObject != null && color == null && i != null){
+            clericObject[1] = i.getId();
+            this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Cleric", 2, clericObject));
+            disableIslands();
+        }
+        else{
+            System.out.println("Not valid for cleric Effect");
+        }
+    }
+
+    private void disableClericEffect (){
+
+        if (this.clericStudents == null)
+            return;
+
+        for (ImageView c: this.clericStudents){
+            c.setOnMouseClicked(null);
+        }
+    }
+
+
+    private int[] jesterObject = null;
+
+    private void jesterEffect (it.polimi.ingsw.Enum.Color jester, it.polimi.ingsw.Enum.Color entrance){
+        if (entrance == null && jester != null) { //chose color from jester
+
+            if (jesterObject == null) { // first
+                jesterObject = new int[2];
+                jesterObject[0] = jester.getIndex();
+                jesterObject[1] = -1;
+
+                EventHandler<MouseEvent> handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " from entrance for jester Effect");
+                    jesterEffect(null, color);
+                };
+
+                enableEntrance(handler);
+            }
+            else if (jesterObject.length == 2){ // 2
+                int first = jesterObject[0];
+
+                jesterObject = new int[4];
+                jesterObject[0] = first;
+                jesterObject[1] = -1;
+                jesterObject[2] = jester.getIndex();
+                jesterObject[3] = -1;
+            }
+            else { // 3
+                int first = jesterObject[0];
+                int second = jesterObject[2];
+
+                jesterObject = new int[6];
+                jesterObject[0] = first;
+                jesterObject[1] = -1;
+                jesterObject[2] = second;
+                jesterObject[3] = -1;
+                jesterObject[4] = jester.getIndex();
+                jesterObject[5] = -1;
+
+                disableJesterEffect();
+            }
+
+        }
+        else if (entrance != null && jester == null && jesterObject != null){
+            disableJesterEffect();
+
+            int length = jesterObject.length;
+            if (length == 2){
+                jesterObject[1] = entrance.getIndex();
+                this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
+                disableEntrance();
+            }
+            else if (length == 4){
+                if (jesterObject[1] == -1)
+                    jesterObject[1] = entrance.getIndex();
+                else{
+                    jesterObject[3] = entrance.getIndex();
+                    this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
+                    disableEntrance();
+                }
+            }
+            else { // length == 6
+                if (jesterObject[1] == -1)
+                    jesterObject[1] = entrance.getIndex();
+                else if (jesterObject[3] == -1)
+                    jesterObject[3] = entrance.getIndex();
+                else{
+                    jesterObject[5] = entrance.getIndex();
+                    this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
+                    disableEntrance();
+                }
+            }
+        }
+        else {
+            System.out.println("Not valid for jester Effect");
+        }
+    }
+
+    private void disableJesterEffect(){
+
+        if (this.jesterStudents == null)
+            return;
+
+        for (ImageView c: this.jesterStudents){
+            c.setOnMouseClicked(null);
+        }
+    }
+
+    private void disablePrincessEffect() {
+
+        if (this.princessStudents == null)
+            return;
+
+        for (ImageView c: this.princessStudents){
+            c.setOnMouseClicked(null);
+        }
+    }
+
+
+
+
+
+
+
 
     @FXML
     private Tab assistantTab;
@@ -1502,6 +1719,7 @@ public class MainGameController extends Controller implements Initializable {
 
         DataCollector dC = this.dataCollector;
         EventHandler<MouseEvent> handler = mouseEvent -> {
+            ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
             Assistant a = (Assistant) ((Node) mouseEvent.getSource()).getUserData();
             System.out.println("Selected assistant " + a.name());
             dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Played Assistant", a.getValue()));
