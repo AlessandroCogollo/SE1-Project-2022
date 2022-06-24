@@ -27,6 +27,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.net.URL;
 import java.util.*;
@@ -119,6 +121,8 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private Label stepsLabel;
     @FXML
+    private Label phaseLabel;
+    @FXML
     private Label playedCharacterLabel;
     @FXML
     private Label characterPlayedTitle;
@@ -157,6 +161,12 @@ public class MainGameController extends Controller implements Initializable {
             this.coinsNumberLabel.setText(String.valueOf(model.getPlayerById(dataCollector.getId()).getCoins()));
         }
 
+        if (Objects.equals(model.getActualPhase(), "Action")) {
+            this.phaseLabel.setText(model.getActualPhase() + " - " + model.getActualActionPhase());
+        } else {
+            this.phaseLabel.setText(model.getActualPhase());
+        }
+
         Assistant a = Assistant.getAssistantByValue(model.getPlayerById(this.dataCollector.getId()).getActiveAssistant());
         if (a != null) {
             int max = a.getMaxMovement();
@@ -165,7 +175,7 @@ public class MainGameController extends Controller implements Initializable {
             this.stepsLabel.setText("Max " + max + " steps");
         }
         else
-            this.stepsLabel.setText("No active Assistant at the moment");
+            this.stepsLabel.setText("");
 
         int[] bag = dataCollector.getModel().getBag();
         leftBlue.setText(String.valueOf(bag[0]));
@@ -249,9 +259,9 @@ public class MainGameController extends Controller implements Initializable {
             Assistant a = Assistant.getAssistantByValue(model.getPlayerById(i).getActiveAssistant());
             String text;
             if (a != null)
-                text = "Active assistant: " + a.name() + " value: " + a.getValue();
+                text = a.name() + " - " + a.getValue();
             else
-                text = "No active Assistant";
+                text = "";
 
             labels.get(i).setText(text);
         }
@@ -391,9 +401,9 @@ public class MainGameController extends Controller implements Initializable {
 
     private Tab actualTab = null;
     private GridPane actualRoom = null;
-    private List<List<Circle>> room = null;
+    private List<List<ImageView>> room = null;
     private GridPane actualEntrance = null;
-    private List<Circle> entrance = null;
+    private List<ImageView> entrance = null;
 
     public void setSchools(){
 
@@ -455,10 +465,27 @@ public class MainGameController extends Controller implements Initializable {
         );*/
 
         for(int i = 0; i < professors.length; i++){
-            Circle c = new Circle(height);
-            c.setFill(convertColor(i));
+            ImageView tokenView = new ImageView();
+            tokenView.setFitHeight(20);
+            tokenView.setFitWidth(20);
+            Image token = null;
+            if (i == 0) {
+                token = new Image("/token/hexa_pawn_blue.png");
+            } else if (i == 1) {
+                token = new Image("/token/hexa_pawn_pink.png");
+            } else if (i == 2) {
+                token = new Image("/token/hexa_pawn_yellow.png");
+            } else if (i == 3) {
+                token = new Image("/token/hexa_pawn_red.png");
+            } else if (i == 4) {
+                token = new Image("/token/hexa_pawn_green.png");
+            }
+
+            tokenView.setImage(token);
+            // Circle c = new Circle(height);
+            // c.setFill(convertColor(i));
             if(professors[i] != -1)
-                professorsGrids.get(professors[i]).add(c, i, 0);
+                professorsGrids.get(professors[i]).add(tokenView, i, 0);
         }
     }
 
@@ -481,21 +508,25 @@ public class MainGameController extends Controller implements Initializable {
             for(it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
 
                 for(int students = 0; students < room[color.getIndex()]; students++){
-                    Circle c = new Circle(height);
-                    c.setFill(convertColor(color.getIndex()));
+
+                    ImageView tokenView = new ImageView();
+                    tokenView.setFitHeight(20);
+                    tokenView.setFitWidth(20);
+                    Image token = convertColor(students, 20);
+                    tokenView.setImage(token);
 
 
                     //if this in the player room set the color data to each circle and add all of them to a matrix
                     if (id.equals(this.dataCollector.getId())){
-                        c.setUserData(color);
+                        tokenView.setUserData(color);
                         if (this.room == null) {
                             this.room = new ArrayList<>(5);
                             for (int i = 0; i < it.polimi.ingsw.Enum.Color.getNumberOfColors(); i++)
                                 this.room.add(new ArrayList<>(10));
                         }
-                        this.room.get(color.getIndex()).add(students, c);
+                        this.room.get(color.getIndex()).add(students, tokenView);
                     }
-                    roomGrids.get(id).add(c, color.getIndex(), students);
+                    roomGrids.get(id).add(tokenView, color.getIndex(), students);
                 }
             }
 
@@ -526,8 +557,14 @@ public class MainGameController extends Controller implements Initializable {
             for(it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
                 for(int student = 0; student < entrance[color.getIndex()]; student++){
 
-                    Circle c = new Circle(height);
-                    c.setFill(convertColor(color.getIndex()));
+                    ImageView tokenView = new ImageView();
+                    tokenView.setFitHeight(20);
+                    tokenView.setFitWidth(20);
+                    Image token = convertColor(color.getIndex(), 20);
+                    tokenView.setImage(token);
+
+                    // Circle c = new Circle(height);
+                    // c.setFill(convertColor(color.getIndex()));
 
                     if (added == 4) //position (4, 0) not allowed
                         added++;
@@ -539,14 +576,14 @@ public class MainGameController extends Controller implements Initializable {
                     if(row > 1 || column > 4)
                         System.out.println("Entrance space exceeded!");
 
-                    entranceGrid.add(c, column, row);
+                    entranceGrid.add(tokenView, column, row);
 
                     if (id.equals(this.dataCollector.getId())){
-                        c.setUserData(color);
+                        tokenView.setUserData(color);
                         if (this.entrance == null) {
                             this.entrance = new ArrayList<>(9);
                         }
-                        this.entrance.add(c);
+                        this.entrance.add(tokenView);
                     }
                     added++;
                 }
@@ -628,7 +665,7 @@ public class MainGameController extends Controller implements Initializable {
         if (this.entrance == null)
             return;
 
-        for (Circle c : this.entrance){
+        for (ImageView c : this.entrance){
             c.setDisable(false);
             c.setOnMouseClicked(handler);
         }
@@ -638,7 +675,7 @@ public class MainGameController extends Controller implements Initializable {
         if (this.entrance == null)
             return;
 
-        for (Circle c : this.entrance){
+        for (ImageView c : this.entrance){
             c.setDisable(true);
             c.setOnMouseClicked(null);
         }
@@ -683,8 +720,8 @@ public class MainGameController extends Controller implements Initializable {
         if (this.room == null)
             return;
 
-        for (List<Circle> l : this.room){
-            for (Circle c : l){
+        for (List<ImageView> l : this.room){
+            for (ImageView c : l){
                 c.setDisable(false);
                 c.setOnMouseClicked(handler);
             }
@@ -695,8 +732,8 @@ public class MainGameController extends Controller implements Initializable {
         if (this.room == null)
             return;
 
-        for (List<Circle> list: this.room){
-            for (Circle c : list){
+        for (List<ImageView> list: this.room){
+            for (ImageView c : list){
                 c.setDisable(true);
                 c.setOnMouseClicked(null);
             }
@@ -775,9 +812,9 @@ public class MainGameController extends Controller implements Initializable {
                     row++;
 
                     ImageView tokenView = new ImageView();
-                    tokenView.setFitHeight(32);
-                    tokenView.setFitWidth(32);
-                    Image token = convertColor(i, 32);
+                    tokenView.setFitHeight(20);
+                    tokenView.setFitWidth(20);
+                    Image token = convertColor(i, 20);
                     tokenView.setImage(token);
                     grid.add(tokenView, column, row);
 
@@ -928,10 +965,10 @@ public class MainGameController extends Controller implements Initializable {
             }
         }
 
-        Image image = new Image("/token/mothernature.png",32,32,false,false);
+        Image image = new Image("/token/mothernature.png",16,16,false,false);
         ImageView imageView = new ImageView();
-        imageView.setFitHeight(32);
-        imageView.setFitWidth(32);
+        imageView.setFitHeight(16);
+        imageView.setFitWidth(16);
         imageView.setImage(image);
         grids.get(model.getMotherNatureIslandId()).add(imageView, 0, 0);
 
@@ -943,21 +980,25 @@ public class MainGameController extends Controller implements Initializable {
             grid.setUserData(island);
 
             int[] students = island.getStudents();
-            int added = 1; // posion 0, 0 is only for mother nature
+            int added = 1; // position 0, 0 is only for mother nature
             for (int i = 0; i < students.length; i++) {
-                for (int j = 0; j < students[i]; j++) {
-
-                    int column = added % grid.getColumnCount();
-                    int row = added / grid.getColumnCount();
+                if (students[i] > 0) {
+                    int column = (i % grid.getColumnCount()) + 1;
+                    int row = (i / grid.getColumnCount()) + 1;
                     ImageView tokenView = new ImageView();
-                    tokenView.setFitHeight(32);
-                    tokenView.setFitWidth(32);
-                    Image token = convertColor(i, 32);
+                    tokenView.setFitHeight(16);
+                    tokenView.setFitWidth(16);
+                    Image token = convertColor(i, 16);
                     tokenView.setImage(token);
-                    // Circle circle = new Circle(32);
-                    // circle.setFill(convertColor(i));
+                    Label label = new Label(String.valueOf(students[i]));
+                    label.setTranslateY(-11);
+                    label.setTranslateX(4);
+                    label.setOpacity(1);
+                    label.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
+                    label.setTextFill(Color.WHITE);
                     grid.add(tokenView, column, row);
-                    added++;
+                    grid.add(label, column, row);
+                    // added++;
                 }
             }
 
