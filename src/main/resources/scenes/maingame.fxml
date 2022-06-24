@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -111,7 +112,7 @@
                      </font>
                   </Label>
                   <Label fx:id="stepsLabel" layoutX="20.0" layoutY="605.0" prefHeight="27.0" prefWidth="200.0" text="Max 3 Steps" textFill="#beb2b2" AnchorPane.leftAnchor="20.0" />
-                  <Label fx:id="playedCharacterLabel" layoutX="20.0" layoutY="650.0" text="Apothecary" textFill="#f7bd0e" AnchorPane.leftAnchor="20.0" />
+                  <Label fx:id="playedCharacterLabel" layoutX="60.0" layoutY="653.0" prefHeight="17.0" prefWidth="170.0" text="Apothecary" textFill="#f7bd0e" AnchorPane.leftAnchor="20.0" />
                   <Label layoutX="20.0" layoutY="551.0" text="Game Phase" textFill="WHITE" AnchorPane.leftAnchor="20.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -929,126 +930,134 @@
                               <content>
                                 <AnchorPane fx:id="assistantPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ImageView fx:id="lion" fitHeight="140.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(1).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="dog" fitHeight="140.0" fitWidth="100.0" layoutX="777.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(8).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="octopus" fitHeight="140.0" fitWidth="100.0" layoutX="640.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(7).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="snake" fitHeight="140.0" fitWidth="100.0" layoutX="535.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(6).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="fox" fitHeight="140.0" fitWidth="100.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(5).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="eagle" fitHeight="140.0" fitWidth="100.0" layoutX="325.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(4).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="cat" fitHeight="140.0" fitWidth="100.0" layoutX="220.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(3).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="goose" fitHeight="140.0" fitWidth="100.0" layoutX="115.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(2).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="turtle" fitHeight="140.0" fitWidth="100.0" layoutX="995.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(10).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="elephant" fitHeight="140.0" fitWidth="100.0" layoutX="886.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Assistenti/3x/Assistente%20(9).png" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="161.0" prefWidth="727.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1062.0" style="-fx-background-color: #2c2b3d;">
+                                                 <children>
+                                                    <ImageView fx:id="lion" fitHeight="140.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(1).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="dog" fitHeight="140.0" fitWidth="100.0" layoutX="745.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(8).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="octopus" fitHeight="140.0" fitWidth="100.0" layoutX="640.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(7).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="snake" fitHeight="140.0" fitWidth="100.0" layoutX="535.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(6).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="fox" fitHeight="140.0" fitWidth="100.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(5).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="eagle" fitHeight="140.0" fitWidth="100.0" layoutX="325.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(4).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="cat" fitHeight="140.0" fitWidth="100.0" layoutX="220.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(3).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="goose" fitHeight="140.0" fitWidth="100.0" layoutX="115.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(2).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="turtle" fitHeight="140.0" fitWidth="100.0" layoutX="955.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(10).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                    <ImageView fx:id="elephant" fitHeight="140.0" fitWidth="100.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                       <image>
+                                                          <Image url="@../Assistenti/3x/Assistente%20(9).png" />
+                                                       </image>
+                                                       <effect>
+                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                             <color>
+                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                             </color>
+                                                          </DropShadow>
+                                                       </effect>
+                                                    </ImageView>
+                                                 </children>
+                                              </AnchorPane>
+                                            </content>
+                                          </ScrollPane>
                                        </children>
                                 </AnchorPane>
                               </content>
@@ -1057,271 +1066,324 @@
                               <content>
                                 <AnchorPane fx:id="charactersPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ImageView fx:id="cook" fitHeight="140.0" fitWidth="100.0" layoutX="777.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front8.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="knight" fitHeight="140.0" fitWidth="100.0" layoutX="640.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front7.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <AnchorPane fx:id="jesterPane" layoutX="536.0">
-                                             <children>
-                                                <ImageView fx:id="jester" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../Personaggi/CarteTOT_front6.jpg" />
-                                                   </image>
-                                                   <effect>
-                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                         </color>
-                                                      </DropShadow>
-                                                   </effect>
-                                                </ImageView>
-                                                <GridPane fx:id="jesterGrid" hgap="5.0" layoutX="22.0" layoutY="75.0" prefHeight="112.0" prefWidth="110.0" vgap="5.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
-                                                   <padding>
-                                                      <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
-                                                   </padding>
-                                                </GridPane>
-                                             </children>
-                                          </AnchorPane>
-                                          <ImageView fx:id="minotaur" fitHeight="166.0" fitWidth="109.0" layoutX="450.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                          <ImageView fx:id="jester" fitHeight="140.0" fitWidth="100.0" layoutX="535.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front6.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="minotaur" fitHeight="140.0" fitWidth="100.0" layoutX="430.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front5.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <AnchorPane fx:id="apothecaryPane" layoutX="318.0">
-                                             <children>
-                                                <ImageView fx:id="apothecary" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../Personaggi/CarteTOT_front4.jpg" />
-                                                   </image>
-                                                   <effect>
-                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                         </color>
-                                                      </DropShadow>
-                                                   </effect>
-                                                </ImageView>
-                                                <Label fx:id="labelApothecary" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="66.0" layoutY="62.0" prefHeight="25.0" prefWidth="51.0" text="x4">
-                                                   <font>
-                                                      <Font name="System Bold" size="33.0" />
-                                                   </font>
-                                                </Label>
-                                                <ImageView fx:id="bancardToken" fitHeight="78.0" fitWidth="32.0" layoutX="34.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../token/token%20apothecary.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </children>
-                                          </AnchorPane>
-                                          <ImageView fx:id="postman" fitHeight="166.0" fitWidth="109.0" layoutX="232.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                          <ImageView fx:id="apothecary" fitHeight="140.0" fitWidth="100.0" layoutX="325.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front4.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="postman" fitHeight="140.0" fitWidth="100.0" layoutX="220.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front3.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="herald" fitHeight="140.0" fitWidth="100.0" layoutX="115.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front2.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <AnchorPane fx:id="clericPane" layoutX="-9.0">
-                                             <children>
-                                                <ImageView fx:id="cleric" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../Personaggi/CarteTOT_front.jpg" />
-                                                   </image>
-                                                   <effect>
-                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                         </color>
-                                                      </DropShadow>
-                                                   </effect>
-                                                </ImageView>
-                                                <GridPane fx:id="clericGrid" hgap="10.0" layoutX="23.0" layoutY="75.0" prefHeight="110.0" prefWidth="110.0" vgap="10.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
-                                                   <padding>
-                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                                   </padding>
-                                                </GridPane>
-                                             </children>
-                                          </AnchorPane>
-                                          <ImageView fx:id="drunkard" fitHeight="166.0" fitWidth="109.0" layoutX="1213.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                          <ImageView fx:id="cleric" fitHeight="140.0" fitWidth="100.0" layoutX="14.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="drunkard" fitHeight="140.0" fitWidth="100.0" layoutX="1213.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front12.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="thief" fitHeight="140.0" fitWidth="100.0" layoutX="1104.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front11.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <AnchorPane fx:id="princessPane" layoutX="972.0">
-                                             <children>
-                                                <ImageView fx:id="princess" fitHeight="166.0" fitWidth="109.0" layoutX="23.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../Personaggi/CarteTOT_front10.jpg" />
-                                                   </image>
-                                                   <effect>
-                                                      <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                         </color>
-                                                      </DropShadow>
-                                                   </effect>
-                                                </ImageView>
-                                                <GridPane fx:id="princessGrid" hgap="10.0" layoutX="23.0" layoutY="75.0" prefHeight="110.0" prefWidth="110.0" vgap="10.0">
-                                                   <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                   </columnConstraints>
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                   </rowConstraints>
-                                                   <padding>
-                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                                   </padding>
-                                                </GridPane>
-                                             </children>
-                                          </AnchorPane>
-                                          <ImageView fx:id="bard" fitHeight="166.0" fitWidth="109.0" layoutX="886.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-                                          <ImageView fx:id="princess" fitHeight="140.0" fitWidth="100.0" layoutX="995.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front10.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
-                                          <ImageView fx:id="bard" fitHeight="140.0" fitWidth="100.0" layoutX="886.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                                             <image>
-                                                <Image url="@../Personaggi/CarteTOT_front9.jpg" />
-                                             </image>
-                                             <effect>
-                                                <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                   </color>
-                                                </DropShadow>
-                                             </effect>
-                                          </ImageView>
+                                          <ScrollPane prefHeight="163.0" prefWidth="726.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1267.0" style="-fx-background-color: #2c2b3d;">
+                                                   <children>
+                                                      <AnchorPane fx:id="cleric" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <GridPane fx:id="clericGrid" hgap="10.0" layoutY="40.0" prefHeight="100.0" prefWidth="100.0" vgap="10.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <padding>
+                                                                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                               </padding>
+                                                            </GridPane>
+                                                            <ImageView fx:id="clericCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+													  <AnchorPane fx:id="herald" layoutX="115.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front2.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="heraldCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="postman" layoutX="220.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front3.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="postmanCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="apothecary" layoutX="325.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front4.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <Label fx:id="labelApothecary" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="35.0" layoutY="93.0" prefHeight="25.0" prefWidth="51.0" text="x4">
+                                                               <font>
+                                                                  <Font name="System Bold" size="33.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ImageView fx:id="banCardToken" fitHeight="78.0" fitWidth="32.0" layoutX="3.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/token%20apothecary.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <ImageView fx:id="apothecaryCoin" fitHeight="40.0" fitWidth="40.0" layoutX="61.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="minotaur" layoutX="430.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front5.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="minotaurCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="jester" layoutX="535.0" layoutY="6.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front6.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="jesterCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <GridPane fx:id="jesterGrid" hgap="10.0" layoutY="12.0" prefHeight="128.0" prefWidth="100.0" vgap="10.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <padding>
+                                                                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                               </padding>
+                                                            </GridPane>
+                                                         </children>
+                                                      </AnchorPane>
+													  <AnchorPane fx:id="knight" layoutX="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front7.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="knightCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="cook" layoutX="745.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front8.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="cookCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <ImageView fx:id="cookActiveColor" fitHeight="81.0" fitWidth="39.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/circle_pink.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="bard" layoutX="850.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front9.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="bardCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+													  <AnchorPane fx:id="princess" layoutX="955.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front10.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+															<GridPane fx:id="princessGrid" hgap="10.0" layoutY="40.0" prefHeight="100.0" prefWidth="100.0" vgap="10.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <padding>
+                                                                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                               </padding>
+                                                            </GridPane>
+                                                            <ImageView fx:id="princessCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+													  <AnchorPane fx:id="thief" layoutX="1060.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front11.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="thiefCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+													  <AnchorPane fx:id="drunkard" layoutX="1165.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.topAnchor="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="140.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <image>
+                                                                  <Image url="@../Personaggi/CarteTOT_front12.jpg" />
+                                                               </image>
+                                                               <effect>
+                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
+                                                                     <color>
+                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
+                                                                     </color>
+                                                                  </DropShadow>
+                                                               </effect>
+                                                            </ImageView>
+                                                            <ImageView fx:id="drunkardCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../token/coin.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </children>
+                                                </AnchorPane>
+                                            </content>
+                                          </ScrollPane>
                                        </children>
-                                    </AnchorPane>
-                              </content>
+                                </AnchorPane>
+							  </content>
                             </Tab>
                           </tabs>
                         </TabPane>

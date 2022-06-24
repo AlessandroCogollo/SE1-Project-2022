@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -30,6 +31,17 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.*;
 
+/*
+todo
+    - visualizzare tutte le informazioni sulle varie isole
+    - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più
+    - mettere a posto le informazioni visualizzate sui character che per ora sono fatte un po' male
+    - aggiungere una visualizzazione dello stato di gioco (basta scrivere da qualche parte la fase di gioco)
+    - evindeziare in qualche modo quali sono le zone interagibili della plancia
+    - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
+    - aggiungere un metodo per far scegliere ai player un colore, io pensavo al cliccare sui colori a sinistra nella bag
+    - resize text lenght in status bar and assistant below name to match new dimension of window
+*/
 
 public class MainGameController extends Controller implements Initializable {
 
@@ -74,8 +86,12 @@ public class MainGameController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        Scene s = super.main.getMainStage().getScene();
+
         System.out.println("Initialize Started");
-        super.main.getMainStage().getScene().setCursor(Cursor.WAIT);
+
+        if (s != null)
+            s.setCursor(Cursor.WAIT);
 
         setGameStatus();
         setUsernames();
@@ -87,7 +103,8 @@ public class MainGameController extends Controller implements Initializable {
 
         System.out.println("Elaborate Model");
         elaborateModel();
-        super.main.getMainStage().getScene().setCursor(Cursor.DEFAULT);
+        if (s != null)
+            s.setCursor(Cursor.DEFAULT);
     }
 
     @FXML
@@ -999,59 +1016,78 @@ public class MainGameController extends Controller implements Initializable {
 
     private List<Node> characterPlayable = null;
 
-    @FXML
-    private ImageView cook;
 
     @FXML
-    private ImageView knight;
+    private AnchorPane cleric;
+    @FXML
+    private GridPane clericGrid;
+    @FXML
+    private ImageView clericCoin;
 
     @FXML
-    private AnchorPane jesterPane;
+    private AnchorPane herald;
     @FXML
-    private ImageView jester;
-    @FXML
-    private GridPane jesterGrid;
+    private ImageView heraldCoin;
 
     @FXML
-    private ImageView minotaur;
+    private AnchorPane postman;
+    @FXML
+    private ImageView postmanCoin;
 
     @FXML
-    private AnchorPane apothecaryPane;
-    @FXML
-    private ImageView apothecary;
+    private AnchorPane apothecary;
     @FXML
     private Label labelApothecary;
     @FXML
-    private ImageView bancardToken;
+    private ImageView banCardToken;
+    @FXML
+    private ImageView apothecaryCoin;
 
     @FXML
-    private ImageView postman;
+    private AnchorPane minotaur;
+    @FXML
+    private ImageView minotaurCoin;
 
     @FXML
-    private ImageView herald;
+    private AnchorPane jester;
+    @FXML
+    private GridPane jesterGrid;
+    @FXML
+    private ImageView jesterCoin;
 
     @FXML
-    private AnchorPane clericPane;
+    private AnchorPane knight;
     @FXML
-    private ImageView cleric;
-    @FXML
-    private GridPane clericGrid;
+    private ImageView knightCoin;
 
     @FXML
-    private ImageView drunkard;
+    private AnchorPane cook;
+    @FXML
+    private ImageView cookCoin;
+    @FXML
+    private ImageView cookActiveColor;
 
     @FXML
-    private ImageView thief;
+    private AnchorPane bard;
+    @FXML
+    private ImageView bardCoin;
 
     @FXML
-    private AnchorPane princessPane;
-    @FXML
-    private ImageView princess;
+    private AnchorPane princess;
     @FXML
     private GridPane princessGrid;
+    @FXML
+    private ImageView princessCoin;
 
     @FXML
-    private ImageView bard;
+    private AnchorPane thief;
+    @FXML
+    private ImageView thiefCoin;
+
+    @FXML
+    private AnchorPane drunkard;
+    @FXML
+    private ImageView drunkardCoin;
 
 
     private void setCharacters() {
@@ -1067,17 +1103,17 @@ public class MainGameController extends Controller implements Initializable {
         List<CharacterSerializable> characters = model.getCharacterList();
 
         List<Node> list = new ArrayList<>(12);
-        list.add(0, apothecaryPane);
+        list.add(0, apothecary);
         list.add(1, bard);
-        list.add(2, clericPane);
+        list.add(2, cleric);
         list.add(3, cook);
         list.add(4, drunkard);
         list.add(5, herald);
-        list.add(6, jesterPane);
+        list.add(6, jester);
         list.add(7, knight);
         list.add(8, minotaur);
         list.add(9, postman);
-        list.add(10, princessPane);
+        list.add(10, princess);
         list.add(11, thief);
 
         for (int i = 0; i < 12; i++){
