@@ -36,8 +36,9 @@ import java.util.*;
     - evindeziare in qualche modo quali sono le zone interagibili della plancia
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
-    - Aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
-    - Aggiungere Wizard alla visualizzazione negli username
+    - aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
+    - aggiungere Wizard alla visualizzazione negli username
+    - isole ingrandite se sono aggregate
 
     - aggiungere visualizzazione del motivo di chiusura del programma - done
     - visualizzare tutte le informazioni sulle varie isole - done
