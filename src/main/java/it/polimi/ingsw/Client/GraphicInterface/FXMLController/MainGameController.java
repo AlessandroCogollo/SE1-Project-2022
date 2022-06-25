@@ -11,13 +11,10 @@ import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
 import it.polimi.ingsw.Server.Model.Island;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -39,6 +36,9 @@ todo
     - evindeziare in qualche modo quali sono le zone interagibili della plancia
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
+    - Aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
+    - Aggiungere Wizard alla visualizzazione negli username
+    - aggiungere visualizzazione del motivo di chiusura del programma
 
     - visualizzare tutte le informazioni sulle varie isole - done
     - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più - done
@@ -76,13 +76,35 @@ public class MainGameController extends Controller implements Initializable {
         };
     }
 
-    public Image convertColor(int id, double size) {
+    public Image convertTo3DCircle(int id, double size) {
         return switch (id) {
             case 0 -> new Image("/token/circle_pawn_blue.png", size, size, false, false);
             case 1 -> new Image("/token/circle_pawn_pink.png", size, size, false, false);
             case 2 -> new Image("/token/circle_pawn_yellow.png", size, size, false, false);
             case 3 -> new Image("/token/circle_pawn_red.png", size, size, false, false);
             case 4 -> new Image("/token/circle_pawn_green.png", size, size, false, false);
+            default -> null;
+        };
+    }
+
+    public Image convertTo3DHexagon(int id, double size) {
+        return switch (id) {
+            case 0 -> new Image("/token/hexa_pawn_blue.png", size, size, false, false);
+            case 1 -> new Image("/token/hexa_pawn_pink.png", size, size, false, false);
+            case 2 -> new Image("/token/hexa_pawn_yellow.png", size, size, false, false);
+            case 3 -> new Image("/token/hexa_pawn_red.png", size, size, false, false);
+            case 4 -> new Image("/token/hexa_pawn_green.png", size, size, false, false);
+            default -> null;
+        };
+    }
+
+    public Image convertToCircle(int id, double size) {
+        return switch (id) {
+            case 0 -> new Image("/token/circle_blue.png", size, size, false, false);
+            case 1 -> new Image("/token/circle_pink.png", size, size, false, false);
+            case 2 -> new Image("/token/circle_yellow.png", size, size, false, false);
+            case 3 -> new Image("/token/circle_red.png", size, size, false, false);
+            case 4 -> new Image("/token/circle_green.png", size, size, false, false);
             default -> null;
         };
     }
@@ -546,7 +568,7 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(20);
                     tokenView.setFitWidth(20);
-                    Image token = convertColor(color.getIndex(), 20);
+                    Image token = convertTo3DCircle(color.getIndex(), 20);
                     tokenView.setImage(token);
 
 
@@ -594,7 +616,7 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(20);
                     tokenView.setFitWidth(20);
-                    Image token = convertColor(color.getIndex(), 20);
+                    Image token = convertTo3DCircle(color.getIndex(), 20);
                     tokenView.setImage(token);
 
                     // Circle c = new Circle(height);
@@ -729,7 +751,9 @@ public class MainGameController extends Controller implements Initializable {
             disableStudentsDestination();
         };
 
-        this.actualRoom.setOnMouseClicked(handler);
+        int[] room = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfRoom();
+        if (room[this.colorChoose.getIndex()] < 10)
+            this.actualRoom.setOnMouseClicked(handler);
 
         handler = mouseEvent -> {
             ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -848,7 +872,7 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(20);
                     tokenView.setFitWidth(20);
-                    Image token = convertColor(i, 20);
+                    Image token = convertTo3DCircle(i, 20);
                     tokenView.setImage(token);
                     grid.add(tokenView, column, row);
 
@@ -1013,18 +1037,60 @@ public class MainGameController extends Controller implements Initializable {
             GridPane grid = grids.get(island.getId());
             grid.setUserData(island);
 
+            /*      0                   1               2
+            0   [ Mother Nature     Ban Cards       Towers]
+                [                                         ]
+            1   [ Blue              Purple          Yellow]
+                [                                         ]
+            2   [ Red               Green                 ]
+            */
+
+            if (model.getGameMode() == 1 && island.getBanCard() > 0){
+                ImageView banCard = new ImageView();
+                banCard.setFitHeight(16);
+                banCard.setFitWidth(16);
+                banCard.setImage(new Image("/token/token_apothecary.png", 16, 16, false, false));
+                Label banCardLabel = new Label(String.valueOf(island.getBanCard()));
+                banCardLabel.setTranslateY(-11);
+                banCardLabel.setTranslateX(4);
+                banCardLabel.setOpacity(1);
+                banCardLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
+                banCardLabel.setTextFill(Color.WHITE);
+                grid.add(banCard, 1, 0);
+                grid.add(banCardLabel, 1, 0);
+            }
+
+            if (island.getTowerCount() > 0){
+                /*ImageView tower = new ImageView();
+                tower.setFitHeight(16);
+                tower.setFitWidth(16);
+                tower.setImage(new Image("/token/token_apothecary.png", 16, 16, false, false));*/
+                Circle tower = new Circle(8);
+                tower.setFill(convertTowerColor(island.getTowerColor()));
+                Label towerLabel = new Label(String.valueOf(island.getTowerCount()));
+                towerLabel.setTranslateY(-11);
+                towerLabel.setTranslateX(4);
+                towerLabel.setOpacity(1);
+                towerLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
+                towerLabel.setTextFill(Color.WHITE);
+                grid.add(tower, 2, 0);
+                grid.add(towerLabel, 2, 0);
+            }
+
+
+
             int[] students = island.getStudents();
-            int added = 1; // position 0, 0 is only for mother nature
-            for (int i = 0; i < students.length; i++) {
-                if (students[i] > 0) {
-                    int column = (i % grid.getColumnCount()) + 1;
-                    int row = (i / grid.getColumnCount());
+            for (it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()) {
+                if (students[color.getIndex()] > 0) {
+                    int position = color.getIndex() + 3; //first 3 position occupied
+                    int column = (position % 3);
+                    int row = (position / 3);
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(16);
                     tokenView.setFitWidth(16);
-                    Image token = convertColor(i, 16);
+                    Image token = convertTo3DCircle(color.getIndex(), 16);
                     tokenView.setImage(token);
-                    Label label = new Label(String.valueOf(students[i]));
+                    Label label = new Label(String.valueOf(students[color.getIndex()]));
                     label.setTranslateY(-11);
                     label.setTranslateX(4);
                     label.setOpacity(1);
@@ -1032,7 +1098,6 @@ public class MainGameController extends Controller implements Initializable {
                     label.setTextFill(Color.WHITE);
                     grid.add(tokenView, column, row);
                     grid.add(label, column, row);
-                    // added++;
                 }
             }
 
@@ -1266,7 +1331,7 @@ public class MainGameController extends Controller implements Initializable {
                         ImageView tokenView = new ImageView();
                         tokenView.setFitHeight(32);
                         tokenView.setFitWidth(32);
-                        Image token = convertColor(color.getIndex(), 32);
+                        Image token = convertTo3DCircle(color.getIndex(), 32);
                         tokenView.setImage(token);
 
                         this.clericGrid.add(tokenView, column, row);
@@ -1281,6 +1346,16 @@ public class MainGameController extends Controller implements Initializable {
                     }
                 }
             }
+            case 3 -> {
+                int color = c.getColorId();
+                if (color != -1){
+                    Image image = convertToCircle(color, this.cookActiveColor.getFitHeight());
+                    this.cookActiveColor.setImage(image);
+                }
+                else {
+                    containers.get(3).getChildren().remove(this.cookActiveColor);
+                }
+            }
             case 6 -> {
                 // jester
                 int[] students = c.getStudents();
@@ -1292,7 +1367,7 @@ public class MainGameController extends Controller implements Initializable {
                         ImageView tokenView = new ImageView();
                         tokenView.setFitHeight(32);
                         tokenView.setFitWidth(32);
-                        Image token = convertColor(color.getIndex(), 32);
+                        Image token = convertTo3DCircle(color.getIndex(), 32);
                         tokenView.setImage(token);
                         this.jesterGrid.add(tokenView, column, row);
                         if (this.jesterStudents == null)
@@ -1315,7 +1390,7 @@ public class MainGameController extends Controller implements Initializable {
                         ImageView tokenView = new ImageView();
                         tokenView.setFitHeight(32);
                         tokenView.setFitWidth(32);
-                        Image token = convertColor(color.getIndex(), 32);
+                        Image token = convertTo3DCircle(color.getIndex(), 32);
                         tokenView.setImage(token);
                         this.princessGrid.add(tokenView, column, row);
                         if (this.princessStudents == null)
@@ -1336,7 +1411,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (Node c : this.characterPlayable){
             c.setOnMouseClicked(null);
-            c.setDisable(true);
+            //c.setDisable(false);
         }
     }
 
@@ -1353,7 +1428,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (AnchorPane c : this.characterPlayable){
 
-            c.setDisable(false);
+            //c.setDisable(false);
             c.setOnMouseClicked(mouseEvent -> {
                 //((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 CharacterSerializable character = (CharacterSerializable) ((Node)mouseEvent.getSource()).getUserData();
@@ -1377,7 +1452,9 @@ public class MainGameController extends Controller implements Initializable {
             return;
         }
 
-        DataCollector dC = this.dataCollector;
+        if (characterId != 1 && characterId != 6)
+            disableCharacters();
+
         EventHandler<MouseEvent> handler;
 
         switch (characterId){
@@ -1410,6 +1487,8 @@ public class MainGameController extends Controller implements Initializable {
                     super.main.displayMessage("Cannot play Bard because you don't have enough students in your room");
                     return;
                 }
+
+                disableCharacters();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1496,8 +1575,11 @@ public class MainGameController extends Controller implements Initializable {
                 if (this.jesterStudents == null)
                     return;
 
+                disableCharacters();
+
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    mouseEvent.consume();
                     it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
                     System.out.println("Choose color " + color + " from jester for jester Effect");
                     jesterEffect(color, null);
@@ -1732,7 +1814,6 @@ public class MainGameController extends Controller implements Initializable {
             int length = jesterObject.length;
             if (length == 2){
                 jesterObject[1] = entrance.getIndex();
-                System.out.println("Activated Jester");
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                 disableEntrance();
                 disableCharacters();
@@ -1742,7 +1823,6 @@ public class MainGameController extends Controller implements Initializable {
                     jesterObject[1] = entrance.getIndex();
                 else{
                     jesterObject[3] = entrance.getIndex();
-                    System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
                     disableCharacters();
@@ -1755,7 +1835,6 @@ public class MainGameController extends Controller implements Initializable {
                     jesterObject[3] = entrance.getIndex();
                 else{
                     jesterObject[5] = entrance.getIndex();
-                    System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
                     disableCharacters();
@@ -1951,7 +2030,7 @@ public class MainGameController extends Controller implements Initializable {
             activateAssistant();
         }
         else {
-            if (model.getGameMode() == 1 && this.dataCollector.canPlayCharacter())
+            if (model.getGameMode() == 1 && this.dataCollector.canPlayCharacter() && !aP.equals(ActionPhase.NotActionPhase))
                 activateCharacter();
             switch (aP) {
                 case MoveStudent -> activateStudentsMove();

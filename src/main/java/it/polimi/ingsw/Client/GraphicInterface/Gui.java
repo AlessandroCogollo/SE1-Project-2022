@@ -225,7 +225,7 @@ public class Gui extends Application implements Graphic {
 
         private void modelSelector(DataCollector dC){
 
-            final String fileName = "game_full.json";
+            final String fileName = "CharacterTest.json";
 
             final String name1 = "player1"; // id: 0
             final String name2 = "player2"; // id: 1
