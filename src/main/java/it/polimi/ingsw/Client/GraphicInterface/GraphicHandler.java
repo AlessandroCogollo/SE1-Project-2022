@@ -69,6 +69,10 @@ public class GraphicHandler {
         this.graphic.stopGraphic();
     }
 
+    public void gameOver (String message){
+        this.graphic.gameOver(message);
+    }
+
     public void updateModel (ModelMessage model){
         this.dataCollector.setModel(model);
     }

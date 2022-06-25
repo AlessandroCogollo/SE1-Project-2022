@@ -136,6 +136,7 @@ public class Client{
     private void graphicStopped() {
         this.setCode(Errors.GRAPHIC_STOPPED);
     }
+
     private void shutdownAll() {
         if (this.setup != null)
             this.setup.interrupt();
@@ -160,19 +161,14 @@ public class Client{
                 System.out.println("Ready to play, waiting for the start of the game");
                 new Thread(this.game, "GameHandler").start();
             }
-            case SERVER_DOWN -> {
-                System.out.println("The server go down, shutting down");
-                go = false;
-            }
-            case GAME_OVER -> {
-                System.out.println("The game is finished, shutting down");
-                go = false;
-            }
+            case SERVER_DOWN -> this.graphic.gameOver("The server is down, the client needs to shutdown");
+            case GAME_OVER -> System.out.println("The game is finished, shutting down");
             case GRAPHIC_STOPPED -> {
                 System.out.println("Graphic has stopped, shutting down");
                 go = false;
             }
-            case PLAYER_DISCONNECTED, CANNOT_ACCEPT -> go = false;
+            case PLAYER_DISCONNECTED -> this.graphic.gameOver("A player disconnected, the client needs to shutdown");
+            case CANNOT_ACCEPT -> this.graphic.gameOver("The Server Cannot Accept more client");
         }
 
         //reset code

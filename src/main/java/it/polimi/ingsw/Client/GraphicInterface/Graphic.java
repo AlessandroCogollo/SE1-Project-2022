@@ -32,4 +32,10 @@ public interface Graphic {
      * Stop any io method and the Graphic thread if is running
      */
     void stopGraphic();
+
+    /**
+     * Display the message and stop the graphic using the stopGraphic Method
+     * @param message the message that will be displayed
+     */
+    void gameOver (String message);
 }

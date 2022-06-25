@@ -105,10 +105,11 @@ public class Gui extends Application implements Graphic {
         });
     }
 
-    public void gameOver(String winMessage) {
+    @Override
+    public void gameOver(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText(winMessage);
+            alert.setContentText(message);
             alert.initOwner(Gui.mainStage.getOwner());
             alert.showAndWait();
             stopGraphic();

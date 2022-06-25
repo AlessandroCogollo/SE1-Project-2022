@@ -128,7 +128,7 @@ public class Cli implements Graphic {
         System.out.println();
 
         if(model.gameIsOver()){
-            displayMessage(this.dC.getStandardWinMessage());
+            gameOver(this.dC.getStandardWinMessage());
             return;
         }
 
@@ -526,6 +526,14 @@ public class Cli implements Graphic {
             e.printStackTrace();
             System.exit(-1);
         }
+
+        this.dC.graphicIsTerminated();
+    }
+
+    @Override
+    public void gameOver(String message) {
+        displayMessage(message);
+        stopGraphic();
     }
 
 
