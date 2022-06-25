@@ -225,17 +225,17 @@ public class Gui extends Application implements Graphic {
 
         private void modelSelector(DataCollector dC){
 
-            final String fileName = "0character1test21.json";
+            final String fileName = "0player11player22player33player41.json";
 
-            final String name1 = "bit"; // id: 0
-            final String name2 = "tib"; // id: 1
-            final String name3 = "itb"; // id: 2
-            final String name4 = "bti"; // id: 3
+            final String name1 = "player1"; // id: 0
+            final String name2 = "player2"; // id: 1
+            final String name3 = "player3"; // id: 2
+            final String name4 = "player4"; // id: 3
 
-            final Wizard w1 = Wizard.Wise;      // id: 0
+            final Wizard w1 = Wizard.Sorcerer;      // id: 0
             final Wizard w2 = Wizard.King;      // id: 1
-            final Wizard w3 = Wizard.Sorcerer;  // id: 2
-            final Wizard w4 = Wizard.Witch;     // id: 3
+            final Wizard w3 = Wizard.Witch;  // id: 2
+            final Wizard w4 = Wizard.Wise;     // id: 3
 
 
 

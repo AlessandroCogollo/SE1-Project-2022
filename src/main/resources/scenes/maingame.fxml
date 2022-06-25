@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -21,9 +20,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="980.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="980.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <SplitPane dividerPositions="0.25" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="980.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
+      <SplitPane dividerPositions="0.25" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="980.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
          <items>
             <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="200.0">
                <children>
@@ -137,27 +136,27 @@
                      </fill>
                   </Rectangle>
                   <Label fx:id="leftYellow" layoutX="51.0" layoutY="502.0" text="7" textFill="#beb2b2" />
-                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="colorBlue" fitWidth="30.0" layoutX="40.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/circle_blue.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="74.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="colorGreen" fitHeight="30.0" fitWidth="30.0" layoutX="74.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/circle_green.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="108.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="colorPink" fitHeight="30.0" fitWidth="40.0" layoutX="108.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/circle_pink.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="142.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="colorYellow" fitHeight="30.0" fitWidth="40.0" layoutX="142.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/circle_yellow.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="30.0" fitWidth="40.0" layoutX="175.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="colorRed" fitHeight="30.0" fitWidth="40.0" layoutX="175.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../token/circle_red.png" />
                      </image>
@@ -930,9 +929,9 @@
                               <content>
                                 <AnchorPane fx:id="assistantPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ScrollPane minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="161.0" prefWidth="727.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
+                                          <ScrollPane focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="166.0" prefWidth="727.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
                                             <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1062.0" style="-fx-background-color: #2c2b3d;">
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1062.0" style="-fx-background-color: #2c2b3d;">
                                                  <children>
                                                     <ImageView fx:id="lion" fitHeight="140.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                        <image>
@@ -1066,9 +1065,9 @@
                               <content>
                                 <AnchorPane fx:id="charactersPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ScrollPane pannable="true" prefHeight="163.0" prefWidth="726.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
+                                          <ScrollPane pannable="true" prefHeight="166.0" prefWidth="726.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
                                             <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1267.0" style="-fx-background-color: #2c2b3d;">
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1267.0" style="-fx-background-color: #2c2b3d;">
                                                    <children>
                                                       <AnchorPane fx:id="cleric" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                          <children>
@@ -1392,9 +1391,6 @@
                </children>
             </AnchorPane>
          </items>
-         <cursor>
-            <Cursor fx:constant="CROSSHAIR" />
-         </cursor>
       </SplitPane>
    </center>
    <bottom>

@@ -11,6 +11,7 @@ import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;
 import it.polimi.ingsw.Server.Model.Island;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,14 +36,16 @@ import java.util.*;
 
 /*
 todo
-    - visualizzare tutte le informazioni sulle varie isole
-    - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più
-    - mettere a posto le informazioni visualizzate sui character che per ora sono fatte un po' male
-    - aggiungere una visualizzazione dello stato di gioco (basta scrivere da qualche parte la fase di gioco)
     - evindeziare in qualche modo quali sono le zone interagibili della plancia
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
-    - aggiungere un metodo per far scegliere ai player un colore, io pensavo al cliccare sui colori a sinistra nella bag
-    - resize text lenght in status bar and assistant below name to match new dimension of window
+    - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
+
+    - visualizzare tutte le informazioni sulle varie isole - done
+    - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più - done
+    - mettere a posto le informazioni visualizzate sui character che per ora sono fatte un po' male - done (vedete se vi piacciono)
+    - aggiungere una visualizzazione dello stato di gioco (basta scrivere da qualche parte la fase di gioco) - done
+    - aggiungere un metodo per far scegliere ai player un colore, io pensavo al cliccare sui colori a sinistra nella bag - done
+    - resize text lenght in status bar and assistant below name to match new dimension of window - done
 */
 
 public class MainGameController extends Controller implements Initializable {
@@ -88,12 +91,12 @@ public class MainGameController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        Scene s = super.main.getMainStage().getScene();
+        //Scene s = super.main.getMainStage().getScene();
 
         System.out.println("Initialize Started");
 
-        if (s != null)
-            s.setCursor(Cursor.WAIT);
+        //if (s != null)
+            //s.setCursor(Cursor.WAIT);
 
         setGameStatus();
         setUsernames();
@@ -105,8 +108,8 @@ public class MainGameController extends Controller implements Initializable {
 
         System.out.println("Elaborate Model");
         elaborateModel();
-        if (s != null)
-            s.setCursor(Cursor.DEFAULT);
+        //if (s != null)
+            //s.setCursor(Cursor.DEFAULT);
     }
 
     @FXML
@@ -137,6 +140,17 @@ public class MainGameController extends Controller implements Initializable {
     private Label leftBlue;
     @FXML
     private Label leftRed;
+
+    @FXML
+    private ImageView colorBlue;
+    @FXML
+    private ImageView colorYellow;
+    @FXML
+    private ImageView colorGreen;
+    @FXML
+    private ImageView colorPink;
+    @FXML
+    private ImageView colorRed;
 
     public void setGameStatus(){
 
@@ -183,9 +197,29 @@ public class MainGameController extends Controller implements Initializable {
         leftPink.setText(String.valueOf(bag[2]));
         leftRed.setText(String.valueOf(bag[3]));
         leftYellow.setText(String.valueOf(bag[4]));
+
+        this.colorBlue.setUserData(it.polimi.ingsw.Enum.Color.Blue);
+        this.colorYellow.setUserData(it.polimi.ingsw.Enum.Color.Yellow);
+        this.colorGreen.setUserData(it.polimi.ingsw.Enum.Color.Green);
+        this.colorPink.setUserData(it.polimi.ingsw.Enum.Color.Purple);
+        this.colorRed.setUserData(it.polimi.ingsw.Enum.Color.Red);
     }
 
+    private void enableColorChoose(EventHandler<MouseEvent> handler) {
+        this.colorBlue.setOnMouseClicked(handler);
+        this.colorYellow.setOnMouseClicked(handler);
+        this.colorGreen.setOnMouseClicked(handler);
+        this.colorPink.setOnMouseClicked(handler);
+        this.colorRed.setOnMouseClicked(handler);
+    }
 
+    private void disableColorChoose() {
+        this.colorBlue.setOnMouseClicked(null);
+        this.colorYellow.setOnMouseClicked(null);
+        this.colorGreen.setOnMouseClicked(null);
+        this.colorPink.setOnMouseClicked(null);
+        this.colorRed.setOnMouseClicked(null);
+    }
 
     @FXML
     private Label username1;
@@ -499,7 +533,7 @@ public class MainGameController extends Controller implements Initializable {
         roomGrids.add(gridRoom3);
         roomGrids.add(gridRoom4);
 
-        double height = 9;
+        //double height = 9;
 
         for(Integer id: names.keySet()){
 
@@ -512,7 +546,7 @@ public class MainGameController extends Controller implements Initializable {
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(20);
                     tokenView.setFitWidth(20);
-                    Image token = convertColor(students, 20);
+                    Image token = convertColor(color.getIndex(), 20);
                     tokenView.setImage(token);
 
 
@@ -1051,11 +1085,14 @@ public class MainGameController extends Controller implements Initializable {
 
     @FXML
     private Tab charactersTab;
-
     @FXML
     private AnchorPane charactersPane;
+    @FXML
+    private ScrollPane scrollPaneCharacter;
+    @FXML
+    private AnchorPane anchorPaneScrollPaneCharacter;
 
-    private List<Node> characterPlayable = null;
+    private List<AnchorPane> characterPlayable = null;
 
 
     @FXML
@@ -1133,6 +1170,18 @@ public class MainGameController extends Controller implements Initializable {
 
     private void setCharacters() {
 
+        EventHandler<Event> hand = event -> {
+            System.out.println(event.toString());
+            System.out.println("Type : " + event.getEventType());
+            System.out.println("Target : " + event.getTarget());
+            System.out.println("Source : " + event.getSource());
+        };
+
+
+        charactersPane.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
+        scrollPaneCharacter.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
+        anchorPaneScrollPaneCharacter.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
+
         ModelMessage model = dataCollector.getModel();
         int gM = model.getGameMode();
 
@@ -1143,33 +1192,52 @@ public class MainGameController extends Controller implements Initializable {
 
         List<CharacterSerializable> characters = model.getCharacterList();
 
-        List<Node> list = new ArrayList<>(12);
-        list.add(0, apothecary);
-        list.add(1, bard);
-        list.add(2, cleric);
-        list.add(3, cook);
-        list.add(4, drunkard);
-        list.add(5, herald);
-        list.add(6, jester);
-        list.add(7, knight);
-        list.add(8, minotaur);
-        list.add(9, postman);
-        list.add(10, princess);
-        list.add(11, thief);
+        List<AnchorPane> list = new ArrayList<>(12);
+        list.add(apothecary);
+        list.add(bard);
+        list.add(cleric);
+        list.add(cook);
+        list.add(drunkard);
+        list.add(herald);
+        list.add(jester);
+        list.add(knight);
+        list.add(minotaur);
+        list.add(postman);
+        list.add(princess);
+        list.add(thief);
+
+        List<ImageView> coins = new ArrayList<>(12);
+        coins.add(apothecaryCoin);
+        coins.add(bardCoin);
+        coins.add(clericCoin);
+        coins.add(cookCoin);
+        coins.add(drunkardCoin);
+        coins.add(heraldCoin);
+        coins.add(jesterCoin);
+        coins.add(knightCoin);
+        coins.add(minotaurCoin);
+        coins.add(postmanCoin);
+        coins.add(princessCoin);
+        coins.add(thiefCoin);
 
         for (int i = 0; i < 12; i++){
+
+            AnchorPane c = list.get(i);
 
             if (model.isCharacterIdValid(i)){
                 if (this.characterPlayable == null)
                     this.characterPlayable = new ArrayList<>(characters.size());
 
-                this.characterPlayable.add(list.get(i));
-                list.get(i).setUserData(model.getCharacterById(i));
+                this.characterPlayable.add(c);
+                CharacterSerializable characterSerializable = model.getCharacterById(i);
+                c.setUserData(characterSerializable);
 
-                setCharacter(i);
+                setCharacter(characterSerializable, coins, list);
             }
-            else
-                this.charactersPane.getChildren().remove(list.get(i));
+            else {
+                c.setVisible(false);
+                c.setDisable(true);
+            }
         }
 
         disableCharacters();
@@ -1180,13 +1248,17 @@ public class MainGameController extends Controller implements Initializable {
     private List<ImageView> jesterStudents = null;
     private List<ImageView> princessStudents = null;
 
-    private void setCharacter(int id) {
+    private void setCharacter(CharacterSerializable c, List<ImageView> coins, List<AnchorPane> containers) {
 
         ModelMessage model = this.dataCollector.getModel();
-        CharacterSerializable c = model.getCharacterById(id);
+        int id = c.getId();
 
-        if (c == null)
+        if (!model.isCharacterIdValid(id))
             return;
+
+        if (!c.isUsed()){
+            containers.get(id).getChildren().remove(coins.get(id));
+        }
 
         switch (id){
             case 0 -> {
@@ -1207,10 +1279,12 @@ public class MainGameController extends Controller implements Initializable {
                         tokenView.setFitWidth(32);
                         Image token = convertColor(color.getIndex(), 32);
                         tokenView.setImage(token);
+
                         this.clericGrid.add(tokenView, column, row);
                         if (this.clericStudents == null)
                             this.clericStudents = new ArrayList<>(4);
 
+                        tokenView.setUserData(color);
                         this.clericStudents.add(tokenView);
                         added++;
                     }
@@ -1234,6 +1308,7 @@ public class MainGameController extends Controller implements Initializable {
                             this.jesterStudents = new ArrayList<>(6);
 
                         this.jesterStudents.add(tokenView);
+                        tokenView.setUserData(color);
                         added++;
                     }
                 }
@@ -1256,6 +1331,7 @@ public class MainGameController extends Controller implements Initializable {
                             this.princessStudents = new ArrayList<>(4);
 
                         this.princessStudents.add(tokenView);
+                        tokenView.setUserData(color);
                         added++;
                     }
                 }
@@ -1274,19 +1350,22 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     private void activateCharacter() {
-        if (this.characterPlayable == null)
+        if (this.characterPlayable == null) {
+            System.out.println("list of playable character null");
             return;
+        }
 
-        for (Node c : this.characterPlayable){
+        for (AnchorPane c : this.characterPlayable){
 
             c.setDisable(false);
             c.setOnMouseClicked(mouseEvent -> {
-                ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                //((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 CharacterSerializable character = (CharacterSerializable) ((Node)mouseEvent.getSource()).getUserData();
                 System.out.println("Selected character " + character.getName());
 
                 askCharacterAttributes(character);
             });
+            System.out.println("Set handler for " + c.getId());
         }
     }
 
@@ -1308,7 +1387,6 @@ public class MainGameController extends Controller implements Initializable {
 
         if (characterId != 6 && characterId != 1)
             disableCharacters();
-        //todo all character effects
 
         switch (characterId){
             case 0 -> {
@@ -1320,6 +1398,7 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose Island for apothecary  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
+                    System.out.println("Activated " + character.getName());
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
                 };
@@ -1363,6 +1442,7 @@ public class MainGameController extends Controller implements Initializable {
                     return;
 
                 handler = mouseEvent -> {
+                    mouseEvent.consume();
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                     it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
                     System.out.println("Choose color " + color + " from cleric for cleric Effect");
@@ -1373,11 +1453,28 @@ public class MainGameController extends Controller implements Initializable {
                     c.setOnMouseClicked(handler);
                 }
 
+                super.main.displayMessage("Please select a student from the cleric, then click on the island where you want to put it");
                 return;
             }
             case 3 -> {
                 //cook - color that not count as influence
-                return; //todo possible to use the 5 professor on the left to pick the color
+
+                handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " for cook Effect");
+                    int[] obj = new int[1];
+                    obj[0] = color.getIndex();
+                    System.out.println("Activated " + character.getName());
+                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
+                    disableColorChoose();
+                };
+
+                enableColorChoose(handler);
+
+                super.main.displayMessage("Please select a color from the list on the left");
+
+                return;
             }
             case 5 -> {
                 //herald calc influence of an island
@@ -1388,6 +1485,7 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose Island for herald  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
+                    System.out.println("Activated " + character.getName());
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
                 };
@@ -1424,7 +1522,7 @@ public class MainGameController extends Controller implements Initializable {
                     c.setOnMouseClicked(handler);
                 }
 
-
+                super.main.displayMessage("Please select a max of 3 students from the jester, then click on your students on the entrance to swap them");
                 return;
             }
             case 10 -> {
@@ -1439,6 +1537,7 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose color " + color + " from princess for princess Effect");
                     int[] obj = new int[1];
                     obj[0] = color.getIndex();
+                    System.out.println("Activated " + character.getName());
                     dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disablePrincessEffect();
                 };
@@ -1447,14 +1546,32 @@ public class MainGameController extends Controller implements Initializable {
                     c.setOnMouseClicked(handler);
                 }
 
+                super.main.displayMessage("Please select a student from the princess that will be added to your room");
                 return;
             }
             case 11 -> {
                 //thief - choose a color
-                return; //todo possible to use the 5 professor on the left to pick the color
+
+                handler = mouseEvent -> {
+                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    System.out.println("Choose color " + color + " for thief Effect");
+                    int[] obj = new int[1];
+                    obj[0] = color.getIndex();
+                    System.out.println("Activated " + character.getName());
+                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
+                    disableColorChoose();
+                };
+
+                enableColorChoose(handler);
+
+                super.main.displayMessage("Please select a color from the list on the left");
+
+                return;
             }
         }
 
+        System.out.println("Activated " + character.getName());
         this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, null));
     }
 
@@ -1519,6 +1636,7 @@ public class MainGameController extends Controller implements Initializable {
                 bardObject[1] = room.getIndex();
                 disableEntrance();
                 disableRoom();
+                System.out.println("Activated Bard");
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
             }
             else { //choose 2 color
@@ -1528,6 +1646,7 @@ public class MainGameController extends Controller implements Initializable {
                 else { //last setted
                     bardObject[3] = room.getIndex();
                     disableRoom();
+                    System.out.println("Activated Bard");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
                 }
             }
@@ -1558,6 +1677,7 @@ public class MainGameController extends Controller implements Initializable {
         }
         else if (clericObject != null && color == null && i != null){
             clericObject[1] = i.getId();
+            System.out.println("Activated Cleric");
             this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Cleric", 2, clericObject));
             disableIslands();
         }
@@ -1627,6 +1747,7 @@ public class MainGameController extends Controller implements Initializable {
             int length = jesterObject.length;
             if (length == 2){
                 jesterObject[1] = entrance.getIndex();
+                System.out.println("Activated Jester");
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                 disableEntrance();
             }
@@ -1635,6 +1756,7 @@ public class MainGameController extends Controller implements Initializable {
                     jesterObject[1] = entrance.getIndex();
                 else{
                     jesterObject[3] = entrance.getIndex();
+                    System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
                 }
@@ -1646,6 +1768,7 @@ public class MainGameController extends Controller implements Initializable {
                     jesterObject[3] = entrance.getIndex();
                 else{
                     jesterObject[5] = entrance.getIndex();
+                    System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
                 }
