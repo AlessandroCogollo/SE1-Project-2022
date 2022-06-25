@@ -23,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -62,6 +63,26 @@ public class MainGameController extends Controller implements Initializable {
             case 2 -> Color.WHITE;
             case 3 -> Color.GREY;
             default -> Color.TRANSPARENT;
+        };
+    }
+
+    public Image convertTo3DTowerColor(int id, double size){
+        return switch (id) {
+            case 1 -> new Image("/token/black_tower.png", size, 2*size, false, false);
+            case 2 -> new Image("/token/white_tower.png", size, 2*size, false, false);
+            case 3 -> new Image("/token/grey_tower.png", size, 2*size, false, false);
+            default -> null;
+        };
+    }
+
+    public Image convertDeckImage(int id) {
+        return switch (id) {
+            case 1 -> new Image("/Assistenti/retro/CarteTOT_back_1@3x.png");
+            case 2 -> new Image("/Assistenti/retro/CarteTOT_back_11@3x.png");
+            case 3 -> new Image("/Assistenti/retro/CarteTOT_back_21@3x.png");
+            case 4 -> new Image("/Assistenti/retro/CarteTOT_back_31@3x.png");
+            case 5 -> new Image("/Assistenti/retro/CarteTOT_back_41@3x.png");
+            default -> null;
         };
     }
 
@@ -251,7 +272,14 @@ public class MainGameController extends Controller implements Initializable {
     private Label username3;
     @FXML
     private Label username4;
-
+    @FXML
+    private Rectangle icon1;
+    @FXML
+    private Rectangle icon2;
+    @FXML
+    private Rectangle icon3;
+    @FXML
+    private Rectangle icon4;
     @FXML
     private Label label1;
     @FXML
@@ -291,26 +319,34 @@ public class MainGameController extends Controller implements Initializable {
         labels.add(label2);
         labels.add(label3);
         labels.add(label4);
+        List<Rectangle> icons = new ArrayList<>(playerNumber);
+        icons.add(icon1);
+        icons.add(icon2);
+        icons.add(icon3);
+        icons.add(icon4);
 
         if (playerNumber < 4){
-            this.color4.setVisible(false);
-            this.color4.setDisable(true);
+            this.icon4.setVisible(false);
+            this.icon4.setDisable(true);
             this.rectangle4.setVisible(false);
             this.username4.setVisible(false);
             this.label4.setVisible(false);
         }
         if (playerNumber < 3){
-            this.color3.setVisible(false);
-            this.color3.setDisable(true);
+            this.icon3.setVisible(false);
+            this.icon3.setDisable(true);
             this.rectangle3.setVisible(false);
             this.username3.setVisible(false);
             this.label3.setVisible(false);
         }
 
-
         for (Integer i : usernames.keySet()){
 
             names.get(i).setText(usernames.get(i));
+
+            // TODO: implement actual wizard choosen
+            Image img = convertDeckImage(i);
+            icons.get(i).setFill(new ImagePattern(img));
 
             Assistant a = Assistant.getAssistantByValue(model.getPlayerById(i).getActiveAssistant());
             String text;
@@ -524,22 +560,8 @@ public class MainGameController extends Controller implements Initializable {
             ImageView tokenView = new ImageView();
             tokenView.setFitHeight(20);
             tokenView.setFitWidth(20);
-            Image token = null;
-            if (i == 0) {
-                token = new Image("/token/hexa_pawn_blue.png");
-            } else if (i == 1) {
-                token = new Image("/token/hexa_pawn_pink.png");
-            } else if (i == 2) {
-                token = new Image("/token/hexa_pawn_yellow.png");
-            } else if (i == 3) {
-                token = new Image("/token/hexa_pawn_red.png");
-            } else if (i == 4) {
-                token = new Image("/token/hexa_pawn_green.png");
-            }
-
+            Image token = convertTo3DHexagon(i, 20);
             tokenView.setImage(token);
-            // Circle c = new Circle(height);
-            // c.setFill(convertColor(i));
             if(professors[i] != -1)
                 professorsGrids.get(professors[i]).add(tokenView, i, 0);
         }
@@ -673,11 +695,12 @@ public class MainGameController extends Controller implements Initializable {
             GridPane grid = towerGrids.get(id);
 
             for(int i = 0; i < towers; i++){
-                Circle c = new Circle(height);
-                c.setFill(color);
+                ImageView tokenView = new ImageView();
+                Image token = convertTo3DTowerColor(p.getTowerColor(), 20);
+                tokenView.setImage(token);
                 int column = i % grid.getColumnCount();
                 int row = i / grid.getColumnCount();
-                grid.add(c, column, row);
+                grid.add(tokenView, column, row);
 
                 if(column > 3 || row > 1)
                     System.out.println("Tower space exceeded!");
@@ -1065,8 +1088,10 @@ public class MainGameController extends Controller implements Initializable {
                 tower.setFitHeight(16);
                 tower.setFitWidth(16);
                 tower.setImage(new Image("/token/token_apothecary.png", 16, 16, false, false));*/
-                Circle tower = new Circle(8);
-                tower.setFill(convertTowerColor(island.getTowerColor()));
+                ImageView tower = new ImageView();
+                tower.setFitWidth(16);
+                Image token = convertTo3DTowerColor(island.getTowerColor(), 16);
+                tower.setImage(token);
                 Label towerLabel = new Label(String.valueOf(island.getTowerCount()));
                 towerLabel.setTranslateY(-11);
                 towerLabel.setTranslateX(4);

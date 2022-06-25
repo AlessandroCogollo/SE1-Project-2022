@@ -27,7 +27,7 @@
             <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="200.0">
                <children>
                   <Rectangle fx:id="rectangle1" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="24.0" layoutY="78.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
-                  <Rectangle arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="40.0" layoutX="36.0" layoutY="88.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
+                  <Rectangle fx:id="icon1" arcHeight="25.0" arcWidth="25.0" fill="DODGERBLUE" height="40.0" layoutX="36.0" layoutY="88.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Assistenti/retro/CarteTOT_back_1@3x.png'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
                   <Label fx:id="username1" layoutX="88.0" layoutY="90.0" text="frigobar123" textFill="WHITE" AnchorPane.leftAnchor="64.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -35,7 +35,7 @@
                   </Label>
                   <Label fx:id="label1" layoutX="88.0" layoutY="110.0" text="Mago Thelma" textFill="#beb2b2" AnchorPane.leftAnchor="64.0" />
                   <Rectangle fx:id="rectangle2" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="24.0" layoutY="148.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
-                  <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#cbaa45" height="40.0" layoutX="36.0" layoutY="158.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
+                  <Rectangle fx:id="icon2" arcHeight="25.0" arcWidth="25.0" fill="#cbaa45" height="40.0" layoutX="36.0" layoutY="158.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
                   <Label fx:id="username2" layoutX="88.0" layoutY="160.0" text="sexycolbe" textFill="WHITE" AnchorPane.leftAnchor="64.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -43,7 +43,7 @@
                   </Label>
                   <Label fx:id="label2" layoutX="88.0" layoutY="180.0" text="Mago Forest" textFill="#beb2b2" AnchorPane.leftAnchor="64.0" />
                   <Rectangle fx:id="rectangle3" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="20.0" layoutY="218.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
-                  <Rectangle fx:id="color3" arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="40.0" layoutX="36.0" layoutY="228.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
+                  <Rectangle fx:id="icon3" arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="40.0" layoutX="36.0" layoutY="228.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
                   <Label fx:id="username3" layoutX="88.0" layoutY="230.0" text="lucabotti88" textFill="WHITE" AnchorPane.leftAnchor="64.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -51,7 +51,7 @@
                   </Label>
                   <Label fx:id="label3" layoutX="88.0" layoutY="250.0" text="Piton" textFill="#beb2b2" AnchorPane.leftAnchor="64.0" />
                   <Rectangle fx:id="rectangle4" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="24.0" layoutY="288.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
-                  <Rectangle fx:id="color4" arcHeight="25.0" arcWidth="25.0" fill="#1fffc2" height="40.0" layoutX="30.0" layoutY="298.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
+                  <Rectangle fx:id="icon4" arcHeight="25.0" arcWidth="25.0" fill="#1fffc2" height="40.0" layoutX="30.0" layoutY="298.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
                   <Label fx:id="username4" layoutX="88.0" layoutY="300.0" text="margaragorn" textFill="WHITE" AnchorPane.leftAnchor="64.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -224,14 +224,14 @@
                                                             <Image url="@../isl1.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid9" alignment="CENTER" hgap="3.0" scaleX="1.1" scaleY="1.1" translateX="-10.0" translateY="10.0" vgap="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <GridPane fx:id="islandGrid9" alignment="BASELINE_CENTER" hgap="3.0" scaleX="1.1" scaleY="1.1" translateX="-10.0" translateY="10.0" vgap="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -248,14 +248,14 @@
                                                             <Image url="@../isl1.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid1" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid1" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-5.0" vgap="3.0">
                                                         <columnConstraints>
                                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                         </columnConstraints>
                                                         <rowConstraints>
-                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         </rowConstraints>
@@ -272,14 +272,14 @@
                                                             <Image url="@../isl2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid2" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid2" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -296,14 +296,14 @@
                                                             <Image url="@../isl1.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid3" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="-10.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid3" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="-10.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -320,14 +320,14 @@
                                                             <Image url="@../isl3.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid4" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="-5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid4" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="-5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -344,14 +344,14 @@
                                                             <Image url="@../isl1.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid5" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid5" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -368,14 +368,14 @@
                                                             <Image url="@../isl1.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid6" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="10.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid6" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="10.0" translateY="10.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -392,14 +392,14 @@
                                                             <Image url="@../isl2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid7" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid7" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -416,14 +416,14 @@
                                                             <Image url="@../isl3.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid8" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid8" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -440,14 +440,14 @@
                                                             <Image url="@../isl2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid10" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid10" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -464,14 +464,14 @@
                                                             <Image url="@../isl3.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid11" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="-5.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid11" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateY="-5.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
@@ -488,14 +488,14 @@
                                                             <Image url="@../isl3.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <GridPane fx:id="islandGrid12" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-10.0" translateY="-10.0" vgap="3.0">
+                                                      <GridPane fx:id="islandGrid12" alignment="BASELINE_CENTER" hgap="3.0" prefHeight="70.0" prefWidth="70.0" scaleX="1.1" scaleY="1.1" translateX="-10.0" translateY="-10.0" vgap="3.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
-                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
