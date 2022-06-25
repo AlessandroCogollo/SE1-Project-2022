@@ -116,17 +116,12 @@ public class ModelHandler implements Runnable{
                 if (m.gameIsOver()){
                     this.persistenceAssistant.gameOver();
                     server.setCode(Errors.GAME_OVER);
+                    stopModel();
                 }
                 else{
                     this.persistenceAssistant.updateModelFile(m);
                 }
             }
-            if (m.gameIsOver() && !this.thread.isInterrupted()){
-                server.setCode(Errors.GAME_OVER);
-                stopModel();
-            }
-
-
 
             message = gson.toJsonTree(m);
         }
@@ -143,14 +138,21 @@ public class ModelHandler implements Runnable{
 
     private void sendMessageToPlayers (JsonElement m){
         //send message to all players
+
+        boolean interrupted = false;
         for (int id: this.ids){
             boolean done = false;
             while (!done) {
                 try {
                     this.queues.getPlayerQueue(id).put(m);
                     done = true;
-                } catch (InterruptedException ignored){} //this action need to be done for all player in any case if it is started
+                } catch (InterruptedException e){
+                    interrupted = true;
+                } //this action need to be done for all player in any case if it is started
             }
         }
+
+        if (interrupted)
+            stopModel();
     }
 }
