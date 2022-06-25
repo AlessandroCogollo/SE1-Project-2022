@@ -1170,18 +1170,6 @@ public class MainGameController extends Controller implements Initializable {
 
     private void setCharacters() {
 
-        EventHandler<Event> hand = event -> {
-            System.out.println(event.toString());
-            System.out.println("Type : " + event.getEventType());
-            System.out.println("Target : " + event.getTarget());
-            System.out.println("Source : " + event.getSource());
-        };
-
-
-        charactersPane.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
-        scrollPaneCharacter.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
-        anchorPaneScrollPaneCharacter.addEventHandler(MouseEvent.MOUSE_CLICKED, hand);
-
         ModelMessage model = dataCollector.getModel();
         int gM = model.getGameMode();
 
@@ -1270,6 +1258,7 @@ public class MainGameController extends Controller implements Initializable {
                 // cleric
                 int[] students = c.getStudents();
                 int added = 0;
+
                 for (it.polimi.ingsw.Enum.Color color: it.polimi.ingsw.Enum.Color.values()){
                     for (int i = 0; i < students[color.getIndex()]; i++){
                         int column = added % this.clericGrid.getColumnCount();
@@ -1284,8 +1273,10 @@ public class MainGameController extends Controller implements Initializable {
                         if (this.clericStudents == null)
                             this.clericStudents = new ArrayList<>(4);
 
-                        tokenView.setUserData(color);
                         this.clericStudents.add(tokenView);
+
+                        tokenView.setUserData(color);
+
                         added++;
                     }
                 }
@@ -1349,6 +1340,11 @@ public class MainGameController extends Controller implements Initializable {
         }
     }
 
+    private void setCharacterMove (CharacterSerializable characterSerializable, int[] obj){
+        disableCharacters();
+        this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + characterSerializable.getName(), characterSerializable.getId(), obj));
+    }
+
     private void activateCharacter() {
         if (this.characterPlayable == null) {
             System.out.println("list of playable character null");
@@ -1365,7 +1361,6 @@ public class MainGameController extends Controller implements Initializable {
 
                 askCharacterAttributes(character);
             });
-            System.out.println("Set handler for " + c.getId());
         }
     }
 
@@ -1385,9 +1380,6 @@ public class MainGameController extends Controller implements Initializable {
         DataCollector dC = this.dataCollector;
         EventHandler<MouseEvent> handler;
 
-        if (characterId != 6 && characterId != 1)
-            disableCharacters();
-
         switch (characterId){
             case 0 -> {
                 //apothecary - ban card
@@ -1398,9 +1390,8 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose Island for apothecary  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
-                    System.out.println("Activated " + character.getName());
-                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
+                    setCharacterMove(character, obj);
                 };
 
                 enableIslands(handler);
@@ -1419,8 +1410,6 @@ public class MainGameController extends Controller implements Initializable {
                     super.main.displayMessage("Cannot play Bard because you don't have enough students in your room");
                     return;
                 }
-
-                disableCharacters();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1465,9 +1454,8 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose color " + color + " for cook Effect");
                     int[] obj = new int[1];
                     obj[0] = color.getIndex();
-                    System.out.println("Activated " + character.getName());
-                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableColorChoose();
+                    setCharacterMove(character, obj);
                 };
 
                 enableColorChoose(handler);
@@ -1485,9 +1473,8 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose Island for herald  " + i.getId());
                     int[] obj = new int[1];
                     obj[0] = i.getId();
-                    System.out.println("Activated " + character.getName());
-                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableIslands();
+                    setCharacterMove(character, obj);
                 };
 
                 enableIslands(handler);
@@ -1508,8 +1495,6 @@ public class MainGameController extends Controller implements Initializable {
 
                 if (this.jesterStudents == null)
                     return;
-
-                disableCharacters();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1537,9 +1522,8 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose color " + color + " from princess for princess Effect");
                     int[] obj = new int[1];
                     obj[0] = color.getIndex();
-                    System.out.println("Activated " + character.getName());
-                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disablePrincessEffect();
+                    setCharacterMove(character, obj);
                 };
 
                 for (ImageView c: this.princessStudents){
@@ -1558,9 +1542,8 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Choose color " + color + " for thief Effect");
                     int[] obj = new int[1];
                     obj[0] = color.getIndex();
-                    System.out.println("Activated " + character.getName());
-                    dC.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, obj));
                     disableColorChoose();
+                    setCharacterMove(character, obj);
                 };
 
                 enableColorChoose(handler);
@@ -1571,8 +1554,7 @@ public class MainGameController extends Controller implements Initializable {
             }
         }
 
-        System.out.println("Activated " + character.getName());
-        this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played " + character.getName(), characterId, null));
+        setCharacterMove(character, null);
     }
 
     private boolean checkCoins(CharacterSerializable character) {
@@ -1638,6 +1620,7 @@ public class MainGameController extends Controller implements Initializable {
                 disableRoom();
                 System.out.println("Activated Bard");
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
+                disableCharacters();
             }
             else { //choose 2 color
                 if (bardObject[1] == -1){ // first setted
@@ -1648,6 +1631,7 @@ public class MainGameController extends Controller implements Initializable {
                     disableRoom();
                     System.out.println("Activated Bard");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Bard", 1, bardObject));
+                    disableCharacters();
                 }
             }
         }
@@ -1663,14 +1647,14 @@ public class MainGameController extends Controller implements Initializable {
     private void clericEffect(it.polimi.ingsw.Enum.Color color, Island i){
         if (clericObject == null && color != null && i == null){
             clericObject = new int[2];
-            clericObject[0] = colorChoose.getIndex();
+            clericObject[0] = color.getIndex();
             disableClericEffect();
 
             EventHandler<MouseEvent> handler = mouseEvent -> {
                 ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                 Island is = (Island) ((Node) mouseEvent.getSource()).getUserData();
                 System.out.println("Choose island " + is.getId() + " for cleric Effect");
-                clericEffect(null, i);
+                clericEffect(null, is);
             };
 
             enableIslands(handler);
@@ -1680,6 +1664,7 @@ public class MainGameController extends Controller implements Initializable {
             System.out.println("Activated Cleric");
             this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Cleric", 2, clericObject));
             disableIslands();
+            disableCharacters();
         }
         else{
             System.out.println("Not valid for cleric Effect");
@@ -1750,6 +1735,7 @@ public class MainGameController extends Controller implements Initializable {
                 System.out.println("Activated Jester");
                 this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                 disableEntrance();
+                disableCharacters();
             }
             else if (length == 4){
                 if (jesterObject[1] == -1)
@@ -1759,6 +1745,7 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
+                    disableCharacters();
                 }
             }
             else { // length == 6
@@ -1771,6 +1758,7 @@ public class MainGameController extends Controller implements Initializable {
                     System.out.println("Activated Jester");
                     this.dataCollector.setNextMove(new PlayCharacterMessage(Errors.NO_ERROR, "Played Jester", 6, jesterObject));
                     disableEntrance();
+                    disableCharacters();
                 }
             }
         }
