@@ -105,10 +105,16 @@ public class Gui extends Application implements Graphic {
         });
     }
 
-    public void gameOver(String winMessage) {
+    @Override
+    public void displayError(String message) {
+        dC.setErrorData(message);
+    }
+
+    @Override
+    public void gameOver(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText(winMessage);
+            alert.setContentText(message);
             alert.initOwner(Gui.mainStage.getOwner());
             alert.showAndWait();
             stopGraphic();
@@ -179,8 +185,8 @@ public class Gui extends Application implements Graphic {
         mainStage.setFullScreen(false);
         mainStage.setResizable(false);
         mainStage.setTitle("Main Game");
-        mainStage.setHeight(760);
-        mainStage.setWidth(980);
+        mainStage.setHeight(780);
+        mainStage.setWidth(1000);
         this.sceneController.activate("mainGame");
     }
 

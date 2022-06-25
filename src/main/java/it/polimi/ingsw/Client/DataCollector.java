@@ -9,8 +9,10 @@ import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Island;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DataCollector {
 
@@ -89,12 +91,21 @@ public class DataCollector {
 
     /**
      * If the Info sended by the client to the server are not corrected, the server will send an error with this message that explained it
-     * @return the string set by the main thread of client
+     * @return the string set by the main thread of client and reset the error to null
      */
     public String getErrorData() {
-        return errorData;
+        String error = this.errorData;
+        this.errorData = null;
+        return error;
     }
 
+    /**
+     * Used after the game has started for set the message from the server if some player commit an error
+     * @param errorData the string from the server
+     */
+    public void setErrorData(String errorData) {
+        this.errorData = errorData;
+    }
 
     public void setCallbackForModel (Runnable callbackForModel) {
         this.callbackForModel = callbackForModel;
@@ -309,9 +320,45 @@ public class DataCollector {
         if (this.numOfPlayers != 4){
             return "The player " + this.usernames.get(winningId) + " with id " + winningId + " has won the game, congratulation";
         }
-        else{
-            //todo 4 player win message
-            return null;
+        else {
+            Set<Integer> ids = usernames.keySet();
+
+            List<Integer> teamRed = new ArrayList<>(2);
+            List<Integer> teamBlue = new ArrayList<>(2);
+
+            int winnerTeam = -1; // 0 red, 1 blue
+
+            for (Integer id : ids){
+                if (id % 2 == 0)
+                    teamRed.add(id);
+                else
+                    teamBlue.add(id);
+
+                if (winningId == id){
+                    if (id % 2 == 0)
+                        winnerTeam = 0;
+                    else
+                        winnerTeam = 1;
+                }
+            }
+
+            int id1, id2;
+
+            if (winnerTeam == 0){
+                id1 = teamRed.get(0);
+                id2 = teamRed.get(1);
+            }
+            else if (winnerTeam == 1){
+                id1 = teamBlue.get(0);
+                id2 = teamBlue.get(1);
+            }
+            else{
+                System.err.println("ERROR ids not valid");
+                return null;
+            }
+
+            return "The players " + this.usernames.get(id1) + " and his team mate " + this.usernames.get(id2) + " have won the game, congratulation";
+
         }
     }
 

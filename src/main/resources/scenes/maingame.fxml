@@ -927,15 +927,15 @@
                           <tabs>
                             <Tab fx:id="assistantTab" text="Assistant">
                               <content>
-                                <AnchorPane fx:id="assistantPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <ScrollPane focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="166.0" prefWidth="727.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
                                             <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1062.0" style="-fx-background-color: #2c2b3d;">
+                                              <AnchorPane fx:id="assistantPane" minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1062.0" style="-fx-background-color: #2c2b3d;">
                                                  <children>
                                                     <ImageView fx:id="lion" fitHeight="140.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(1).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente1.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -947,7 +947,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="dog" fitHeight="140.0" fitWidth="100.0" layoutX="745.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(8).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente8.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -959,7 +959,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="octopus" fitHeight="140.0" fitWidth="100.0" layoutX="640.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(7).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente7.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -971,7 +971,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="snake" fitHeight="140.0" fitWidth="100.0" layoutX="535.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(6).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente6.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -983,7 +983,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="fox" fitHeight="140.0" fitWidth="100.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(5).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente5.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -995,7 +995,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="eagle" fitHeight="140.0" fitWidth="100.0" layoutX="325.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(4).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente4.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -1007,7 +1007,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="cat" fitHeight="140.0" fitWidth="100.0" layoutX="220.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(3).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente3.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -1019,7 +1019,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="goose" fitHeight="140.0" fitWidth="100.0" layoutX="115.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(2).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente2.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -1031,7 +1031,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="turtle" fitHeight="140.0" fitWidth="100.0" layoutX="955.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(10).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente10.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -1043,7 +1043,7 @@
                                                     </ImageView>
                                                     <ImageView fx:id="elephant" fitHeight="140.0" fitWidth="100.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
-                                                          <Image url="@../Assistenti/3x/Assistente%20(9).png" />
+                                                          <Image url="@../Assistenti/3x/Assistente9.png" />
                                                        </image>
                                                        <effect>
                                                           <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
@@ -1166,7 +1166,7 @@
                                                             </Label>
                                                             <ImageView fx:id="banCardToken" fitHeight="78.0" fitWidth="32.0" layoutX="3.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@../token/token%20apothecary.png" />
+                                                                  <Image url="@../token/token_apothecary.png" />
                                                                </image>
                                                             </ImageView>
                                                             <ImageView fx:id="apothecaryCoin" fitHeight="40.0" fitWidth="40.0" layoutX="61.0" pickOnBounds="true" preserveRatio="true">
