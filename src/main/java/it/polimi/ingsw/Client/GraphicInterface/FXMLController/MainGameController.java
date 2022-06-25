@@ -984,7 +984,7 @@ public class MainGameController extends Controller implements Initializable {
             for (int i = 0; i < students.length; i++) {
                 if (students[i] > 0) {
                     int column = (i % grid.getColumnCount()) + 1;
-                    int row = (i / grid.getColumnCount()) + 1;
+                    int row = (i / grid.getColumnCount());
                     ImageView tokenView = new ImageView();
                     tokenView.setFitHeight(16);
                     tokenView.setFitWidth(16);
