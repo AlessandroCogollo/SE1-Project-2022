@@ -85,9 +85,9 @@ public class Cli implements Graphic {
                     numofplayer = askInteger("Insert the number of player: 2, 3 or 4");
 
                     if (gamemode < 0 || gamemode > 1)
-                        displayError("Gamemode must be 0 or 1");
+                        displayInputError("Gamemode must be 0 or 1");
                     if (numofplayer < 2 || numofplayer > 4)
-                        displayError("Number of PLayer must be 2 or 3 or 4");
+                        displayInputError("Number of PLayer must be 2 or 3 or 4");
 
                 } catch (IOException | InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -109,7 +109,7 @@ public class Cli implements Graphic {
         int done = this.dC.getDone(null); //the value is not -1
 
         if (done == 0) {
-            displayError(this.dC.getErrorData());
+            displayInputError(this.dC.getErrorData());
             setInfo();
             return;
         }
@@ -188,7 +188,7 @@ public class Cli implements Graphic {
         while (!Thread.currentThread().isInterrupted() && !model.isCloudValid(cloud)){
             cloud = askInteger("Insert the id of cloud to take the students");
             if (!model.isCloudValid(cloud)) {
-                displayError("insert a valid cloud id");
+                displayInputError("insert a valid cloud id");
             }
         }
         if (Thread.currentThread().isInterrupted())
@@ -220,7 +220,7 @@ public class Cli implements Graphic {
         while (!Thread.currentThread().isInterrupted() && (movement < 1 || movement > max)){
             movement = askInteger("Insert the number of movement for mother nature");
             if (movement < 1 || movement > max) {
-                displayError("insert a number between 1 and " + max);
+                displayInputError("insert a number between 1 and " + max);
             }
         }
         if (Thread.currentThread().isInterrupted())
@@ -244,7 +244,7 @@ public class Cli implements Graphic {
         while (destination != -1 && !model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
             destination = askInteger("Choose if you want to move the students to your room (-1) or to an island (use his id)");
             if (destination != -1 && !model.isIslandIdValid(destination)){
-                displayError("Insert -1 or a valid island id");
+                displayInputError("Insert -1 or a valid island id");
             }
         }
         if (Thread.currentThread().isInterrupted())
@@ -265,7 +265,7 @@ public class Cli implements Graphic {
         while (!right.contains(choose) && !Thread.currentThread().isInterrupted()){
             choose = askInteger("Select your Assistant from the list above");
             if (!right.contains(choose))
-                displayError("Please select a valid assistant");
+                displayInputError("Please select a valid assistant");
         }
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException("Cli: askAssistant interrupted");
@@ -302,7 +302,7 @@ public class Cli implements Graphic {
             else if (correctNo.contains(answer))
                 choice = false;
             else{
-                displayError("Insert a valid response (Yes, yes, y, No, no, n)");
+                displayInputError("Insert a valid response (Yes, yes, y, No, no, n)");
                 answer = null;
             }
         }
@@ -323,14 +323,14 @@ public class Cli implements Graphic {
             characterId = askInteger("Choose the id of character that you want to play");
             CharacterSerializable c = model.getCharacterById(characterId);
             if (c == null){
-                displayError("Choose a valid character");
+                displayInputError("Choose a valid character");
                 characterId = -1;
                 continue;
             }
             int cost = (c.isUsed()) ? (c.getCost() + 1) : c.getCost();
             PlayerSerializable p = model.getPlayerById(myId);
             if (p.getCoins() < cost){
-                displayError("You don't have enough coins for play this character, you have: " + p.getCoins() + " coins and this character costs " + cost + " coins");
+                displayInputError("You don't have enough coins for play this character, you have: " + p.getCoins() + " coins and this character costs " + cost + " coins");
                 characterId = -1;
             }
         }
@@ -360,7 +360,7 @@ public class Cli implements Graphic {
                 while (number == -1 && !Thread.currentThread().isInterrupted()){
                     number = askInteger("How many students you want to swap, 1, or 2?");
                     if (number != 1 && number != 2){
-                        displayError("Insert a valid number, 1 or 2");
+                        displayInputError("Insert a valid number, 1 or 2");
                         number = -1;
                     }
                 }
@@ -446,7 +446,7 @@ public class Cli implements Graphic {
                 while (number == -1 && !Thread.currentThread().isInterrupted()){
                     number = askInteger("How many students you want to swap, 1, 2 or 3?");
                     if (number < 1 || number > 3){
-                        displayError("Insert a valid number, 1, 2 or 3");
+                        displayInputError("Insert a valid number, 1, 2 or 3");
                         number = -1;
                     }
                 }
@@ -510,7 +510,14 @@ public class Cli implements Graphic {
         System.out.println("Cli: " + message);
     }
 
-    public void displayError(String errorMessage) {
+    @Override
+    public void displayError(String error){
+        if (error == null)
+            return;
+        System.out.println("Warning: " + error);
+    }
+
+    public void displayInputError(String errorMessage) {
         if (errorMessage == null)
             return;
         System.out.println("Cli ERROR during input: " + errorMessage);
@@ -546,7 +553,7 @@ public class Cli implements Graphic {
             s = this.input.readLine();
             if (s == null || s.isEmpty() || s.isBlank()) {
                 if (askMessage != null) {
-                    displayError("The value can't be blank");
+                    displayInputError("The value can't be blank");
                 }
                 continue;
             }
@@ -568,7 +575,7 @@ public class Cli implements Graphic {
             try {
                 temp = Integer.parseInt(s);
             } catch (NumberFormatException e) {
-                displayError("Insert a valid Number");
+                displayInputError("Insert a valid Number");
                 continue;
             }
             done = true;
@@ -588,7 +595,7 @@ public class Cli implements Graphic {
             try {
                 w = Wizard.valueOf(s);
             } catch (IllegalArgumentException e) {
-                displayError("Insert a valid wizard");
+                displayInputError("Insert a valid wizard");
             }
         }
 
@@ -602,7 +609,7 @@ public class Cli implements Graphic {
         while ((color < 0 || color > 4) && !Thread.currentThread().isInterrupted()){
             color = askInteger(askMessage);
             if (color < 0 || color > 4){
-                displayError("Insert a valid color number: 0, 1, 2, 3, 4");
+                displayInputError("Insert a valid color number: 0, 1, 2, 3, 4");
             }
         }
 
@@ -620,7 +627,7 @@ public class Cli implements Graphic {
                 done = true;
             }
             else {
-                displayError("Insert a color that is in this container (container[colorChoose] > 0): " + Arrays.toString(container));
+                displayInputError("Insert a color that is in this container (container[colorChoose] > 0): " + Arrays.toString(container));
             }
         }
 
@@ -635,7 +642,7 @@ public class Cli implements Graphic {
         while (!model.isIslandIdValid(destination) && !Thread.currentThread().isInterrupted()){
             destination = askInteger(askMessage);
             if (!model.isIslandIdValid(destination))
-                displayError("Insert a valid Island id");
+                displayInputError("Insert a valid Island id");
         }
 
         if (Thread.currentThread().isInterrupted())

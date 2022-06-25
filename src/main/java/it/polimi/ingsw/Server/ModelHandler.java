@@ -85,6 +85,7 @@ public class ModelHandler implements Runnable{
                 move = queues.getModelQueue().poll(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 System.out.println("Interrupted while waiting for some move from clients ModelHandlers");
+                this.thread.interrupt();
                 break;
             }
             if (move == null)
@@ -122,6 +123,7 @@ public class ModelHandler implements Runnable{
             }
             if (m.gameIsOver() && !this.thread.isInterrupted()){
                 server.setCode(Errors.GAME_OVER);
+                stopModel();
             }
 
 

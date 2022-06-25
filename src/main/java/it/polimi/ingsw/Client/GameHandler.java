@@ -9,7 +9,6 @@ import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.util.concurrent.BlockingQueue;
 
 
@@ -115,7 +114,6 @@ public class GameHandler implements Runnable{
     }
 
     private void gameOver() {
-        //todo win message
         this.client.setCode(Errors.GAME_OVER);
     }
 
@@ -161,14 +159,12 @@ public class GameHandler implements Runnable{
 
             if (!Errors.NO_ERROR.equals(temp.getError())){
 
-                this.g.displayMessage(temp.getMessage());
+                this.g.displayError(temp.getMessage());
 
                 if (this.currentPlayerId != -1 && this.currentPlayerId == this.myId)
                     return null;
             }
         }
-
-        //todo idea say that the precedent player has done his move
         return this.gson.fromJson(mJ, ModelMessage.class);
     }
 }

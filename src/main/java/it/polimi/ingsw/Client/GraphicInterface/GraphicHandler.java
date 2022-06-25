@@ -57,8 +57,8 @@ public class GraphicHandler {
         this.dataCollector.setDone(done, message);
     }
 
-    public void displayMessage (String message){
-        this.graphic.displayMessage(message);
+    public void displayError(String message){
+        this.graphic.displayError(message);
     }
 
     public void setGameData (LobbyInfoMessage gameData, int id){

@@ -32,14 +32,14 @@ import java.net.URL;
 import java.util.*;
 
 /*
-todo
+   todo
     - evindeziare in qualche modo quali sono le zone interagibili della plancia
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
     - Aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
     - Aggiungere Wizard alla visualizzazione negli username
-    - aggiungere visualizzazione del motivo di chiusura del programma
 
+    - aggiungere visualizzazione del motivo di chiusura del programma - done
     - visualizzare tutte le informazioni sulle varie isole - done
     - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più - done
     - mettere a posto le informazioni visualizzate sui character che per ora sono fatte un po' male - done (vedete se vi piacciono)
@@ -2019,6 +2019,12 @@ public class MainGameController extends Controller implements Initializable {
 
         System.out.println("Gui your Turn");
         moveAsker(model);
+
+        String s = this.dataCollector.getErrorData();
+
+        if (s != null){
+            super.main.displayMessage(s);
+        }
     }
 
     private void moveAsker(ModelMessage model) {
@@ -2043,6 +2049,7 @@ public class MainGameController extends Controller implements Initializable {
     private void notYourTurn() {
 
         //todo do it better
+        //could use a sound for it
 
         super.main.displayMessage("It is not your turn, please wait");
     }

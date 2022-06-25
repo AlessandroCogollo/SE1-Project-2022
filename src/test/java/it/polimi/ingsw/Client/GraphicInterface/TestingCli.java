@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
 import it.polimi.ingsw.Enum.Wizard;
-import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-import org.jetbrains.annotations.Nullable;
 
 public class TestingCli extends Cli {
 
@@ -53,7 +51,7 @@ public class TestingCli extends Cli {
         int done = this.dC.getDone(null); //the value is not -1
 
         if (done == 0){
-            displayError(this.dC.getErrorData());
+            displayInputError(this.dC.getErrorData());
             setInfo();
             return;
         }

@@ -29,6 +29,12 @@ public interface Graphic {
     void displayMessage (String message);
 
     /**
+     * Display the error committed by one player
+     * @param message the error message received from the server
+     */
+    void displayError (String message);
+
+    /**
      * Stop any io method and the Graphic thread if is running
      */
     void stopGraphic();
