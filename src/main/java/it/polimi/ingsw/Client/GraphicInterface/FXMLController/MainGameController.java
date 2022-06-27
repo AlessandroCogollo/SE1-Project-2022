@@ -47,11 +47,11 @@ import java.util.*;
 
 /*
    todo
-    - evindeziare in qualche modo quali sono le zone interagibili della plancia
-    - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
     - isole ingrandite se sono aggregate
 
+    - evindeziare in qualche modo quali sono le zone interagibili della plancia - done
+    - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire - done
     - aggiungere Wizard alla visualizzazione negli username - done
     - aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole - done
     - aggiungere visualizzazione del motivo di chiusura del programma - done
@@ -827,6 +827,7 @@ public class MainGameController extends Controller implements Initializable {
         if (this.actualRoom != null) {
             this.actualRoom.setOnMouseClicked(null);
             disabledEffect(this.actualRoom);
+            disabledEffect(this.actualRoom.getParent());
         }
 
         disableIslands();
@@ -841,7 +842,7 @@ public class MainGameController extends Controller implements Initializable {
                 c.setDisable(false);
                 c.setOnMouseClicked(handler);
                 enabledEffect(c);
-                enabledEffectRoom(this.actualRoom.getParent());
+                //enabledEffectRoom(this.actualRoom.getParent());
             }
         }
     }
@@ -964,6 +965,7 @@ public class MainGameController extends Controller implements Initializable {
             g.setOnMouseClicked(null);
             g.setDisable(true);
             disabledEffect(g);
+            disabledEffect(g.getParent());
         }
     }
 
@@ -1206,6 +1208,7 @@ public class MainGameController extends Controller implements Initializable {
             g.setOnMouseClicked(null);
             g.setDisable(true);
             disabledEffect(g);
+            disabledEffect(g.getParent());
         }
     }
 
@@ -2174,7 +2177,7 @@ public class MainGameController extends Controller implements Initializable {
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
 
-        //displayMessage("It is not your turn, please wait");
+        displayMessage("It is not your turn, please wait");
     }
 
     private void gameOver() {
