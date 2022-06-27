@@ -1045,7 +1045,7 @@ public class MainGameController extends Controller implements Initializable {
                 panes.get(i).setDisable(true);
                 panes.get(i).setVisible(false);
             }
-            else if(dataCollector.getModel().getIslandList().get(i).isMerged()){
+            else if(dataCollector.getModel().getIslandFromId(i).isMerged()){
                 resizeIsland((ImageView) panes.get(i).getChildren().get(0));
             }
         }
