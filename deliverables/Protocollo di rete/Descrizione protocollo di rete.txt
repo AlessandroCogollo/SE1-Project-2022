@@ -1,0 +1,200 @@
+-- Setup della Connessione --
+ 
+I seguenti messaggi sono invece inviati con protocollo tcp e includono:
+ - time: per scartare eventuali messaggi arrivati in ritardo
+ - errorCode: usato più durante le fasi di gioco per evidenziare errori ai client, se non ce ne sono è 0
+ - stringMessage: una stringa per evidenziare il tipo di messaggio
+più vari attributi indipendenti dei messaggi.
+
+
+
+//CLIENT
+La fase di setup della connessione inizia con il client che invia al server il propio indirizzo ip e la propria porta
+ - stringMessage: "I'm an Eriantys Client"
+ - myIp:
+ - myPort:
+
+
+
+
+//SERVER
+Il server risponde al client in due possibili modi:
+ - se non è il primo gli chiede il proprio nome utente e il mago scelto (per il retro delle carte)
+    - stringMessage: "I'm the Eriantys Server, give me the login"
+    - ip: rinvia almeno una volta con protocollo tcp
+    - port: rinvia almeno una volta con protocollo tcp
+    - youAreFirst: false
+   
+ - se è il primo chiede anche il numero di player e la modalità di gioco
+    - stringMessage: "I'm the Eriantys Server, give me the login"
+    - ip: rinvia almeno una volta con protocollo tcp
+    - port: rinvia almeno una volta con protocollo tcp
+    - youAreFirst: true
+ 
+//CLIENT
+Il client quindi invia le informazioni richieste
+ - se youArefirst true
+    - stringMessage: "I'm the fisrt Eriantys Client, sended login and game Info"
+    - username:
+	- wizard:
+	
+	- numOfPlayer:
+	- gameMode:
+	
+ - se youArefirst false
+    - stringMessage: "I'm the Eriantys Client, sended login"
+    - username:
+	- wizard:
+	
+
+
+
+//SERVER
+Il server risponde con la conferma che ha ricevuto i dati del client e invia anche l'id del player nel gioco
+ - stringMessage: "I'm the Eriantys Server, received login. Wait for the start of the game"
+ - yourId:
+
+//CLIENT
+Il client risponde con la conferma che ha ricevuto il proprio id e si mette in attesa per il primo messaggio del model
+ - stringMessage: "I'm the Eriantys Client, received id. I'll wait"
+ 
+
+
+Da qui in poi i client e il server si scambieranno dei messaggi di ping per mantenere attiva la connessione del tipo
+ - time:
+ - errorCode: ping code
+ - StringMessage: "Ping"
+
+
+
+-- Tutti i player si sono connessi e sono in attesa del model --
+
+//SERVER
+Il server invia le informazioni dei giocatori connessi
+ - lista degli username degli utenti (Map<Integer, String>)
+ - lista dei wizard scelti dagli utenti (Map<Integer, Wizard>)
+ 
+ 
+(OPZIONALE) se il gioco è stato ricaricato da una partita vecchia
+//SERVER
+Il server invia un messaggio ai giocatori informandoli che il gioco è stato ripristinato con anche la data e l'ora di quando è stato lasciato in sospeso
+
+
+
+//SERVER
+Il server invierà a tutti i client lo stato del model per far partire la partita, i messaggi in questione oltre al vero e propio stato del model avranno i seguenti attributi aggiuntivi (oltre a quelli presenti anche durante la fase di setup della connessioni):
+ - gameMode: per inviare le impostazioni di gioco a tutti
+ - playerNumber: per inviare le impostazioni di gioco a tutti
+ - winnerId: impostato sempre a -1 finché non c'è un vincitore (caso 4 giocatori con i compagni viene gestito internamente nel client grazie al fatto che i compagni della stessa squadra hanno l'id o sempre pari o sempre dispari)
+ 
+ - currentPlayerId: id del giocatore corrente che sarà anche l'unico client che potrà inviare una mossa senza causare un errore
+ 
+ - phase: action o planning 
+ - actionPhase: moveStudents, moveMotherNature, ChooseCloud, noActionPhase
+ - studentsMovedThisTurn: usato nella moveStudents actionPhase per dire al client quanti studenti ha già mosso il player (durante advanced game in questo modo il player può anche giocare un personaggio mentre sta spostando gli studenti)
+ (usate per far inviare la giusta mossa al client corrente)
+ 
+ ..resto del model serializzato @1
+ 
+//CLIENT
+Il client corrente invia quindi la mossa al server appena l'utente sceglie
+ - time
+ - errorCode: 0
+ - stringMessage: "Current Player, sended move"
+ 
+ - modeId: @2
+    - some attributes for the move
+	
+	
+	
+	
+//SERVER
+Se un client si disconnette (il server non riceve più ping), il server invia a tutti i client restanti
+ - time
+ - errorCode: game closed
+ - stringMessage: "I'm the Eriantys Server, Game Stopped due to user disconnection"
+ 
+//CLIENT
+Nel caso di disconnessione del server invece il timeout da parte dei client farà chiudere in automatico il gioco
+ 
+ 
+
+
+@1
+
+//MODEL
+
+motherNature: island id;
+Islands: {
+	(
+	id: int
+	students: int[5]
+	towerNumber: int
+	towerColor: int
+	stopCard: int
+	)
+	//for each island (aggregated island can be inferred by the number of tower)
+}
+Clouds {
+	(
+	id: int
+	students: int[5]
+	)
+	//for each clouds
+}
+Porfessors: int[5]
+Bag: int[5]
+Players: {
+	(
+	id: int
+	username: String
+	activeAssistant: int
+	towerColor: int
+	AsistantInHand: int[] //array of value of assistant
+	coins: int //0 if gameMode == 0
+	School: 
+		(
+		entranceStudents: int[5]
+		roomStudents: int[5]
+		towerInSchool: int
+		)
+	)
+	//for each player
+}
+
+//if Advanced Game
+activeCharactersId: int
+CharactersPlayable: {
+	(
+	id: int
+	cost: int
+	used: boolean
+	//optional attributes of characters
+	)
+	//for each character playable
+}
+
+
+
+
+@2
+
+//MOVEID
+
+	//1: Play assistant
+AssistantValue: int
+
+	//2: Move Student
+indexColorToMove: int
+idIsland: int //if move to room id = 0
+
+	//3: motherNature
+positions: int
+
+	//4: chooseCloud
+cloudId: int
+
+	//5: PlayCharacter
+characterId: int
+ - some attributes of the characters played
+

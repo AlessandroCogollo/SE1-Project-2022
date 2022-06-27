@@ -888,7 +888,7 @@ public class MainGameController extends Controller implements Initializable {
     public void setClouds(){
 
         ModelMessage model = dataCollector.getModel();
-        int num = model.getCurrentPlayerId();
+        int num = model.getPlayerNumber();
 
         if(num < 4){
             cloudAnchor4.setDisable(true);
