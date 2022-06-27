@@ -21,8 +21,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -510,6 +512,9 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private GridPane gridEntrance4;
 
+    @FXML
+    private Label messageLabel;
+
     private Tab actualTab = null;
     private GridPane actualRoom = null;
     private List<List<ImageView>> room = null;
@@ -728,6 +733,10 @@ public class MainGameController extends Controller implements Initializable {
 
     }
 
+    public void displayMessage(String s){
+        this.messageLabel.setText(s);
+    }
+
 
     private it.polimi.ingsw.Enum.Color colorChoose = null;
 
@@ -755,7 +764,7 @@ public class MainGameController extends Controller implements Initializable {
 
         enableEntrance(handler);
 
-        super.main.displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining)");
+        displayMessage("It is your turn, please select a students from your entrance. Just click on It ( " + this.dataCollector.getModel().getStudentsToMove() + " students remaining)");
     }
 
     private void enableEntrance (EventHandler<MouseEvent> handler){
@@ -799,6 +808,7 @@ public class MainGameController extends Controller implements Initializable {
         if (room[this.colorChoose.getIndex()] < 10) {
             this.actualRoom.setOnMouseClicked(handler);
             enabledEffect(this.actualRoom);
+            enabledEffectRoom(this.actualRoom.getParent());
         }
 
         handler = mouseEvent -> {
@@ -810,7 +820,7 @@ public class MainGameController extends Controller implements Initializable {
 
         enableIslands(handler);
 
-        super.main.displayMessage("Please select where to put the students: on an island or on your room.");
+        displayMessage("Please select where to put the students: on an island or on your room.");
     }
 
     private void disableStudentsDestination() {
@@ -831,6 +841,7 @@ public class MainGameController extends Controller implements Initializable {
                 c.setDisable(false);
                 c.setOnMouseClicked(handler);
                 enabledEffect(c);
+                enabledEffectRoom(this.actualRoom.getParent());
             }
         }
     }
@@ -972,9 +983,10 @@ public class MainGameController extends Controller implements Initializable {
                 disableClouds();
             });
             enabledEffect(g);
+            enabledEffectCard(g.getParent());
         }
 
-        super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
+        displayMessage("It is your turn, please click on the cloud you want to choose");
     }
 
 
@@ -1067,6 +1079,7 @@ public class MainGameController extends Controller implements Initializable {
         panes.add(this.islandAnchor12);
 
         for (int i = 0; i < 12; i++){
+            panes.get(i).setEffect(new DropShadow(10, Color.YELLOWGREEN));
             if (!model.isIslandIdValid(i)){
                 grids.get(i).setDisable(true);
                 grids.get(i).setVisible(false);
@@ -1168,7 +1181,7 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     public void resizeIsland(ImageView img){
-        img.setEffect(new DropShadow(10, Color.IVORY));
+        img.setEffect(new DropShadow(15, Color.GOLD));
         img.setScaleX(1.5);
         img.setScaleY(1.5);
     }
@@ -1181,6 +1194,7 @@ public class MainGameController extends Controller implements Initializable {
             g.setOnMouseClicked(handler);
             g.setDisable(false);
             enabledEffect(g);
+            enabledEffectCard(g.getParent());
         }
     }
 
@@ -1210,7 +1224,7 @@ public class MainGameController extends Controller implements Initializable {
 
         enableIslands(handler);
 
-        super.main.displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
+        displayMessage("It is your turn, please click on the island where you want to move Mother Nature");
     }
 
 
@@ -1503,7 +1517,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 askCharacterAttributes(character);
             });
-            enabledEffect(c);
+            enabledEffectCard(c);
         }
     }
 
@@ -1541,7 +1555,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 enableIslands(handler);
 
-                super.main.displayMessage("Please click on the island where put the ban card");
+                displayMessage("Please click on the island where put the ban card");
 
                 return;
             }
@@ -1552,7 +1566,7 @@ public class MainGameController extends Controller implements Initializable {
                 int[] r = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfRoom();
 
                 if (Arrays.stream(e).sum() < 1 || Arrays.stream(r).sum() < 1){
-                    super.main.displayMessage("Cannot play Bard because you don't have enough students in your room");
+                    displayMessage("Cannot play Bard because you don't have enough students in your room");
                     return;
                 }
 
@@ -1569,7 +1583,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 enableEntrance(handler);
 
-                super.main.displayMessage("Click on the students from your entrance (max 2), then click on the students in the room for swap them");
+                displayMessage("Click on the students from your entrance (max 2), then click on the students in the room for swap them");
 
                 return;
             }
@@ -1591,10 +1605,10 @@ public class MainGameController extends Controller implements Initializable {
 
                 for (ImageView c: this.clericStudents){
                     c.setOnMouseClicked(handler);
-                    enabledEffect(c);
+                    enabledEffectCard(c);
                 }
 
-                super.main.displayMessage("Please select a student from the cleric, then click on the island where you want to put it");
+                displayMessage("Please select a student from the cleric, then click on the island where you want to put it");
                 return;
             }
             case 3 -> {
@@ -1612,7 +1626,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 enableColorChoose(handler);
 
-                super.main.displayMessage("Please select a color from the list on the left");
+                displayMessage("Please select a color from the list on the left");
 
                 return;
             }
@@ -1631,7 +1645,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 enableIslands(handler);
 
-                super.main.displayMessage("Please click on the island where calc the influence");
+                displayMessage("Please click on the island where calc the influence");
 
                 return;
             }
@@ -1641,7 +1655,7 @@ public class MainGameController extends Controller implements Initializable {
                 int[] e = model.getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfEntrance();
 
                 if (Arrays.stream(e).sum() < 1){
-                    super.main.displayMessage("Cannot play Jester because you don't have enough students in your entrance");
+                    displayMessage("Cannot play Jester because you don't have enough students in your entrance");
                     return;
                 }
 
@@ -1662,10 +1676,10 @@ public class MainGameController extends Controller implements Initializable {
 
                 for (ImageView c: this.jesterStudents){
                     c.setOnMouseClicked(handler);
-                    enabledEffect(c);
+                    enabledEffectCard(c);
                 }
 
-                super.main.displayMessage("Please select a max of 3 students from the jester, then click on your students on the entrance to swap them");
+                displayMessage("Please select a max of 3 students from the jester, then click on your students on the entrance to swap them");
                 return;
             }
             case 10 -> {
@@ -1686,10 +1700,10 @@ public class MainGameController extends Controller implements Initializable {
 
                 for (ImageView c: this.princessStudents){
                     c.setOnMouseClicked(handler);
-                    enabledEffect(c);
+                    enabledEffectCard(c);
                 }
 
-                super.main.displayMessage("Please select a student from the princess that will be added to your room");
+                displayMessage("Please select a student from the princess that will be added to your room");
                 return;
             }
             case 11 -> {
@@ -1707,7 +1721,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 enableColorChoose(handler);
 
-                super.main.displayMessage("Please select a color from the list on the left");
+                displayMessage("Please select a color from the list on the left");
 
                 return;
             }
@@ -1725,7 +1739,7 @@ public class MainGameController extends Controller implements Initializable {
         int coins = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getCoins();
 
         if (coins < cost) {
-            super.main.displayMessage("Sorry you don't have enough coins to play the " + character.getName() + " its cost is " + cost + " and your coins are " + coins);
+            displayMessage("Sorry you don't have enough coins to play the " + character.getName() + " its cost is " + cost + " and your coins are " + coins);
             return true;
         }
 
@@ -2074,15 +2088,24 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView a : this.assistantList){
             a.setDisable(false);
             a.setOnMouseClicked(handler);
-            enabledEffect(a);
+            enabledEffectCard(a);
         }
 
-        super.main.displayMessage("It is your turn, please select an assistant. Just click on It");
+        displayMessage("It is your turn, please select an assistant. Just click on It");
     }
 
+    private void enabledEffectCard(Node node){
+        Effect enabled = new DropShadow(20, Color.DEEPSKYBLUE);
+        node.setEffect(enabled);
+    }
 
     private void enabledEffect (Node node){
-        Effect enabled = new DropShadow(20, Color.DEEPSKYBLUE);
+        Effect enabled = new Glow(10);
+        node.setEffect(enabled);
+    }
+
+    private void enabledEffectRoom(Node node){
+        Effect enabled = new Bloom(0.8);
         node.setEffect(enabled);
     }
     private void disabledEffect (Node node){
@@ -2111,7 +2134,7 @@ public class MainGameController extends Controller implements Initializable {
         String s = this.dataCollector.getErrorData();
 
         if (s != null){
-            super.main.displayMessage(s);
+            displayMessage(s);
         }
     }
 
@@ -2139,13 +2162,13 @@ public class MainGameController extends Controller implements Initializable {
         //todo do it better
         //could use a sound for it
 
-        String musicFile = "sound/notification-sound-7062.mp3";
+        String musicFile = "sound/mixkit-correct-answer-tone-2870.wav";
 
         Media sound = new Media(getClass().getClassLoader().getResource(musicFile).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
 
-        //super.main.displayMessage("It is not your turn, please wait");
+        //displayMessage("It is not your turn, please wait");
     }
 
     private void gameOver() {
