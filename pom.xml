@@ -57,6 +57,12 @@
       <artifactId>javafx-fxml</artifactId>
       <version>18.0.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <version>18.0.1</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>

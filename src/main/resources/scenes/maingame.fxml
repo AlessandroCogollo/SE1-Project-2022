@@ -937,121 +937,51 @@
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente1.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="dog" fitHeight="140.0" fitWidth="100.0" layoutX="745.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente8.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="octopus" fitHeight="140.0" fitWidth="100.0" layoutX="640.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente7.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="snake" fitHeight="140.0" fitWidth="100.0" layoutX="535.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente6.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="fox" fitHeight="140.0" fitWidth="100.0" layoutX="430.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente5.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="eagle" fitHeight="140.0" fitWidth="100.0" layoutX="325.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente4.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="cat" fitHeight="140.0" fitWidth="100.0" layoutX="220.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente3.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="goose" fitHeight="140.0" fitWidth="100.0" layoutX="115.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente2.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                     <ImageView fx:id="turtle" fitHeight="140.0" fitWidth="100.0" layoutX="955.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente10.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
-                                                    <ImageView fx:id="elephant" fitHeight="140.0" fitWidth="100.0" layoutX="850.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                                    <ImageView fx:id="elephant" fitHeight="140.0" fitWidth="100.0" layoutX="851.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                                                        <image>
                                                           <Image url="@../Assistenti/3x/Assistente9.png" />
                                                        </image>
-                                                       <effect>
-                                                          <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                             <color>
-                                                                <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                             </color>
-                                                          </DropShadow>
-                                                       </effect>
                                                     </ImageView>
                                                  </children>
                                               </AnchorPane>
@@ -1075,13 +1005,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <GridPane fx:id="clericGrid" hgap="10.0" layoutY="40.0" prefHeight="100.0" prefWidth="100.0" vgap="10.0">
                                                                <columnConstraints>
@@ -1109,13 +1032,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front2.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="heraldCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1130,13 +1046,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front3.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="postmanCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1151,13 +1060,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front4.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <Label fx:id="labelApothecary" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="35.0" layoutY="93.0" prefHeight="25.0" prefWidth="51.0" text="x4">
                                                                <font>
@@ -1182,13 +1084,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front5.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="minotaurCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1203,13 +1098,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front6.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="jesterCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1238,13 +1126,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front7.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="knightCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1259,13 +1140,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front8.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="cookCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1285,13 +1159,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front9.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="bardCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1306,13 +1173,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front10.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
 															<GridPane fx:id="princessGrid" hgap="10.0" layoutY="40.0" prefHeight="100.0" prefWidth="100.0" vgap="10.0">
                                                                <columnConstraints>
@@ -1340,13 +1200,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front11.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="thiefCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -1361,13 +1214,6 @@
                                                                <image>
                                                                   <Image url="@../Personaggi/CarteTOT_front12.jpg" />
                                                                </image>
-                                                               <effect>
-                                                                  <DropShadow height="48.64" radius="23.4525" spread="0.1" width="47.17">
-                                                                     <color>
-                                                                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.290630966424942" />
-                                                                     </color>
-                                                                  </DropShadow>
-                                                               </effect>
                                                             </ImageView>
                                                             <ImageView fx:id="drunkardCoin" fitHeight="40.0" fitWidth="40.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>

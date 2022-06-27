@@ -2,9 +2,11 @@ package it.polimi.ingsw.Client.GraphicInterface.FXMLController;
 
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.Gui;
-import it.polimi.ingsw.Enum.*;
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
+import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
@@ -15,8 +17,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -24,13 +30,15 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -39,10 +47,10 @@ import java.util.*;
     - evindeziare in qualche modo quali sono le zone interagibili della plancia
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
-    - aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
     - isole ingrandite se sono aggregate
 
     - aggiungere Wizard alla visualizzazione negli username - done
+    - aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole - done
     - aggiungere visualizzazione del motivo di chiusura del programma - done
     - visualizzare tutte le informazioni sulle varie isole - done
     - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più - done
@@ -246,18 +254,28 @@ public class MainGameController extends Controller implements Initializable {
 
     private void enableColorChoose(EventHandler<MouseEvent> handler) {
         this.colorBlue.setOnMouseClicked(handler);
+        enabledEffect(this.colorBlue);
         this.colorYellow.setOnMouseClicked(handler);
+        enabledEffect(this.colorYellow);
         this.colorGreen.setOnMouseClicked(handler);
+        enabledEffect(this.colorGreen);
         this.colorPink.setOnMouseClicked(handler);
+        enabledEffect(this.colorPink);
         this.colorRed.setOnMouseClicked(handler);
+        enabledEffect(this.colorRed);
     }
 
     private void disableColorChoose() {
         this.colorBlue.setOnMouseClicked(null);
+        disabledEffect(this.colorBlue);
         this.colorYellow.setOnMouseClicked(null);
+        disabledEffect(this.colorYellow);
         this.colorGreen.setOnMouseClicked(null);
+        disabledEffect(this.colorGreen);
         this.colorPink.setOnMouseClicked(null);
+        disabledEffect(this.colorPink);
         this.colorRed.setOnMouseClicked(null);
+        disabledEffect(this.colorRed);
     }
 
     @FXML
@@ -625,7 +643,7 @@ public class MainGameController extends Controller implements Initializable {
         entranceGrids.add(gridEntrance3);
         entranceGrids.add(gridEntrance4);
 
-        double height = 11;
+        //double height = 11;
         for(Integer id: names.keySet()){
 
             int[] entrance = dataCollector.getModel().getPlayerById(id).getSchool().getCopyOfEntrance();
@@ -747,6 +765,7 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView c : this.entrance){
             c.setDisable(false);
             c.setOnMouseClicked(handler);
+            enabledEffect(c);
         }
     }
 
@@ -757,6 +776,7 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView c : this.entrance){
             c.setDisable(true);
             c.setOnMouseClicked(null);
+            disabledEffect(c);
         }
     }
 
@@ -775,8 +795,10 @@ public class MainGameController extends Controller implements Initializable {
         };
 
         int[] room = this.dataCollector.getModel().getPlayerById(this.dataCollector.getId()).getSchool().getCopyOfRoom();
-        if (room[this.colorChoose.getIndex()] < 10)
+        if (room[this.colorChoose.getIndex()] < 10) {
             this.actualRoom.setOnMouseClicked(handler);
+            enabledEffect(this.actualRoom);
+        }
 
         handler = mouseEvent -> {
             ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -791,8 +813,10 @@ public class MainGameController extends Controller implements Initializable {
     }
 
     private void disableStudentsDestination() {
-        if (this.actualRoom != null)
+        if (this.actualRoom != null) {
             this.actualRoom.setOnMouseClicked(null);
+            disabledEffect(this.actualRoom);
+        }
 
         disableIslands();
     }
@@ -805,6 +829,7 @@ public class MainGameController extends Controller implements Initializable {
             for (ImageView c : l){
                 c.setDisable(false);
                 c.setOnMouseClicked(handler);
+                enabledEffect(c);
             }
         }
     }
@@ -817,6 +842,7 @@ public class MainGameController extends Controller implements Initializable {
             for (ImageView c : list){
                 c.setDisable(true);
                 c.setOnMouseClicked(null);
+                disabledEffect(c);
             }
         }
     }
@@ -925,6 +951,7 @@ public class MainGameController extends Controller implements Initializable {
         for (GridPane g: this.usedClouds) {
             g.setOnMouseClicked(null);
             g.setDisable(true);
+            disabledEffect(g);
         }
     }
 
@@ -943,6 +970,7 @@ public class MainGameController extends Controller implements Initializable {
                 dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Cloud choosed", c.getId()));
                 disableClouds();
             });
+            enabledEffect(g);
         }
 
         super.main.displayMessage("It is your turn, please click on the cloud you want to choose");
@@ -1141,6 +1169,7 @@ public class MainGameController extends Controller implements Initializable {
         for (GridPane g : this.activeIsland) {
             g.setOnMouseClicked(handler);
             g.setDisable(false);
+            enabledEffect(g);
         }
     }
 
@@ -1151,6 +1180,7 @@ public class MainGameController extends Controller implements Initializable {
         for (GridPane g : this.activeIsland) {
             g.setOnMouseClicked(null);
             g.setDisable(true);
+            disabledEffect(g);
         }
     }
 
@@ -1437,6 +1467,7 @@ public class MainGameController extends Controller implements Initializable {
         for (Node c : this.characterPlayable){
             c.setOnMouseClicked(null);
             //c.setDisable(false);
+            disabledEffect(c);
         }
     }
 
@@ -1461,6 +1492,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 askCharacterAttributes(character);
             });
+            enabledEffect(c);
         }
     }
 
@@ -1516,8 +1548,10 @@ public class MainGameController extends Controller implements Initializable {
                 disableCharacters();
 
                 handler = mouseEvent -> {
-                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
-                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    Node node = (Node) mouseEvent.getSource();
+                    node.setOnMouseClicked(null);
+                    disabledEffect(node);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) node.getUserData();
                     System.out.println("Choose color " + color + " from entrance for bard Effect");
                     bardEffect(color, null);
                 };
@@ -1536,14 +1570,17 @@ public class MainGameController extends Controller implements Initializable {
 
                 handler = mouseEvent -> {
                     mouseEvent.consume();
-                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
-                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    Node node = (Node) mouseEvent.getSource();
+                    node.setOnMouseClicked(null);
+                    disabledEffect(node);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) node.getUserData();
                     System.out.println("Choose color " + color + " from cleric for cleric Effect");
                     clericEffect(color, null);
                 };
 
                 for (ImageView c: this.clericStudents){
                     c.setOnMouseClicked(handler);
+                    enabledEffect(c);
                 }
 
                 super.main.displayMessage("Please select a student from the cleric, then click on the island where you want to put it");
@@ -1603,15 +1640,18 @@ public class MainGameController extends Controller implements Initializable {
                 disableCharacters();
 
                 handler = mouseEvent -> {
-                    ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
                     mouseEvent.consume();
-                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) ((Node) mouseEvent.getSource()).getUserData();
+                    Node node = (Node) mouseEvent.getSource();
+                    node.setOnMouseClicked(null);
+                    disabledEffect(node);
+                    it.polimi.ingsw.Enum.Color color = (it.polimi.ingsw.Enum.Color) node.getUserData();
                     System.out.println("Choose color " + color + " from jester for jester Effect");
                     jesterEffect(color, null);
                 };
 
                 for (ImageView c: this.jesterStudents){
                     c.setOnMouseClicked(handler);
+                    enabledEffect(c);
                 }
 
                 super.main.displayMessage("Please select a max of 3 students from the jester, then click on your students on the entrance to swap them");
@@ -1635,6 +1675,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 for (ImageView c: this.princessStudents){
                     c.setOnMouseClicked(handler);
+                    enabledEffect(c);
                 }
 
                 super.main.displayMessage("Please select a student from the princess that will be added to your room");
@@ -1785,6 +1826,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (ImageView c: this.clericStudents){
             c.setOnMouseClicked(null);
+            disabledEffect(c);
         }
     }
 
@@ -1878,6 +1920,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (ImageView c: this.jesterStudents){
             c.setOnMouseClicked(null);
+            disabledEffect(c);
         }
     }
 
@@ -1888,6 +1931,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (ImageView c: this.princessStudents){
             c.setOnMouseClicked(null);
+            disabledEffect(c);
         }
     }
 
@@ -1997,6 +2041,7 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView a : this.assistantList){
             a.setOnMouseClicked(null);
             a.setDisable(true);
+            disabledEffect(a);
         }
     }
 
@@ -2018,13 +2063,20 @@ public class MainGameController extends Controller implements Initializable {
         for (ImageView a : this.assistantList){
             a.setDisable(false);
             a.setOnMouseClicked(handler);
+            enabledEffect(a);
         }
 
         super.main.displayMessage("It is your turn, please select an assistant. Just click on It");
     }
 
 
-
+    private void enabledEffect (Node node){
+        Effect enabled = new DropShadow(20, Color.DEEPSKYBLUE);
+        node.setEffect(enabled);
+    }
+    private void disabledEffect (Node node){
+        node.setEffect(null);
+    }
 
     private void elaborateModel() {
 
@@ -2076,7 +2128,13 @@ public class MainGameController extends Controller implements Initializable {
         //todo do it better
         //could use a sound for it
 
-        super.main.displayMessage("It is not your turn, please wait");
+        String musicFile = "sound/notification-sound-7062.mp3";
+
+        Media sound = new Media(getClass().getClassLoader().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+
+        //super.main.displayMessage("It is not your turn, please wait");
     }
 
     private void gameOver() {
