@@ -1056,6 +1056,7 @@ public class MainGameController extends Controller implements Initializable {
         imageView.setFitWidth(16);
         imageView.setImage(image);
         grids.get(model.getMotherNatureIslandId()).add(imageView, 0, 0);
+        grids.get(model.getMotherNatureIslandId()).setEffect(new DropShadow(10, Color.ORANGERED));
 
         System.out.println("MotherNature Set");
 
