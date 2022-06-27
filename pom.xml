@@ -162,7 +162,7 @@
             <id>default-cli</id>
             <configuration>
               <!-- <mainClass>it.polimi.ingsw.Client.GraphicInterface.Gui</mainClass> -->
-              <mainClass>it.polimi.ingsw.Client.Client</mainClass>
+              <mainClass>it.polimi.ingsw.StarterHelper</mainClass>
             </configuration>
           </execution>
         </executions>
