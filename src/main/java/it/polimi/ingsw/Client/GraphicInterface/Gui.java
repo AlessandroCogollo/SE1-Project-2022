@@ -199,7 +199,11 @@ public class Gui extends Application implements Graphic {
         mainStage.setTitle("Main Game");
         mainStage.setHeight(780);
         mainStage.setWidth(1000);
-        System.out.println("Free memory byte before activate maingame " + Runtime.getRuntime().freeMemory());
+
+        long free = Runtime.getRuntime().freeMemory();
+        long total = Runtime.getRuntime().totalMemory();
+        double perc = ((double) free) / ((double) total) * 100;
+        System.out.println("Memory in byte before before maingame - Free: " + free + " Total: " + total + " - " + perc + "%");
         this.sceneController.activate("mainGame");
     }
 

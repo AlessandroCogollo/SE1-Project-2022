@@ -40,6 +40,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.transform.Scale;
+import jdk.dynalink.linker.ConversionComparator;
+import org.apache.commons.lang3.Conversion;
 
 import java.io.File;
 import java.net.URL;
@@ -161,7 +163,10 @@ public class MainGameController extends Controller implements Initializable {
         //if (s != null)
             //s.setCursor(Cursor.DEFAULT);
 
-        System.out.println("Free memory byte before after maingame " + Runtime.getRuntime().freeMemory());
+        long free = Runtime.getRuntime().freeMemory();
+        long total = Runtime.getRuntime().totalMemory();
+        double perc = ((double) free) / ((double) total) * 100;
+        System.out.println("Memory in byte before after maingame - Free: " + free + " Total: " + total + " - " + perc + "%");
     }
 
     @FXML
@@ -1095,13 +1100,13 @@ public class MainGameController extends Controller implements Initializable {
             }
         }
 
-        Image image = new Image("/token/mothernature.png",16,16,false,false);
+        Image image = new Image("/token/mothernature.png",16,16,true,false);
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         imageView.setImage(image);
+        imageView.setTranslateY(-11);
         grids.get(model.getMotherNatureIslandId()).add(imageView, 0, 0);
-        grids.get(model.getMotherNatureIslandId()).setEffect(new DropShadow(10, Color.ORANGERED));
 
         System.out.println("MotherNature Set");
 
@@ -1122,9 +1127,10 @@ public class MainGameController extends Controller implements Initializable {
                 ImageView banCard = new ImageView();
                 banCard.setFitHeight(16);
                 banCard.setFitWidth(16);
-                banCard.setImage(new Image("/token/token_apothecary.png", 16, 16, false, false));
+                banCard.setTranslateY(-11);
+                banCard.setImage(new Image("/token/token_apothecary.png", 16, 16, true, false));
                 Label banCardLabel = new Label(String.valueOf(island.getBanCard()));
-                banCardLabel.setTranslateY(-11);
+                banCardLabel.setTranslateY(-24);
                 banCardLabel.setTranslateX(4);
                 banCardLabel.setOpacity(1);
                 banCardLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
@@ -1134,10 +1140,6 @@ public class MainGameController extends Controller implements Initializable {
             }
 
             if (island.getTowerCount() > 0){
-                /*ImageView tower = new ImageView();
-                tower.setFitHeight(16);
-                tower.setFitWidth(16);
-                tower.setImage(new Image("/token/token_apothecary.png", 16, 16, false, false));*/
                 ImageView tower = new ImageView();
                 tower.setFitWidth(16);
                 Image token = convertTo3DTowerColor(island.getTowerColor(), 16);
@@ -1206,11 +1208,17 @@ public class MainGameController extends Controller implements Initializable {
         if (this.activeIslands == null)
             return;
 
+        int id = this.dataCollector.getModel().getMotherNatureIslandId();
+
         for (GridPane g : this.activeIslands) {
+
+            Island i = (Island) g.getUserData();
             g.setOnMouseClicked(null);
             g.setDisable(true);
             disabledEffect(g);
             disabledEffect(g.getParent());
+            if (i.getId() == id)
+                g.getParent().setEffect(new DropShadow(10, Color.ORANGERED));
         }
     }
 
