@@ -9,6 +9,7 @@ public class Island {
     private int towerColor;
     private int banCard;
     private int towerCount;
+    private boolean merged = false;
 
     public Island(int id){
         this.id = id;
@@ -21,6 +22,14 @@ public class Island {
         this.towerColor = -1;
         this.towerCount = 0;
         this.banCard = 0;
+    }
+
+    public void setMerged(boolean merged) {
+        this.merged = merged;
+    }
+
+    public boolean isMerged() {
+        return merged;
     }
 
     public int getId() {
