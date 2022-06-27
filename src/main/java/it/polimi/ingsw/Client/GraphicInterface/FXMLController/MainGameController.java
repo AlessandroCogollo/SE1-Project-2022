@@ -160,6 +160,8 @@ public class MainGameController extends Controller implements Initializable {
         elaborateModel();
         //if (s != null)
             //s.setCursor(Cursor.DEFAULT);
+
+        System.out.println("Free memory byte before after maingame " + Runtime.getRuntime().freeMemory());
     }
 
     @FXML

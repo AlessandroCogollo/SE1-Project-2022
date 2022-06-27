@@ -199,6 +199,7 @@ public class Gui extends Application implements Graphic {
         mainStage.setTitle("Main Game");
         mainStage.setHeight(780);
         mainStage.setWidth(1000);
+        System.out.println("Free memory byte before activate maingame " + Runtime.getRuntime().freeMemory());
         this.sceneController.activate("mainGame");
     }
 

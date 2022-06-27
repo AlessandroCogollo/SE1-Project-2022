@@ -158,11 +158,10 @@ public class GameHandler implements Runnable{
             temp = this.gson.fromJson(mJ, Message.class);
 
             if (!Errors.NO_ERROR.equals(temp.getError())){
-
-                this.g.displayError(temp.getMessage());
-
-                if (this.currentPlayerId != -1 && this.currentPlayerId == this.myId)
+                if (this.currentPlayerId != -1 && this.currentPlayerId == this.myId) {
+                    this.g.displayError(temp.getMessage());
                     return null;
+                }
             }
         }
         return this.gson.fromJson(mJ, ModelMessage.class);
