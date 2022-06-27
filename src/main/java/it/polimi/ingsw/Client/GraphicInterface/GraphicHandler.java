@@ -84,4 +84,8 @@ public class GraphicHandler {
     public void setGraphicStopCallback (Runnable callback){
         this.dataCollector.setGraphicStopped(callback);
     }
+
+    public void displayMessage(String message){
+        this.graphic.displayMessage(message);
+    }
 }

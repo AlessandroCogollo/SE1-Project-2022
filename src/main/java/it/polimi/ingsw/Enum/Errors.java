@@ -162,6 +162,10 @@ public enum Errors {
      * Error description: The graphic interface stopped for some error
      */
     GRAPHIC_STOPPED (309, "The graphic interface stopped for some error"),
+    /**
+     * Error description: The upcoming model is resumed from a previous game
+     */
+    MODEL_RESUMED (310, "The upcoming model is resumed from a previous game"),
 
 
     /*

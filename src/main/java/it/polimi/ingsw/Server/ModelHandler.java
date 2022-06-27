@@ -8,6 +8,12 @@ import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.Game;
 
+import javax.enterprise.inject.Model;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +49,11 @@ public class ModelHandler implements Runnable{
 
         if(this.persistenceAssistant.modelAvailable()){
             this.model = this.persistenceAssistant.getResumedModel();
+            Message temp = this.persistenceAssistant.getResumedModelMessage();
+            Instant time = temp.getTime();
+            SimpleDateFormat d = new SimpleDateFormat("dd MMMM yyyy - HH:mm::ss - z");
+            temp = temp.setError(Errors.MODEL_RESUMED).setMessage("Model resumed from: " + d.format(java.util.Date.from(time)));
+            sendMessageToPlayers(this.gson.toJsonTree(temp));
         }
         else {
             this.model = Game.getGameModel(ids, gameMode);

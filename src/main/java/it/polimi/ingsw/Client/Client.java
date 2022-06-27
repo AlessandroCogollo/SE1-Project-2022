@@ -34,6 +34,7 @@ public class Client{
 
     private final Object lock = new Object();
     private Errors code = Errors.NOTHING_TODO;
+    private String message = null;
 
     /**
      * Simpler Constructor with only the ip and the port of the server, it will ask the player if he wants a cli or a gui interface and the ping timer is set to 60 sec
@@ -167,8 +168,15 @@ public class Client{
                 System.out.println("Graphic has stopped, shutting down");
                 go = false;
             }
-            case PLAYER_DISCONNECTED -> this.graphic.gameOver("A player disconnected, the client needs to shutdown");
+            case PLAYER_DISCONNECTED -> {
+                this.graphic.gameOver(this.message);
+                this.message = null;
+            }
             case CANNOT_ACCEPT -> this.graphic.gameOver("The Server Cannot Accept more client");
+            case MODEL_RESUMED -> {
+                this.graphic.displayMessage(this.message);
+                this.message = null;
+            }
         }
 
         //reset code
@@ -193,6 +201,7 @@ public class Client{
 
             if (Errors.PLAYER_DISCONNECTED.equals(temp.getError())) {
                 System.out.println(temp.getMessage());
+                this.message = temp.getMessage();
                 setCode(Errors.PLAYER_DISCONNECTED);
                 return;
             }
@@ -201,6 +210,13 @@ public class Client{
                 System.out.println(temp.getMessage());
                 setCode(Errors.CANNOT_ACCEPT);
                 return;
+            }
+
+            if (Errors.MODEL_RESUMED.equals(temp.getError())){
+                System.out.println(temp.getMessage());
+                this.message = temp.getMessage();
+                setCode(Errors.MODEL_RESUMED);
+                continue;
             }
 
             try {

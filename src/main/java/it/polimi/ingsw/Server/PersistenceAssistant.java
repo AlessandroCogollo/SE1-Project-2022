@@ -3,6 +3,7 @@ package it.polimi.ingsw.Server;
 import com.google.gson.Gson;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Game;
+import org.apache.maven.model.Model;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,6 +22,8 @@ public class PersistenceAssistant {
 
     private Path modelFile = null;
     private Gson gson = null;
+
+    private ModelMessage resumedModel = null;
 
     public PersistenceAssistant(Map<Integer, String> usernames, int gameMode) {
 
@@ -44,6 +47,10 @@ public class PersistenceAssistant {
         this.ids = x.stream().mapToInt(l -> l).toArray();
 
         this.name = sb.toString();
+    }
+
+    public ModelMessage getResumedModelMessage () {
+        return this.resumedModel;
     }
 
     public boolean modelAvailable(){
@@ -120,9 +127,9 @@ public class PersistenceAssistant {
         if (this.gson == null)
             this.gson = new Gson();
 
-        ModelMessage resumedModel = this.gson.fromJson(json, ModelMessage.class);
+        this.resumedModel = this.gson.fromJson(json, ModelMessage.class);
 
-        return Game.setGame(this.ids, resumedModel);
+        return Game.setGame(this.ids, this.resumedModel);
     }
 
     public boolean updateModelFile(ModelMessage model) {

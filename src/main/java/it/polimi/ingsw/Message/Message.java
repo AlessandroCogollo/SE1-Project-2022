@@ -17,6 +17,12 @@ public class Message {
         this.message = message;
     }
 
+    private Message (String time, Errors er, String message){
+        this.time = time;
+        this.errorCode = er.getCode();
+        this.message = message;
+    }
+
     public Instant getTime() {
         return Instant.parse(time);
     }
@@ -27,6 +33,19 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+
+    public Message setTime(Instant time){
+        return new Message(time.toString(), Errors.getErrorsByCode(this.errorCode), this.message);
+    }
+
+    public Message setError(Errors er){
+        return new Message(this.time, er, this.message);
+    }
+
+    public Message setMessage(String message){
+        return new Message(this.time, Errors.getErrorsByCode(this.errorCode), message);
     }
 
     @Override
@@ -41,6 +60,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Creation Time: " + this.time + ", Error: " + this.errorCode + ", Message: " + this.message + ". " + super.toString();
+        return "Creation Time: " + this.time + ", Error: " + this.errorCode + ", Message: " + this.message + ", Type: " + getClass() + ". " + super.toString();
     }
 }

@@ -2112,6 +2112,12 @@ public class MainGameController extends Controller implements Initializable {
         if (s != null){
             super.main.displayMessage(s);
         }
+
+        String musicFile = "sound/notification-sound-7062.mp3";
+
+        Media sound = new Media(getClass().getClassLoader().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
     }
 
     private void moveAsker(ModelMessage model) {
@@ -2138,7 +2144,7 @@ public class MainGameController extends Controller implements Initializable {
         //todo do it better
         //could use a sound for it
 
-        String musicFile = "sound/notification-sound-7062.mp3";
+        String musicFile = "sound/mixkit-positive-notification-951.wav";
 
         Media sound = new Media(getClass().getClassLoader().getResource(musicFile).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
