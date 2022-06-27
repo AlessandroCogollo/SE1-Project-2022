@@ -51,7 +51,7 @@ public class ModelHandler implements Runnable{
             this.model = this.persistenceAssistant.getResumedModel();
             Message temp = this.persistenceAssistant.getResumedModelMessage();
             Instant time = temp.getTime();
-            SimpleDateFormat d = new SimpleDateFormat("dd MMMM yyyy - HH:mm::ss - z");
+            SimpleDateFormat d = new SimpleDateFormat("dd MMMM yyyy - HH:mm:ss - z");
             temp = temp.setError(Errors.MODEL_RESUMED).setMessage("Model resumed from: " + d.format(java.util.Date.from(time)));
             sendMessageToPlayers(this.gson.toJsonTree(temp));
         }

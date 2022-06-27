@@ -9,6 +9,8 @@ import it.polimi.ingsw.Server.Model.Characters.Character;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
 
+import java.util.Arrays;
+
 // This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
 public class Game{
 
@@ -135,6 +137,10 @@ public class Game{
             return Errors.NOT_CURRENT_PLAYER.getCode();
         if (!round.getPhase().equals(Phase.Action) || !round.getActionPhase().equals(ActionPhase.ChooseCloud))
             return Errors.NOT_RIGHT_PHASE.getCode();
+
+        Cloud cloud = gameInit.getBoard().getCloudById(cloudId);
+        if (Arrays.stream(cloud.getCopyOfDrawnStudents()).sum() == 0)
+            return Errors.CLOUD_EMPTY.getCode();
 
         p.chooseCloud(c);
 

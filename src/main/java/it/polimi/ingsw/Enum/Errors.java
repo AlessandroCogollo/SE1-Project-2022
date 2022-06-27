@@ -120,6 +120,10 @@ public enum Errors {
      * Error description: Cannot play a character in a normal game
      */
     INVALID_MOVE (221, "Cannot play a character in a normal game"),
+    /**
+     *  Error description: The cloud choose is empty
+     */
+    CLOUD_EMPTY (222, "The cloud choose is empty"),
 
 
 
