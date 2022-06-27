@@ -12,7 +12,7 @@
 | Basic rules      	 |  🟢   |
 | Complete rules   	 |  🟢   |
 | Socket           	 |  🟢   |
-| GUI              	 |  🟡   |
+| GUI              	 |  🟢   |
 | CLI              	 |  🟢   |
 | Multiple games   	 |  🔴   |
 | Persistence		      |  🟢   |

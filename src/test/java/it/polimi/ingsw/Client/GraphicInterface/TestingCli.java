@@ -1,11 +1,30 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
+import it.polimi.ingsw.Enum.Assistant;
+import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Enum.Wizard;
+import it.polimi.ingsw.Message.ChooseCloudMessage;
+import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import it.polimi.ingsw.Message.MoveMotherNatureMessage;
+import it.polimi.ingsw.Message.MoveStudentMessage;
+import it.polimi.ingsw.Message.PlayAssistantMessage;
+
+import java.util.Random;
 
 public class TestingCli extends Cli {
 
     static Integer wI = 0;
     static Integer uI = 0;
+    static final Random rand = new Random(System.currentTimeMillis());
+
+    @Override
+    public void startGraphic() {
+        super.startGraphic();
+        this.dC.setCallbackForModel(this::modelCallback);
+    }
 
     static String getUsername() {
         synchronized (uI) {
@@ -64,5 +83,22 @@ public class TestingCli extends Cli {
     @Override
     public void modelCallback() {
         System.out.println("Testing CLi model Callback");
+
+        ModelMessage model = this.dC.getModel();
+        int myId = this.dC.getId();
+
+        Phase p = Phase.valueOf(model.getActualPhase());
+        ActionPhase aP = ActionPhase.valueOf(model.getActualActionPhase());
+
+        if (Phase.Planning.equals(p)){
+            this.dC.setNextMove(new PlayAssistantMessage(Errors.NO_ERROR, "Test CLi", rand.nextInt(1, 11)));
+        }
+        else {
+            switch (aP) {
+                case MoveStudent -> this.dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Test Cli", rand.nextInt(Color.getNumberOfColors()), rand.nextInt(-1, 12)));
+                case MoveMotherNature -> this.dC.setNextMove(new MoveMotherNatureMessage(Errors.NO_ERROR, "Test Cli", rand.nextInt(6)));
+                case ChooseCloud -> this.dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Test Cli", myId));
+            }
+        }
     }
 }

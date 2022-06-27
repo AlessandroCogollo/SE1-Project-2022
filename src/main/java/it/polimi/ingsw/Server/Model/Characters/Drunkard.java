@@ -20,10 +20,6 @@ final public class Drunkard extends Character  {
         // calcInfluence() method already implemented in GameBoard
     }
 
-    public Color getColor(){
-        return Color.Blue;
-    } // todo verify
-
     @Override
     public Errors canActivateEffect(int[] obj) {
         // no further checks needed

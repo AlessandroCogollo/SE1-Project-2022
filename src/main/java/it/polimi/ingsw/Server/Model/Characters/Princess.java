@@ -56,11 +56,9 @@ final public class Princess extends Character {
         Player p = super.gameInitializer.getRoundHandler().getCurrent();
 
         if (!Color.isColorIdValid(colorId))
-            return Errors.NOT_VALID_COLOR;
-        if (!super.gameInitializer.existsPlayer(p.getId()))
-            return Errors.PLAYER_NOT_EXIST;
+            return Errors.NOT_RIGHT_PARAMETER;
         if (this.students[colorId] <= 0)
-            return Errors.NO_STUDENT;
+            return Errors.NOT_ENOUGH_TOKEN;
 
         Color c = Color.getColorById(colorId);
 

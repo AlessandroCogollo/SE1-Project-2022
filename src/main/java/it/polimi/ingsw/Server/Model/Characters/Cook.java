@@ -5,34 +5,31 @@ import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
+import java.util.Objects;
 import java.util.Optional;
 
 final public class Cook extends Character {
 
-    private Optional<Color> color;
+    private Color color;
 
     Cook(GameInitializer gameInitializer) {
         super (3, 3, gameInitializer, "Cook");
-        this.color = Optional.empty();
+        this.color = null;
     }
 
     Cook(GameInitializer gameInitializer, CharacterSerializable character) {
         super (gameInitializer, character);
-        this.color = Optional.ofNullable(Color.getColorById(character.getColorId()));
+        this.color = Color.getColorById(character.getColorId());
     }
 
     public Color getColor (){
-        return color.orElse(null);
-    }
-
-    public Optional<Color> getProfessor(){
-        return this.color;
+        return color;
     }
 
     @Override
     protected void activateEffect(int[] color) {
         int colorId = color[0];
-        this.color = Optional.ofNullable(Color.getColorById(colorId));
+        this.color = Objects.requireNonNull(Color.getColorById(colorId));
     }
 
     @Override

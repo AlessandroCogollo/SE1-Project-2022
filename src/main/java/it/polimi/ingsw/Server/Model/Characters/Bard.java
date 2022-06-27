@@ -7,6 +7,7 @@ import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
+import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -40,6 +41,12 @@ final public class Bard extends Character {
 
         if (chosenColors.length != 2 && chosenColors.length != 4)
             return Errors.NOT_RIGHT_PARAMETER;
+
+        for (int i : chosenColors) {
+            if (!Color.isColorIdValid(i)) {
+                return Errors.NOT_RIGHT_PARAMETER;
+            }
+        }
 
         Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
         School currSchool = currPlayer.getSchool();

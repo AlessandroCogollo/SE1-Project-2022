@@ -22,11 +22,11 @@ final public class Thief extends Character {
     protected void activateEffect(int[] obj) {
 
         int colorId = obj[0];
-        Color c = Color.getColorById(colorId);
+        Color c = Objects.requireNonNull(Color.getColorById(colorId));
 
         for (Player p : gameInitializer) {
             int tempCount = 3;
-            while ((p.getSchool().getNumberOfStudentInRoomByColor(Objects.requireNonNull(c)) > 0) && (tempCount > 0)) {
+            while ((p.getSchool().getNumberOfStudentInRoomByColor(c) > 0) && (tempCount > 0)) {
                 p.getSchool().removeStudentFromRoom(c);
                 super.gameInitializer.getBag().addStudents(c);
                 tempCount--;
@@ -42,7 +42,7 @@ final public class Thief extends Character {
         int colorId = obj[0];
 
         if (!Color.isColorIdValid(colorId))
-            return Errors.NOT_VALID_COLOR;
+            return Errors.NOT_RIGHT_PARAMETER;
 
         return Errors.NO_ERROR;
     }

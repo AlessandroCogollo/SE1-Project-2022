@@ -6,12 +6,18 @@ import it.polimi.ingsw.Server.Model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CharacterTest {
+
 
     @Test
     @DisplayName("Set Up Test")
@@ -46,7 +52,7 @@ public class CharacterTest {
         Character Apothecary = CharacterFactory.produceCharacterById(0, g);
 
         // check correct building
-        Assertions.assertTrue(Apothecary instanceof it.polimi.ingsw.Server.Model.Characters.Apothecary);
+        assertTrue(Apothecary instanceof it.polimi.ingsw.Server.Model.Characters.Apothecary);
 
         for (int i = 0; i < testCases.length; i++) {
 
@@ -80,29 +86,59 @@ public class CharacterTest {
             }
         }
 
-    @Test
-    @DisplayName("Bard Test")
-    void BardTest() {
+    public static Stream<Arguments> bard (){
+        List<int[]> testCases = new ArrayList<>(653);
+        testCases.add(new int[]{});
+        testCases.add(new int[]{1, 2, 3, 4, 5, 6});
+        testCases.add(new int[]{1, 2, 3});
 
-        int[][] testCases = {
-                {},                          // check empty input
-                {1, 2, 3, 4, 5, 6},          // check input longer than maximum size
-                {1, 2, 3},                   // check odd input
-                // TODO: check if it is correctly moving students
-        };
+        int colorNumber = Color.getNumberOfColors();
 
+        for (long i = 0; i < Math.pow(colorNumber, 4); i++){
+            int[] x = new int[4];
+            x[3] = (int) (i % colorNumber);
+            x[2] = (int) ((i / colorNumber) % colorNumber);
+            x[1] = (int) ((i / Math.pow(colorNumber, 2)) % colorNumber);
+            x[0] = (int) ((i / Math.pow(colorNumber, 3)) % colorNumber);
+            testCases.add(x);
+        }
+
+        for (long i = 0; i < Math.pow(colorNumber, 2); i++){
+            int[] x = new int[2];
+            x[1] = (int) (i % colorNumber);
+            x[0] = (int) ((i / colorNumber) % colorNumber);
+            testCases.add(x);
+        }
+
+
+        return testCases.stream().map(Arguments::of);
+    }
+
+    private static GameInitializer bardG (){
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
-
-        for (int[] testCase : testCases) {
-
-            Character Bard = CharacterFactory.produceCharacterById(1, g);
-
-            Errors er = Bard.canActivateEffect(testCase);
-            if (er == Errors.NO_ERROR) {
-                Bard.activateEffect(testCase);
-            } else {
-                Assertions.assertEquals(Errors.NOT_RIGHT_PARAMETER, er);
+        School s = g.getRoundHandler().getCurrent().getSchool();
+        Random r = new Random(System.currentTimeMillis());
+        for (Color c : Color.values()){
+            for (int i = 0; i < r.nextInt(10); i++){
+                s.addStudentToRoom(c);
             }
+        }
+        return g;
+    }
+    @ParameterizedTest
+    @MethodSource("bard")
+    @DisplayName("Bard Test")
+    void BardTest(int[] testCase) {
+
+
+        Character Bard = CharacterFactory.produceCharacterById(1, bardG());
+
+        Errors er = Bard.canActivateEffect(testCase);
+        if (er == Errors.NO_ERROR) {
+            Bard.activateEffect(testCase);
+            Bard.use(testCase);
+        } else {
+            assertTrue(Errors.NOT_RIGHT_PARAMETER.equals(er) || Errors.NOT_ENOUGH_TOKEN.equals(er));
         }
     }
 
@@ -123,14 +159,13 @@ public class CharacterTest {
                 {2, 1},
                 {3, 1},
                 {4, 1}
-                // TODO: check behaviour when the number of students on this is <= 0
         };
 
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Cleric = CharacterFactory.produceCharacterById(2, g);
 
         // check correct building
-        Assertions.assertTrue(Cleric instanceof Cleric);
+        assertTrue(Cleric instanceof Cleric);
 
         int[] tempStudents = ((Cleric) Cleric).getStudentsNumber();
         int countStudents = 0;
@@ -158,30 +193,11 @@ public class CharacterTest {
             else if (tempStudents[testCase[0]] <= 0)
                 //the card hasn't the students color
                 Assertions.assertEquals(Errors.NO_STUDENT, er);
-            else
+            else {
                 //no error
                 Assertions.assertEquals(Errors.NO_ERROR, er);
-
-
-            /*try {
-                Errors er = Cleric.canActivateEffect(testCases[i]);
-                if (er==Errors.NO_ERROR) {
-                    // trivial
-                    Assertions.assertTrue(true);
-                } else {
-                    if (i == 3) {
-                        // check error catch: NOT_VALID_COLOR
-                        Assertions.assertEquals(14, er.getCode());
-                    } else {
-                        // check error catch: NOT_VALID_DESTINATION
-                        if
-                        Assertions.assertEquals(15, er.getCode());
-                    }
-                }
-            // catch OutOfBounds
-            } catch (ArrayIndexOutOfBoundsException exception) {
-                Assertions.assertTrue(true);
-            }*/
+                Cleric.use(testCase);
+            }
         }
     }
 
@@ -197,8 +213,8 @@ public class CharacterTest {
         Character Cook = CharacterFactory.produceCharacterById(3, g);
 
         // check correct building
-        Assertions.assertTrue(Cook instanceof Cook);
-        Assertions.assertTrue(((Cook) Cook).getProfessor().isEmpty());
+        assertTrue(Cook instanceof Cook);
+        assertNull(((Cook) Cook).getColor());
 
         for (int i = 0; i < testCases.length; i++) {
             int[] x = new int[1];
@@ -224,9 +240,11 @@ public class CharacterTest {
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Drunkard = CharacterFactory.produceCharacterById(4, g);
 
-        Assertions.assertTrue(Drunkard instanceof Drunkard);
+        assertTrue(Drunkard instanceof Drunkard);
 
-        // trivial, already tested in GameBoard
+        assertEquals(Errors.NO_ERROR, Drunkard.canActivateEffect(null));
+
+        Drunkard.use(null);
     }
 
     @Test
@@ -235,7 +253,7 @@ public class CharacterTest {
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Herald = CharacterFactory.produceCharacterById(5, g);
 
-        Assertions.assertTrue(Herald instanceof Herald);
+        assertTrue(Herald instanceof Herald);
 
         int[] testCases = {
                 1, 2, 3, 4
@@ -249,14 +267,54 @@ public class CharacterTest {
         }
     }
 
-    @Test
+
+    public static Stream<Arguments> jester (){
+        List<int[]> testCases = new ArrayList<>(16278);
+        testCases.add(new int[]{});
+        testCases.add(new int[]{1, 2, 3, 4, 5, 6});
+        testCases.add(new int[]{1, 2, 3});
+
+        int colorNumber = Color.getNumberOfColors();
+
+        for (long i = 0; i < Math.pow(colorNumber, 6); i++){
+            int[] x = new int[6];
+            x[5] = (int) (i % colorNumber);
+            x[4] = (int) ((i / colorNumber) % colorNumber);
+            x[3] = (int) ((i / Math.pow(colorNumber, 2)) % colorNumber);
+            x[2] = (int) ((i / Math.pow(colorNumber, 3)) % colorNumber);
+            x[1] = (int) ((i / Math.pow(colorNumber, 4)) % colorNumber);
+            x[0] = (int) ((i / Math.pow(colorNumber, 5)) % colorNumber);
+            testCases.add(x);
+        }
+
+        for (long i = 0; i < Math.pow(colorNumber, 4); i++){
+            int[] x = new int[4];
+            x[3] = (int) (i % colorNumber);
+            x[2] = (int) ((i / colorNumber) % colorNumber);
+            x[1] = (int) ((i / Math.pow(colorNumber, 2)) % colorNumber);
+            x[0] = (int) ((i / Math.pow(colorNumber, 3)) % colorNumber);
+            testCases.add(x);
+        }
+
+        for (long i = 0; i < Math.pow(colorNumber, 2); i++){
+            int[] x = new int[2];
+            x[1] = (int) (i % colorNumber);
+            x[0] = (int) ((i / colorNumber) % colorNumber);
+            testCases.add(x);
+        }
+
+
+        return testCases.stream().map(Arguments::of);
+    }
+
+    @ParameterizedTest
+    @MethodSource("jester")
     @DisplayName("Jester Test")
-    void JesterTest() {
-        GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
-        Character Jester = CharacterFactory.produceCharacterById(6, g);
+    void JesterTest(int [] testCase) {
+        Character Jester = CharacterFactory.produceCharacterById(6, GameInitializerTest.setGameInitializer(2, 1));
 
         // check correct building
-        Assertions.assertTrue(Jester instanceof Jester);
+        assertTrue(Jester instanceof Jester);
 
         // check if number of students is correct
         int studentsCount = 0;
@@ -265,6 +323,15 @@ public class CharacterTest {
             if (studentsTemp[color.getIndex()] != 0) studentsCount += studentsTemp[color.getIndex()];
         }
         Assertions.assertEquals(6, studentsCount);
+
+        Errors er = Jester.canActivateEffect(testCase);
+        if (er.equals(Errors.NO_ERROR)) {
+            Jester.use(testCase);
+            assertTrue(true);
+        }
+        else{
+            assertTrue(er.equals(Errors.NOT_RIGHT_PARAMETER) || er.equals(Errors.NOT_ENOUGH_TOKEN));
+        }
     }
 
     @Test
@@ -274,8 +341,10 @@ public class CharacterTest {
         Character Knight = CharacterFactory.produceCharacterById(7, g);
 
         // check correct building
-        Assertions.assertTrue(Knight instanceof Knight);
+        assertTrue(Knight instanceof Knight);
 
+        Knight.canActivateEffect(null);
+        Knight.use(null);
         // trivial, already tested in GameBoard
     }
 
@@ -286,8 +355,9 @@ public class CharacterTest {
         Character Minotaur = CharacterFactory.produceCharacterById(8, g);
 
         // check correct building
-        Assertions.assertTrue(Minotaur instanceof Minotaur);
-
+        assertTrue(Minotaur instanceof Minotaur);
+        Minotaur.canActivateEffect(null);
+        Minotaur.use(null);
         // trivial, already tested in GameBoard
     }
 
@@ -298,19 +368,39 @@ public class CharacterTest {
         Character Postman = CharacterFactory.produceCharacterById(9, g);
 
         // check correct building
-        Assertions.assertTrue(Postman instanceof Postman);
-
+        assertTrue(Postman instanceof Postman);
+        Postman.canActivateEffect(null);
+        Postman.use(null);
         // trivial, already tested in GameBoard
     }
 
-    @Test
+    public static Stream<Arguments> princess (){
+        List<int[]> testCases = new ArrayList<>(16278);
+        testCases.add(new int[]{});
+        testCases.add(new int[]{1, 2, 3, 4, 5, 6});
+        testCases.add(new int[]{1, 2, 3});
+        testCases.add(new int[]{-2});
+        testCases.add(new int[]{5});
+
+        for (Color c: Color.values()){
+            int[] x = new int[1];
+            x[0] = c.getIndex();
+            testCases.add(x);
+        }
+
+
+        return testCases.stream().map(Arguments::of);
+    }
+
+    @ParameterizedTest
+    @MethodSource("princess")
     @DisplayName("Princess Test")
-    void PrincessTest() {
+    void PrincessTest(int[] testCase) {
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Princess = CharacterFactory.produceCharacterById(10, g);
 
         // check correct building
-        Assertions.assertTrue(Princess instanceof Princess);
+        assertTrue(Princess instanceof Princess);
 
         // check if number of students is correct
         int studentsCount = 0;
@@ -320,16 +410,32 @@ public class CharacterTest {
         }
         Assertions.assertEquals(4, studentsCount);
 
-        // TODO: check activateEffects() && canActivateEffects()
+        Errors er = Princess.canActivateEffect(testCase);
+        if (er.equals(Errors.NO_ERROR)) {
+            Princess.use(testCase);
+            assertTrue(true);
+        }
+        else{
+            assertTrue(er.equals(Errors.NOT_RIGHT_PARAMETER) || er.equals(Errors.NOT_ENOUGH_TOKEN) || er.equals(Errors.NO_MORE_MOVEMENT));
+        }
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("princess")
     @DisplayName("Thief Test")
-    void ThiefTest() {
+    void ThiefTest(int[] testCase) {
         GameInitializer g = GameInitializerTest.setGameInitializer(2, 1);
         Character Thief = CharacterFactory.produceCharacterById(11, g);
 
         // check correct building
-        Assertions.assertTrue(Thief instanceof Thief);
+        assertTrue(Thief instanceof Thief);
+        Errors er = Thief.canActivateEffect(testCase);
+        if (er.equals(Errors.NO_ERROR)) {
+            Thief.use(testCase);
+            assertTrue(true);
+        }
+        else{
+            assertTrue(er.equals(Errors.NOT_RIGHT_PARAMETER) || er.equals(Errors.NOT_ENOUGH_TOKEN));
+        }
     }
 }

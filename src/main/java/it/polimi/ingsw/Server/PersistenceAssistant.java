@@ -115,6 +115,7 @@ public class PersistenceAssistant {
         }
         return string;
     }
+
     public Game getResumedModel() {
 
         if (this.modelFile == null){

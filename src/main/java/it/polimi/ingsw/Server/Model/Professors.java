@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Server.Model.Characters.Character;
 
 import java.util.Arrays;
 
@@ -55,6 +56,20 @@ public class Professors {
                         equal = true;
                 }
             }
+
+            Character activeCharacter = gInit.getBoard().getActiveCharacter();
+            RoundHandler r = gInit.getRoundHandler();
+            Player current = null;
+            if (r != null){
+                current = r.getCurrent();
+            }
+
+            /*DrunkHard effect*/
+            if (activeCharacter != null && activeCharacter.getId() == 4 && current != null && current.getSchool().getNumberOfStudentInRoomByColor(c) == max){
+                professors[c.getIndex()] = current.getId();
+                continue;
+            }
+
             //update the professor if only if there aren't equals
             if (!equal && maxP != null)
                 professors[c.getIndex()] = maxP.getId();
@@ -62,6 +77,8 @@ public class Professors {
     }
 
     Player getPlayerWithProfessor (Color color){
+        if (color == null)
+            return null;
         int pId = professors[color.getIndex()];
         if (pId != -1)
             return gInit.getPlayerById(pId);

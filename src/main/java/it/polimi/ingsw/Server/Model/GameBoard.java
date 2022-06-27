@@ -153,9 +153,9 @@ public class GameBoard implements Iterable<Cloud>{
 
 
     //knight: adds 2 points to the current player (id = 7) --- OK
-    //drunkard: given a color, blocks the influence calc for those students (id = 4) --- OK
+    //cook: given a color, blocks the influence calc for those students (id = 3) --- OK
     //minotaur: blocks the influence calc for the towers (id = 8) --- OK
-    //cook: obtains the professor even if in withdraw in number of students in the room (id = 3) --- OK
+    //drunkard: obtains the professor even if in withdraw in number of students in the room (id = 4) --- OK done in professor class
 
 
     //returns the influence of each player
@@ -177,26 +177,26 @@ public class GameBoard implements Iterable<Cloud>{
         int [] students = c.getStudents();
         Player p;
         //fill the players influence array
-        int temp = 0;
+        //int temp = 0;
+
+        this.professors.updateProfessors();
+
         for (int i = 0; i < Color.getNumberOfColors(); i++){
 
-            /* Cook effect */
-            if(activeCharacter != null && activeCharacter.getId() == 3 && ((Cook) getActiveCharacter()).getProfessor().isPresent() && Objects.requireNonNull(Color.getColorById(i)).equals(((Cook) getActiveCharacter()).getProfessor().get())){
-                p = gInit.getRoundHandler().getCurrent(); //if i is the cook-color, p is the current player
-            }
+            p = this.professors.getPlayerWithProfessor(Objects.requireNonNull(Color.getColorById(i)));
 
-            else{
-                p = this.professors.getPlayerWithProfessor(Objects.requireNonNull(Color.getColorById(i))); // else p is who owns the i-color
-            }
             if (p != null) { //if somebody owns the professor of the i-color
                 playersInfluence.replace(p, playersInfluence.get(p) + students[i]); // sum the influence of the player
             }
         }
 
-        /* Drunkard effect */
-        if(activeCharacter != null && activeCharacter.getId() == 4){
-            p = this.professors.getPlayerWithProfessor(((Drunkard) getActiveCharacter()).getColor()); // p owns the drunkard-color
-            playersInfluence.replace(p, 0);
+        /* Cook effect */
+        if(activeCharacter != null && activeCharacter.getId() == 3){
+            Cook cook = (Cook) getActiveCharacter();
+            Color color = cook.getColor();
+            p = this.professors.getPlayerWithProfessor(color);
+            if (p != null)
+                playersInfluence.replace(p, 0);
         }
         return playersInfluence;
     }

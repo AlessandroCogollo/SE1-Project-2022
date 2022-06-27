@@ -12,5 +12,6 @@ public class TestingGraphicHandler extends GraphicHandler{
         t.startGraphic();
         this.graphic = t;
         this.dataCollector = t.getDataCollector();
+
     }
 }

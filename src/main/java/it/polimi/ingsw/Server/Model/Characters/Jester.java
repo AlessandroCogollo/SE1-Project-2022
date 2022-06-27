@@ -26,18 +26,18 @@ final public class Jester extends Character {
     @Override
     protected void activateEffect(int[] chosenColor) {
 
-        Player currPlayer = gameInitializer.getRoundHandler().getCurrent();
-        School currSchool = currPlayer.getSchool();
+        School currSchool =  gameInitializer.getRoundHandler().getCurrent().getSchool();
 
-        for (int i = 0; i <= chosenColor.length; i++) {
-            if (i%2==0) {
+        for (int i = 0; i < chosenColor.length; i++) {
+            Color c = Objects.requireNonNull(Color.getColorById(chosenColor[i]));
+            if (i % 2 == 0) {
                 // even elements are those to be removed from this card
-                this.students[i]--;
-                currSchool.addStudentToEntrance(Objects.requireNonNull(Color.getColorById(i)));
+                this.students[c.getIndex()]--;
+                currSchool.addStudentToEntrance(c);
             } else {
                 // odd elements are those to be added to this card
-                this.students[i]++;
-                currSchool.removeStudentFromEntrance(Objects.requireNonNull(Color.getColorById(i)));
+                this.students[c.getIndex()]++;
+                currSchool.removeStudentFromEntrance(c);
             }
         }
     }
@@ -54,23 +54,27 @@ final public class Jester extends Character {
     @Override
     public Errors canActivateEffect(int[] obj) {
 
-        System.err.println("received" + Arrays.toString(obj));
+        //System.err.println("received" + Arrays.toString(obj));
 
         int length = obj.length;
 
-        if(length == 0 || length % 2 == 1 || length > 6)
+        if(length != 2 && length != 4 && length != 6)
             return Errors.NOT_RIGHT_PARAMETER;
+
+        for (int i : obj) {
+            if (!Color.isColorIdValid(i)) {
+                return Errors.NOT_RIGHT_PARAMETER;
+            }
+        }
 
         int[] tempStudents = Arrays.copyOf(this.students, this.students.length);
 
-        System.err.println("Jester" + Arrays.toString(tempStudents));
+        //System.err.println("Jester" + Arrays.toString(tempStudents));
 
-        for (int i = 0; i <= length; i++) {
-            if (i%2==0) {
-                // even elements are those to be removed from this card
+        for (int i = 0; i < Color.getNumberOfColors(); i++) {
+            if (i % 2 == 0) {
                 tempStudents[i]--;
             } else {
-                // odd elements are those to be added to this card
                 tempStudents[i]++;
             }
         }
@@ -80,6 +84,29 @@ final public class Jester extends Character {
                 return Errors.NOT_ENOUGH_TOKEN;
             }
         }
+
+        int[] entrance = gameInitializer.getRoundHandler().getCurrent().getSchool().getCopyOfEntrance();
+
+        int index = obj[1];
+        if (entrance[index] < 1)
+            return Errors.NOT_ENOUGH_TOKEN;
+        else
+            entrance[index]--;
+
+        if (length > 2){
+            index = obj[3];
+            if (entrance[index] < 1)
+                return Errors.NOT_ENOUGH_TOKEN;
+            else
+                entrance[index]--;
+        }
+
+        if (length > 4){
+            index = obj[5];
+            if (entrance[index] < 1)
+                return Errors.NOT_ENOUGH_TOKEN;
+        }
+
 
         return Errors.NO_ERROR;
     }
