@@ -686,12 +686,12 @@ public class MainGameController extends Controller implements Initializable {
         towerGrids.add(gridTowers3);
         towerGrids.add(gridTowers4);
 
-        double height = 13;
+        //double height = 13;
 
         for(Integer id: names.keySet()){
 
             PlayerSerializable p = model.getPlayerById(id);
-            Color color = convertTowerColor(p.getTowerColor());
+            //Color color = convertTowerColor(p.getTowerColor());
             int towers = p.getSchool().getTowers();
             GridPane grid = towerGrids.get(id);
 
@@ -1097,7 +1097,7 @@ public class MainGameController extends Controller implements Initializable {
                 Image token = convertTo3DTowerColor(island.getTowerColor(), 16);
                 tower.setImage(token);
                 Label towerLabel = new Label(String.valueOf(island.getTowerCount()));
-                towerLabel.setTranslateY(-11);
+                towerLabel.setTranslateY(-30);
                 towerLabel.setTranslateX(4);
                 towerLabel.setOpacity(1);
                 towerLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
