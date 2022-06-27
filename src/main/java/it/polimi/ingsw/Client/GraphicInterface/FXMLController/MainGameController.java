@@ -166,7 +166,7 @@ public class MainGameController extends Controller implements Initializable {
         long free = Runtime.getRuntime().freeMemory();
         long total = Runtime.getRuntime().totalMemory();
         double perc = ((double) free) / ((double) total) * 100;
-        System.out.println("Memory in byte before after maingame - Free: " + free + " Total: " + total + " - " + perc + "%");
+        System.out.println("Memory in byte before after maingame - Free: " + free + " Total: " + total + " - " + (100 - perc) + "%");
     }
 
     @FXML

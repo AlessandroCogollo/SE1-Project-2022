@@ -203,7 +203,7 @@ public class Gui extends Application implements Graphic {
         long free = Runtime.getRuntime().freeMemory();
         long total = Runtime.getRuntime().totalMemory();
         double perc = ((double) free) / ((double) total) * 100;
-        System.out.println("Memory in byte before before maingame - Free: " + free + " Total: " + total + " - " + perc + "%");
+        System.out.println("Memory in byte before before maingame - Free: " + free + " Total: " + total + " - " + (100 - perc) + "%");
         this.sceneController.activate("mainGame");
     }
 
