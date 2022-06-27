@@ -142,6 +142,7 @@ public class Islands implements Iterable<Island>{
             dest.setBanCard();
 
         dest.setTowerCount(src.getTowerCount() + dest.getTowerCount());
+        dest.setMerged(true);
     }
 
     static private <T> void rand( T[] array) {

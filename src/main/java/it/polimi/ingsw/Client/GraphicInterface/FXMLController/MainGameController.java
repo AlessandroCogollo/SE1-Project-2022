@@ -30,6 +30,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.transform.Scale;
 
 import java.net.URL;
 import java.util.*;
@@ -1001,7 +1002,7 @@ public class MainGameController extends Controller implements Initializable {
     @FXML
     private GridPane islandGrid12;
 
-    private List<GridPane> activeIsland = null;
+    private List<GridPane> activeIslands = null;
 
     public void setIslands(){
 
@@ -1043,6 +1044,9 @@ public class MainGameController extends Controller implements Initializable {
                 grids.get(i).setVisible(false);
                 panes.get(i).setDisable(true);
                 panes.get(i).setVisible(false);
+            }
+            else if(dataCollector.getModel().getIslandList().get(i).isMerged()){
+                resizeIsland((ImageView) panes.get(i).getChildren().get(0));
             }
         }
 
@@ -1126,29 +1130,35 @@ public class MainGameController extends Controller implements Initializable {
                 }
             }
 
-            if (this.activeIsland == null)
-                this.activeIsland = new ArrayList<>(islands.size());
+            if (this.activeIslands == null)
+                this.activeIslands = new ArrayList<>(islands.size());
 
-            this.activeIsland.add(grid);
+            this.activeIslands.add(grid);
         }
         disableIslands();
     }
 
+    public void resizeIsland(ImageView img){
+        img.setEffect(new DropShadow(10, Color.IVORY));
+        img.setScaleX(1.5);
+        img.setScaleY(1.5);
+    }
+
     public void enableIslands(EventHandler<MouseEvent> handler){
-        if (this.activeIsland == null)
+        if (this.activeIslands == null)
             return;
 
-        for (GridPane g : this.activeIsland) {
+        for (GridPane g : this.activeIslands) {
             g.setOnMouseClicked(handler);
             g.setDisable(false);
         }
     }
 
     public void disableIslands(){
-        if (this.activeIsland == null)
+        if (this.activeIslands == null)
             return;
 
-        for (GridPane g : this.activeIsland) {
+        for (GridPane g : this.activeIslands) {
             g.setOnMouseClicked(null);
             g.setDisable(true);
         }
