@@ -54,7 +54,7 @@ final public class Jester extends Character {
     @Override
     public Errors canActivateEffect(int[] obj) {
 
-        //System.err.println("received" + Arrays.toString(obj));
+        System.out.println("received" + Arrays.toString(obj));
 
         int length = obj.length;
 
@@ -69,13 +69,16 @@ final public class Jester extends Character {
 
         int[] tempStudents = Arrays.copyOf(this.students, this.students.length);
 
-        //System.err.println("Jester" + Arrays.toString(tempStudents));
+        System.out.println("Jester" + Arrays.toString(tempStudents));
 
-        for (int i = 0; i < Color.getNumberOfColors(); i++) {
+        for (int i = 0; i < obj.length; i++) {
+            Color c = Objects.requireNonNull(Color.getColorById(obj[i]));
             if (i % 2 == 0) {
-                tempStudents[i]--;
+                // even elements are those to be removed from this card
+                tempStudents[c.getIndex()]--;
             } else {
-                tempStudents[i]++;
+                // odd elements are those to be added to this card
+                tempStudents[c.getIndex()]++;
             }
         }
 

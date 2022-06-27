@@ -965,7 +965,7 @@ public class MainGameController extends Controller implements Initializable {
             g.setOnMouseClicked(null);
             g.setDisable(true);
             disabledEffect(g);
-            disabledEffect(g.getParent());
+            //disabledEffect(g.getParent());
         }
     }
 
@@ -985,7 +985,7 @@ public class MainGameController extends Controller implements Initializable {
                 disableClouds();
             });
             enabledEffect(g);
-            enabledEffectCard(g.getParent());
+            //enabledEffectCard(g.getParent());
         }
 
         displayMessage("It is your turn, please click on the cloud you want to choose");
@@ -1545,6 +1545,7 @@ public class MainGameController extends Controller implements Initializable {
         switch (characterId){
             case 0 -> {
                 //apothecary - ban card
+                disableIslands();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1574,6 +1575,7 @@ public class MainGameController extends Controller implements Initializable {
                 }
 
                 disableCharacters();
+                disableEntrance();
 
                 handler = mouseEvent -> {
                     Node node = (Node) mouseEvent.getSource();
@@ -1596,6 +1598,8 @@ public class MainGameController extends Controller implements Initializable {
                 if (this.clericStudents == null)
                     return;
 
+                disableIslands();
+
                 handler = mouseEvent -> {
                     mouseEvent.consume();
                     Node node = (Node) mouseEvent.getSource();
@@ -1616,6 +1620,7 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 3 -> {
                 //cook - color that not count as influence
+                disableColorChoose();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1635,6 +1640,8 @@ public class MainGameController extends Controller implements Initializable {
             }
             case 5 -> {
                 //herald calc influence of an island
+
+                disableIslands();
 
                 handler = mouseEvent -> {
                     ((Node) mouseEvent.getSource()).setOnMouseClicked(null);
@@ -1666,6 +1673,7 @@ public class MainGameController extends Controller implements Initializable {
                     return;
 
                 disableCharacters();
+                disableEntrance();
 
                 handler = mouseEvent -> {
                     mouseEvent.consume();
