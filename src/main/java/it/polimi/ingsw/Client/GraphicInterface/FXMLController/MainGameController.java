@@ -19,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -38,9 +40,9 @@ import java.util.*;
     - mandare i messaggi al player non come alert (lasciandoli solo per degli errori o per casi particolari) ma o scriverli da qualche parte sempre visibili, o visualizzarli in risalto per tot secondi e poi farli scomparire
     - mettere a posto colori nomi per 4 giocatori (ora sono banalmente rossi e blu e visualizzandoli non sono bellissimi)
     - aggiungere le immagini delle torri al posto dei cerchi sia nelle scuole sia nelle isole
-    - aggiungere Wizard alla visualizzazione negli username
     - isole ingrandite se sono aggregate
 
+    - aggiungere Wizard alla visualizzazione negli username - done
     - aggiungere visualizzazione del motivo di chiusura del programma - done
     - visualizzare tutte le informazioni sulle varie isole - done
     - aggiungere a ogni character o il suo costo aggiornato se è stato usato o come nel gioco vero una moneta su di esso per indicare che costa di più - done
@@ -76,15 +78,8 @@ public class MainGameController extends Controller implements Initializable {
         };
     }
 
-    public Image convertDeckImage(int id) {
-        return switch (id) {
-            case 1 -> new Image("/Assistenti/retro/CarteTOT_back_1@3x.png");
-            case 2 -> new Image("/Assistenti/retro/CarteTOT_back_11@3x.png");
-            case 3 -> new Image("/Assistenti/retro/CarteTOT_back_21@3x.png");
-            case 4 -> new Image("/Assistenti/retro/CarteTOT_back_31@3x.png");
-            case 5 -> new Image("/Assistenti/retro/CarteTOT_back_41@3x.png");
-            default -> null;
-        };
+    public Image convertDeckImage(Wizard wizard) {
+       return new Image("/Assistenti/retro/" + wizard.getFileName());
     }
 
     public Color convertColor(int id){
@@ -309,6 +304,7 @@ public class MainGameController extends Controller implements Initializable {
         ModelMessage model = dataCollector.getModel();
         int playerNumber = model.getPlayerNumber();
         Map<Integer, String> usernames = dataCollector.getUsernames();
+        Map<Integer, Wizard> wizards = dataCollector.getWizards();
 
         List<Label> names = new ArrayList<>(playerNumber);
         names.add(username1);
@@ -345,9 +341,12 @@ public class MainGameController extends Controller implements Initializable {
 
             names.get(i).setText(usernames.get(i));
 
-            // TODO: implement actual wizard choosen
-            Image img = convertDeckImage(i);
-            icons.get(i).setFill(new ImagePattern(img));
+
+            //resize image for have a square
+            Image img = convertDeckImage(wizards.get(i));
+            PixelReader reader = img.getPixelReader();
+            WritableImage newImage = new WritableImage(reader, 0, 0, 494, 494);
+            icons.get(i).setFill(new ImagePattern(newImage));
 
             Assistant a = Assistant.getAssistantByValue(model.getPlayerById(i).getActiveAssistant());
             String text;
