@@ -231,7 +231,7 @@ public class Gui extends Application implements Graphic {
 
         private void modelSelector(DataCollector dC){
 
-            final String fileName = "AllToken.json";
+            final String fileName = "0bit1tib1.json";
 
             final String name1 = "player1"; // id: 0
             final String name2 = "player2"; // id: 1
@@ -278,8 +278,8 @@ public class Gui extends Application implements Graphic {
 
             ModelMessage model = g.fromJson(json, ModelMessage.class);
 
-            //final int id = 0;  //player id, below could use the current player
-            final int id = model.getCurrentPlayerId();
+            final int id = 1;  //player id, below could use the current player
+            //final int id = model.getCurrentPlayerId();
 
             dC.setModel(model);
 
