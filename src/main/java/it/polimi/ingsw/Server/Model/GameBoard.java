@@ -271,7 +271,10 @@ public class GameBoard implements Iterable<Cloud>{
         c.setTowerColor(p.getTowerColor());
     }
 
-    //check if there's a tower to add or all towers to be replaced, and in that case does that
+    /**
+     * check if there's a tower to add or all towers to be replaced, and in that case does that
+     * @param c: the island we want to calculate the influence in
+     */
     public void calcInfluence(Island c) {
 
         ArrayList<Integer> influences = getInfluences(c);
@@ -300,7 +303,12 @@ public class GameBoard implements Iterable<Cloud>{
         }
 
     }
-    //returns an ArrayList with the players that owns the given tower color
+
+    /**
+     *
+     * @param towerColor
+     * @return an ArrayList with the players that owns the given tower color
+     */
     ArrayList<Player> getPlayerWithTower(int towerColor){
         ArrayList<Player> list = new ArrayList<>();
         for (Player p : gInit){
@@ -311,7 +319,11 @@ public class GameBoard implements Iterable<Cloud>{
         return list;
     }
 
-    //returns the higher TowerColor
+    /**
+     *
+     * @param influences: the influences arraylist
+     * @return the higher TowerColor
+     */
     private static ArrayList<Integer> findMax (ArrayList<Integer> influences){
         int max = 0;
         int black = influences.get(0);
