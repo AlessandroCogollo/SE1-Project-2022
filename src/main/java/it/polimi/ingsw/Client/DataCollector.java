@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Data container to share the information between the back-end of client and the graphic interface.
+ * It has also some method for pre-computing the data.
+ * it can be accessed from both the graphic and the client side.
+ */
 public class DataCollector {
 
     private final Graphic gInstance;
@@ -45,7 +50,7 @@ public class DataCollector {
 
     private Runnable graphicStopped = null;
 
-    //all this method will be called by the Graphic class
+    // Called by the Graphic
 
     /**
      * Constructor called by a Graphic class
@@ -90,7 +95,7 @@ public class DataCollector {
     }
 
     /**
-     * If the Info sended by the client to the server are not corrected, the server will send an error with this message that explained it
+     * If the Info sent by the client to the server are not corrected, the server will send an error with this message that explained it
      * @return the string set by the main thread of client and reset the error to null
      */
     public String getErrorData() {
@@ -107,23 +112,42 @@ public class DataCollector {
         this.errorData = errorData;
     }
 
+    /**
+     * Used from the graphic for set the callback to run when a model arrives
+     * @param callbackForModel the callback to run when a model arrives
+     */
     public void setCallbackForModel (Runnable callbackForModel) {
         this.callbackForModel = callbackForModel;
         System.out.println("CallbackForModel set");
     }
 
+    /**
+     * Get the model (usually used from graphic)
+     * @return the model if it is set yet, null otherwise
+     */
     public ModelMessage getModel() {
         return model;
     }
 
+    /**
+     * Get the map for username (usually used from graphic)
+     * @return the map if it is set yet, null otherwise
+     */
     public Map<Integer, String> getUsernames() {
         return usernames;
     }
-
+    /**
+     * Get the map for wizard (usually used from graphic)
+     * @return the map if it is set yet, null otherwise
+     */
     public Map<Integer, Wizard> getWizards() {
         return wizards;
     }
 
+    /**
+     * Set the next move that will be sent to server (usually used from graphic)
+     * @param nextMove the move that will be sent to server
+     */
     public void setNextMove(ClientMessage nextMove) {
         if (nextMove == null)
             return;
@@ -134,22 +158,81 @@ public class DataCollector {
         System.out.println("Move Set");
     }
 
+    /**
+     * Get the current player Id (usually used from graphic)
+     * @return the current player Id if it is set yet, null otherwise
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Call the callback set by the back-end of the client when the graphic stop, if it is set yet
+     */
     public void graphicIsTerminated(){
         if (this.graphicStopped != null)
             new Thread(this.graphicStopped, "Graphic Stopper Callback Thread").start();
     }
 
-    //all this method will be called by the Client main thread itself
+    /**
+     * Used by the graphic to set the username choose by the player
+     * @param username the username choose
+     */
+    public void setUsername(String username) {
+        synchronized (this.lock) {
+            this.username = username;
+            this.lock.notifyAll();
+        }
+    }
+    /**
+     * Used by the graphic to set the wizard choose by the player
+     * @param wizard the wizard choose
+     */
+    public void setWizard(Wizard wizard) {
+        synchronized (this.lock) {
+            this.wizard = wizard;
+            this.lock.notifyAll();
+        }
+    }
+    /**
+     * Used by the graphic to set the game mode choose by the player (if the first one)
+     * @param gameMode the game mode choose
+     */
+    public void setGameMode(int gameMode) {
+        synchronized (this.lock) {
+            this.gameMode = gameMode;
+            this.lock.notifyAll();
+        }
+    }
+    /**
+     * Used by the graphic to set the player number of the game choose by the player (if the first one)
+     * @param numOfPlayers the player number of the game choose
+     */
+    public void setNumOfPlayers (int numOfPlayers) {
+        synchronized (this.lock) {
+            this.numOfPlayers = numOfPlayers;
+            this.lock.notifyAll();
+        }
+    }
 
 
+
+
+
+    // Called by the back-end client
+
+    /**
+     * Return the graphic instance that has created this dataCollector
+     * @return the graphic instance that has created this dataCollector
+     */
     public Graphic getGraphicInstance() {
         return gInstance;
     }
 
+    /**
+     * Used by the Client for set the info received from server, it call the callback set by the graphic if present
+     * @param first if this client is the first one or not
+     */
     public void setFirst (boolean first){
         if (first)
             this.first = 0;
@@ -161,6 +244,11 @@ public class DataCollector {
         }
     }
 
+    /**
+     * Used by the Client for set the info received from server, it call the callback set by the graphic if present
+     * @param done if the message sent by the client to the server during the connection setup are corrected
+     * @param message if the message aren't corrected the error message from the server
+     */
     public void setDone (boolean done, @Nullable String message){
         if (done) {
             this.done = 1;
@@ -182,6 +270,10 @@ public class DataCollector {
         }
     }
 
+    /**
+     * Set the model received and call the callback if set
+     * @param model the model received from the server
+     */
     public void setModel(ModelMessage model) {
 
         if (model == null && this.model == null)
@@ -197,14 +289,26 @@ public class DataCollector {
             System.out.println("Callback Model null");
     }
 
+    /**
+     * set the map of usernames
+     * @param usernames the map
+     */
     public void setUsernames(Map<Integer, String> usernames) {
         this.usernames = usernames;
     }
-
+    /**
+     * set the map of wizard
+     * @param wizards the map
+     */
     public void setWizards(Map<Integer, Wizard> wizards) {
         this.wizards = wizards;
     }
 
+    /**
+     * The client wait until the graphic has set the next move
+     * @return the move set by the graphic
+     * @throws InterruptedException it the thread is interrupted
+     */
     public ClientMessage askMove() throws InterruptedException {
         ClientMessage mess;
         synchronized (this.lock) {
@@ -218,40 +322,19 @@ public class DataCollector {
         return mess;
     }
 
+    /**
+     * set the callback that will be called if the graphic stop
+     * @param graphicStopped the callback
+     */
     public void setGraphicStopped(Runnable graphicStopped) {
         this.graphicStopped = graphicStopped;
     }
 
-    //this method can be called both from the Graphic class and the main client thread
-
-    public void setUsername(String username) {
-        synchronized (this.lock) {
-            this.username = username;
-            this.lock.notifyAll();
-        }
-    }
-
-    public void setWizard(Wizard wizard) {
-        synchronized (this.lock) {
-            this.wizard = wizard;
-            this.lock.notifyAll();
-        }
-    }
-
-    public void setGameMode(int gameMode) {
-        synchronized (this.lock) {
-            this.gameMode = gameMode;
-            this.lock.notifyAll();
-        }
-    }
-
-    public void setNumOfPlayers (int numOfPlayers) {
-        synchronized (this.lock) {
-            this.numOfPlayers = numOfPlayers;
-            this.lock.notifyAll();
-        }
-    }
-
+    /**
+     * Used by the back-end client. It waits until the graphic set the username.
+     * @return the username choose by the player
+     * @throws InterruptedException if the thread is interrupted
+     */
     public String getUsername() throws InterruptedException {
         synchronized (this.lock) {
             while (this.username == null) {
@@ -260,7 +343,11 @@ public class DataCollector {
         }
         return this.username;
     }
-
+    /**
+     * Used by the back-end client. It waits until the graphic set the wizard.
+     * @return the wizard choose by the player
+     * @throws InterruptedException if the thread is interrupted
+     */
     public Wizard getWizard() throws InterruptedException {
         synchronized (this.lock) {
             while (this.wizard == null) {
@@ -269,7 +356,11 @@ public class DataCollector {
         }
         return this.wizard;
     }
-
+    /**
+     * Used by the back-end client. It waits until the graphic set the game mode.
+     * @return the game mode choose by the player
+     * @throws InterruptedException if the thread is interrupted
+     */
     public int getGameMode() throws InterruptedException {
         synchronized (this.lock) {
             while (this.gameMode == -1) {
@@ -278,7 +369,11 @@ public class DataCollector {
         }
         return gameMode;
     }
-
+    /**
+     * Used by the back-end client. It waits until the graphic set the player number.
+     * @return the player number choose by the player
+     * @throws InterruptedException if the thread is interrupted
+     */
     public int getNumOfPlayers() throws InterruptedException {
         synchronized (this.lock) {
             while (this.numOfPlayers == -1) {
@@ -288,6 +383,11 @@ public class DataCollector {
         return this.numOfPlayers;
     }
 
+    /**
+     * Used by the back-end client for set the data received about all the other players and his id
+     * @param gameData data from the server
+     * @param id id of the player
+     */
     public void setGameData(LobbyInfoMessage gameData, int id) {
         this.gameMode = gameData.getGameMode();
         this.numOfPlayers = gameData.getNumOfPlayer();
@@ -297,20 +397,36 @@ public class DataCollector {
     }
 
 
+
+
     //some usefully method that pre-compute some information
 
+    /**
+     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
+     * @return if this player is the current player
+     */
     public boolean isThisMyTurn() {
         return this.id == this.model.getCurrentPlayerId();
     }
-
+    /**
+     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
+     * @return the id of the current player
+     */
     public Integer getIdOfCurrentPlayer () {
         return this.model.getCurrentPlayerId();
     }
 
+    /**
+     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
+     * @return the usernames of the current player
+     */
     public String getUsernameOfCurrentPlayer () {
         return this.usernames.get(this.model.getCurrentPlayerId());
     }
-
+    /**
+     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
+     * @return a standard win message also with the 4 player possibility (two player winner)
+     */
     public String getStandardWinMessage() {
         if (!this.model.gameIsOver())
             throw new IllegalStateException("Cannot invoke this method if the game is not finished");
@@ -361,7 +477,10 @@ public class DataCollector {
 
         }
     }
-
+    /**
+     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
+     * @return true if this player could play a character
+     */
     public boolean canPlayCharacter() {
 
         if (this.model == null || this.model.getGameMode() == 0 || this.model.getActiveCharacterId() != -1)

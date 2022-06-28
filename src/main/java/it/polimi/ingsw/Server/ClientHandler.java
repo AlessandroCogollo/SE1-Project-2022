@@ -17,7 +17,11 @@ import java.util.regex.Pattern;
 import it.polimi.ingsw.Network.ConnectionHandler;
 
 /**
- * Class that creates the Abstract view of the client
+ * Class that creates the Abstract view of the client.
+ * It use the NetworkHandler for send the message to the player.
+ * Implements the setup of communication described in the deliverables folder, server side.
+ *
+ * When the game is stared creates two thread that only pass the message from the model to the client and from the client to the model.
  */
 public class ClientHandler implements Runnable{
 

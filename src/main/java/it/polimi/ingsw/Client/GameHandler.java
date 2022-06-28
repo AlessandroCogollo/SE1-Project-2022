@@ -11,6 +11,9 @@ import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Handle the Game from when the client receives the first model.
+ */
 
 public class GameHandler implements Runnable{
 
@@ -25,6 +28,14 @@ public class GameHandler implements Runnable{
 
     private int currentPlayerId = -1;
 
+    /**
+     * Contructor
+     * @param myId id of the player
+     * @param in queue to the server
+     * @param out queue from the server
+     * @param g the graphic handler
+     * @param client the main client class
+     */
     public GameHandler(int myId, BlockingQueue<JsonElement> in, BlockingQueue<JsonElement> out, GraphicHandler g, Client client) {
         this.myId = myId;
         this.in = in;
@@ -33,6 +44,9 @@ public class GameHandler implements Runnable{
         this.client = client;
     }
 
+    /**
+     * Stop this game handler
+     */
     public void stopGameHandler (){
         if (this.thread == null){
             System.out.println("Cannot stop GameHandler if is it not running");
@@ -43,6 +57,11 @@ public class GameHandler implements Runnable{
 
     }
 
+    /**
+     * Only takes the model and set it into the data collector.
+     * If it is a Game Over it communicates it to the main client class.
+     * Then if it is the current player wait for the move from the graphic and then send it to the server.
+     */
     @Override
     public void run() {
 

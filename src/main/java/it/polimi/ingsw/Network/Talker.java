@@ -8,6 +8,11 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Talker class used by the ConnectionHandler.
+ *
+ * Wait until there is a message to be sent and send it.
+ */
 public class Talker implements Runnable{
 
     private final Gson gson = new GsonBuilder().create();
@@ -17,12 +22,22 @@ public class Talker implements Runnable{
 
     private Thread thread = null;
 
+    /**
+     * Constructor
+     * @param messageSource the source queue of messages
+     * @param outputStream the network to send the message
+     * @param ping the ping for rest it after we send a message
+     */
     public Talker(BlockingQueue<JsonElement> messageSource, OutputStream outputStream, PingTimer ping) {
         this.messageSource = messageSource;
         this.out = new PrintWriter(outputStream, true);
         this.ping = ping;
     }
 
+    /**
+     * Main method.
+     * Wait for some message in the queue and then send them.
+     */
     @Override
     public void run() {
         this.thread = Thread.currentThread();
@@ -46,6 +61,9 @@ public class Talker implements Runnable{
         System.out.println("Talker Stopped");
     }
 
+    /**
+     * Stop the Talker thread
+     */
     public void stopTalker(){
         if (this.thread == null){
             System.out.println("Cannot stop Talker if is it not running");

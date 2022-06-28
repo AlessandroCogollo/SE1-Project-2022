@@ -13,6 +13,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Listener used by the ConnectionHandler
+ * Read the json message from the network and put them in the queue
+ */
 public class Listener implements Runnable{
 
     private final Gson gson = new GsonBuilder().create();
@@ -23,12 +27,21 @@ public class Listener implements Runnable{
 
     private Thread thread = null;
 
+    /**
+     * Constructor
+     * @param messageSource queue
+     * @param inputStream the input from network
+     * @param ping ping timer used for reset the ping if a message arrives
+     */
     public Listener(BlockingQueue<JsonElement> messageSource, InputStream inputStream, PingTimer ping) {
         this.messageDestination = messageSource;
         this.in = new BufferedReader(new InputStreamReader(inputStream));
         this.ping = ping;
     }
 
+    /**
+     * Main method. Waits for a message and when arrives one valid (Json Message) reset the ping and if it is not only a ping message put it in the queue
+     */
     @Override
     public void run() {
         //listener thread
@@ -81,6 +94,9 @@ public class Listener implements Runnable{
         System.out.println("Listener: Stopped");
     }
 
+    /**
+     * Stop this listener
+     */
     public void stopListener(){
         if (this.thread == null){
             System.out.println("Cannot stop Listener if is it not running");

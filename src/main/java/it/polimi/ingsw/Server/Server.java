@@ -53,6 +53,13 @@ public class Server {
 
     /**
      * Start the main Thread of the server
+     * The main thread start the lobby then it will wait until some other thread ask him to do something after a certain condition occur
+     * <pre>
+     * Possibilities:
+     *      - All client are correctly connected so the main server start the model and creates the queue to all the player for simulates the abstract Clients
+     *      - A player Disconnected, the lobby has sent to all the player the message yet (this will cause the client to shutdown) so the main server thread stop anything
+     *      - Game Over, the game has a winner, the last model is sent yet to the player so the server only shutdown anything
+     * </pre>
      */
     public void start (){
         Thread.currentThread().setName("Main Server Thread");
@@ -77,7 +84,10 @@ public class Server {
         shutdownAll();
     }
 
-    //this method is invoked any time someone modify the code, so the server know what to do.
+    /**
+     * This method is invoked any time someone modify the Code of the server main thread using the setCode method, so the server know what to do.
+     * @return true if the server should continue to run, false if the server need to shutdown anything
+     */
     private boolean doSomething() {
 
         if (Thread.currentThread().isInterrupted()) {

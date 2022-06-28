@@ -18,7 +18,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Main Client class
+ * Main Client class.
+ * It represent like the back-end of the client, then all the information are asked and displayed through the graphic Interface using a Container of data and some callback function.
  */
 public class Client{
 
@@ -91,7 +92,14 @@ public class Client{
     }
 
     /**
-     * Start the main thread of client
+     * Start the main thread of client.
+     * This will start the ConnectionHandler, a filter for message from the queue of the ConnectionHandler, and a thread for setup the connection between him and the server.
+     * Then it waits like the main thread of server for something to do.
+     * The ConnectionHandler is the same as the server one.
+     * The filter is used for receive some special message from the server, like a disconnection message that will cause a client shutdown or other one time message.
+     * The connection setup thread implements the setup of communication described in the deliverables folder, client side.
+     *
+     * When it finish to setup the connection it start the GameHandler Class
      */
     public void start() {
 
@@ -422,8 +430,10 @@ public class Client{
         return message;
     }
 
-    //test method
-
+    /**
+     * Used only during testing for start the client without using the starter helper and the cli
+     * @param args standard args of main
+     */
     public static void main(String[] args){
         GraphicHandler gH = new GraphicHandler("Gui");
         gH.startGraphic();

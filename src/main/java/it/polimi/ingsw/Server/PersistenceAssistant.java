@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Server.Model.Game;
 import org.apache.maven.model.Model;
+import org.apache.velocity.tools.generic.MathTool;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,6 +14,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Class for the persistence function.
+ * All the game info are use for create the identifier of this game.
+ * playerNumber + gameMode + _ + username1 + _ + username2 + _ + ... (the usernames insert by the client can't contain special characters)
+ */
 public class PersistenceAssistant {
 
     private final String name;
@@ -25,6 +31,11 @@ public class PersistenceAssistant {
 
     private ModelMessage resumedModel = null;
 
+    /**
+     * Constructor of the class
+     * @param usernames map used for generate an identifier of the game, so if the players name are the same we could find the last file created
+     * @param gameMode the game mode of the game used for add information to the identifier
+     */
     public PersistenceAssistant(Map<Integer, String> usernames, int gameMode) {
 
         //test only
@@ -36,12 +47,12 @@ public class PersistenceAssistant {
 
 
         StringBuilder sb = new StringBuilder();
+        sb.append(usernames.size()).append(gameMode);
         List<Integer> x = new ArrayList<>(usernames.size());
         for (Integer id: usernames.keySet()){
-            sb.append(id).append(usernames.get(id));
+            sb.append('_').append(usernames.get(id));
             x.add(id);
         }
-        sb.append(gameMode);
         sb.append(".json");
 
         this.ids = x.stream().mapToInt(l -> l).toArray();
@@ -49,10 +60,18 @@ public class PersistenceAssistant {
         this.name = sb.toString();
     }
 
+    /**
+     * get the modelMessage loaded from storage, return a not null value only if the mehtod getResumedModel is called before this
+     * @return the model message resumed or null
+     */
     public ModelMessage getResumedModelMessage () {
         return this.resumedModel;
     }
 
+    /**
+     * Check if the model is available. It is mandatory to call this method before getResumed model, otherwise it will return null
+     * @return true if it is available false otherwise
+     */
     public boolean modelAvailable(){
 
         if (this.name == null)
@@ -100,7 +119,6 @@ public class PersistenceAssistant {
         return true;
     }
 
-
     private static String getFile (Path path){
         if (path == null)
             return null;
@@ -116,6 +134,10 @@ public class PersistenceAssistant {
         return string;
     }
 
+    /**
+     * Get the Model class resumed from the modelMessage file in storage. It is mandatory to call modelAvailable for have the model, otherwise this function will return always null
+     * @return The Model resumed if there is one, null otherwise
+     */
     public Game getResumedModel() {
 
         if (this.modelFile == null){
@@ -133,6 +155,11 @@ public class PersistenceAssistant {
         return Game.setGame(this.ids, this.resumedModel);
     }
 
+    /**
+     * Update or create the Model in the storage
+     * @param model the modelMessage for update the file
+     * @return true if the update was a success false otherwise
+     */
     public boolean updateModelFile(ModelMessage model) {
 
         if (this.gson == null)
@@ -157,6 +184,10 @@ public class PersistenceAssistant {
         return true;
     }
 
+    /**
+     * The game is over so this method will delete the file saved
+     * @return true if the file is deleted correctly, false otherwise
+     */
     public boolean gameOver() {
 
         if (!modelAvailable()){

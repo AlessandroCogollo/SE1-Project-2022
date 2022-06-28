@@ -11,12 +11,6 @@ import java.util.Collection;
 /**
  * Cli argument parser Class, for start the server or the client
  */
-/* todo
-*   - arguments sanitize StarterHelper
-*   - set all test
-*   - add resume game to model GameInitializer
-*   - check if the bag does not have enough students at the end of the game
-*/
 public class StarterHelper{
 
     private final Collection<OptionHandler> options;
@@ -35,6 +29,7 @@ public class StarterHelper{
 
     /**
      * Class Constructor
+     * @param debug used for testing, if set to false it doesn't start anything, otherwise start the requested component
      */
     public StarterHelper(boolean debug) {
         this.options = new ArrayList<>();

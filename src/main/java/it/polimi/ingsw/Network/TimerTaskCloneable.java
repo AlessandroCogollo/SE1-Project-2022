@@ -3,19 +3,33 @@ package it.polimi.ingsw.Network;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
+/**
+ * TimerTask that can be cloned for rest the timer.
+ */
 public class TimerTaskCloneable extends TimerTask implements Cloneable {
 
-    private final Callable<Object> call;
+    private final Callable<?> call;
 
-    public TimerTaskCloneable(Callable<Object> call) {
+    /**
+     * Constructor
+     * @param call the function that will be call
+     */
+    public TimerTaskCloneable(Callable<?> call) {
         super();
         this.call = call;
     }
 
-    public Callable<Object> getCall() {
+    /**
+     * Getter
+     * @return call passed in constructor
+     */
+    public Callable<?> getCall() {
         return call;
     }
 
+    /**
+     * Only call the passed Callable
+     */
     @Override
     public void run() {
         try {
@@ -26,6 +40,10 @@ public class TimerTaskCloneable extends TimerTask implements Cloneable {
         }
     }
 
+    /**
+     * Clone method for get a new TimerTaskCloneable with the same task
+     * @return the new TimerTaskCloneable with the same task
+     */
     @Override
     public TimerTaskCloneable clone() {
         try {

@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * A complete implementation that mask completely the network level and gives you two easy queue, one to the server and one from the server. <br>
- * It is implemented with a TCP Socket and use a peak of 6 thread to run (1 for the main thread that is always in wait, 2 for input and output from the server, and finally 3 for the ping where a thread creates 2 java.util.Timer).<br>
+ * It is implemented with a TCP Socket and use a max of 6 thread to run (1 for the main thread that is always in wait, 2 for input and output from the server, and finally 3 for the ping where a thread creates 2 java.util.Timer).<br>
  * This class takes care also of the ping from and to this client, it send always a ping within the default timeout passed to the constructor, and calls the TimerTask function passed when the server doesn't send anything for the default timeout passed * 2. <br>
  */
 public class ConnectionHandler implements Runnable{

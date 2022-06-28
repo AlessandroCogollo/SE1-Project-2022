@@ -3,6 +3,10 @@ package it.polimi.ingsw.Network;
 import java.time.Duration;
 import java.util.Timer;
 
+/**
+ * Ping sender and receiver.
+ * Use two Timer and two timerTask cloneable for let reset them.
+ */
 public class PingTimer implements Runnable{
 
     private Timer sendTimer = new Timer("sendTimer");
@@ -12,10 +16,23 @@ public class PingTimer implements Runnable{
     private final TimerTaskCloneable errorTask;
     private final Duration receiveTimeout;
 
+    /**
+     * Constructor
+     * @param defaultTimeout duration of timeout, used for the send and duplicate for the receive
+     * @param sendPingTask task for the sending of ping
+     * @param errorTask task used when the client do not send any message for the receive duration
+     */
     public PingTimer(Duration defaultTimeout, TimerTaskCloneable sendPingTask, TimerTaskCloneable errorTask){
         this(defaultTimeout, defaultTimeout.multipliedBy(2), sendPingTask, errorTask);
     }
 
+    /**
+     * Constructor
+     * @param sendTimeout duration of send timeout
+     * @param receiveTimeout duration of receive timeout
+     * @param sendPingTask task for the sending of ping
+     * @param errorTask task used when the client do not send any message for the receive duration
+     */
     public PingTimer(Duration sendTimeout, Duration receiveTimeout, TimerTaskCloneable sendPingTask, TimerTaskCloneable errorTask) {
         this.sendTimeout = sendTimeout;
         this.receiveTimeout = receiveTimeout;

@@ -60,10 +60,11 @@ class PersistenceAssistantTest {
             return;
         }
 
-        String example = "0user01user12user23user31.json";
-        //                0user01user 1 2 u s e r 2 3 u s e r 3 1 . j s o n
-        //                01234567891011121314151617181920212223242526272829
-        //                     5      11          17          23
+
+        String example = "41_user0_user1_user2_user3.json";
+        //                41_user0_us e r 1 _ u s e r 2 _ u s e r 3 . j s o n
+        //                0123456789101112131415161718192021222324252627282930
+        //                  2    7        13          19          25
 
         for (Path p: fileList){
             String name = String.valueOf(p.getFileName());
@@ -72,28 +73,30 @@ class PersistenceAssistantTest {
                 continue;
             }
 
-            String sub1 = (String) name.subSequence(0, 5);
-            String sub2 = (String) name.subSequence(6, 11);
-            String sub3 = (String) name.subSequence(12, 17);
-            String sub4 = (String) name.subSequence(18, 23);
-            String sub5 = (String) name.subSequence(24, 30);
+            String sub1 = (String) name.subSequence(0, 2);
+            String sub2 = (String) name.subSequence(2, 7);
+            String sub3 = (String) name.subSequence(8, 13);
+            String sub4 = (String) name.subSequence(14, 19);
+            String sub5 = (String) name.subSequence(20, 25);
+            String sub6 = (String) name.subSequence(26, 31);
 
             System.out.println(sub1 + sub2 + sub3 + sub4 + sub5);
 
 
-            if (    !sub1.equals("0user") ||
-                    !sub2.equals("1user") ||
-                    !sub3.equals("2user") ||
-                    !sub4.equals("3user") ||
-                    !sub5.equals("1.json")){
+            if (    !sub1.equals("41") ||
+                    !sub2.equals("_user") ||
+                    !sub3.equals("_user") ||
+                    !sub4.equals("_user") ||
+                    !sub5.equals("_user") ||
+                    !sub6.equals(".json")){
                 continue;
             }
 
             u = new HashMap<>(4);
-            u.put(0, "user" + name.charAt(5));
-            u.put(1, "user" + name.charAt(11));
-            u.put(2, "user" + name.charAt(17));
-            u.put(3, "user" + name.charAt(23));
+            u.put(0, "user" + name.charAt(7));
+            u.put(1, "user" + name.charAt(13));
+            u.put(2, "user" + name.charAt(19));
+            u.put(3, "user" + name.charAt(25));
 
             a = new PersistenceAssistant(u, 1);
 

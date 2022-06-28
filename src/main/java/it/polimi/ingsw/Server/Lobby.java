@@ -19,7 +19,18 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Class that manage all the client handler
+ * Class that manage all the client handler.
+ *
+ * Lobby class is the one that creates the ServerSocket and that receive the first request from client.
+ *
+ * The first 2 players are accepted in any case and the rest of connection setup is handled by the ClientHandler.
+ * The 2 following are left in a grey area waiting for the first player to choose the number of players of the game (the ping is only message sent at regular time interval)
+ * When the player choose if they can't participate they follow the rest of client, otherwise a new Client handler is created to handle the connection setup.
+ * All the other client receives a deny message that cause the shutdown of them.
+ *
+ * Also when all client are connected sent them the info of other player, then communicates it to the main server thread.
+ *
+ * If a player disconnected at any time send to all other player the error and communicates it to the main server thread.
  */
 public class Lobby implements Runnable {
 
@@ -117,7 +128,7 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * Method for stop the main thread of Lobby and all sub thread, this includes all clientHandler already created
+     * Method for stop the main thread of Lobby and all sub thread, this includes all clientHandler already created (it waits until all message are sent to players)
      */
     public void shutDownLobby() {
 
@@ -178,9 +189,7 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * First wait for the first client and the data of the game.
-     * When it receives them it will start to accept other player.
-     * When all the player are connected communicates to the main server thread to star the game.
+     * Main method of the Thread, do the task described in the class description
      */
     @Override
     public void run() {
@@ -304,6 +313,7 @@ public class Lobby implements Runnable {
         }
     }
 
+
     private void accept() {
 
         this.acceptor = Thread.currentThread();
@@ -405,7 +415,6 @@ public class Lobby implements Runnable {
             } catch (IOException | InterruptedException ignored) {} //if catch an exception here the socket is already close so the client is down, and for the server is not a problem
         }
     }
-
 
     private void acceptNewClient (int id, int maxPlayers){
         //no check over thread interrupted because this operation if the accept() succeed must be done

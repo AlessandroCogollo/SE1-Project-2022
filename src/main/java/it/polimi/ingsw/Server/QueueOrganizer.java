@@ -39,7 +39,7 @@ public class QueueOrganizer {
     /**
      * getter for the player queue
      * @param id request the queue to the player with this id
-     * @return the players thread-safe queue
+     * @return the players thread-safe queue, null if there isn't a queue for the requested id
      */
     public BlockingQueue<JsonElement> getPlayerQueue(int id){
         return this.playersQueue.get(id);

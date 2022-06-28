@@ -201,12 +201,12 @@ public class RoundHandler {
     /**
      * Cycle between the phase
      *
-     * Start Planning.
+     * Starts with Planning.
      *
-     * Planning : cycle throw player so, in this case, this method only change the current player to the next one
+     * Planning : cycle through player so, in this case, this method only change the current player to the next one
      *      player 1 => player 2 => Action
      *
-     * Action : cycle before throw all his subPhase, then throw players
+     * Action : cycle before throw all his subPhase, then through players
      *      player 1 :
      *          moveStudents => moveMotherNature => ChooseClouds => player 2
      *      player 2 :

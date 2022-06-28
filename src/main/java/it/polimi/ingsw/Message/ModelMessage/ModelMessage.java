@@ -131,6 +131,15 @@ public class ModelMessage extends Message {
         return playerNumber;
     }
 
+    public int[] getIds () {
+        int size = playerList.size();
+        int[] ids = new int[size];
+        for (int i = 0; i < size; i++){
+            ids[i] = playerList.get(i).getId();
+        }
+        return ids;
+    }
+
     public List<Integer> getActionOrder() {
         return actionOrder;
     }
