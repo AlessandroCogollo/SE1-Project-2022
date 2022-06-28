@@ -105,6 +105,32 @@ public class Client{
 
         new Thread(this::setupConnectionAndStartGame, "ConnectionSetup").start();
 
+        /*new Thread(() -> {
+            double mega = Math.pow(1024, 2);
+            double giga = Math.pow(1024, 3);
+            while (true) {
+
+                double free = Runtime.getRuntime().freeMemory();
+                double total = Runtime.getRuntime().totalMemory();
+                double max = Runtime.getRuntime().maxMemory();
+                double used = total - free;
+
+                System.out.println("######## Memory Checker ############");
+
+                System.out.println("Free: " + free / mega + "m");
+                System.out.println("Used: " + used / mega + "m");
+                System.out.println("%: " + used / max * 100 + " of " + max / giga + "g");
+
+                //Runtime.getRuntime().gc();
+                //System.gc();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }, "MemoryChecher").start();*/
+
 
         //do nothing until some other thread tells him what to do with a code
 

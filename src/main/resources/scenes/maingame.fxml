@@ -20,7 +20,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="980.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="980.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <SplitPane dividerPositions="0.25" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="980.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
          <items>
@@ -64,12 +64,12 @@
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
                                  </color>
                               </Stop>
                            </stops>
@@ -88,12 +88,12 @@
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
                                  </color>
                               </Stop>
                            </stops>
@@ -123,12 +123,12 @@
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color blue="0.3960784375667572" green="0.2862745225429535" red="0.29411765933036804" />
+                                    <Color red="0.29411765933036804" green="0.2862745225429535" blue="0.3960784375667572" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
                                  <color>
-                                    <Color blue="0.5592105388641357" green="0.405168741941452" red="0.4154382050037384" />
+                                    <Color red="0.4154382050037384" green="0.405168741941452" blue="0.5592105388641357" />
                                  </color>
                               </Stop>
                            </stops>
@@ -617,7 +617,7 @@
                                                          <effect>
                                                             <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                                <color>
-                                                                  <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                                </color>
                                                             </DropShadow>
                                                          </effect>
@@ -695,7 +695,7 @@
                                                          <effect>
                                                             <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                                <color>
-                                                                  <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                                </color>
                                                             </DropShadow>
                                                          </effect>
@@ -773,7 +773,7 @@
                                                          <effect>
                                                             <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                                <color>
-                                                                  <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                                </color>
                                                             </DropShadow>
                                                          </effect>
@@ -851,7 +851,7 @@
                                                          <effect>
                                                             <DropShadow height="50.0" radius="28.95" spread="0.26" width="67.8">
                                                                <color>
-                                                                  <Color blue="1.0" green="1.0" opacity="0.3307839334011078" red="1.0" />
+                                                                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.3307839334011078" />
                                                                </color>
                                                             </DropShadow>
                                                          </effect>
@@ -993,11 +993,11 @@
                             </Tab>
                             <Tab fx:id="charactersTab" text="Characters">
                               <content>
-                                <AnchorPane fx:id="charactersPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <ScrollPane pannable="true" prefHeight="166.0" prefWidth="726.0" style="-fx-background-color: #2c2b3d;" vbarPolicy="NEVER">
                                             <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1267.0" style="-fx-background-color: #2c2b3d;">
+                                              <AnchorPane fx:id="charactersPane" minHeight="0.0" minWidth="0.0" prefHeight="151.0" prefWidth="1267.0" style="-fx-background-color: #2c2b3d;">
                                                    <children>
                                                       <AnchorPane fx:id="cleric" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                                                          <children>

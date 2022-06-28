@@ -32,7 +32,7 @@ public class Gui extends Application implements Graphic {
     private final static Object lock = new Object();
     protected static Stage mainStage = null;
     private SceneController sceneController = null;
-
+    private MainGameController c = null;
 
     @Override
     public void start(Stage stage) {
@@ -184,7 +184,7 @@ public class Gui extends Application implements Graphic {
 
     private void waitForStartGame() {
         System.out.println("WaitForStartGame");
-        this.sceneController.addScreen("mainGame", new MainGameController(this, "scenes/maingame.fxml"));
+        //this.sceneController.addScreen("mainGame", new MainGameController(this, "scenes/maingame.fxml"));
 
         if (Gui.dC.getModel() != null)
             displayMainGame();
@@ -194,17 +194,32 @@ public class Gui extends Application implements Graphic {
     }
 
     private void displayMainGame (){
-        mainStage.setFullScreen(false);
-        mainStage.setResizable(false);
-        mainStage.setTitle("Main Game");
-        mainStage.setHeight(780);
-        mainStage.setWidth(1000);
+        if (c == null){
+            mainStage.setFullScreen(false);
+            mainStage.setResizable(false);
+            mainStage.setTitle("Main Game");
+            mainStage.setHeight(780);
+            mainStage.setWidth(1000);
 
-        long free = Runtime.getRuntime().freeMemory();
-        long total = Runtime.getRuntime().totalMemory();
-        double perc = ((double) free) / ((double) total) * 100;
-        System.out.println("Memory in byte before before maingame - Free: " + free + " Total: " + total + " - " + (100 - perc) + "%");
-        this.sceneController.activate("mainGame");
+            c = new MainGameController(this, "scenes/maingame.fxml");
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(c.getResource()));
+            fxmlLoader.setController(c);
+            Parent root = null;
+
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                System.err.println("Error while loading " + c.getResource() + " resource, exit");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+            mainStage.getScene().setRoot(root);
+        }
+        else
+            c.update();
+
+        //this.sceneController.activate("mainGame");
     }
 
     public void startButtonPressed(ActionEvent actionEvent) {
