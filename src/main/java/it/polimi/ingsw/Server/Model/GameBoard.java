@@ -9,6 +9,9 @@ import it.polimi.ingsw.Server.Model.Characters.Character;
 
 import java.util.*;
 
+/**
+ * The game board class, that contains the clouds, the character deck, the islands and the professors.
+ */
 public class GameBoard implements Iterable<Cloud>{
 
     private final GameInitializer gInit;
@@ -119,6 +122,10 @@ public class GameBoard implements Iterable<Cloud>{
         return this.activeCharacter != null;
     }
 
+    /**
+     * moves mother nature for *count* positions
+     * @param count: the number of steps that mother nature would do
+     */
     public void moveMotherNature(int count){
 
         //move mother nature of count position
@@ -157,8 +164,11 @@ public class GameBoard implements Iterable<Cloud>{
     //minotaur: blocks the influence calc for the towers (id = 8) --- OK
     //drunkard: obtains the professor even if in withdraw in number of students in the room (id = 4) --- OK done in professor class
 
-
-    //returns the influence of each player
+    /**
+     *
+     * @param c: Island that we want to calculate the influences on
+     * @return the influence of each player on that island, wrapped in a hashmap
+     */
     HashMap<Player, Integer> getInfluenceMap(Island c){
 
         HashMap<Player, Integer> playersInfluence = new HashMap<>(gInit.getPlayersNumber()); // map of the influences
@@ -201,7 +211,11 @@ public class GameBoard implements Iterable<Cloud>{
         return playersInfluence;
     }
 
-    // returns an ArrayList of int with the black, white and grey influences
+    /**
+     *
+     * @param c: Island that we want to calculate the influences on
+     * @return an arrayList of int with the black, white and grey influences
+     */
     ArrayList<Integer> getInfluences(Island c){
 
         //get the influence of each player
@@ -241,7 +255,11 @@ public class GameBoard implements Iterable<Cloud>{
         return influences;
     }
 
-    //replaces the current towers on the Island c with the ones of the player p
+    /**
+     * replaces the current towers on the Island c with the ones of the player p
+     * @param c: island in which we want to replace the current towers
+     * @param p: the player that now possesses the tower on the island
+     */
     void replaceTowers(Island c, Player p){
         int count = c.getTowerCount();
         //the old towers come back to the owner

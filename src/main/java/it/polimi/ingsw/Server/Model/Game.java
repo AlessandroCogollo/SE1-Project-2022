@@ -11,7 +11,12 @@ import it.polimi.ingsw.Enum.Phases.Phase;
 
 import java.util.Arrays;
 
-// This class is the interface towards the controller. It also check if the move from player/controller are valid. The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one, and the method for the possible interactions of users to the model
+/**
+ * This class is the interface towards the controller.
+ * It also checks if the move from player/controller are valid.
+ * The only methods tha can be invoked from the controller are the factory method for getting a Game Instance or and advanced one,
+ * and the method for the possible interactions of users to the model
+  */
 public class Game{
 
     protected final GameInitializer gameInit;
@@ -93,6 +98,12 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
+    /**
+     * Checks if mother nature can be moved to the target island and then invokes the method in the player class.
+     * @param playerId: the player that wants to move mother nature
+     * @param position: the target island
+     * @return the error code
+     */
     public int moveMotherNature (int playerId, int position){
 
         if (!gameInit.existsPlayer(playerId))
@@ -122,6 +133,12 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
+    /**
+     * Checks if the cloud can be chosen and then invokes the method in the player class
+     * @param playerId: the player that wants to choose the cloud
+     * @param cloudId: id of the chosen cloud
+     * @return error code
+     */
     public int chooseCloud (int playerId, int cloudId){
 
         if (!gameInit.existsPlayer(playerId))
@@ -148,7 +165,13 @@ public class Game{
 
         return Errors.NO_ERROR.getCode();
     }
-
+    /**
+     * Checks if the character can be played and then invokes the method in the player class.
+     * @param playerId: the player that wants to move mother nature
+     * @param characterId: the id of the character
+     * @param obj: optional argument needed to play the character
+     * @return the error code
+     */
     public int playCharacter(int playerId, int characterId, int[] obj) {
 
         int gameMode = gameInit.getGameMode();
@@ -188,7 +211,14 @@ public class Game{
         return Errors.NO_ERROR.getCode();
     }
 
-    //return the correct interface for the parameter passed, in case of four player the teammates need to have the same final bit (in decimal same team all odds or all even, and the other team the opposite)
+    /**
+     *
+     * @param ids: ids of the player
+     * @param gameMode: game mode id (0-1)
+     * @return the correct interface for the parameter passed,
+     * in case of four player the teammates need to have the same final bit
+     * (in decimal same team all odds or all even, and the other team the opposite)
+     */
     static public Game getGameModel (int[] ids, int gameMode){
 
         if (!checkProperties(ids, gameMode))

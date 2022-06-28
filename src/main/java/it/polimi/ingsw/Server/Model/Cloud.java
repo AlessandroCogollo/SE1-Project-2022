@@ -4,6 +4,9 @@ import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 
 import java.util.Arrays;
 
+/**
+ * cloud class, representing the clouds to be chosen at the end of the turn
+ */
 public class Cloud {
     private final int id;
     private final Bag bag;
@@ -23,7 +26,9 @@ public class Cloud {
         this.drawnStudents = cloud.getDrawnStudents();
     }
 
-    //return only a copy of drawnStudents, used only in message creations
+    /**
+     * @return only a copy of drawnStudents, used only in message creations
+     */
     public int[] getCopyOfDrawnStudents (){
         return Arrays.copyOf(drawnStudents, drawnStudents.length);
     }
@@ -39,7 +44,10 @@ public class Cloud {
             this.drawnStudents = bag.drawStudents(3);
     }
 
-    //return a copy of the students in the cloud and reset them to 0
+    /**
+     *
+     * @return a copy of the students in the cloud and reset them to 0
+     */
     public int[] getStudents() {
         //create a copy of drawstudents
         int[] students = Arrays.copyOf(drawnStudents, drawnStudents.length);
