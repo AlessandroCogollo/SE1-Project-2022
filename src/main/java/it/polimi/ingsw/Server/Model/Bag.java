@@ -5,6 +5,9 @@ import it.polimi.ingsw.Enum.Color;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Bag class to draw the students
+ */
 public class Bag {
 
     private final int[] students;
@@ -24,6 +27,10 @@ public class Bag {
         this.gameInitializer = gameInitializer;
     }
 
+    /**
+     *
+     * @return the array of the left students
+     */
     public int[] getStudentsCopy(){
         return Arrays.copyOf(students, students.length);
     }
@@ -32,6 +39,12 @@ public class Bag {
         this.students[color.getIndex()]++;
     }
 
+    /**
+     * draw student(s), that will be removed from the bag
+     * @param count: the number of students to be drawn
+     * @return an array representing the students drawn:
+     * the index is the corresponding color, while the element is the number of students drawn of that color
+     */
     public int[] drawStudents(int count){
         int[] drawnStudents = new int[Color.getNumberOfColors()];
         Arrays.fill(drawnStudents, 0);
