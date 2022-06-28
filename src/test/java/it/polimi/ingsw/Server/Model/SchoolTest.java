@@ -215,6 +215,9 @@ class SchoolTest {
         assertEquals(0, s.getTowers());
     }
 
+    /**
+     * Test the movement from the entrance
+     */
     @Test
     void moveStudentFromEntrance() {
         School s = getSchool(8, 7);

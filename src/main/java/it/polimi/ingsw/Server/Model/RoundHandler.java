@@ -8,7 +8,10 @@ import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import java.util.*;
 
 
-//this class cycle throw the phase and the player to keep track of all moves done, needs to run start() in order to start the game
+/**
+ * This class cycle throw the phase and the player to keep track of all moves done, needs to run start() in order to start the game.
+ * Implements the finite state machine of the model see next() method
+ */
 public class RoundHandler {
 
     private final GameInitializer gInit;
@@ -39,6 +42,10 @@ public class RoundHandler {
         this.isFinalRound = false;
     }
 
+    /**
+     * return the current player (the player who has to do a move), or the player that has done the last move before the call on the next() method
+     * @return the class of the corresponding player
+     */
     public Player getCurrent() {
         return current;
     }
@@ -191,7 +198,21 @@ public class RoundHandler {
         this.isFinalRound = resumedModel.isFinalRound();
     }
 
-    //cycle between the phase
+    /**
+     * Cycle between the phase
+     *
+     * Start Planning.
+     *
+     * Planning : cycle throw player so, in this case, this method only change the current player to the next one
+     *      player 1 => player 2 => Action
+     *
+     * Action : cycle before throw all his subPhase, then throw players
+     *      player 1 :
+     *          moveStudents => moveMotherNature => ChooseClouds => player 2
+     *      player 2 :
+     *          moveStudents => moveMotherNature => ChooseClouds => Planning
+     *
+     */
     void next (){
 
         //planning phase

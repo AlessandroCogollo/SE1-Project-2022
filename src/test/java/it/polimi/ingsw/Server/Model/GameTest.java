@@ -221,7 +221,9 @@ class GameTest {
 
     }
 
-
+    /**
+     * Test for all the model together use the completeRound() method for simulate some round in the game
+     */
     //@RepeatedTest(1000)
     @Test //black box
     void completeGame(){
@@ -247,7 +249,12 @@ class GameTest {
 
     }
 
-
+    /**
+     * Used in completeGame() test
+     * @param g gameInitializer for check the information
+     * @param r roundHandler for check the information
+     * @param game game for do all moves
+     */
     void completeRound(GameInitializer g, RoundHandler r, Game game){
 
 
