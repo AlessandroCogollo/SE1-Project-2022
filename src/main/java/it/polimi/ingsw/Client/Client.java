@@ -435,7 +435,7 @@ public class Client{
     public static void main(String[] args){
         GraphicHandler gH = new GraphicHandler("Gui");
         gH.startGraphic();
-        Client client = new Client (gH, "127.0.0.1", 5088);
+        Client client = new Client (gH, "127.0.0.1", 5075);
         client.start();
     }
 

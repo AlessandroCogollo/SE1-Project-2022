@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 public class Bot {
 
     static final int number = 1; // start number of bot (if <= 1 start a single bot)
-    static final int port = 5088;
+    static final int port = 5075;
 
     public static void main(String[] args){
         int x = Math.max(number, 1);

@@ -124,11 +124,30 @@ public class Gui extends Application implements Graphic {
     @Override
     public void gameOver(String message) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+            WinnerController c = new WinnerController(this, "scenes/winner.fxml", message);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(c.getResource()));
+            fxmlLoader.setController(c);
+            Parent root = null;
+
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                System.err.println("Error while loading " + c.getResource() + " resource, exit");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+
+            mainStage.getScene().setRoot(root);
+            mainStage.setWidth(620);
+            mainStage.setHeight(460);
+            mainStage.show();
+
+            /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText(message);
             alert.initOwner(Gui.mainStage.getOwner());
-            alert.showAndWait();
-            stopGraphic();
+            alert.showAndWait();*/
         });
     }
 

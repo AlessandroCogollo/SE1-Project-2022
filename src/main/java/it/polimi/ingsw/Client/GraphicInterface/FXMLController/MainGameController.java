@@ -1467,6 +1467,7 @@ public class MainGameController extends Controller implements Initializable {
             this.characters.get(id).setUserData(s);
             updatesCharacter(s);
         }
+        disableCharacters();
     }
 
     @FXML
