@@ -196,8 +196,6 @@ public class Game{
         if (gameInit.getBoard().isCharacterPlayed())
             return Errors.CHARACTER_YET_PLAYED.getCode();
 
-        //todo check if is a good move (es. play a character during the choose Cloud phase is may an error) ?
-
         if (p.getCoins() < x.getCost())
             return Errors.NOT_ENOUGH_COINS.getCode();
 

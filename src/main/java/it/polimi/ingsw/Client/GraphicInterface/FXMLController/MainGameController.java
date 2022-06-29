@@ -2458,9 +2458,6 @@ public class MainGameController extends Controller implements Initializable {
     }
     private void notYourTurn() {
 
-        //todo do it better
-        //could use a sound for it
-
         String musicFile = "sound/mixkit-correct-answer-tone-2870.wav";
 
         Media sound = new Media(getClass().getClassLoader().getResource(musicFile).toExternalForm());
@@ -2470,7 +2467,7 @@ public class MainGameController extends Controller implements Initializable {
         displayMessage("It is not your turn, please wait");
     }
     private void gameOver() {
-        String message = this.dataCollector.getStandardWinMessage(); //todo use a better one
+        String message = this.dataCollector.getStandardWinMessage();
 
         super.main.gameOver(message);
     }

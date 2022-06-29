@@ -122,8 +122,6 @@ class PlayerTest {
         assertEquals(p1.getTowers(), p2.getTowers(), "Test 1");
         assertEquals(6, p2.getTowers(), "Test 1");
         assertEquals(0, s2.getTowers(), "Test 2");
-
-        //todo test win case
     }
 
     @Test //testing only the mate possibility

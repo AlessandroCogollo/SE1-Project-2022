@@ -29,7 +29,7 @@ class ClientTest {
         c.start();
 
         assertTrue(true);
-        //todo
+        //done in other test
     }
 
     private void startServer(ServerSocket serverSocket) {

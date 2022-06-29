@@ -51,10 +51,9 @@ public class Cli implements Graphic {
 
         int first = this.dC.getFirst(null); //the value is not -1
 
-        //todo min lenght
         String username;
         try {
-            username = askString("Insert your username:");
+            username = askUsername("Insert your username:");
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
             System.out.println("Cli interrupted");
@@ -561,6 +560,25 @@ public class Cli implements Graphic {
                 }
                 continue;
             }
+            done = true;
+        }
+
+        if (Thread.currentThread().isInterrupted())
+            throw new InterruptedException("Cli: Thread Interrupted");
+
+        return s;
+    }
+
+    public String askUsername(@Nullable String askMessage) throws InterruptedException, IOException {
+        boolean done = false;
+        String s = null;
+        while (!done && !Thread.currentThread().isInterrupted()) {
+            s = askString(askMessage);
+            if (s.length() < 3) {
+                System.out.println("The username must have at least 3 char");
+                continue;
+            }
+
             done = true;
         }
 

@@ -123,13 +123,4 @@ public class GameBoardTest {
         //trivial
         assertTrue(true);
     }
-
-    @Test
-    void moveMotherNature() {
-        //test only apothecary bancard other test will be done in islands class
-
-        //todo only check for apothecary bancard
-    }
-
-    //todo calcInfluence test
 }
