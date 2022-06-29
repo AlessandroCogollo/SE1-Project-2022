@@ -143,7 +143,7 @@ public class Server {
      * @param args standard main args param
      */
     public static void main(String[] args) {
-        Server server = new Server(5075);
+        Server server = new Server(5088);
         server.start();
     }
 }

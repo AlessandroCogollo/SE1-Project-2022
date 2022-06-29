@@ -152,6 +152,17 @@ public class Gui extends Application implements Graphic {
     }
 
     @Override
+    public void criticalError(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(message);
+            alert.initOwner(Gui.mainStage.getOwner());
+            alert.showAndWait();
+            stopGraphic();
+        });
+    }
+
+    @Override
     public void stopGraphic() {
         Platform.exit();
     }
@@ -237,7 +248,6 @@ public class Gui extends Application implements Graphic {
         else
             c.update();
 
-        //this.sceneController.activate("mainGame");
     }
 
     public void startButtonPressed(ActionEvent actionEvent) {

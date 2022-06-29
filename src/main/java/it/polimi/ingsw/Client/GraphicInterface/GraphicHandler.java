@@ -73,6 +73,10 @@ public class GraphicHandler {
         this.graphic.gameOver(message);
     }
 
+    public void errorFromServer (String message){
+        this.graphic.criticalError(message);
+    }
+
     public void updateModel (ModelMessage model){
         this.dataCollector.setModel(model);
     }

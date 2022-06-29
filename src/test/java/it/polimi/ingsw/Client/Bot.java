@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
  */
 public class Bot {
 
-    static final int number = 1; // start number of bot (if <= 1 start a single bot)
-    static final int port = 5075;
+    static final int number = 2; // start number of bot (if <= 1 start a single bot)
+    static final int port = 5088;
 
     public static void main(String[] args){
         int x = Math.max(number, 1);

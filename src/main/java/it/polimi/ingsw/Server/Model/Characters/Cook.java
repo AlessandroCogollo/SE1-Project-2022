@@ -25,6 +25,10 @@ final public class Cook extends Character {
         return color;
     }
 
+    public void resetColor() {
+        this.color = null;
+    }
+
     @Override
     protected void activateEffect(int[] color) {
         int colorId = color[0];

@@ -422,18 +422,23 @@ public class DataCollector {
     public String getUsernameOfCurrentPlayer () {
         return this.usernames.get(this.model.getCurrentPlayerId());
     }
+
     /**
-     * Valid only if the model has arrived. Otherwise it throws a NullPointerException.
-     * @return a standard win message also with the 4 player possibility (two player winner)
+     * Valid only if the model has arrived and the game is finished. Otherwise it throws a NullPointerException or an IllegalStateException.
+     * @return the list of winning id (1 if player number is 2 or 3, 2 if player number is 4)
      */
-    public String getStandardWinMessage() {
+    public List<Integer> getWinnerIds () {
+
         if (!this.model.gameIsOver())
             throw new IllegalStateException("Cannot invoke this method if the game is not finished");
 
+
         int winningId = this.model.getWinnerId();
+        List<Integer> x;
 
         if (this.numOfPlayers != 4){
-            return "The player " + this.usernames.get(winningId) + " with id " + winningId + " has won the game, congratulation";
+            x = new ArrayList<>(1);
+            x.add(winningId);
         }
         else {
             Set<Integer> ids = usernames.keySet();
@@ -457,23 +462,31 @@ public class DataCollector {
                 }
             }
 
-            int id1, id2;
+            if (winnerTeam == 0)
+                x = teamRed;
+            else
+                x = teamBlue;
+        }
+        return x;
+    }
+    /**
+     * Valid only if the model has arrived and the game is finished. Otherwise it throws a NullPointerException or an IllegalStateException.
+     * @return a standard win message also with the 4 player possibility (two player winner)
+     */
+    public String getStandardWinMessage() {
 
-            if (winnerTeam == 0){
-                id1 = teamRed.get(0);
-                id2 = teamRed.get(1);
-            }
-            else if (winnerTeam == 1){
-                id1 = teamBlue.get(0);
-                id2 = teamBlue.get(1);
-            }
-            else{
-                System.err.println("ERROR ids not valid");
-                return null;
-            }
+
+        List<Integer> winIds = getWinnerIds();
+
+        if (winIds.size() == 1){
+            int id = winIds.get(0);
+            return "The player " + this.usernames.get(id) + " with id " + id + " has won the game, congratulation";
+        }
+        else {
+            int id1 = winIds.get(0);
+            int id2 = winIds.get(1);
 
             return "The players " + this.usernames.get(id1) + " and his team mate " + this.usernames.get(id2) + " have won the game, congratulation";
-
         }
     }
     /**
