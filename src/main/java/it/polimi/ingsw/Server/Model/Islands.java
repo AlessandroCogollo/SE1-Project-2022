@@ -1,11 +1,11 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.Enum.Color;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import it.polimi.ingsw.Enum.Color;
 
 public class Islands implements Iterable<Island>{
 

@@ -3,7 +3,10 @@ package it.polimi.ingsw.Server.Model.Characters;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 public class CharacterFactory {
     //method to create a character

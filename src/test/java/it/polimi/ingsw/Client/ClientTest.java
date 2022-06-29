@@ -1,7 +1,5 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.GraphicInterface.Cli;
-import it.polimi.ingsw.Client.GraphicInterface.GraphicHandler;
 import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Server.PortGetter;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientTest {
 

@@ -1,13 +1,12 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
-import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
-import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.Objects;
 

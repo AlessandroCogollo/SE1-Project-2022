@@ -15,11 +15,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,27 +29,30 @@ class ConnectionHandlerTest {
 
     @Test
     void getOutQueue() throws IOException {
-        ServerSocket s = new ServerSocket(PortGetter.getPort());
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
+        try (ServerSocket s = new ServerSocket(PortGetter.getPort())) {
+            ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
-        Thread t = new Thread(c);
-        t.start();
-        s.accept();
-        assertNotNull(c.getOutQueue());
+            Thread t = new Thread(c);
+            t.start();
+            s.accept();
+            assertNotNull(c.getOutQueue());
+        }
+
     }
 
     @Test
     void getInQueue() throws IOException {
-        ServerSocket s = new ServerSocket(PortGetter.getPort());
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
+        try (ServerSocket s = new ServerSocket(PortGetter.getPort())) {
+            ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
-        Thread t = new Thread(c);
-        t.start();
-        s.accept();
-        assertNotNull(c.getInQueue());;
+            Thread t = new Thread(c);
+            t.start();
+            s.accept();
+            assertNotNull(c.getOutQueue());
+        }
     }
 
-    class UtilClass {
+    static class UtilClass {
         private boolean bool;
         private ConnectionHandler c = null;
 
@@ -92,11 +96,11 @@ class ConnectionHandlerTest {
         BlockingQueue <JsonElement> clientOut = c.getOutQueue();
 
         //set ping from server to client
-        Callable pingSender = new Callable() {
+        Callable<Object> pingSender = new Callable<Object>() {
             private PrintWriter w;
             private Gson g;
 
-            public Callable init(PrintWriter w){
+            public Callable<Object> init(PrintWriter w){
                 this.w = w;
                 this.g = new Gson();
                 return this;
@@ -156,10 +160,10 @@ class ConnectionHandlerTest {
         //use a little class to pass information to runnable and verifying that everything works fine
         UtilClass serverIsUp = new UtilClass(true);
         s = new ServerSocket(PortGetter.getPort());
-        Callable call = new Callable() {
+        Callable<Object> call = new Callable<Object>() {
             private UtilClass b;
 
-            public Callable init (UtilClass b){
+            public Callable<Object> init (UtilClass b){
                 this.b = b;
                 return this;
             }
@@ -184,11 +188,11 @@ class ConnectionHandlerTest {
 
 
         //set ping from server to client
-        pingSender = new Callable() {
+        pingSender = new Callable<Object>() {
             private PrintWriter w;
             private Gson g;
 
-            public Callable init(PrintWriter w){
+            public Callable<Object> init(PrintWriter w){
                 this.w = w;
                 this.g = new Gson();
                 return this;
@@ -337,7 +341,7 @@ class ConnectionHandlerTest {
 
         for(Integer i: messageOrder) {
             mR = null;
-            while (mR == null || (mR != null && Errors.PING.equals(mR.getError()))) {
+            while (mR == null || Errors.PING.equals(mR.getError())) {
                 sR = null;
                 while (sR == null){
                     sR = serverIn.readLine();
@@ -353,19 +357,21 @@ class ConnectionHandlerTest {
     }
     @Test
     void stopConnectionHandler() throws IOException, InterruptedException {
-        ServerSocket s = new ServerSocket(PortGetter.getPort());
-        ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
+        try (ServerSocket s = new ServerSocket(PortGetter.getPort())) {
+            ConnectionHandler c = new ConnectionHandler(s.getInetAddress().getHostAddress(), s.getLocalPort(), Duration.ofSeconds(60), null);
 
-        new Thread(c).start();
-        s.accept();
+            new Thread(c).start();
+            s.accept();
 
-        Thread.sleep(200);
+            Thread.sleep(200);
 
-        c.stopConnectionHandler();
-        Thread.sleep(200);
-        System.out.println("Use dump to se if the thread listener talker and ping timer are running");
-        //done yet and setted true
-        Thread.sleep(5000);
-        assertTrue(true);
+            c.stopConnectionHandler();
+            Thread.sleep(200);
+            System.out.println("Use dump to se if the thread listener talker and ping timer are running");
+            //done yet and set true
+            Thread.sleep(5000);
+            assertTrue(true);
+        }
+
     }
 }

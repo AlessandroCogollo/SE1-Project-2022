@@ -8,8 +8,6 @@ import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 import it.polimi.ingsw.Server.Model.GameInitializerTest;
 import org.junit.jupiter.api.RepeatedTest;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 class ModelMessageTest {
 
     @RepeatedTest(1) //for test over more type of character

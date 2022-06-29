@@ -3,7 +3,6 @@ package it.polimi.ingsw.Server;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
 import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.ClientMessageDecorator;
@@ -15,7 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //real test done while testing the connection between server and client
 class ClientHandlerTest {

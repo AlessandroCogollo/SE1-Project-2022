@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="980.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <SplitPane dividerPositions="0.25" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="980.0" style="-fx-background-color: #2c2b3d;" stylesheets="@style/style.css">
@@ -42,7 +30,7 @@
                      </font>
                   </Label>
                   <Label fx:id="label2" layoutX="88.0" layoutY="180.0" text="Mago Forest" textFill="#beb2b2" AnchorPane.leftAnchor="64.0" />
-                  <Rectangle fx:id="rectangle3" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="20.0" layoutY="218.0" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
+                  <Rectangle fx:id="rectangle3" arcHeight="30.0" arcWidth="30.0" fill="#4b4965" height="60.0" layoutX="20.0" layoutY="218.0" opacity="0.5" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" />
                   <Rectangle fx:id="icon3" arcHeight="25.0" arcWidth="25.0" fill="#a305a3" height="40.0" layoutX="36.0" layoutY="228.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-background-image: url('../Raw/Carte_retro/mago1.jpg'); -fx-background-repeat: no-repeat; fx-background-size: 100% 100%; -fx-background-position: center center;" width="40.0" AnchorPane.leftAnchor="12.0" />
                   <Label fx:id="username3" layoutX="88.0" layoutY="230.0" text="lucabotti88" textFill="WHITE" AnchorPane.leftAnchor="64.0">
                      <font>

@@ -3,11 +3,11 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
+import it.polimi.ingsw.Enum.Phases.ActionPhase;
+import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessageBuilder;
 import it.polimi.ingsw.Server.Model.Characters.Character;
-import it.polimi.ingsw.Enum.Phases.ActionPhase;
-import it.polimi.ingsw.Enum.Phases.Phase;
 
 import java.util.Arrays;
 

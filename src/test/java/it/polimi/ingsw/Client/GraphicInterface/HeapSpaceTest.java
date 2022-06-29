@@ -1,23 +1,19 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HeapSpaceTest extends Application {
 

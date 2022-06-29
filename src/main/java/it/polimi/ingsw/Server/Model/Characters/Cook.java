@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Server.Model.Characters;
 
-import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Color;
+import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Server.Model.GameInitializer;
 
 import java.util.Objects;
-import java.util.Optional;
 
 final public class Cook extends Character {
 

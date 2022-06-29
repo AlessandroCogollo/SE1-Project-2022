@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Message.ModelMessage;
 
 import it.polimi.ingsw.Enum.Color;
-import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
+import it.polimi.ingsw.Server.Model.Characters.*;
 
 import java.util.Arrays;
 

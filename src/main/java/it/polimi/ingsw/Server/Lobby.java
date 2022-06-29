@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
-
 import it.polimi.ingsw.Message.LobbyInfoMessage;
 import it.polimi.ingsw.Message.Message;
 import it.polimi.ingsw.Message.Ping;

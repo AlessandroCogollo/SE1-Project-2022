@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-import it.polimi.ingsw.Server.Model.Characters.*;
 
 import java.util.Collection;
 import java.util.Iterator;

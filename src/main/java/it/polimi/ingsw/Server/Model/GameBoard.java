@@ -4,8 +4,10 @@ import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Message.ModelMessage.CharacterSerializable;
 import it.polimi.ingsw.Message.ModelMessage.CloudSerializable;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-import it.polimi.ingsw.Server.Model.Characters.*;
+import it.polimi.ingsw.Server.Model.Characters.Apothecary;
 import it.polimi.ingsw.Server.Model.Characters.Character;
+import it.polimi.ingsw.Server.Model.Characters.CharacterFactory;
+import it.polimi.ingsw.Server.Model.Characters.Cook;
 
 import java.util.*;
 

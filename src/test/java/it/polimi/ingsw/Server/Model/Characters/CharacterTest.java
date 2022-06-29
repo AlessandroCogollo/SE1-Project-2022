@@ -2,13 +2,14 @@ package it.polimi.ingsw.Server.Model.Characters;
 
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
-import it.polimi.ingsw.Server.Model.*;
+import it.polimi.ingsw.Server.Model.GameInitializer;
+import it.polimi.ingsw.Server.Model.GameInitializerTest;
+import it.polimi.ingsw.Server.Model.School;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;

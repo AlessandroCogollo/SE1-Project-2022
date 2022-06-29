@@ -1,11 +1,10 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Network.TimerTaskCloneable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Timer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimerTaskCloneableTest {
 

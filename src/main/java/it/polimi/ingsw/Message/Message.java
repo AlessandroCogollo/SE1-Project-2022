@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Message;
 
 import it.polimi.ingsw.Enum.Errors;
-import it.polimi.ingsw.OptionHandler;
 
 import java.time.Instant;
 

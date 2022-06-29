@@ -3,7 +3,8 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientMessageDecoratorTest {
 

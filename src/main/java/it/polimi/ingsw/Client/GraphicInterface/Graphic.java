@@ -1,10 +1,5 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import it.polimi.ingsw.Client.DataCollector;
-import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
-
-import java.io.IOException;
-
 /**
  * Interface of the client Graphic
  */

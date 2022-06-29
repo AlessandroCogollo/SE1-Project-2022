@@ -1,24 +1,17 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
 import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Errors;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //real test done while testing the connection between server and client like in this run test
 class ServerTest {

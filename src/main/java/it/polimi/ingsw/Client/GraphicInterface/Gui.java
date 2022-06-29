@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.Client.DataCollector;
 import it.polimi.ingsw.Client.GraphicInterface.FXMLController.*;
 import it.polimi.ingsw.Enum.Wizard;
-
 import it.polimi.ingsw.Message.LobbyInfoMessage;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
 import it.polimi.ingsw.Message.ModelMessage.PlayerSerializable;

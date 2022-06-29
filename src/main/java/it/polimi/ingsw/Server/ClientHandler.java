@@ -5,16 +5,17 @@ import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 import it.polimi.ingsw.Message.*;
+import it.polimi.ingsw.Network.ConnectionHandler;
 
 import java.net.Socket;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import it.polimi.ingsw.Network.ConnectionHandler;
 
 /**
  * Class that creates the Abstract view of the client.

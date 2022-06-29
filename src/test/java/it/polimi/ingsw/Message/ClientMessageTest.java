@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientMessageTest {
 

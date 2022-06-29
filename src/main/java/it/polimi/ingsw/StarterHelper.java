@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.GraphicInterface.*;
+import it.polimi.ingsw.Client.GraphicInterface.GraphicHandler;
 import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 

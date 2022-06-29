@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.GraphicInterface.TestingCli;
 import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
 import it.polimi.ingsw.Enum.Wizard;
 import org.junit.jupiter.api.Test;

@@ -2,12 +2,10 @@ package it.polimi.ingsw.Message.ModelMessage;
 
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Message.Message;
-import it.polimi.ingsw.Server.Model.*;
-import it.polimi.ingsw.Server.Model.Characters.*;
 import it.polimi.ingsw.Server.Model.Characters.Character;
+import it.polimi.ingsw.Server.Model.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
