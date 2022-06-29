@@ -1351,7 +1351,7 @@ public class MainGameController extends Controller implements Initializable {
 
                 */
 
-                if (i == model.getMotherNatureIslandId()){
+                if (i == model.getMotherNatureIslandId() || model.getMotherNatureIslandId() == -1){ //-1 is used for test the visualization of mother nature not possible in normal game
                     Image image = LazyImageLoader.getInstance().getMotherNature(16);
                     ImageView imageView = new ImageView();
                     imageView.setFitHeight(16);
@@ -1466,6 +1466,7 @@ public class MainGameController extends Controller implements Initializable {
 
         for (Integer id : this.characters.keySet()){
             CharacterSerializable s = model.getCharacterById(id);
+            this.characters.get(id).setUserData(s);
             updatesCharacter(s);
         }
     }

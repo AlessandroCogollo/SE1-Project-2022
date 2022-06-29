@@ -1,5 +1,9 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.GraphicInterface.TestingGraphicHandler;
+import it.polimi.ingsw.Server.PortGetter;
+import it.polimi.ingsw.Server.Server;
 import org.apache.commons.cli.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,6 +12,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -473,5 +480,31 @@ class StarterHelperTest {
         String[] args0 = { }; //empty
         StarterHelper.main(args0);
         assertTrue(true);
+    }
+
+    /**
+     * Test over a complete game from the start of the server and the clients to the game over using the testing cli that simulate a user
+     */
+    @Test
+    void completeTest () throws InterruptedException {
+        int port = PortGetter.getPort();
+        Server server = new Server(port);
+
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        ex.execute(server::start);
+
+        Thread.sleep(10);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 4; i++) {
+            TestingGraphicHandler tgh = new TestingGraphicHandler("Cli");
+            tgh.startGraphic();
+            Client c = new Client(tgh, "127.0.0.1", port);
+            executorService.execute(c::start);
+        }
+
+        ex.shutdown();
+        //now all the client are connected and the game is running
+        assertTrue(ex.awaitTermination(10, TimeUnit.MINUTES));
     }
 }

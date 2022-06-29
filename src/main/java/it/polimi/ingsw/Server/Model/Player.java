@@ -107,7 +107,7 @@ public class Player implements Iterable<Assistant>{
             mate.get().moveTowerToIsland(number);
         }
         else if (school.removeTowers(number)){
-            System.out.println("\n\n Player : " + id + "has finished the towers \n");
+            System.out.println("\n\n Player: " + id + " has finished the towers \n");
             gameInitializer.checkWin(this);
         }
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Client.GraphicInterface;
 
-import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Color;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
@@ -24,9 +23,11 @@ public class TestingCli extends Cli {
     public void startGraphic() {
         super.startGraphic();
         this.dC.setCallbackForModel(this::modelCallback);
+        this.dC.getFirst(this::setInfo);
+        this.dC.getDone(this::doneCallback);
     }
 
-    static String getUsername() {
+    public String getUsername() {
         synchronized (uI) {
             if (uI > 3)
                 uI = 0;
@@ -34,7 +35,8 @@ public class TestingCli extends Cli {
         }
     }
 
-    static Wizard getWizard() {
+    public Wizard getWizard() {
+
         synchronized (wI) {
             if (wI > 4)
                 wI = 0;
@@ -53,7 +55,7 @@ public class TestingCli extends Cli {
 
     @Override
     public void setInfo() {
-        int first = this.dC.getFirst(null); //the value is not -1
+        int first = this.dC.getFirst( null); //the value is not -1
 
         this.dC.setUsername(getUsername());
 
@@ -72,20 +74,20 @@ public class TestingCli extends Cli {
         if (done == 0){
             displayInputError(this.dC.getErrorData());
             setInfo();
-            return;
         }
 
         //info sent correctly
-
-        this.dC.setCallbackForModel(this::modelCallback);
     }
 
     @Override
     public void modelCallback() {
-        System.out.println("Testing CLi model Callback");
+        //System.out.println("Testing CLi model Callback");
 
         ModelMessage model = this.dC.getModel();
-        int myId = this.dC.getId();
+
+        if(model.gameIsOver()){
+            System.out.println("Testing CLi: " + dC.getStandardWinMessage());
+        }
 
         Phase p = Phase.valueOf(model.getActualPhase());
         ActionPhase aP = ActionPhase.valueOf(model.getActualActionPhase());
@@ -97,7 +99,7 @@ public class TestingCli extends Cli {
             switch (aP) {
                 case MoveStudent -> this.dC.setNextMove(new MoveStudentMessage(Errors.NO_ERROR, "Test Cli", rand.nextInt(Color.getNumberOfColors()), rand.nextInt(-1, 12)));
                 case MoveMotherNature -> this.dC.setNextMove(new MoveMotherNatureMessage(Errors.NO_ERROR, "Test Cli", rand.nextInt(6)));
-                case ChooseCloud -> this.dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Test Cli", myId));
+                case ChooseCloud -> this.dC.setNextMove(new ChooseCloudMessage(Errors.NO_ERROR, "Test Cli", rand.nextInt(4)));
             }
         }
     }

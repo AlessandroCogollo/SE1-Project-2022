@@ -54,7 +54,7 @@ final public class Jester extends Character {
     @Override
     public Errors canActivateEffect(int[] obj) {
 
-        System.out.println("received" + Arrays.toString(obj));
+        //System.out.println("received" + Arrays.toString(obj));
 
         int length = obj.length;
 
@@ -69,7 +69,7 @@ final public class Jester extends Character {
 
         int[] tempStudents = Arrays.copyOf(this.students, this.students.length);
 
-        System.out.println("Jester" + Arrays.toString(tempStudents));
+        //System.out.println("Jester" + Arrays.toString(tempStudents));
 
         for (int i = 0; i < obj.length; i++) {
             Color c = Objects.requireNonNull(Color.getColorById(obj[i]));

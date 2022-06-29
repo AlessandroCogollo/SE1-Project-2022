@@ -517,6 +517,10 @@ public class Cli implements Graphic {
         System.out.println("Warning: " + error);
     }
 
+    /**
+     * display the message if it is not null in the standard output
+     * @param errorMessage the message to be displayed
+     */
     public void displayInputError(String errorMessage) {
         if (errorMessage == null)
             return;
