@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.xml.crypto.Data;
 import java.net.URL;
@@ -29,6 +31,10 @@ public class WinnerController extends Controller implements Initializable {
 
     @FXML
     private Label winLabel;
+    @FXML
+    private ImageView winImage;
+    @FXML
+    private Label winTitle;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,12 +43,11 @@ public class WinnerController extends Controller implements Initializable {
         List<Integer> winningIds = this.dataCollector.getWinnerIds();
         int myId = this.dataCollector.getId();
 
-        if (!winningIds.contains(myId)){
-            //not the winner
-            System.out.println("Loser");
+        if (!winningIds.contains(myId)) {
+            Image img = LazyImageLoader.getInstance().getGorilla(winImage.getFitWidth(), winImage.getFitHeight());
+            winImage.setImage(img);
+            winTitle.setText("Loser - Embrace Monke");
         }
-
-
     }
 
     public void close(ActionEvent actionEvent){

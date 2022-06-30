@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
  */
 public class Bot {
 
-    static final int number = 2; // start number of bot (if <= 1 start a single bot)
+    static final int number = 3; // start number of bot (if <= 1 start a single bot)
     static final int port = 5088;
 
     public static void main(String[] args){
@@ -24,7 +24,7 @@ public class Bot {
 
 
     static void startSingle(){
-        TestingGraphicHandler tgh = new TestingGraphicHandler("Cli");
+        TestingGraphicHandler tgh = new TestingGraphicHandler("Gui");
         tgh.startGraphic();
         Client c = new Client(tgh, "127.0.0.1", port);
         c.start();
