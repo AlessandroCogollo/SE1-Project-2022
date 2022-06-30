@@ -45,7 +45,8 @@ public class RoundHandler {
     }
 
     /**
-     * return the current player (the player who has to do a move), or the player that has done the last move before the call on the next() method
+     * return the current player (the player who has to do a move),
+     * or the player that has done the last move before the call on the next() method
      * @return the class of the corresponding player
      */
     public Player getCurrent() {

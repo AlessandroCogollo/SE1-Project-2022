@@ -150,6 +150,11 @@ public class GameInitializer implements Iterable<Player>{
         }
     }
 
+    /**
+     * checks if the game is in a tie status.
+     * Not all the tie cases are covered by game rules.
+     * @return the first player that is in tie id
+     */
     private int equalCase() {
         final int id = 0;
         final int professorNumber = 1;
@@ -176,7 +181,7 @@ public class GameInitializer implements Iterable<Player>{
         //descending order
         RoundHandler.revertMatrix(professorMap, length);
 
-        //other case case are not covered in rules, if the player has the same number of tower used and the same number of professor (an odd number of professor must be not took), or the same with 3 players
+        //other cases are not covered in rules, if the player has the same number of tower used and the same number of professor (an odd number of professor must be not took), or the same with 3 players
         return professorMap[id][0];
     }
 
@@ -210,7 +215,6 @@ public class GameInitializer implements Iterable<Player>{
 
         return newProfessorMap;
     }
-
     void printMatrix (int[][] matrix, int row, int column, String[] rawName){
         boolean use = rawName.length == row;
         for (int r = 0; r < row; r++) {

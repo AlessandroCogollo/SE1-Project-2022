@@ -52,7 +52,10 @@ public class Island {
         return banCard;
     }
 
-    //adds the student to the island
+    /**
+     * adds the student to the island
+     * @param color: the color of the student to add
+     */
     public void addStudent(Color color){
         students[color.getIndex()]++;
     }

@@ -28,6 +28,9 @@ public class Professors {
         return Arrays.copyOf(professors, professors.length);
     }
 
+    /**
+     * checks the number of students in every room and moves the professors in the right schools
+     */
     void updateProfessors(){
         //check all professor color
         for (Color c: Color.values()){

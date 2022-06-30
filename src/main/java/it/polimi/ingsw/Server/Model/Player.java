@@ -64,7 +64,10 @@ public class Player implements Iterable<Assistant>{
         return school.hasStudentInEntrance(color);
     }
 
-    // play assistant will remove the assistant from the student's deck and set it as is active assistant, that will be changed only in the next planning phase
+    /**
+     * plays assistant and remove the assistant from the student's deck and set it as is active assistant,
+     * that will be changed only in the next planning phase
+     */
     public void playAssistant (Assistant x){
         if (x != null)
             deck.remove(x);
@@ -75,7 +78,10 @@ public class Player implements Iterable<Assistant>{
         }
     }
 
-    // check if the movement is towards his room or to an island
+    /**
+     * check if the movement is towards his room or to an island
+     * and moves it
+      */
     public void moveStudent (Color c, int destinationId){
         if (destinationId != -1){
             Color student = school.removeStudentFromEntrance(c);
@@ -87,17 +93,26 @@ public class Player implements Iterable<Assistant>{
         }
     }
 
-    // move mother nature calls the appropriate method in board
+    /**
+     *  move mother nature calls the appropriate method in board
+     * @param position: targeted island
+     */
     public void moveMotherNature (int position){
         gameInitializer.getBoard().moveMotherNature(position);
     }
 
-    // choose cloud call the method in school for add all the students
+    /**
+     * choose cloud call the method in school for add all the students
+     * @param c: the cloud
+     */
     public void chooseCloud (Cloud c){
         school.addStudentFromCloud(c);
     }
 
-    //methods for the board to manage the tower, if it's a game with 4 players there will be some players with the mate attribute not null
+    /**
+     *     methods for the board to manage the towers,
+     *     if it's a game with 4 players there will be some players with the mate attribute not null
+     */
     public int getTowers (){
         return mate.map(Player::getTowers).orElseGet(school::getTowers);
     }
@@ -130,7 +145,10 @@ public class Player implements Iterable<Assistant>{
     }
 
 
-    //factory method for generate all player or advance player if it is an advanced game, with the exception of 4 players
+    /**
+     *     factory method to generate all players -or advance players if it is an advanced game-,
+     *     except 4 players
+     */
     public static Collection<Player> factoryPlayers (int[] ids, GameInitializer gI) {
 
         Bag bag = gI.getBag();
@@ -231,6 +249,10 @@ public class Player implements Iterable<Assistant>{
         return p;
     }
 
+    /**
+     *     factory method to generate all players -or advance players if it is an advanced game-,
+     *     except 4 players
+     */
     public static Collection<Player> factoryPlayers (GameInitializer gI, List<PlayerSerializable> playerList) {
 
         int gameMode = gI.getGameMode();
