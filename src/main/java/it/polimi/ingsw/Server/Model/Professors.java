@@ -65,7 +65,7 @@ public class Professors {
             }
 
             /*DrunkHard effect*/
-            if (activeCharacter != null && activeCharacter.getId() == 4 && current != null && current.getSchool().getNumberOfStudentInRoomByColor(c) == max){
+            if (activeCharacter != null && activeCharacter.getId() == 4 && current != null && current.getSchool().getNumberOfStudentInRoomByColor(c) == max && max != 0){
                 professors[c.getIndex()] = current.getId();
                 continue;
             }

@@ -551,6 +551,11 @@ public class Cli implements Graphic {
         stopGraphic();
     }
 
+    @Override
+    public void criticalError(String message) {
+        gameOver(message);
+    }
+
 
     public String askString(@Nullable String askMessage) throws InterruptedException, IOException {
         String s = null;

@@ -39,4 +39,10 @@ public interface Graphic {
      * @param message the message that will be displayed
      */
     void gameOver (String message);
+
+    /**
+     * Visualize the last message before the client shutdown
+     * @param message message describing the error
+     */
+    void criticalError (String message);
 }

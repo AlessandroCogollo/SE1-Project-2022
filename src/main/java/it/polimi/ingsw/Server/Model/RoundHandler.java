@@ -4,6 +4,8 @@ import it.polimi.ingsw.Enum.Assistant;
 import it.polimi.ingsw.Enum.Phases.ActionPhase;
 import it.polimi.ingsw.Enum.Phases.Phase;
 import it.polimi.ingsw.Message.ModelMessage.ModelMessage;
+import it.polimi.ingsw.Server.Model.Characters.Character;
+import it.polimi.ingsw.Server.Model.Characters.Cook;
 
 import java.util.*;
 
@@ -252,7 +254,7 @@ public class RoundHandler {
                     actionPhase = ActionPhase.ChooseCloud;
                     break;
                 case ChooseCloud:
-                    gInit.getBoard().playCharacter(null, null); //reset active character
+                    resetActiveCharacter();
 
                     //return to planning
                     if (actionOrder.isEmpty()) {
@@ -289,6 +291,13 @@ public class RoundHandler {
             i++;
         }
         return ids[rand.nextInt(gInit.getPlayersNumber())];
+    }
+
+    private void resetActiveCharacter() {
+        Character c = gInit.getBoard().getActiveCharacter();
+        if (c != null && c.getId() == 3)
+            ((Cook) c).resetColor();
+        gInit.getBoard().playCharacter(null, null);
     }
 
     private void resetActiveAssistants() {
