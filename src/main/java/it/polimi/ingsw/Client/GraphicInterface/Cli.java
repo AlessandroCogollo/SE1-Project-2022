@@ -22,6 +22,9 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 
+/**
+ * Cli graphic
+ */
 
 public class Cli implements Graphic {
 
@@ -45,6 +48,9 @@ public class Cli implements Graphic {
         return dC;
     }
 
+    /**
+     * Starts the cli
+     */
     public void startGraphic() {
         this.dC = new DataCollector(this);
 

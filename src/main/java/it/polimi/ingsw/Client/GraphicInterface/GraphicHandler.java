@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 /**
- * Class that simplifies the interaction between client main thread and cli or gui, all method of this class should be called only from
+ * Class that simplifies the interaction between client main thread and cli or gui, all method of this class should be called only from the client back-end
  */
 public class GraphicHandler {
 

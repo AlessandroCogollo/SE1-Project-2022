@@ -11,6 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+/**
+ * Controller for the selection of wizard.
+ * When the button on the scene is pushed, call a method in the main gui class for update the scenes.
+ */
 public class WizardController extends Controller{
 
     private Wizard tempWizard = null;

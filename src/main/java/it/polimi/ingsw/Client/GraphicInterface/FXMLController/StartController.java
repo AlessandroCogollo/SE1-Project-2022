@@ -5,6 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+/**
+ * Controller for the launch scene.
+ * When the button on the scene is pushed, call a method in the main gui class for update the scenes.
+ */
 public class StartController extends Controller{
 
     public StartController(Gui main, String resource) {

@@ -12,6 +12,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the win scene.
+ * When it is closed stops the JavaFx application.
+ */
 public class WinnerController extends Controller implements Initializable {
 
     private final String winMessage;

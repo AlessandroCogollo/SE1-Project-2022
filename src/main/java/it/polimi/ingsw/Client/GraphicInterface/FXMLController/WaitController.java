@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+/**
+ * Controller of the wait scene.
+ * It is changed automatically from the gui main class.
+ */
 public class WaitController extends Controller{
 
 

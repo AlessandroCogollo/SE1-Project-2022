@@ -5,6 +5,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
+/**
+ * Class used for the lazy loading of the images, all of them are loaded only one time if the size requested doesn't change.
+ * This will improve the memory usage.
+ */
 public class LazyImageLoader {
 
     private static LazyImageLoader instance = null;

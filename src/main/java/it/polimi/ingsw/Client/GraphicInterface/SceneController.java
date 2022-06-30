@@ -8,6 +8,9 @@ import javafx.scene.Scene;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Class used to switch between scenes
+ */
 public class SceneController {
 
     private final Scene main;
@@ -29,10 +32,19 @@ public class SceneController {
         return currentController;
     }
 
+    /**
+     * Add a scene to the class
+     * @param name name that will be used for set it in the main stage
+     * @param controller the controller that will be used when activating a scene
+     */
     public void addScreen(String name, Controller controller){
         sceneMap.put(name, controller);
     }
 
+    /**
+     * Set a scene using the name provided
+     * @param name the name of the scene to visualize
+     */
     public void activate(String name){
         Controller c = this.sceneMap.get(name);
 

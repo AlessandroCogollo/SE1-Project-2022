@@ -8,6 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
+/**
+ * Controller for the username selection.
+ * When the button on the scene is pushed, call a method in the main gui class for update the scenes.
+ */
 public class UsernameController extends Controller{
 
     public UsernameController(Gui main, String resource) {

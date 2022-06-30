@@ -11,6 +11,10 @@ import javafx.scene.effect.MotionBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+/**
+ * Controller of the sceneS for the additional information.
+ * When the button on the scene is pushed, call a method in the main gui class for update the scenes.
+ */
 public class AddDataController extends Controller{ //Additional Data Controller
 
     public AddDataController(Gui main, String resource) {

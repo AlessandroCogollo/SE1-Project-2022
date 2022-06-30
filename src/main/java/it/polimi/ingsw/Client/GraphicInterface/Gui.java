@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The main Java FX class
+ */
 public class Gui extends Application implements Graphic {
 
     protected static DataCollector dC = null;
@@ -84,6 +87,9 @@ public class Gui extends Application implements Graphic {
         }
     }
 
+    /**
+     * Method used for start the JavaFx application
+     */
     public static void startGraphic() {
         System.out.println("Gui Started");
         new Thread(() -> Application.launch(Gui.class, (String[]) null), "Gui Thread").start();
@@ -287,6 +293,9 @@ public class Gui extends Application implements Graphic {
         this.waitForDone();
     }
 
+    /**
+     * Class used for testing the visualization of main game without start the all game
+     */
     public static class ScenesLoader extends Gui {
 
         private void modelSelector(DataCollector dC){
@@ -393,6 +402,10 @@ public class Gui extends Application implements Graphic {
         }
     }
 
+    /**
+     * Start the Inner class ScenesLoader
+     * @param args default args
+     */
     public static void main(String[] args){
         Application.launch(ScenesLoader.class, (String[]) null);
     }

@@ -1,11 +1,16 @@
 package it.polimi.ingsw.Server;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Class used during test in server package for have different port and don't throw exceptions
+ */
 public class PortGetter {
 
     static private final ArrayList<Integer> lastPortsUsed = new ArrayList<>(10);

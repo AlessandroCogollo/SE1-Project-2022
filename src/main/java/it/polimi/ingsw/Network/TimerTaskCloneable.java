@@ -4,7 +4,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 /**
- * TimerTask that can be cloned for rest the timer.
+ * TimerTask that can be cloned for reset the timer.
  */
 public class TimerTaskCloneable extends TimerTask implements Cloneable {
 
