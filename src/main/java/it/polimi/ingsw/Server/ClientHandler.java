@@ -106,7 +106,10 @@ public class ClientHandler implements Runnable{
 
     /**
      * Main thread of ClientHandler, first start a thread for handling the setup of the connection.
-     * Then wait until the game has to start, and finally start two thread for exchange message between client and model
+     * Then wait until the game has to start, and finally start two thread for exchange message between client and model.
+     *
+     * The thread that read the messages from the net creates a new message decorator for add the information of the player id, in this way the client can't send move pretending to be someone else, then it send this new message to the model that will elaborate it
+     * The thread that send the message to the net instead only take the message from the model and put them in the output queue of the ConnectionHandler.
      */
     @Override
     public void run() {
