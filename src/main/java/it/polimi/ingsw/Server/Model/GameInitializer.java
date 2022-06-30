@@ -28,6 +28,11 @@ public class GameInitializer implements Iterable<Player>{
         this.winningPlayerId = -1;
     }
 
+    /**
+     * creates the game board, the professors, the islands
+     * @param ids
+     * @param roundHandler
+     */
     void createAllGame (int[] ids, RoundHandler roundHandler){
         this.bag = new Bag(this);
         this.professors = new Professors(this);
@@ -96,10 +101,17 @@ public class GameInitializer implements Iterable<Player>{
         return exists;
     }
 
+    /**
+     * checks if the player with id = winner has won
+     * @param winner
+     */
     void checkWin(Player winner){
         this.winningPlayerId = winner.getId();
     }
 
+    /**
+     * checks if somebody has won
+     */
     void checkWin (){
 
         int length;
