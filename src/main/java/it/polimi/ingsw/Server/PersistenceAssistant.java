@@ -19,8 +19,10 @@ import java.util.stream.Stream;
 
 /**
  * Class for the persistence function.
- * All the game info are use for create the identifier of this game.
+ * All the game info are used to create the identifier of this game.
  * playerNumber + gameMode + _ + username1 + _ + username2 + _ + ... (the usernames insert by the client can't contain special characters)
+ *
+ * The persistence function activates when the players reconnect after the game has been interrupted: the server recognizes them (if they maintained their nickname and reconnect in the same order) and loads the JSON file from the persistence folder.
  */
 public class PersistenceAssistant {
 

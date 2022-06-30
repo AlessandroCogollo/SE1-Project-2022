@@ -233,7 +233,7 @@ public class Gui extends Application implements Graphic {
             mainStage.setHeight(780);
             mainStage.setWidth(1000);
             mainStage.setFullScreen(false);
-            mainStage.setResizable(false); //for ubuntu
+            mainStage.setResizable(true); //for ubuntu
             mainStage.setTitle("Main Game");
 
             c = new MainGameController(this, "scenes/maingame.fxml");

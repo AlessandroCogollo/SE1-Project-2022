@@ -29,8 +29,8 @@
             <Image url="@../logoeryantis.png" />
          </image>
       </ImageView>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="128.0" prefHeight="16.0" prefWidth="155.0" text="Victory Royale!" textAlignment="CENTER" textFill="WHITE" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="220.0" layoutY="163.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <Label fx:id="winTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="128.0" prefHeight="16.0" prefWidth="155.0" text="Victory Royale!" textAlignment="CENTER" textFill="WHITE" />
+      <ImageView fx:id="winImage" fitHeight="150.0" fitWidth="200.0" layoutX="220.0" layoutY="163.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../winner.png" />
          </image>

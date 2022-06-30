@@ -261,4 +261,13 @@ public class LazyImageLoader {
 
         return banCard;
     }
+
+    private Image gorilla = null;
+
+    public Image getGorilla(double height, double width){
+        if (gorilla == null)
+            gorilla = new Image("gorilla_1f98d.png", width, height, true, false);
+
+        return gorilla;
+    }
 }
