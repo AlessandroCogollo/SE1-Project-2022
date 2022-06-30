@@ -5,6 +5,10 @@ import it.polimi.ingsw.Server.Model.AdvancedPlayer;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.School;
 
+/**
+ * message that contains all the info of a player:
+ * id, tower color, assistant deck, active assistant, school, coins.
+ */
 public class PlayerSerializable {
     private final int id;
     private final int towerColor;

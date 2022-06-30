@@ -4,6 +4,9 @@ import it.polimi.ingsw.Enum.Errors;
 
 import java.time.Instant;
 
+/**
+ * the message class, used for the communication between client and server
+ */
 public class Message {
 
     private final String time;

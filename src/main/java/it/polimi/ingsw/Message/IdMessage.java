@@ -2,6 +2,9 @@ package it.polimi.ingsw.Message;
 
 import it.polimi.ingsw.Enum.Errors;
 
+/**
+ * message that contains the id of the player
+ */
 public class IdMessage extends Message{
 
     private final int playerId;

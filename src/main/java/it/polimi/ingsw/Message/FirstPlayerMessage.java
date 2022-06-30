@@ -3,6 +3,9 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 
+/**
+ * message composed y the first player, enriched with the number of players and the game mode chosen
+ */
 public class FirstPlayerMessage extends Message{
 
     private final String username;

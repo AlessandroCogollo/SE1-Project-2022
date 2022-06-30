@@ -28,7 +28,10 @@ public class ModelMessageBuilder {
         return builder;
     }
 
-    //require GameInitializer not null
+    /**
+     *     requires GameInitializer not null.
+     *     builds the model message with the game initializer in this class
+     */
     public ModelMessage buildModelMessage (Errors er){
         if (this.gameInitializer == null)
             return null;

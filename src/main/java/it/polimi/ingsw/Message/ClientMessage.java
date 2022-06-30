@@ -3,6 +3,9 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
 
+/**
+ * message abstract class for client
+ */
 public abstract class ClientMessage extends Message{
 
     private final int moveId;

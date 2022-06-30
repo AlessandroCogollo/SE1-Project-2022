@@ -604,16 +604,16 @@ public class MainGameController extends Controller implements Initializable {
                 return;
             }
 
-            System.out.println("Team Blue");
+            System.out.println("Team Salmon");
             for (Integer id : teamBlue){
                 System.out.print(this.usernames.get(id).getText() + " ");
-                this.usernames.get(id).setTextFill(Color.BLUE);
+                this.usernames.get(id).setTextFill(Color.LIGHTSALMON);
             }
             System.out.println();
-            System.out.println("Team Red");
+            System.out.println("Team Plum");
             for (Integer id : teamRed){
                 System.out.print(this.usernames.get(id).getText() + " ");
-                this.usernames.get(id).setTextFill(Color.RED);
+                this.usernames.get(id).setTextFill(Color.PLUM);
             }
             System.out.println();
         }

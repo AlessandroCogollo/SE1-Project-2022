@@ -3,6 +3,9 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
 
+/**
+ * message that can execute a charcter play
+ */
 public final class PlayCharacterMessage extends ClientMessage{
 
     private final int characterId;

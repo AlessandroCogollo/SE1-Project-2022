@@ -6,6 +6,9 @@ import it.polimi.ingsw.Server.Model.Characters.*;
 
 import java.util.Arrays;
 
+/**
+ * class that contains all the info of a character, also if it has been used or not, and it is serializable.
+ */
 public class CharacterSerializable {
 
     private final int id;

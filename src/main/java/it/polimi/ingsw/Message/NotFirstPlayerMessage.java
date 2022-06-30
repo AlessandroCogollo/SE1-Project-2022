@@ -3,6 +3,9 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Enum.Wizard;
 
+/**
+ * message that contains only the username and the wizard of a player
+ */
 public class NotFirstPlayerMessage extends Message{
 
     private final String username;

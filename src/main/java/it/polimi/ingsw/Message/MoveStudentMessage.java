@@ -3,6 +3,9 @@ package it.polimi.ingsw.Message;
 import it.polimi.ingsw.Enum.Errors;
 import it.polimi.ingsw.Server.Model.Game;
 
+/**
+ * message that can execute a student move
+ */
 public final class MoveStudentMessage extends ClientMessage{
 
     private final int indexColorToMove;

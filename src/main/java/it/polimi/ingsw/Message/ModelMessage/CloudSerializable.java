@@ -2,6 +2,9 @@ package it.polimi.ingsw.Message.ModelMessage;
 
 import it.polimi.ingsw.Server.Model.Cloud;
 
+/**
+ * class that contains the info of one cloud, but serializable
+ */
 public class CloudSerializable {
 
     private final int id;

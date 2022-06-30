@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * this class has all the data needed by the client to know the game status.
+ * It takes all the information from the game initializer.
+ */
 public class ModelMessage extends Message {
 
     private final int gameMode;

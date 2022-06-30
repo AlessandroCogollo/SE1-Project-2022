@@ -5,6 +5,9 @@ import it.polimi.ingsw.Enum.Wizard;
 
 import java.util.Map;
 
+/**
+ * message that can retrieve the lobby info (usernames, wizards, game mode, number of players)
+ */
 public class LobbyInfoMessage extends Message{
 
     private final Map<Integer, String> usernames;
